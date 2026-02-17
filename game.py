@@ -146,7 +146,8 @@ class Game:
                 if bev.is_blocked():
                     def_team.add_stats(Statistic.Blocks, 1, bev.defender)
 
-                if bev.is_assisted():
+                # Assist should only be awarded on made field goals.
+                if bev.is_assisted() and bev.has_scored():
                     att_team.add_stats(Statistic.Assists, 1, bev.assistant)
 
                 for ext in self.extensions:

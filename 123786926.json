@@ -3596,7 +3596,7 @@
     "events": [
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.JUMP_BALL",
+            "rebound_type": "933",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -3609,8 +3609,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "203",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 11,
             "defending_team": 1,
@@ -3628,8 +3628,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_WING",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "102",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 7,
             "defending_team": 0,
@@ -3647,7 +3647,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.BALL_STOLEN",
+            "interrupt_type": "807",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -3660,8 +3660,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DRIVING_LAYUP",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "411",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -3678,7 +3678,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -3691,8 +3691,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.REBOUND_SHOT",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "409",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -3709,7 +3709,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -3722,8 +3722,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.HOOK",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "405",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -3740,7 +3740,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -3753,8 +3753,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "203",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -3771,7 +3771,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 1,
             "attacker": 3,
             "defending_team": 0,
@@ -3784,8 +3784,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.REBOUND_SHOT",
-            "shot_result": "ShotResult.GOALTEND",
+            "shot_type": "409",
+            "shot_result": "2",
             "attacking_team": 1,
             "attacker": 3,
             "defending_team": 0,
@@ -3802,7 +3802,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.PASS_INTERCEPTED",
+            "interrupt_type": "808",
             "attacking_team": 0,
             "attacker": 7,
             "defending_team": 1,
@@ -3815,8 +3815,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DRIVING_LAYUP",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "411",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 7,
             "defending_team": 0,
@@ -3834,8 +3834,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_ELBOW",
-            "shot_result": "ShotResult.MISSED_WITH_FOUL",
+            "shot_type": "201",
+            "shot_result": "4",
             "attacking_team": 0,
             "attacker": 11,
             "defending_team": 1,
@@ -3852,7 +3852,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.SHOOTING_FOUL",
+            "foul_type": "504",
             "flagrant": 0,
             "attacking_team": 0,
             "attacker": 11,
@@ -3866,7 +3866,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 0,
             "attacker": 11,
             "gameclock": 155,
@@ -3877,7 +3877,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 0,
             "attacker": 11,
             "gameclock": 155,
@@ -3888,8 +3888,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "203",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -3906,7 +3906,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 1,
             "attacker": 7,
             "defending_team": 0,
@@ -3919,8 +3919,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_ELBOW",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "201",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -3937,7 +3937,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -3950,8 +3950,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DRIVING_LAYUP",
-            "shot_result": "ShotResult.MISSED_WITH_FOUL",
+            "shot_type": "411",
+            "shot_result": "4",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -3968,7 +3968,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.SHOOTING_FOUL",
+            "foul_type": "504",
             "flagrant": 0,
             "attacking_team": 1,
             "attacker": 4,
@@ -3982,7 +3982,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 1,
             "attacker": 4,
             "gameclock": 195,
@@ -3993,7 +3993,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 1,
             "attacker": 4,
             "gameclock": 195,
@@ -4004,7 +4004,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -4017,8 +4017,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_WING",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "102",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -4035,7 +4035,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 0,
             "attacker": 5,
             "defending_team": 1,
@@ -4048,7 +4048,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.PASS_INTERCEPTED",
+            "interrupt_type": "808",
             "attacking_team": 0,
             "attacker": 7,
             "defending_team": 1,
@@ -4061,8 +4061,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "203",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 7,
             "defending_team": 0,
@@ -4080,7 +4080,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.PASS_INTERCEPTED",
+            "interrupt_type": "808",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -4093,8 +4093,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DUNK1",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "401",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 3,
             "defending_team": 0,
@@ -4112,8 +4112,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.LAYUP",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "402",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 5,
             "defending_team": 1,
@@ -4131,7 +4131,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.BALL_THROWN_OUT",
+            "interrupt_type": "802",
             "attacking_team": 1,
             "attacker": 7,
             "defending_team": 0,
@@ -4144,7 +4144,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PG",
+            "sub_type": "9510",
             "team": 0,
             "player_in": 0,
             "player_out": 10,
@@ -4156,7 +4156,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PF",
+            "sub_type": "9513",
             "team": 0,
             "player_in": 5,
             "player_out": 6,
@@ -4168,8 +4168,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "203",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -4186,7 +4186,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 3,
             "defending_team": 1,
@@ -4199,7 +4199,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.PERSONAL_FOUL",
+            "foul_type": "507",
             "flagrant": 0,
             "attacking_team": 1,
             "attacker": 7,
@@ -4213,7 +4213,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SF",
+            "sub_type": "9512",
             "team": 0,
             "player_in": 9,
             "player_out": 4,
@@ -4225,7 +4225,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PF",
+            "sub_type": "9513",
             "team": 1,
             "player_in": 5,
             "player_out": 7,
@@ -4237,7 +4237,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_C",
+            "sub_type": "9514",
             "team": 1,
             "player_in": 0,
             "player_out": 2,
@@ -4249,8 +4249,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DRIVING_LAYUP",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "411",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 1,
             "defending_team": 0,
@@ -4267,7 +4267,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.PERSONAL_FOUL",
+            "foul_type": "507",
             "flagrant": 0,
             "attacking_team": 0,
             "attacker": 8,
@@ -4281,7 +4281,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SF",
+            "sub_type": "9512",
             "team": 1,
             "player_in": 1,
             "player_out": 6,
@@ -4293,8 +4293,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.LAYUP",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "402",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -4311,7 +4311,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 4,
             "defending_team": 1,
@@ -4324,8 +4324,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_TOPKEY",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "204",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 2,
             "defending_team": 0,
@@ -4343,7 +4343,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.BALL_THROWN_OUT",
+            "interrupt_type": "802",
             "attacking_team": 0,
             "attacker": 1,
             "defending_team": 1,
@@ -4356,7 +4356,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PG",
+            "sub_type": "9510",
             "team": 0,
             "player_in": 10,
             "player_out": 0,
@@ -4368,7 +4368,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SG",
+            "sub_type": "9511",
             "team": 0,
             "player_in": 8,
             "player_out": 1,
@@ -4380,8 +4380,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_TOPKEY",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "204",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -4398,7 +4398,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.REBOUND_OUT_OF_BOUNDS",
+            "rebound_type": "934",
             "attacking_team": 1,
             "attacker": 6,
             "defending_team": 0,
@@ -4411,8 +4411,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_TOPKEY",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "204",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 6,
             "defending_team": 1,
@@ -4429,7 +4429,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 0,
             "attacker": 11,
             "defending_team": 1,
@@ -4442,7 +4442,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.PASS_INTERCEPTED",
+            "interrupt_type": "808",
             "attacking_team": 0,
             "attacker": 9,
             "defending_team": 1,
@@ -4455,8 +4455,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.POST_UP_MOVE",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "403",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 2,
             "defending_team": 0,
@@ -4474,7 +4474,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.PASS_INTERCEPTED",
+            "interrupt_type": "808",
             "attacking_team": 0,
             "attacker": 9,
             "defending_team": 1,
@@ -4487,8 +4487,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.POST_UP_MOVE",
-            "shot_result": "ShotResult.MISSED_WITH_FOUL",
+            "shot_type": "403",
+            "shot_result": "4",
             "attacking_team": 1,
             "attacker": 1,
             "defending_team": 0,
@@ -4505,7 +4505,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.SHOOTING_FOUL",
+            "foul_type": "504",
             "flagrant": 0,
             "attacking_team": 1,
             "attacker": 1,
@@ -4519,7 +4519,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 1,
             "attacker": 1,
             "gameclock": 431,
@@ -4530,7 +4530,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SF",
+            "sub_type": "9512",
             "team": 0,
             "player_in": 4,
             "player_out": 9,
@@ -4542,7 +4542,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PF",
+            "sub_type": "9513",
             "team": 0,
             "player_in": 6,
             "player_out": 5,
@@ -4554,7 +4554,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SF",
+            "sub_type": "9512",
             "team": 1,
             "player_in": 6,
             "player_out": 1,
@@ -4566,7 +4566,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PF",
+            "sub_type": "9513",
             "team": 1,
             "player_in": 7,
             "player_out": 5,
@@ -4578,7 +4578,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 1,
             "attacker": 1,
             "gameclock": 431,
@@ -4589,7 +4589,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -4602,8 +4602,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.POST_UP_MOVE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "403",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 5,
             "defending_team": 1,
@@ -4620,7 +4620,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -4633,8 +4633,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_WING",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "202",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -4651,7 +4651,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 1,
             "attacker": 1,
             "defending_team": 0,
@@ -4664,8 +4664,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.REBOUND_SHOT",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "409",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 1,
             "defending_team": 0,
@@ -4682,8 +4682,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_TOPKEY",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "204",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 11,
             "defending_team": 1,
@@ -4700,7 +4700,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 1,
             "defending_team": 1,
@@ -4713,8 +4713,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DRIVING_LAYUP",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "411",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -4731,7 +4731,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 1,
             "attacker": 1,
             "defending_team": 0,
@@ -4744,8 +4744,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DRIVING_LAYUP",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "411",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -4762,8 +4762,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DUNK1",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "401",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 9,
             "defending_team": 1,
@@ -4781,8 +4781,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.POST_UP_MOVE",
-            "shot_result": "ShotResult.MISSED_WITH_FOUL",
+            "shot_type": "403",
+            "shot_result": "4",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -4799,7 +4799,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.SHOOTING_FOUL",
+            "foul_type": "504",
             "flagrant": 0,
             "attacking_team": 1,
             "attacker": 4,
@@ -4813,7 +4813,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 1,
             "attacker": 4,
             "gameclock": 538,
@@ -4824,7 +4824,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PG",
+            "sub_type": "9510",
             "team": 0,
             "player_in": 0,
             "player_out": 10,
@@ -4836,7 +4836,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SG",
+            "sub_type": "9511",
             "team": 0,
             "player_in": 1,
             "player_out": 8,
@@ -4848,7 +4848,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_C",
+            "sub_type": "9514",
             "team": 1,
             "player_in": 2,
             "player_out": 0,
@@ -4860,7 +4860,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 1,
             "attacker": 4,
             "gameclock": 538,
@@ -4871,8 +4871,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.LAYUP",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "402",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 5,
             "defending_team": 1,
@@ -4889,7 +4889,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 0,
             "attacker": 1,
             "defending_team": 1,
@@ -4902,8 +4902,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DRIVING_LAYUP",
-            "shot_result": "ShotResult.BLOCKED",
+            "shot_type": "411",
+            "shot_result": "3",
             "attacking_team": 0,
             "attacker": 1,
             "defending_team": 1,
@@ -4920,7 +4920,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 4,
             "defending_team": 1,
@@ -4933,7 +4933,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.LOST_HANDLE",
+            "interrupt_type": "812",
             "attacking_team": 1,
             "attacker": 3,
             "defending_team": 0,
@@ -4946,7 +4946,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SF",
+            "sub_type": "9512",
             "team": 0,
             "player_in": 9,
             "player_out": 4,
@@ -4958,7 +4958,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SF",
+            "sub_type": "9512",
             "team": 1,
             "player_in": 1,
             "player_out": 6,
@@ -4970,7 +4970,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PF",
+            "sub_type": "9513",
             "team": 1,
             "player_in": 5,
             "player_out": 7,
@@ -4982,13 +4982,13 @@
         },
         {
             "event_type": "break",
-            "break_type": "BreakType.TIMEOUT_60",
+            "break_type": "7061",
             "team": 0
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "203",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 7,
             "defending_team": 1,
@@ -5006,8 +5006,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DRIVING_LAYUP",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "411",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -5025,8 +5025,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_TOPKEY",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "101",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -5043,7 +5043,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 3,
             "defending_team": 1,
@@ -5056,8 +5056,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "203",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 6,
             "defending_team": 0,
@@ -5075,8 +5075,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DUNK1",
-            "shot_result": "ShotResult.MISSED_WITH_FOUL",
+            "shot_type": "401",
+            "shot_result": "4",
             "attacking_team": 0,
             "attacker": 10,
             "defending_team": 1,
@@ -5093,7 +5093,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.SHOOTING_FOUL",
+            "foul_type": "504",
             "flagrant": 0,
             "attacking_team": 0,
             "attacker": 10,
@@ -5107,7 +5107,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 0,
             "attacker": 10,
             "gameclock": 653,
@@ -5118,7 +5118,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_C",
+            "sub_type": "9514",
             "team": 0,
             "player_in": 4,
             "player_out": 7,
@@ -5130,7 +5130,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SF",
+            "sub_type": "9512",
             "team": 1,
             "player_in": 6,
             "player_out": 1,
@@ -5142,7 +5142,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PF",
+            "sub_type": "9513",
             "team": 1,
             "player_in": 7,
             "player_out": 5,
@@ -5154,7 +5154,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 0,
             "attacker": 10,
             "gameclock": 653,
@@ -5165,7 +5165,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 3,
             "defending_team": 1,
@@ -5178,8 +5178,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_TOPKEY",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "204",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 3,
             "defending_team": 0,
@@ -5197,8 +5197,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_WING",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "102",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -5215,8 +5215,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DRIVING_LAYUP",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "411",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -5233,7 +5233,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 1,
             "attacker": 7,
             "defending_team": 0,
@@ -5246,8 +5246,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.POST_UP_MOVE",
-            "shot_result": "ShotResult.BLOCKED",
+            "shot_type": "403",
+            "shot_result": "3",
             "attacking_team": 0,
             "attacker": 7,
             "defending_team": 1,
@@ -5264,7 +5264,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.REBOUND_OUT_OF_BOUNDS",
+            "rebound_type": "934",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -5277,8 +5277,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "203",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 1,
             "defending_team": 1,
@@ -5295,7 +5295,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -5308,8 +5308,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_CORNER",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "103",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -5326,12 +5326,12 @@
         },
         {
             "event_type": "break",
-            "break_type": "BreakType.END_OF_QUARTER",
+            "break_type": "961",
             "team": -1
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.POS_SWAP",
+            "sub_type": "9520",
             "team": 0,
             "player_in": 9,
             "player_out": 4,
@@ -5343,7 +5343,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PG",
+            "sub_type": "9510",
             "team": 0,
             "player_in": 10,
             "player_out": 0,
@@ -5355,8 +5355,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.HOOK",
-            "shot_result": "ShotResult.GOALTEND",
+            "shot_type": "405",
+            "shot_result": "2",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -5373,8 +5373,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_WING",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "202",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 11,
             "defending_team": 1,
@@ -5391,7 +5391,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 7,
             "defending_team": 1,
@@ -5404,8 +5404,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_TOPKEY",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "204",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -5422,8 +5422,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_WING",
-            "shot_result": "ShotResult.BLOCKED",
+            "shot_type": "202",
+            "shot_result": "3",
             "attacking_team": 0,
             "attacker": 5,
             "defending_team": 1,
@@ -5440,7 +5440,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.REBOUND_OUT_OF_BOUNDS",
+            "rebound_type": "934",
             "attacking_team": 0,
             "attacker": 5,
             "defending_team": 1,
@@ -5453,8 +5453,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "203",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -5471,7 +5471,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 1,
             "attacker": 10,
             "defending_team": 0,
@@ -5484,8 +5484,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_WING",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "202",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 7,
             "defending_team": 1,
@@ -5502,7 +5502,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -5515,8 +5515,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DRIVING_LAYUP",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "411",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -5533,7 +5533,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -5546,8 +5546,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_WING",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "202",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -5564,7 +5564,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.REBOUND_OUT_OF_BOUNDS",
+            "rebound_type": "934",
             "attacking_team": 1,
             "attacker": 3,
             "defending_team": 0,
@@ -5577,7 +5577,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.BALL_THROWN_OUT",
+            "interrupt_type": "802",
             "attacking_team": 0,
             "attacker": 10,
             "defending_team": 1,
@@ -5590,7 +5590,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_C",
+            "sub_type": "9514",
             "team": 0,
             "player_in": 7,
             "player_out": 9,
@@ -5602,8 +5602,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "203",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -5620,7 +5620,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -5633,8 +5633,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DUNK1",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "401",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 5,
             "defending_team": 1,
@@ -5652,8 +5652,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_TOPKEY",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "204",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -5670,8 +5670,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_WING",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "102",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 5,
             "defending_team": 1,
@@ -5688,7 +5688,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 0,
             "attacker": 5,
             "defending_team": 1,
@@ -5701,8 +5701,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DUNK2",
-            "shot_result": "ShotResult.BLOCKED",
+            "shot_type": "410",
+            "shot_result": "3",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -5719,7 +5719,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -5732,7 +5732,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.BALL_STOLEN",
+            "interrupt_type": "807",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -5745,8 +5745,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.LAYUP",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "402",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -5763,7 +5763,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 3,
             "defending_team": 1,
@@ -5776,8 +5776,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_ELBOW",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "201",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -5794,7 +5794,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.REBOUND_OUT_OF_BOUNDS",
+            "rebound_type": "934",
             "attacking_team": 1,
             "attacker": 7,
             "defending_team": 0,
@@ -5807,13 +5807,13 @@
         },
         {
             "event_type": "break",
-            "break_type": "BreakType.TIMEOUT_30",
+            "break_type": "7060",
             "team": 0
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_WING",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "102",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 11,
             "defending_team": 1,
@@ -5830,7 +5830,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -5843,8 +5843,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.REBOUND_SHOT",
-            "shot_result": "ShotResult.BLOCKED",
+            "shot_type": "409",
+            "shot_result": "3",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -5861,7 +5861,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 7,
             "defending_team": 1,
@@ -5874,8 +5874,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.POST_UP_MOVE",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "403",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -5893,8 +5893,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.LAYUP",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "402",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 5,
             "defending_team": 1,
@@ -5911,7 +5911,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.REBOUND_OUT_OF_BOUNDS",
+            "rebound_type": "934",
             "attacking_team": 0,
             "attacker": 5,
             "defending_team": 1,
@@ -5924,8 +5924,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.FADE_AWAY",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "404",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -5942,7 +5942,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 0,
             "attacker": 5,
             "defending_team": 1,
@@ -5955,8 +5955,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_WING",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "202",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 7,
             "defending_team": 1,
@@ -5973,7 +5973,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 4,
             "defending_team": 1,
@@ -5986,8 +5986,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_ELBOW",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "201",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -6004,7 +6004,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 1,
             "attacker": 2,
             "defending_team": 0,
@@ -6017,7 +6017,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.BALL_THROWN_OUT",
+            "interrupt_type": "802",
             "attacking_team": 0,
             "attacker": 11,
             "defending_team": 1,
@@ -6030,7 +6030,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PG",
+            "sub_type": "9510",
             "team": 0,
             "player_in": 0,
             "player_out": 10,
@@ -6042,7 +6042,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SF",
+            "sub_type": "9512",
             "team": 0,
             "player_in": 9,
             "player_out": 4,
@@ -6054,7 +6054,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PF",
+            "sub_type": "9513",
             "team": 0,
             "player_in": 5,
             "player_out": 6,
@@ -6066,7 +6066,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PF",
+            "sub_type": "9513",
             "team": 1,
             "player_in": 5,
             "player_out": 7,
@@ -6078,7 +6078,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_C",
+            "sub_type": "9514",
             "team": 1,
             "player_in": 0,
             "player_out": 2,
@@ -6090,8 +6090,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.LAYUP",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "402",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -6109,7 +6109,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.PERSONAL_FOUL",
+            "foul_type": "507",
             "flagrant": 0,
             "attacking_team": 0,
             "attacker": 2,
@@ -6123,8 +6123,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DUNK2",
-            "shot_result": "ShotResult.BLOCKED",
+            "shot_type": "410",
+            "shot_result": "3",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -6141,7 +6141,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 6,
             "defending_team": 1,
@@ -6154,8 +6154,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_WING",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "202",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -6173,13 +6173,13 @@
         },
         {
             "event_type": "break",
-            "break_type": "BreakType.TIMEOUT_30",
+            "break_type": "7060",
             "team": 0
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_ELBOW",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "201",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -6196,7 +6196,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 7,
             "defending_team": 1,
@@ -6209,7 +6209,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.PASS_INTERCEPTED",
+            "interrupt_type": "808",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -6222,8 +6222,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DUNK1",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "401",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 10,
             "defending_team": 1,
@@ -6241,8 +6241,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_WING",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "102",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 7,
             "defending_team": 0,
@@ -6259,8 +6259,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_ELBOW",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "201",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 6,
             "defending_team": 1,
@@ -6277,7 +6277,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 1,
             "defending_team": 1,
@@ -6290,7 +6290,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.PASS_INTERCEPTED",
+            "interrupt_type": "808",
             "attacking_team": 1,
             "attacker": 7,
             "defending_team": 0,
@@ -6303,8 +6303,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_TOPKEY",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "101",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 1,
             "defending_team": 1,
@@ -6321,7 +6321,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.REBOUND_OUT_OF_BOUNDS",
+            "rebound_type": "934",
             "attacking_team": 0,
             "attacker": 6,
             "defending_team": 1,
@@ -6334,8 +6334,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "203",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -6352,7 +6352,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 7,
             "defending_team": 1,
@@ -6365,8 +6365,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_CORNER",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "103",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -6383,7 +6383,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 1,
             "attacker": 1,
             "defending_team": 0,
@@ -6396,8 +6396,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.REBOUND_SHOT",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "409",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 1,
             "defending_team": 0,
@@ -6414,8 +6414,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_TOPKEY",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "204",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -6433,8 +6433,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DUNK1",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "401",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -6452,8 +6452,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_CORNER",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "103",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 1,
             "defending_team": 1,
@@ -6470,7 +6470,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 6,
             "defending_team": 1,
@@ -6483,8 +6483,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "203",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 7,
             "defending_team": 0,
@@ -6502,7 +6502,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.SHOOTING_FOUL",
+            "foul_type": "504",
             "flagrant": 0,
             "attacking_team": 1,
             "attacker": 7,
@@ -6516,7 +6516,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PG",
+            "sub_type": "9510",
             "team": 0,
             "player_in": 10,
             "player_out": 0,
@@ -6528,7 +6528,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SG",
+            "sub_type": "9511",
             "team": 0,
             "player_in": 8,
             "player_out": 1,
@@ -6540,7 +6540,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SF",
+            "sub_type": "9512",
             "team": 0,
             "player_in": 4,
             "player_out": 9,
@@ -6552,7 +6552,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PF",
+            "sub_type": "9513",
             "team": 0,
             "player_in": 6,
             "player_out": 5,
@@ -6564,7 +6564,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PF",
+            "sub_type": "9513",
             "team": 1,
             "player_in": 7,
             "player_out": 5,
@@ -6576,7 +6576,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_C",
+            "sub_type": "9514",
             "team": 1,
             "player_in": 2,
             "player_out": 0,
@@ -6588,7 +6588,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SF",
+            "sub_type": "9512",
             "team": 1,
             "player_in": 1,
             "player_out": 6,
@@ -6600,7 +6600,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 1,
             "attacker": 7,
             "gameclock": 1273,
@@ -6611,7 +6611,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -6624,8 +6624,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.REBOUND_SHOT",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "409",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -6642,7 +6642,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -6655,8 +6655,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.POST_UP_MOVE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "403",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 9,
             "defending_team": 1,
@@ -6673,7 +6673,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 3,
             "defending_team": 1,
@@ -6686,8 +6686,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_TOPKEY",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "101",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -6704,7 +6704,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 1,
             "attacker": 11,
             "defending_team": 0,
@@ -6717,8 +6717,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.HOOK",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "405",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 7,
             "defending_team": 1,
@@ -6735,7 +6735,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -6748,8 +6748,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_TOPKEY",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "204",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -6766,8 +6766,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_ELBOW",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "201",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 9,
             "defending_team": 1,
@@ -6784,8 +6784,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.FADE_AWAY",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "404",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -6802,8 +6802,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.POST_UP_MOVE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "403",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 9,
             "defending_team": 1,
@@ -6820,7 +6820,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 3,
             "defending_team": 1,
@@ -6833,8 +6833,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_ELBOW",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "201",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -6851,7 +6851,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 1,
             "attacker": 7,
             "defending_team": 0,
@@ -6864,8 +6864,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.FADE_AWAY",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "404",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 5,
             "defending_team": 1,
@@ -6882,7 +6882,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -6895,8 +6895,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DUNK1",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "401",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -6914,8 +6914,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_HALFCOURT",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "105",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 11,
             "defending_team": 1,
@@ -6932,17 +6932,17 @@
         },
         {
             "event_type": "break",
-            "break_type": "BreakType.END_OF_QUARTER",
+            "break_type": "961",
             "team": -1
         },
         {
             "event_type": "break",
-            "break_type": "BreakType.END_OF_HALF",
+            "break_type": "963",
             "team": -1
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SG",
+            "sub_type": "9511",
             "team": 0,
             "player_in": 1,
             "player_out": 8,
@@ -6954,7 +6954,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SF",
+            "sub_type": "9512",
             "team": 1,
             "player_in": 6,
             "player_out": 1,
@@ -6966,8 +6966,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.POST_UP_MOVE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "403",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 3,
             "defending_team": 0,
@@ -6984,7 +6984,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 1,
             "attacker": 2,
             "defending_team": 0,
@@ -6997,13 +6997,13 @@
         },
         {
             "event_type": "break",
-            "break_type": "BreakType.TIMEOUT_60",
+            "break_type": "7061",
             "team": 0
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DUNK1",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "401",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 11,
             "defending_team": 1,
@@ -7021,8 +7021,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.POST_UP_MOVE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "403",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 3,
             "defending_team": 0,
@@ -7039,7 +7039,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -7052,8 +7052,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "203",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 11,
             "defending_team": 1,
@@ -7070,7 +7070,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -7083,8 +7083,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DUNK1",
-            "shot_result": "ShotResult.MISSED_WITH_FOUL",
+            "shot_type": "401",
+            "shot_result": "4",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -7101,7 +7101,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.SHOOTING_FOUL",
+            "foul_type": "504",
             "flagrant": 0,
             "attacking_team": 1,
             "attacker": 4,
@@ -7115,7 +7115,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 1,
             "attacker": 4,
             "gameclock": 1501,
@@ -7126,7 +7126,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 1,
             "attacker": 4,
             "gameclock": 1501,
@@ -7137,8 +7137,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_LONG",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "104",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 5,
             "defending_team": 1,
@@ -7155,7 +7155,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 3,
             "defending_team": 1,
@@ -7168,8 +7168,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DRIVING_LAYUP",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "411",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -7187,8 +7187,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "203",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 7,
             "defending_team": 1,
@@ -7205,8 +7205,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DUNK1",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "401",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 3,
             "defending_team": 0,
@@ -7224,8 +7224,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_WING",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "102",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -7242,8 +7242,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.POST_UP_MOVE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "403",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 3,
             "defending_team": 0,
@@ -7260,7 +7260,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 1,
             "attacker": 3,
             "defending_team": 0,
@@ -7273,8 +7273,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.REBOUND_SHOT",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "409",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 3,
             "defending_team": 0,
@@ -7291,8 +7291,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "203",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -7309,7 +7309,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.REBOUND_OUT_OF_BOUNDS",
+            "rebound_type": "934",
             "attacking_team": 0,
             "attacker": 7,
             "defending_team": 1,
@@ -7322,8 +7322,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DRIVING_LAYUP",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "411",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -7341,7 +7341,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.PASS_INTERCEPTED",
+            "interrupt_type": "808",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -7354,8 +7354,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DRIVING_LAYUP",
-            "shot_result": "ShotResult.MISSED_WITH_FOUL",
+            "shot_type": "411",
+            "shot_result": "4",
             "attacking_team": 1,
             "attacker": 7,
             "defending_team": 0,
@@ -7372,7 +7372,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.SHOOTING_FOUL",
+            "foul_type": "504",
             "flagrant": 0,
             "attacking_team": 1,
             "attacker": 7,
@@ -7386,7 +7386,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 1,
             "attacker": 7,
             "gameclock": 1644,
@@ -7397,7 +7397,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 1,
             "attacker": 7,
             "gameclock": 1644,
@@ -7408,8 +7408,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.POST_UP_MOVE",
-            "shot_result": "ShotResult.BLOCKED",
+            "shot_type": "403",
+            "shot_result": "3",
             "attacking_team": 0,
             "attacker": 5,
             "defending_team": 1,
@@ -7426,7 +7426,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 3,
             "defending_team": 1,
@@ -7439,8 +7439,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.LAYUP",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "402",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -7458,8 +7458,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.LAYUP",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "402",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -7476,7 +7476,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 3,
             "defending_team": 1,
@@ -7489,8 +7489,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_WING",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "202",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -7508,7 +7508,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.PASS_INTERCEPTED",
+            "interrupt_type": "808",
             "attacking_team": 0,
             "attacker": 11,
             "defending_team": 1,
@@ -7521,8 +7521,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_CORNER",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "103",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -7539,7 +7539,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -7552,8 +7552,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.REBOUND_SHOT",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "409",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -7570,8 +7570,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_WING",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "102",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 5,
             "defending_team": 1,
@@ -7588,8 +7588,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_ELBOW",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "201",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 7,
             "defending_team": 0,
@@ -7606,7 +7606,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 1,
             "attacker": 3,
             "defending_team": 0,
@@ -7619,8 +7619,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.REBOUND_SHOT",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "409",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 3,
             "defending_team": 0,
@@ -7637,7 +7637,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -7650,7 +7650,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.TRAVELLING",
+            "interrupt_type": "810",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -7663,7 +7663,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PG",
+            "sub_type": "9510",
             "team": 0,
             "player_in": 0,
             "player_out": 10,
@@ -7675,7 +7675,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SF",
+            "sub_type": "9512",
             "team": 0,
             "player_in": 9,
             "player_out": 4,
@@ -7687,7 +7687,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PF",
+            "sub_type": "9513",
             "team": 0,
             "player_in": 5,
             "player_out": 6,
@@ -7699,7 +7699,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SF",
+            "sub_type": "9512",
             "team": 1,
             "player_in": 1,
             "player_out": 6,
@@ -7711,7 +7711,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PF",
+            "sub_type": "9513",
             "team": 1,
             "player_in": 5,
             "player_out": 7,
@@ -7723,7 +7723,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_C",
+            "sub_type": "9514",
             "team": 1,
             "player_in": 0,
             "player_out": 2,
@@ -7735,8 +7735,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_TOPKEY",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "101",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 10,
             "defending_team": 1,
@@ -7753,7 +7753,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 6,
             "defending_team": 1,
@@ -7766,8 +7766,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.POST_UP_MOVE",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "403",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 6,
             "defending_team": 0,
@@ -7785,8 +7785,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_WING",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "102",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 6,
             "defending_team": 1,
@@ -7803,7 +7803,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.REBOUND_OUT_OF_BOUNDS",
+            "rebound_type": "934",
             "attacking_team": 0,
             "attacker": 1,
             "defending_team": 1,
@@ -7816,8 +7816,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_TOPKEY",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "101",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 6,
             "defending_team": 1,
@@ -7834,7 +7834,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.REBOUND_OUT_OF_BOUNDS",
+            "rebound_type": "934",
             "attacking_team": 0,
             "attacker": 4,
             "defending_team": 1,
@@ -7847,8 +7847,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_ELBOW",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "201",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -7865,7 +7865,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 4,
             "defending_team": 1,
@@ -7878,8 +7878,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_ELBOW",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "201",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -7897,12 +7897,12 @@
         },
         {
             "event_type": "break",
-            "break_type": "BreakType.TIMEOUT_60",
+            "break_type": "7061",
             "team": 0
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SF",
+            "sub_type": "9512",
             "team": 1,
             "player_in": 6,
             "player_out": 1,
@@ -7914,8 +7914,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.HOOK",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "405",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 10,
             "defending_team": 1,
@@ -7932,7 +7932,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 6,
             "defending_team": 1,
@@ -7945,8 +7945,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_WING",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "102",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 7,
             "defending_team": 0,
@@ -7963,8 +7963,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.LAYUP",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "402",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 6,
             "defending_team": 1,
@@ -7981,7 +7981,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 5,
             "defending_team": 1,
@@ -7994,8 +7994,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_WING",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "202",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -8012,8 +8012,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_TOPKEY",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "101",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -8030,7 +8030,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 1,
             "defending_team": 1,
@@ -8043,8 +8043,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DUNK1",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "401",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 7,
             "defending_team": 0,
@@ -8062,8 +8062,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_ELBOW",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "201",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 6,
             "defending_team": 1,
@@ -8080,8 +8080,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DUNK1",
-            "shot_result": "ShotResult.MISSED_WITH_FOUL",
+            "shot_type": "401",
+            "shot_result": "4",
             "attacking_team": 1,
             "attacker": 1,
             "defending_team": 0,
@@ -8098,7 +8098,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.SHOOTING_FOUL",
+            "foul_type": "504",
             "flagrant": 0,
             "attacking_team": 1,
             "attacker": 1,
@@ -8112,7 +8112,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 1,
             "attacker": 1,
             "gameclock": 1958,
@@ -8123,7 +8123,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PG",
+            "sub_type": "9510",
             "team": 0,
             "player_in": 10,
             "player_out": 0,
@@ -8135,7 +8135,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SG",
+            "sub_type": "9511",
             "team": 0,
             "player_in": 8,
             "player_out": 1,
@@ -8147,7 +8147,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SF",
+            "sub_type": "9512",
             "team": 0,
             "player_in": 4,
             "player_out": 9,
@@ -8159,7 +8159,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PF",
+            "sub_type": "9513",
             "team": 0,
             "player_in": 6,
             "player_out": 5,
@@ -8171,7 +8171,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PF",
+            "sub_type": "9513",
             "team": 1,
             "player_in": 7,
             "player_out": 5,
@@ -8183,7 +8183,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 1,
             "attacker": 1,
             "gameclock": 1958,
@@ -8194,7 +8194,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -8207,8 +8207,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.REBOUND_SHOT",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "409",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -8225,7 +8225,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -8238,8 +8238,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.REBOUND_SHOT",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "409",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -8256,8 +8256,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_TOPKEY",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "101",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 9,
             "defending_team": 1,
@@ -8274,8 +8274,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_WING",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "202",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 7,
             "defending_team": 0,
@@ -8293,8 +8293,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_ELBOW",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "201",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 9,
             "defending_team": 1,
@@ -8311,7 +8311,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -8324,7 +8324,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.PERSONAL_FOUL",
+            "foul_type": "507",
             "flagrant": 0,
             "attacking_team": 1,
             "attacker": 4,
@@ -8338,7 +8338,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_C",
+            "sub_type": "9514",
             "team": 0,
             "player_in": 2,
             "player_out": 7,
@@ -8350,7 +8350,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_C",
+            "sub_type": "9514",
             "team": 1,
             "player_in": 2,
             "player_out": 0,
@@ -8362,8 +8362,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_WING",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "102",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -8380,7 +8380,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -8393,8 +8393,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.LAYUP",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "402",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -8411,8 +8411,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_CORNER",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "103",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 11,
             "defending_team": 1,
@@ -8429,8 +8429,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_CORNER",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "103",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -8448,8 +8448,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_WING",
-            "shot_result": "ShotResult.MISSED_WITH_FOUL",
+            "shot_type": "202",
+            "shot_result": "4",
             "attacking_team": 0,
             "attacker": 11,
             "defending_team": 1,
@@ -8466,7 +8466,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.SHOOTING_FOUL",
+            "foul_type": "504",
             "flagrant": 0,
             "attacking_team": 0,
             "attacker": 11,
@@ -8480,7 +8480,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 0,
             "attacker": 11,
             "gameclock": 2065,
@@ -8491,7 +8491,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SG",
+            "sub_type": "9511",
             "team": 0,
             "player_in": 1,
             "player_out": 8,
@@ -8503,7 +8503,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SF",
+            "sub_type": "9512",
             "team": 1,
             "player_in": 1,
             "player_out": 6,
@@ -8515,7 +8515,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PF",
+            "sub_type": "9513",
             "team": 1,
             "player_in": 5,
             "player_out": 7,
@@ -8527,7 +8527,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_C",
+            "sub_type": "9514",
             "team": 1,
             "player_in": 0,
             "player_out": 2,
@@ -8539,7 +8539,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 0,
             "attacker": 11,
             "gameclock": 2065,
@@ -8550,8 +8550,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_ELBOW",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "201",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -8568,8 +8568,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DRIVING_LAYUP",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "411",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 7,
             "defending_team": 1,
@@ -8586,7 +8586,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 6,
             "defending_team": 1,
@@ -8599,8 +8599,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_WING",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "202",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 2,
             "defending_team": 0,
@@ -8617,8 +8617,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_ELBOW",
-            "shot_result": "ShotResult.MISSED_WITH_FOUL",
+            "shot_type": "201",
+            "shot_result": "4",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -8635,7 +8635,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.SHOOTING_FOUL",
+            "foul_type": "504",
             "flagrant": 0,
             "attacking_team": 0,
             "attacker": 2,
@@ -8649,7 +8649,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 0,
             "attacker": 2,
             "gameclock": 2126,
@@ -8660,7 +8660,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 0,
             "attacker": 2,
             "gameclock": 2126,
@@ -8671,7 +8671,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.REBOUND_OUT_OF_BOUNDS",
+            "rebound_type": "934",
             "attacking_team": 0,
             "attacker": 6,
             "defending_team": 1,
@@ -8684,8 +8684,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.POST_UP_MOVE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "403",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 11,
             "defending_team": 1,
@@ -8702,7 +8702,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 0,
             "attacker": 3,
             "defending_team": 1,
@@ -8715,8 +8715,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TIPIN",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "408",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 3,
             "defending_team": 1,
@@ -8733,7 +8733,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 0,
             "attacker": 3,
             "defending_team": 1,
@@ -8746,8 +8746,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_TOPKEY",
-            "shot_result": "ShotResult.BLOCKED",
+            "shot_type": "204",
+            "shot_result": "3",
             "attacking_team": 0,
             "attacker": 11,
             "defending_team": 1,
@@ -8764,7 +8764,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 1,
             "defending_team": 1,
@@ -8777,8 +8777,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_WING",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "202",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -8795,13 +8795,13 @@
         },
         {
             "event_type": "break",
-            "break_type": "BreakType.END_OF_QUARTER",
+            "break_type": "961",
             "team": -1
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DUNK1",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "401",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 11,
             "defending_team": 1,
@@ -8819,8 +8819,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DUNK1",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "401",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 2,
             "defending_team": 0,
@@ -8838,12 +8838,12 @@
         },
         {
             "event_type": "break",
-            "break_type": "BreakType.TIMEOUT_60",
+            "break_type": "7061",
             "team": 0
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_C",
+            "sub_type": "9514",
             "team": 0,
             "player_in": 7,
             "player_out": 2,
@@ -8855,8 +8855,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_TOPKEY",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "101",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 5,
             "defending_team": 1,
@@ -8873,7 +8873,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -8886,8 +8886,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.OFF_DRIBBLE_JUMP_SHOT",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "406",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 7,
             "defending_team": 1,
@@ -8904,7 +8904,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 4,
             "defending_team": 1,
@@ -8917,8 +8917,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DUNK2",
-            "shot_result": "ShotResult.BLOCKED",
+            "shot_type": "410",
+            "shot_result": "3",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -8935,7 +8935,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.REBOUND_OUT_OF_BOUNDS",
+            "rebound_type": "934",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -8948,8 +8948,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_CORNER",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "103",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -8966,7 +8966,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.REBOUND_OUT_OF_BOUNDS",
+            "rebound_type": "934",
             "attacking_team": 1,
             "attacker": 7,
             "defending_team": 0,
@@ -8979,8 +8979,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.POST_UP_MOVE",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "403",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 6,
             "defending_team": 0,
@@ -8998,8 +8998,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_CORNER",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "103",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -9016,7 +9016,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.PASS_INTERCEPTED",
+            "interrupt_type": "808",
             "attacking_team": 1,
             "attacker": 6,
             "defending_team": 0,
@@ -9029,7 +9029,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.PERSONAL_FOUL",
+            "foul_type": "507",
             "flagrant": 0,
             "attacking_team": 0,
             "attacker": 11,
@@ -9043,8 +9043,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_ELBOW",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "201",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -9061,7 +9061,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -9074,8 +9074,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_WING",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "102",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -9093,8 +9093,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_CORNER",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "103",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 5,
             "defending_team": 1,
@@ -9111,7 +9111,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 4,
             "defending_team": 1,
@@ -9124,8 +9124,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "203",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 1,
             "defending_team": 0,
@@ -9143,7 +9143,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.TRAVELLING",
+            "interrupt_type": "810",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -9156,8 +9156,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_ELBOW",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "201",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -9174,7 +9174,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.REBOUND_OUT_OF_BOUNDS",
+            "rebound_type": "934",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -9187,8 +9187,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_WING",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "202",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -9205,7 +9205,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 6,
             "defending_team": 1,
@@ -9218,8 +9218,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_WING",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "202",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -9236,7 +9236,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 1,
             "attacker": 2,
             "defending_team": 0,
@@ -9249,8 +9249,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_ELBOW",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "201",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 11,
             "defending_team": 1,
@@ -9268,8 +9268,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_CORNER",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "103",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 2,
             "defending_team": 0,
@@ -9286,7 +9286,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -9299,7 +9299,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.PASS_INTERCEPTED",
+            "interrupt_type": "808",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -9312,8 +9312,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.OFF_DRIBBLE_JUMP_SHOT",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "406",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 7,
             "defending_team": 1,
@@ -9330,7 +9330,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -9343,8 +9343,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.REBOUND_SHOT",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "409",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 8,
             "defending_team": 1,
@@ -9361,7 +9361,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 6,
             "defending_team": 1,
@@ -9374,8 +9374,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "203",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 6,
             "defending_team": 0,
@@ -9392,8 +9392,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_WING",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "102",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -9410,8 +9410,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.POST_UP_MOVE",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "403",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 2,
             "defending_team": 0,
@@ -9429,8 +9429,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "203",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 7,
             "defending_team": 1,
@@ -9447,7 +9447,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -9460,7 +9460,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.PERSONAL_FOUL",
+            "foul_type": "507",
             "flagrant": 0,
             "attacking_team": 1,
             "attacker": 5,
@@ -9474,7 +9474,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PG",
+            "sub_type": "9510",
             "team": 0,
             "player_in": 0,
             "player_out": 10,
@@ -9486,7 +9486,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SF",
+            "sub_type": "9512",
             "team": 0,
             "player_in": 9,
             "player_out": 4,
@@ -9498,7 +9498,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PF",
+            "sub_type": "9513",
             "team": 0,
             "player_in": 5,
             "player_out": 6,
@@ -9510,8 +9510,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_TOPKEY",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "101",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -9528,7 +9528,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 1,
             "attacker": 1,
             "defending_team": 0,
@@ -9541,7 +9541,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.PERSONAL_FOUL",
+            "foul_type": "507",
             "flagrant": 0,
             "attacking_team": 0,
             "attacker": 6,
@@ -9555,8 +9555,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_TOPKEY",
-            "shot_result": "ShotResult.MISSED_WITH_FOUL",
+            "shot_type": "204",
+            "shot_result": "4",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -9573,7 +9573,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.SHOOTING_FOUL",
+            "foul_type": "504",
             "flagrant": 0,
             "attacking_team": 0,
             "attacker": 2,
@@ -9587,7 +9587,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 0,
             "attacker": 2,
             "gameclock": 2536,
@@ -9598,7 +9598,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 0,
             "attacker": 2,
             "gameclock": 2536,
@@ -9609,7 +9609,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.PASS_INTERCEPTED",
+            "interrupt_type": "808",
             "attacking_team": 1,
             "attacker": 1,
             "defending_team": 0,
@@ -9622,8 +9622,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DRIVING_LAYUP",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "411",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 1,
             "defending_team": 1,
@@ -9640,7 +9640,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -9653,8 +9653,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DUNK1",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "401",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 6,
             "defending_team": 0,
@@ -9672,7 +9672,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.PERSONAL_FOUL",
+            "foul_type": "507",
             "flagrant": 0,
             "attacking_team": 0,
             "attacker": 1,
@@ -9686,7 +9686,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SG",
+            "sub_type": "9511",
             "team": 0,
             "player_in": 8,
             "player_out": 1,
@@ -9698,8 +9698,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DRIVING_LAYUP",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "411",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 1,
             "defending_team": 1,
@@ -9716,7 +9716,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -9729,8 +9729,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_WING",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "202",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 2,
             "defending_team": 0,
@@ -9747,7 +9747,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.OFF_REBOUND",
+            "rebound_type": "9317",
             "attacking_team": 1,
             "attacker": 6,
             "defending_team": 0,
@@ -9760,8 +9760,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.REBOUND_SHOT",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "409",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 6,
             "defending_team": 0,
@@ -9778,8 +9778,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_TOPKEY",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "101",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 6,
             "defending_team": 1,
@@ -9797,7 +9797,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.PASS_INTERCEPTED",
+            "interrupt_type": "808",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -9810,8 +9810,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "203",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 9,
             "defending_team": 1,
@@ -9828,7 +9828,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -9841,8 +9841,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DRIVING_LAYUP",
-            "shot_result": "ShotResult.MISSED_WITH_FOUL",
+            "shot_type": "411",
+            "shot_result": "4",
             "attacking_team": 1,
             "attacker": 2,
             "defending_team": 0,
@@ -9859,7 +9859,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.SHOOTING_FOUL",
+            "foul_type": "504",
             "flagrant": 0,
             "attacking_team": 1,
             "attacker": 2,
@@ -9873,7 +9873,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 1,
             "attacker": 2,
             "gameclock": 2636,
@@ -9884,7 +9884,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PG",
+            "sub_type": "9510",
             "team": 0,
             "player_in": 10,
             "player_out": 0,
@@ -9896,7 +9896,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SF",
+            "sub_type": "9512",
             "team": 0,
             "player_in": 4,
             "player_out": 9,
@@ -9908,7 +9908,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PF",
+            "sub_type": "9513",
             "team": 0,
             "player_in": 6,
             "player_out": 5,
@@ -9920,7 +9920,7 @@
         },
         {
             "event_type": "free_throw",
-            "free_throw_type": "FreeThrowType.REGULAR",
+            "free_throw_type": "1",
             "attacking_team": 1,
             "attacker": 2,
             "gameclock": 2636,
@@ -9931,8 +9931,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_TOPKEY",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "101",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 9,
             "defending_team": 1,
@@ -9949,7 +9949,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 6,
             "defending_team": 1,
@@ -9962,7 +9962,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.THREE_SEC_VIOLATION",
+            "interrupt_type": "801",
             "attacking_team": 1,
             "attacker": 4,
             "defending_team": 0,
@@ -9975,7 +9975,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SG",
+            "sub_type": "9511",
             "team": 0,
             "player_in": 1,
             "player_out": 8,
@@ -9987,8 +9987,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.POST_UP_MOVE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "403",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 11,
             "defending_team": 1,
@@ -10005,7 +10005,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.REBOUND_OUT_OF_BOUNDS",
+            "rebound_type": "934",
             "attacking_team": 0,
             "attacker": 1,
             "defending_team": 1,
@@ -10018,8 +10018,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_TOPKEY",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "204",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 7,
             "defending_team": 1,
@@ -10036,7 +10036,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 6,
             "defending_team": 1,
@@ -10049,7 +10049,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.PASS_INTERCEPTED",
+            "interrupt_type": "808",
             "attacking_team": 1,
             "attacker": 2,
             "defending_team": 0,
@@ -10062,8 +10062,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_TOPKEY",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "101",
+            "shot_result": "1",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -10080,8 +10080,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DUNK2",
-            "shot_result": "ShotResult.BLOCKED",
+            "shot_type": "410",
+            "shot_result": "3",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -10098,7 +10098,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 1,
             "attacker": 8,
             "defending_team": 0,
@@ -10111,8 +10111,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "203",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 5,
             "defending_team": 1,
@@ -10129,7 +10129,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -10142,8 +10142,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "203",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 1,
             "defending_team": 0,
@@ -10160,7 +10160,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 1,
             "attacker": 2,
             "defending_team": 0,
@@ -10173,7 +10173,7 @@
         },
         {
             "event_type": "interrupt",
-            "interrupt_type": "InterruptType.BALL_THROWN_OUT",
+            "interrupt_type": "802",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -10186,7 +10186,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PG",
+            "sub_type": "9510",
             "team": 0,
             "player_in": 0,
             "player_out": 10,
@@ -10198,7 +10198,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SG",
+            "sub_type": "9511",
             "team": 0,
             "player_in": 8,
             "player_out": 1,
@@ -10210,7 +10210,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SF",
+            "sub_type": "9512",
             "team": 0,
             "player_in": 9,
             "player_out": 4,
@@ -10222,7 +10222,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PF",
+            "sub_type": "9513",
             "team": 0,
             "player_in": 5,
             "player_out": 6,
@@ -10234,7 +10234,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SG",
+            "sub_type": "9511",
             "team": 1,
             "player_in": 6,
             "player_out": 4,
@@ -10246,8 +10246,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_CORNER",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "103",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 2,
             "defending_team": 0,
@@ -10265,8 +10265,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_TOPKEY",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "101",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 1,
             "defending_team": 1,
@@ -10283,7 +10283,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 6,
             "defending_team": 1,
@@ -10296,8 +10296,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_BASELINE",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "203",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 1,
             "defending_team": 0,
@@ -10314,7 +10314,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 1,
             "attacker": 9,
             "defending_team": 0,
@@ -10327,8 +10327,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_TOPKEY",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "101",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 1,
             "defending_team": 1,
@@ -10345,7 +10345,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 1,
             "defending_team": 1,
@@ -10358,8 +10358,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_WING",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "102",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 7,
             "defending_team": 0,
@@ -10377,8 +10377,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_CORNER",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "103",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 1,
             "defending_team": 1,
@@ -10395,7 +10395,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 7,
             "defending_team": 1,
@@ -10408,8 +10408,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.DRIVING_LAYUP",
-            "shot_result": "ShotResult.SCORED",
+            "shot_type": "411",
+            "shot_result": "1",
             "attacking_team": 1,
             "attacker": 7,
             "defending_team": 0,
@@ -10427,8 +10427,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_WING",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "102",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 10,
             "defending_team": 1,
@@ -10445,7 +10445,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -10458,8 +10458,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_WING",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "102",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 7,
             "defending_team": 0,
@@ -10476,7 +10476,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 1,
             "attacker": 10,
             "defending_team": 0,
@@ -10489,8 +10489,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_LONG",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "104",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 9,
             "defending_team": 1,
@@ -10507,7 +10507,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 0,
             "attacker": 1,
             "defending_team": 1,
@@ -10520,7 +10520,7 @@
         },
         {
             "event_type": "foul",
-            "foul_type": "FoulType.PERSONAL_FOUL",
+            "foul_type": "507",
             "flagrant": 0,
             "attacking_team": 1,
             "attacker": 1,
@@ -10534,7 +10534,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PG",
+            "sub_type": "9510",
             "team": 0,
             "player_in": 10,
             "player_out": 0,
@@ -10546,7 +10546,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SG",
+            "sub_type": "9511",
             "team": 0,
             "player_in": 1,
             "player_out": 8,
@@ -10558,7 +10558,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SF",
+            "sub_type": "9512",
             "team": 0,
             "player_in": 4,
             "player_out": 9,
@@ -10570,7 +10570,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_PF",
+            "sub_type": "9513",
             "team": 0,
             "player_in": 6,
             "player_out": 5,
@@ -10582,7 +10582,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_C",
+            "sub_type": "9514",
             "team": 0,
             "player_in": 2,
             "player_out": 7,
@@ -10594,7 +10594,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.POS_SWAP",
+            "sub_type": "9520",
             "team": 1,
             "player_in": 3,
             "player_out": 6,
@@ -10606,7 +10606,7 @@
         },
         {
             "event_type": "sub",
-            "sub_type": "SubType.SUB_SG",
+            "sub_type": "9511",
             "team": 1,
             "player_in": 4,
             "player_out": 3,
@@ -10618,8 +10618,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.TWO_POINTER_ELBOW",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "201",
+            "shot_result": "0",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -10636,7 +10636,7 @@
         },
         {
             "event_type": "rebound",
-            "rebound_type": "ReboundType.DEF_REBOUND",
+            "rebound_type": "9318",
             "attacking_team": 1,
             "attacker": 5,
             "defending_team": 0,
@@ -10649,8 +10649,8 @@
         },
         {
             "event_type": "shot",
-            "shot_type": "ShotType.THREE_POINTER_CORNER",
-            "shot_result": "ShotResult.MISSED",
+            "shot_type": "103",
+            "shot_result": "0",
             "attacking_team": 0,
             "attacker": 2,
             "defending_team": 1,
@@ -10667,12 +10667,12 @@
         },
         {
             "event_type": "break",
-            "break_type": "BreakType.END_OF_QUARTER",
+            "break_type": "961",
             "team": -1
         },
         {
             "event_type": "break",
-            "break_type": "BreakType.END_OF_GAME",
+            "break_type": "962",
             "team": -1
         }
     ]
