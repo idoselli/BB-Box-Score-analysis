@@ -1,3 +1,5 @@
+credit to Radek for bb insider which this tool was buit upon.
+
 MIT License
 
 Copyright (c) 2023 Radek Szymanski
