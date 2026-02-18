@@ -1073,11 +1073,7 @@ REPORT_HTML = """<!doctype html>
       return counts.three + counts.jump + counts.paint;
     }
 
-    function pctRange(v, total) {
-      return total ? `${((v / total) * 100).toFixed(1)}%` : "0.0%";
-    }
-
-    function renderPie(targetId, legendId, title, counts) {
+    function renderPie(targetId, legendId, title, counts, madeCounts) {
       const total = sumRangeCounts(counts);
       const pThree = total ? (counts.three / total) * 100 : 0;
       const pJump = total ? (counts.jump / total) * 100 : 0;
@@ -1097,9 +1093,9 @@ REPORT_HTML = """<!doctype html>
       `;
 
       document.getElementById(legendId).innerHTML = `
-        <div class="row"><span class="dot three"></span>Three: <strong>${counts.three}</strong> (${pctRange(counts.three, total)})</div>
-        <div class="row"><span class="dot jump"></span>Jump: <strong>${counts.jump}</strong> (${pctRange(counts.jump, total)})</div>
-        <div class="row"><span class="dot paint"></span>Paint: <strong>${counts.paint}</strong> (${pctRange(counts.paint, total)})</div>
+        <div class="row"><span class="dot three"></span>Three: <strong>${counts.three}</strong> (made <strong>${madeCounts.three}</strong>)</div>
+        <div class="row"><span class="dot jump"></span>Jump: <strong>${counts.jump}</strong> (made <strong>${madeCounts.jump}</strong>)</div>
+        <div class="row"><span class="dot paint"></span>Paint: <strong>${counts.paint}</strong> (made <strong>${madeCounts.paint}</strong>)</div>
       `;
     }
 
@@ -1116,25 +1112,35 @@ REPORT_HTML = """<!doctype html>
       const pslot = Number(pslotRaw);
       const pTeam = getTeamBySide(pside);
       const playerCounts = emptyRangeCounts();
+      const playerMadeCounts = emptyRangeCounts();
 
       shotEvents.forEach(ev => {
         if (Number(ev.attacking_team) !== pside) return;
         const idx = normalizeSlot(ev.attacker, pTeam.players.length);
         if (idx !== pslot) return;
-        playerCounts[getShotRange(ev.shot_type)] += 1;
+        const range = getShotRange(ev.shot_type);
+        playerCounts[range] += 1;
+        if (madeResults.has(String(ev.shot_result))) {
+          playerMadeCounts[range] += 1;
+        }
       });
 
-      renderPie("playerRangePie", "playerRangeLegend", "player shots", playerCounts);
+      renderPie("playerRangePie", "playerRangeLegend", "player shots", playerCounts, playerMadeCounts);
       renderPlayerCourtChart(pside, pslot, pTeam);
 
       const tside = Number(rangeTeamFilter.value);
       const teamCounts = emptyRangeCounts();
+      const teamMadeCounts = emptyRangeCounts();
       shotEvents.forEach(ev => {
         if (Number(ev.attacking_team) !== tside) return;
-        teamCounts[getShotRange(ev.shot_type)] += 1;
+        const range = getShotRange(ev.shot_type);
+        teamCounts[range] += 1;
+        if (madeResults.has(String(ev.shot_result))) {
+          teamMadeCounts[range] += 1;
+        }
       });
 
-      renderPie("teamRangePie", "teamRangeLegend", "team shots", teamCounts);
+      renderPie("teamRangePie", "teamRangeLegend", "team shots", teamCounts, teamMadeCounts);
     }
 
     function renderPlayerCourtChart(side, slot, teamObj) {
