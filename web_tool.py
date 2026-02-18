@@ -286,6 +286,65 @@ REPORT_HTML = """<!doctype html>
       font-size: 13px;
       background: #fff;
     }
+    .filter-block {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .multi-dd {
+      position: relative;
+      min-width: 220px;
+    }
+    .multi-dd-btn {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 7px 9px;
+      font-size: 13px;
+      background: #fff;
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+    }
+    .multi-dd.open .multi-dd-btn {
+      border-color: #9fb4cf;
+      box-shadow: 0 0 0 2px rgba(13, 71, 161, 0.08);
+    }
+    .multi-dd-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      width: 100%;
+      max-height: 260px;
+      overflow: auto;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      z-index: 20;
+      padding: 6px;
+    }
+    .multi-dd.open .multi-dd-menu {
+      display: block;
+    }
+    .multi-dd-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--ink);
+      padding: 4px 2px;
+    }
+    .multi-dd-item.select-all {
+      border-bottom: 1px solid #edf1f5;
+      margin-bottom: 4px;
+      padding-bottom: 6px;
+      font-weight: 700;
+    }
+    .multi-dd-item input {
+      margin: 0;
+    }
     .off-legend {
       display: flex;
       gap: 14px;
@@ -549,24 +608,30 @@ REPORT_HTML = """<!doctype html>
     <section class="card">
       <h3>Defender Shot Analysis</h3>
       <div class="events-head">
-        <label class="small">Defender
-          <select id="defenderFilter"></select>
-        </label>
-        <label class="small">Shot Type
-          <select id="defShotTypeFilter">
-            <option value="all">All</option>
-          </select>
-        </label>
-        <label class="small">Result
-          <select id="defResultFilter">
-            <option value="all">All</option>
-          </select>
-        </label>
+        <div class="small filter-block">
+          <span>Defender</span>
+          <div id="defenderFilter"></div>
+        </div>
+        <div class="small filter-block">
+          <span>Shot Type</span>
+          <div id="defShotTypeFilter"></div>
+        </div>
+        <div class="small filter-block">
+          <span>Result</span>
+          <div id="defResultFilter"></div>
+        </div>
         <span class="small" id="defShotsCount"></span>
       </div>
       <div class="summary-grid" id="defSummary"></div>
       <div class="table-wrap">
         <table id="defShotsTable"></table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Team Strengths & Weaknesses By Shot Type</h3>
+      <div class="table-wrap">
+        <table id="teamStrengthsTable"></table>
       </div>
     </section>
 
@@ -1029,58 +1094,160 @@ REPORT_HTML = """<!doctype html>
     const defSummary = document.getElementById("defSummary");
     const defShotsTable = document.getElementById("defShotsTable");
     const defShotsCount = document.getElementById("defShotsCount");
+    const teamStrengthsTable = document.getElementById("teamStrengthsTable");
+    const defenderFilterState = { options: [] };
+    const shotTypeFilterState = { options: [] };
+    const resultFilterState = { options: [] };
 
-    function populateDefenderOptions() {
-      const options = [];
-      home.players.forEach((p, i) => options.push({ value: `0:${i}`, label: `${p.name} (${home.name})` }));
-      away.players.forEach((p, i) => options.push({ value: `1:${i}`, label: `${p.name} (${away.name})` }));
-
-      defenderFilter.innerHTML = options
-        .map(o => `<option value="${o.value}">${o.label}</option>`)
-        .join("");
+    function selectedValues(filterRoot) {
+      return new Set(
+        [...filterRoot.querySelectorAll("input[data-role='item']:checked")]
+          .map(node => node.value)
+      );
     }
 
-    function populateDefenderResultOptions() {
-      defResultFilter.innerHTML = `<option value="all">All</option>` +
-        Object.entries(shotResultLabel)
-          .map(([k, v]) => `<option value="${k}">${v}</option>`)
-          .join("");
+    function updateFilterButtonLabel(filterRoot, options) {
+      const button = filterRoot.querySelector(".multi-dd-btn");
+      const selected = selectedValues(filterRoot);
+      const total = options.length;
+      if (selected.size === 0) {
+        button.textContent = "None selected";
+        return;
+      }
+      if (selected.size === total) {
+        button.textContent = "All selected";
+        return;
+      }
+      if (selected.size === 1) {
+        const selectedVal = [...selected][0];
+        const found = options.find(o => o.value === selectedVal);
+        button.textContent = found ? found.label : "1 selected";
+        return;
+      }
+      button.textContent = `${selected.size} selected`;
     }
 
-    function populateDefenderShotTypeOptions() {
-      const types = [...new Set(shotEvents.map(ev => String(ev.shot_type)).filter(Boolean))].sort();
-      defShotTypeFilter.innerHTML = `<option value="all">All</option>` +
-        types.map(code => `<option value="${code}">${shotTypeLabel[code] || code}</option>`).join("");
+    function syncSelectAllCheckbox(filterRoot) {
+      const allBox = filterRoot.querySelector("input[data-role='all']");
+      const allItems = [...filterRoot.querySelectorAll("input[data-role='item']")];
+      const checkedCount = allItems.filter(node => node.checked).length;
+      allBox.checked = checkedCount === allItems.length;
+      allBox.indeterminate = checkedCount > 0 && checkedCount < allItems.length;
+    }
+
+    function initMultiDropdown(filterRoot, options, onChange) {
+      filterRoot.className = "multi-dd";
+      filterRoot.innerHTML = "";
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "multi-dd-btn";
+      button.textContent = "All selected";
+      const menu = document.createElement("div");
+      menu.className = "multi-dd-menu";
+
+      const allRow = document.createElement("label");
+      allRow.className = "multi-dd-item select-all";
+      const allBox = document.createElement("input");
+      allBox.type = "checkbox";
+      allBox.checked = true;
+      allBox.dataset.role = "all";
+      const allText = document.createElement("span");
+      allText.textContent = "Select all";
+      allRow.appendChild(allBox);
+      allRow.appendChild(allText);
+      menu.appendChild(allRow);
+
+      options.forEach(opt => {
+        const row = document.createElement("label");
+        row.className = "multi-dd-item";
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.checked = true;
+        cb.value = opt.value;
+        cb.dataset.role = "item";
+        const text = document.createElement("span");
+        text.textContent = opt.label;
+        row.appendChild(cb);
+        row.appendChild(text);
+        menu.appendChild(row);
+      });
+
+      filterRoot.appendChild(button);
+      filterRoot.appendChild(menu);
+
+      button.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        document.querySelectorAll(".multi-dd.open").forEach(node => {
+          if (node !== filterRoot) node.classList.remove("open");
+        });
+        filterRoot.classList.toggle("open");
+      });
+
+      menu.addEventListener("click", (ev) => ev.stopPropagation());
+
+      allBox.addEventListener("change", () => {
+        const allItems = filterRoot.querySelectorAll("input[data-role='item']");
+        allItems.forEach(node => { node.checked = allBox.checked; });
+        syncSelectAllCheckbox(filterRoot);
+        updateFilterButtonLabel(filterRoot, options);
+        onChange();
+      });
+
+      menu.querySelectorAll("input[data-role='item']").forEach(node => {
+        node.addEventListener("change", () => {
+          syncSelectAllCheckbox(filterRoot);
+          updateFilterButtonLabel(filterRoot, options);
+          onChange();
+        });
+      });
+
+      syncSelectAllCheckbox(filterRoot);
+      updateFilterButtonLabel(filterRoot, options);
+    }
+
+    function setupDefenderFilters() {
+      defenderFilterState.options = [
+        ...home.players.map((p, i) => ({ value: `0:${i}`, label: `${p.name} (${home.name})` })),
+        ...away.players.map((p, i) => ({ value: `1:${i}`, label: `${p.name} (${away.name})` }))
+      ];
+      shotTypeFilterState.options = [...new Set(shotEvents.map(ev => String(ev.shot_type)).filter(Boolean))]
+        .sort((a, b) => Number(a) - Number(b))
+        .map(code => ({ value: code, label: shotTypeLabel[code] || code }));
+      resultFilterState.options = Object.entries(shotResultLabel).map(([k, v]) => ({ value: k, label: v }));
+
+      initMultiDropdown(defenderFilter, defenderFilterState.options, renderDefenderShotPanel);
+      initMultiDropdown(defShotTypeFilter, shotTypeFilterState.options, renderDefenderShotPanel);
+      initMultiDropdown(defResultFilter, resultFilterState.options, renderDefenderShotPanel);
     }
 
     function renderDefenderShotPanel() {
-      const [teamSideRaw, slotRaw] = defenderFilter.value.split(":");
-      const teamSide = Number(teamSideRaw);
-      const slot = Number(slotRaw);
-      const teamObj = getTeamBySide(teamSide);
-      const shotTypeVal = defShotTypeFilter.value;
-      const resultVal = defResultFilter.value;
+      const selectedDefenders = selectedValues(defenderFilter);
+      const selectedShotTypes = selectedValues(defShotTypeFilter);
+      const selectedResults = selectedValues(defResultFilter);
 
       const defenderShots = shotEvents.filter(ev => {
-        if (Number(ev.defending_team) !== teamSide) return false;
-        const idx = normalizeSlot(ev.defender, teamObj.players.length);
-        return idx === slot;
+        const side = Number(ev.defending_team);
+        const defTeam = getTeamBySide(side);
+        const idx = normalizeSlot(ev.defender, defTeam.players.length);
+        if (idx === null) return false;
+        if (selectedDefenders.size === 0) return true;
+        return selectedDefenders.has(`${side}:${idx}`);
       });
 
       const filtered = defenderShots.filter(ev => {
-        if (shotTypeVal !== "all" && String(ev.shot_type) !== shotTypeVal) return false;
-        if (resultVal !== "all" && String(ev.shot_result) !== resultVal) return false;
+        if (selectedShotTypes.size > 0 && !selectedShotTypes.has(String(ev.shot_type))) return false;
+        if (selectedResults.size > 0 && !selectedResults.has(String(ev.shot_result))) return false;
         return true;
       });
 
-      const madeCount = defenderShots.filter(ev => ["1", "2", "5"].includes(String(ev.shot_result))).length;
-      const missedCount = defenderShots.filter(ev => ["0", "3", "4"].includes(String(ev.shot_result))).length;
-      const blockedCount = defenderShots.filter(ev => String(ev.shot_result) === "3").length;
-      const foulCount = defenderShots.filter(ev => ["4", "5"].includes(String(ev.shot_result))).length;
-      const fgPct = defenderShots.length ? ((madeCount / defenderShots.length) * 100).toFixed(1) + "%" : "0.0%";
+      const madeCount = filtered.filter(ev => ["1", "2", "5"].includes(String(ev.shot_result))).length;
+      const missedCount = filtered.filter(ev => ["0", "3", "4"].includes(String(ev.shot_result))).length;
+      const blockedCount = filtered.filter(ev => String(ev.shot_result) === "3").length;
+      const foulCount = filtered.filter(ev => ["4", "5"].includes(String(ev.shot_result))).length;
+      const fgPct = filtered.length ? ((madeCount / filtered.length) * 100).toFixed(1) + "%" : "0.0%";
 
       defSummary.innerHTML = `
-        <div class="summary-card"><div class="k">Total Shots Defended</div><div class="v">${defenderShots.length}</div></div>
+        <div class="summary-card"><div class="k">Total Shots Defended</div><div class="v">${filtered.length}</div></div>
         <div class="summary-card"><div class="k">Made Against</div><div class="v">${madeCount}</div></div>
         <div class="summary-card"><div class="k">Missed Against</div><div class="v">${missedCount}</div></div>
         <div class="summary-card"><div class="k">Blocked</div><div class="v">${blockedCount}</div></div>
@@ -1088,7 +1255,7 @@ REPORT_HTML = """<!doctype html>
         <div class="summary-card"><div class="k">FG% Allowed</div><div class="v">${fgPct}</div></div>
       `;
 
-      defShotsCount.textContent = `${filtered.length} shown (${defenderShots.length} total for selected defender)`;
+      defShotsCount.textContent = `${filtered.length} shown (${defenderShots.length} total across selected defenders)`;
 
       defShotsTable.innerHTML = `
         <thead>
@@ -1114,6 +1281,140 @@ REPORT_HTML = """<!doctype html>
               <td>${formatComments(ev.comments)}</td>
             </tr>`;
           }).join("")}
+        </tbody>
+      `;
+    }
+
+    function rangeLabel(rangeKey) {
+      if (rangeKey === "three") return "Three";
+      if (rangeKey === "jump") return "Jump";
+      return "Paint";
+    }
+
+    function buildOffenseByRange(teamSide) {
+      const teamObj = getTeamBySide(teamSide);
+      const out = {};
+      ["three", "jump", "paint"].forEach(range => {
+        out[range] = teamObj.players.map(player => ({
+          name: player.name,
+          a: 0,
+          m: 0
+        }));
+      });
+
+      shotEvents.forEach(ev => {
+        if (Number(ev.attacking_team) !== teamSide) return;
+        const idx = normalizeSlot(ev.attacker, teamObj.players.length);
+        if (idx === null) return;
+        const range = getShotRange(ev.shot_type);
+        if (!(range in out)) return;
+        out[range][idx].a += 1;
+        if (madeResults.has(String(ev.shot_result))) out[range][idx].m += 1;
+      });
+
+      return out;
+    }
+
+    function buildDefenseByRange(teamSide) {
+      const teamObj = getTeamBySide(teamSide);
+      const out = {};
+      ["three", "jump", "paint"].forEach(range => {
+        out[range] = teamObj.players.map(player => ({
+          name: player.name,
+          a: 0,
+          m: 0
+        }));
+      });
+
+      shotEvents.forEach(ev => {
+        if (Number(ev.defending_team) !== teamSide) return;
+        const idx = normalizeSlot(ev.defender, teamObj.players.length);
+        if (idx === null) return;
+        const range = getShotRange(ev.shot_type);
+        if (!(range in out)) return;
+        out[range][idx].a += 1;
+        if (madeResults.has(String(ev.shot_result))) out[range][idx].m += 1;
+      });
+
+      return out;
+    }
+
+    function pickByFg(entries, preferLow) {
+      const withAttempts = entries.filter(e => e.a > 0);
+      if (withAttempts.length === 0) return null;
+
+      const ranked = withAttempts
+        .map(e => ({
+          ...e,
+          pct: (e.m / e.a) * 100
+        }))
+        .sort((a, b) => {
+          if (preferLow) {
+            if (a.pct !== b.pct) return a.pct - b.pct;
+            return b.a - a.a;
+          }
+          if (a.pct !== b.pct) return b.pct - a.pct;
+          return b.a - a.a;
+        });
+
+      return ranked[0];
+    }
+
+    function formatFgCell(item, mode) {
+      if (!item) return "N/A";
+      const pctVal = item.a ? ((item.m / item.a) * 100).toFixed(1) : "0.0";
+      const suffix = mode === "def" ? " allowed" : "";
+      return `${item.name} - ${pctVal}%${suffix} (${item.m}/${item.a})`;
+    }
+
+    function renderStrengthWeaknessView() {
+      const ranges = ["three", "jump", "paint"];
+      const rows = [];
+
+      [0, 1].forEach(side => {
+        const teamObj = getTeamBySide(side);
+        const offByRange = buildOffenseByRange(side);
+        const defByRange = buildDefenseByRange(side);
+
+        ranges.forEach(range => {
+          const offStrength = pickByFg(offByRange[range], false);
+          const offWeakness = pickByFg(offByRange[range], true);
+          const defStrength = pickByFg(defByRange[range], true);
+          const defWeakness = pickByFg(defByRange[range], false);
+
+          rows.push({
+            team: teamObj.name,
+            shotType: rangeLabel(range),
+            offStrength,
+            offWeakness,
+            defStrength,
+            defWeakness
+          });
+        });
+      });
+
+      teamStrengthsTable.innerHTML = `
+        <thead>
+          <tr>
+            <th>Team</th>
+            <th>Shot Range</th>
+            <th>Offensive Strength (High FG%)</th>
+            <th>Offensive Weakness (Low FG%)</th>
+            <th>Defensive Strength (Low FG% Allowed)</th>
+            <th>Defensive Weakness (High FG% Allowed)</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(row => `
+            <tr>
+              <td>${row.team}</td>
+              <td>${row.shotType}</td>
+              <td>${formatFgCell(row.offStrength, "off")}</td>
+              <td>${formatFgCell(row.offWeakness, "off")}</td>
+              <td>${formatFgCell(row.defStrength, "def")}</td>
+              <td>${formatFgCell(row.defWeakness, "def")}</td>
+            </tr>
+          `).join("")}
         </tbody>
       `;
     }
@@ -1160,9 +1461,9 @@ REPORT_HTML = """<!doctype html>
     offTeamFilter.addEventListener("change", renderOffenseShotProfile);
     rangePlayerFilter.addEventListener("change", renderRangeCharts);
     rangeTeamFilter.addEventListener("change", renderRangeCharts);
-    defenderFilter.addEventListener("change", renderDefenderShotPanel);
-    defShotTypeFilter.addEventListener("change", renderDefenderShotPanel);
-    defResultFilter.addEventListener("change", renderDefenderShotPanel);
+    document.addEventListener("click", () => {
+      document.querySelectorAll(".multi-dd.open").forEach(node => node.classList.remove("open"));
+    });
 
     renderTeamTotals();
     renderTopScorers();
@@ -1170,10 +1471,9 @@ REPORT_HTML = """<!doctype html>
     renderOffenseShotProfile();
     populateRangeFilters();
     renderRangeCharts();
-    populateDefenderOptions();
-    populateDefenderShotTypeOptions();
-    populateDefenderResultOptions();
+    setupDefenderFilters();
     renderDefenderShotPanel();
+    renderStrengthWeaknessView();
     renderEvents();
   </script>
 </body>
