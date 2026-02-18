@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 from argparse import Namespace
+import base64
 import contextlib
 import io
+from pathlib import Path
 from typing import Any
 
 from flask import Flask, render_template_string, request
@@ -374,12 +376,19 @@ REPORT_HTML = """<!doctype html>
       overflow: hidden;
       background: #fff;
     }
+    .range-panel-player {
+      grid-column: 1 / -1;
+    }
     .range-body {
       display: grid;
       grid-template-columns: 150px 1fr;
       gap: 12px;
       padding: 12px;
       align-items: center;
+    }
+    .range-body-player {
+      grid-template-columns: 150px minmax(180px, 1fr) 368px;
+      align-items: start;
     }
     .pie-ring {
       width: 140px;
@@ -418,6 +427,7 @@ REPORT_HTML = """<!doctype html>
       align-items: center;
       gap: 8px;
       color: var(--ink);
+      flex-wrap: wrap;
     }
     .dot {
       width: 10px;
@@ -428,6 +438,56 @@ REPORT_HTML = """<!doctype html>
     .dot.three { background: #2563eb; }
     .dot.jump { background: #16a34a; }
     .dot.paint { background: #f97316; }
+    .court-chart {
+      width: 368px;
+      height: 192px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background-color: #f6f6f6;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      position: relative;
+      overflow: hidden;
+    }
+    .court-wrap {
+      display: grid;
+      gap: 6px;
+      justify-items: start;
+    }
+    .court-marker {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      font-size: 11px;
+      line-height: 1;
+      font-weight: 900;
+      text-shadow: 0 0 2px rgba(255, 255, 255, 0.9);
+    }
+    .court-marker.made { color: #067647; }
+    .court-marker.miss { color: #b42318; }
+    .court-key {
+      position: static;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 11px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid #e6e9ee;
+      color: #344054;
+    }
+    .court-key .made { color: #067647; font-weight: 700; }
+    .court-key .miss { color: #b42318; font-weight: 700; }
+    .court-empty {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 12px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #e6e9ee;
+      border-radius: 6px;
+      padding: 4px 7px;
+    }
     .summary-grid {
       display: grid;
       grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -497,6 +557,8 @@ REPORT_HTML = """<!doctype html>
       .cards { grid-template-columns: 1fr; }
       .range-grid { grid-template-columns: 1fr; }
       .range-body { grid-template-columns: 1fr; }
+      .range-body-player { grid-template-columns: 1fr; }
+      .court-chart { width: 100%; max-width: 368px; }
     }
   </style>
 </head>
@@ -577,15 +639,19 @@ REPORT_HTML = """<!doctype html>
     <section class="card">
       <h3>Shot Range Pie Charts</h3>
       <div class="range-grid">
-        <article class="range-panel">
+        <article class="range-panel range-panel-player">
           <div class="events-head">
             <label class="small">Player
               <select id="rangePlayerFilter"></select>
             </label>
           </div>
-          <div class="range-body">
+          <div class="range-body range-body-player">
             <div id="playerRangePie"></div>
             <div id="playerRangeLegend" class="range-legend"></div>
+            <div class="court-wrap">
+              <div id="playerCourtChart" class="court-chart"></div>
+              <div class="court-key"><span class="made">O</span> scored | <span class="miss">X</span> missed</div>
+            </div>
           </div>
         </article>
         <article class="range-panel">
@@ -656,6 +722,7 @@ REPORT_HTML = """<!doctype html>
 
   <script>
     const data = {{ report_json | tojson }};
+    const courtImageUrl = {{ court_image_url | tojson }};
 
     const home = data.teamHome;
     const away = data.teamAway;
@@ -1058,6 +1125,7 @@ REPORT_HTML = """<!doctype html>
       });
 
       renderPie("playerRangePie", "playerRangeLegend", "player shots", playerCounts);
+      renderPlayerCourtChart(pside, pslot, pTeam);
 
       const tside = Number(rangeTeamFilter.value);
       const teamCounts = emptyRangeCounts();
@@ -1067,6 +1135,42 @@ REPORT_HTML = """<!doctype html>
       });
 
       renderPie("teamRangePie", "teamRangeLegend", "team shots", teamCounts);
+    }
+
+    function renderPlayerCourtChart(side, slot, teamObj) {
+      const courtW = 368;
+      const courtH = 192;
+      const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+      const chart = document.getElementById("playerCourtChart");
+      chart.style.backgroundImage = courtImageUrl ? `url("${courtImageUrl}")` : "none";
+
+      const marks = [];
+      shotEvents.forEach(ev => {
+        if (Number(ev.attacking_team) !== side) return;
+        const idx = normalizeSlot(ev.attacker, teamObj.players.length);
+        if (idx !== slot) return;
+        const x = Number(ev.shot_pos_x);
+        const y = Number(ev.shot_pos_y);
+        if (!Number.isFinite(x) || !Number.isFinite(y)) return;
+        const made = madeResults.has(String(ev.shot_result));
+        marks.push({
+          x: clamp(x, 0, courtW),
+          y: clamp(y, 0, courtH),
+          made
+        });
+      });
+
+      const markersHtml = marks.map(m => `
+        <span class="court-marker ${m.made ? "made" : "miss"}" style="left:${m.x}px;top:${m.y}px;">
+          ${m.made ? "O" : "X"}
+        </span>
+      `).join("");
+
+      const emptyHtml = marks.length === 0 ? `<div class="court-empty">No shot positions</div>` : "";
+      chart.innerHTML = `
+        ${markersHtml}
+        ${emptyHtml}
+      `;
     }
 
     function getTeamBySide(side) {
@@ -1540,6 +1644,14 @@ def generate_report(matchid: str, username: str, password: str) -> dict[str, Any
     return serialize_game(game)
 
 
+def get_court_image_data_url() -> str:
+    court_path = Path(__file__).with_name("court.png")
+    if not court_path.exists():
+        return ""
+    data = base64.b64encode(court_path.read_bytes()).decode("ascii")
+    return f"data:image/png;base64,{data}"
+
+
 @app.get("/")
 def form() -> str:
     return render_template_string(
@@ -1592,7 +1704,11 @@ def report() -> tuple[str, int] | str:
         )
 
     return render_template_string(
-        REPORT_HTML, report_json=report_json, matchid=matchid, username=username
+        REPORT_HTML,
+        report_json=report_json,
+        matchid=matchid,
+        username=username,
+        court_image_url=get_court_image_data_url(),
     )
 
 
