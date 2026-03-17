@@ -1234,8 +1234,8 @@ REPORT_HTML = """<!doctype html>
 
     function applySubEvent(activeSet, ev, teamObj) {
       if (String(ev.sub_type) === "9520") return;
-      const playerIn = normalizeSlot(ev.player_in, teamObj.players.length);
-      const playerOut = normalizeSlot(ev.player_out, teamObj.players.length);
+      const playerIn = normalizePlayerIndex(ev.player_in, teamObj.players.length);
+      const playerOut = normalizePlayerIndex(ev.player_out, teamObj.players.length);
       if (playerOut !== null) activeSet.delete(playerOut);
       if (playerIn !== null) activeSet.add(playerIn);
     }
@@ -1552,6 +1552,13 @@ REPORT_HTML = """<!doctype html>
       if (!Number.isFinite(n)) return null;
       if (n >= 1 && n <= playersLen) return n - 1;
       if (n === 0) return null;
+      return null;
+    }
+
+    function normalizePlayerIndex(rawIndex, playersLen) {
+      const n = Number(rawIndex);
+      if (!Number.isFinite(n)) return null;
+      if (n >= 0 && n < playersLen) return n;
       return null;
     }
 
