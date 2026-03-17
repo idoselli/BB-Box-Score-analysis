@@ -265,6 +265,88 @@ REPORT_HTML = """<!doctype html>
       background: #f7f9fc;
       z-index: 6;
     }
+    #playerMatchupTable th:first-child,
+    #playerMatchupTable td:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 4;
+      background: #fff;
+      box-shadow: 2px 0 0 #eef1f5;
+    }
+    #playerMatchupTable th:first-child {
+      background: #f7f9fc;
+      z-index: 6;
+    }
+    #playerMatchupTable th:nth-child(3),
+    #playerMatchupTable td:nth-child(3) {
+      background: #f7f8ff;
+      border-right: 3px solid #c7d2fe;
+    }
+    #playerMatchupTable th:nth-child(4),
+    #playerMatchupTable td:nth-child(4),
+    #playerMatchupTable th:nth-child(5),
+    #playerMatchupTable td:nth-child(5),
+    #playerMatchupTable th:nth-child(6),
+    #playerMatchupTable td:nth-child(6),
+    #playerMatchupTable th:nth-child(7),
+    #playerMatchupTable td:nth-child(7) {
+      background: #f0fdf4;
+    }
+    #playerMatchupTable th:nth-child(7),
+    #playerMatchupTable td:nth-child(7) {
+      border-right: 3px solid #86efac;
+    }
+    #playerMatchupTable th:nth-child(8),
+    #playerMatchupTable td:nth-child(8),
+    #playerMatchupTable th:nth-child(9),
+    #playerMatchupTable td:nth-child(9) {
+      background: #fff7ed;
+    }
+    #playerMatchupTable th:nth-child(9),
+    #playerMatchupTable td:nth-child(9) {
+      border-right: 3px solid #fdba74;
+    }
+    #playerMatchupTable th:nth-child(10),
+    #playerMatchupTable td:nth-child(10),
+    #playerMatchupTable th:nth-child(11),
+    #playerMatchupTable td:nth-child(11) {
+      background: #fef2f2;
+    }
+    #playerDefenseTable th:first-child,
+    #playerDefenseTable td:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 4;
+      background: #fff;
+      box-shadow: 2px 0 0 #eef1f5;
+    }
+    #playerDefenseTable th:first-child {
+      background: #f7f9fc;
+      z-index: 6;
+    }
+    #playerDefenseTable th:nth-child(3),
+    #playerDefenseTable td:nth-child(3),
+    #playerDefenseTable th:nth-child(4),
+    #playerDefenseTable td:nth-child(4) {
+      background: #eef6ff;
+    }
+    #playerDefenseTable th:nth-child(4),
+    #playerDefenseTable td:nth-child(4) {
+      border-right: 3px solid #93c5fd;
+    }
+    #playerDefenseTable th:nth-child(5),
+    #playerDefenseTable td:nth-child(5) {
+      background: #f6f3ff;
+      border-right: 3px solid #c4b5fd;
+    }
+    #playerDefenseTable th:nth-child(6),
+    #playerDefenseTable td:nth-child(6),
+    #playerDefenseTable th:nth-child(7),
+    #playerDefenseTable td:nth-child(7),
+    #playerDefenseTable th:nth-child(8),
+    #playerDefenseTable td:nth-child(8) {
+      background: #f0fdf4;
+    }
     .cards {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -603,6 +685,20 @@ REPORT_HTML = """<!doctype html>
       <h3>Player Box Score (Position Minutes)</h3>
       <div class="table-wrap">
         <table id="playersTable"></table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Player Matchup Overview</h3>
+      <div class="table-wrap">
+        <table id="playerMatchupTable"></table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Player Defense Overview</h3>
+      <div class="table-wrap">
+        <table id="playerDefenseTable"></table>
       </div>
     </section>
 
@@ -1071,6 +1167,274 @@ REPORT_HTML = """<!doctype html>
 
     function sumRangeCounts(counts) {
       return counts.three + counts.jump + counts.paint;
+    }
+
+    function emptyShotStat() {
+      return { m: 0, a: 0 };
+    }
+
+    function addShotStat(stat, made) {
+      stat.a += 1;
+      if (made) stat.m += 1;
+    }
+
+    function shotStatPct(stat) {
+      return stat.a ? ((stat.m / stat.a) * 100).toFixed(1) : "0.0";
+    }
+
+    function shotStatHtml(stat) {
+      if (!stat.a) return "";
+      return `${stat.m}/${stat.a}/${shotStatPct(stat)}%`;
+    }
+
+    function defensePct(stat) {
+      return stat.a ? (((stat.a - stat.m) / stat.a) * 100).toFixed(1) : "";
+    }
+
+    function defensePctHtml(stat) {
+      const pct = defensePct(stat);
+      return pct ? `${pct}%` : "";
+    }
+
+    function defenseStatHtml(stat) {
+      const pct = defensePct(stat);
+      if (!pct) return "";
+      return `${stat.a - stat.m}/${stat.a} ${pct}%`;
+    }
+
+    function emptyPlayerMatchupStats() {
+      return {
+        defended: emptyShotStat(),
+        openClose: emptyShotStat(),
+        openMid: emptyShotStat(),
+        openThree: emptyShotStat(),
+        openTotal: emptyShotStat(),
+        withPass: emptyShotStat(),
+        withoutPass: emptyShotStat(),
+        teamOn: emptyShotStat(),
+        teamOff: emptyShotStat()
+      };
+    }
+
+    function isOpenShotEvent(ev, defendingTeamObj) {
+      return normalizeSlot(ev.defender, defendingTeamObj.players.length) === null;
+    }
+
+    function passReceivedOnShot(ev, attackingTeamObj) {
+      return normalizeSlot(ev.assistant, attackingTeamObj.players.length) !== null;
+    }
+
+    function createStarterActiveSet(teamObj) {
+      const active = new Set();
+      teamObj.players.forEach((player, idx) => {
+        if (player.starter) active.add(idx);
+      });
+      return active;
+    }
+
+    function applySubEvent(activeSet, ev, teamObj) {
+      if (String(ev.sub_type) === "9520") return;
+      const playerIn = normalizeSlot(ev.player_in, teamObj.players.length);
+      const playerOut = normalizeSlot(ev.player_out, teamObj.players.length);
+      if (playerOut !== null) activeSet.delete(playerOut);
+      if (playerIn !== null) activeSet.add(playerIn);
+    }
+
+    function renderPlayerMatchupOverview() {
+      const teamStatsBySide = [
+        home.players.map(() => emptyPlayerMatchupStats()),
+        away.players.map(() => emptyPlayerMatchupStats())
+      ];
+      const activeBySide = {
+        0: createStarterActiveSet(home),
+        1: createStarterActiveSet(away)
+      };
+
+      data.events.forEach(ev => {
+        if (ev.event_type === "shot") {
+          const teamSide = Number(ev.attacking_team);
+          const teamObj = getTeamBySide(teamSide);
+          const defendingTeamObj = getTeamBySide(Number(ev.defending_team));
+          const shooterIdx = normalizeSlot(ev.attacker, teamObj.players.length);
+          const made = madeResults.has(String(ev.shot_result));
+
+          teamObj.players.forEach((_, playerIdx) => {
+            const target = teamStatsBySide[teamSide][playerIdx];
+            addShotStat(activeBySide[teamSide].has(playerIdx) ? target.teamOn : target.teamOff, made);
+          });
+
+          if (shooterIdx !== null) {
+            const shooterStats = teamStatsBySide[teamSide][shooterIdx];
+
+            if (!isOpenShotEvent(ev, defendingTeamObj)) {
+              addShotStat(shooterStats.defended, made);
+            }
+
+            if (isOpenShotEvent(ev, defendingTeamObj)) {
+              const range = getShotRange(ev.shot_type);
+              if (range === "paint") addShotStat(shooterStats.openClose, made);
+              else if (range === "jump") addShotStat(shooterStats.openMid, made);
+              else if (range === "three") addShotStat(shooterStats.openThree, made);
+              addShotStat(shooterStats.openTotal, made);
+            }
+
+            if (passReceivedOnShot(ev, teamObj)) addShotStat(shooterStats.withPass, made);
+            else addShotStat(shooterStats.withoutPass, made);
+          }
+
+          return;
+        }
+
+        if (ev.event_type === "sub") {
+          const teamSide = Number(ev.team);
+          applySubEvent(activeBySide[teamSide], ev, getTeamBySide(teamSide));
+        }
+      });
+
+      const rows = [home, away].flatMap((teamObj, side) =>
+        teamObj.players.map((player, idx) => ({
+          team: teamObj.name,
+          name: player.name,
+          defended: teamStatsBySide[side][idx].defended,
+          openClose: teamStatsBySide[side][idx].openClose,
+          openMid: teamStatsBySide[side][idx].openMid,
+          openThree: teamStatsBySide[side][idx].openThree,
+          openTotal: teamStatsBySide[side][idx].openTotal,
+          teamOn: teamStatsBySide[side][idx].teamOn,
+          teamOff: teamStatsBySide[side][idx].teamOff,
+          withPass: teamStatsBySide[side][idx].withPass,
+          withoutPass: teamStatsBySide[side][idx].withoutPass
+        }))
+      );
+
+      document.getElementById("playerMatchupTable").innerHTML = `
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Team</th>
+            <th>With Defense</th>
+            <th>Open Close</th>
+            <th>Open Mid</th>
+            <th>Open 3PT</th>
+            <th>Open Total</th>
+            <th>Team FG On</th>
+            <th>Team FG Off</th>
+            <th>Pass Received</th>
+            <th>No Pass</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(row => `
+            <tr>
+              <td>${row.name}</td>
+              <td>${row.team}</td>
+              <td>${shotStatHtml(row.defended)}</td>
+              <td>${shotStatHtml(row.openClose)}</td>
+              <td>${shotStatHtml(row.openMid)}</td>
+              <td>${shotStatHtml(row.openThree)}</td>
+              <td>${shotStatHtml(row.openTotal)}</td>
+              <td>${shotStatHtml(row.teamOn)}</td>
+              <td>${shotStatHtml(row.teamOff)}</td>
+              <td>${shotStatHtml(row.withPass)}</td>
+              <td>${shotStatHtml(row.withoutPass)}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      `;
+    }
+
+    function emptyPlayerDefenseStats() {
+      return {
+        teamDefOn: emptyShotStat(),
+        teamDefOff: emptyShotStat(),
+        defendedTotal: emptyShotStat(),
+        defendedClose: emptyShotStat(),
+        defendedMid: emptyShotStat(),
+        defendedThree: emptyShotStat()
+      };
+    }
+
+    function renderPlayerDefenseOverview() {
+      const teamStatsBySide = [
+        home.players.map(() => emptyPlayerDefenseStats()),
+        away.players.map(() => emptyPlayerDefenseStats())
+      ];
+      const activeBySide = {
+        0: createStarterActiveSet(home),
+        1: createStarterActiveSet(away)
+      };
+
+      data.events.forEach(ev => {
+        if (ev.event_type === "shot") {
+          const defSide = Number(ev.defending_team);
+          const defTeamObj = getTeamBySide(defSide);
+          const defenderIdx = normalizeSlot(ev.defender, defTeamObj.players.length);
+          const made = madeResults.has(String(ev.shot_result));
+
+          defTeamObj.players.forEach((_, playerIdx) => {
+            const target = teamStatsBySide[defSide][playerIdx];
+            addShotStat(activeBySide[defSide].has(playerIdx) ? target.teamDefOn : target.teamDefOff, made);
+          });
+
+          if (defenderIdx !== null) {
+            const defenderStats = teamStatsBySide[defSide][defenderIdx];
+            addShotStat(defenderStats.defendedTotal, made);
+            const range = getShotRange(ev.shot_type);
+            if (range === "paint") addShotStat(defenderStats.defendedClose, made);
+            else if (range === "jump") addShotStat(defenderStats.defendedMid, made);
+            else if (range === "three") addShotStat(defenderStats.defendedThree, made);
+          }
+
+          return;
+        }
+
+        if (ev.event_type === "sub") {
+          const teamSide = Number(ev.team);
+          applySubEvent(activeBySide[teamSide], ev, getTeamBySide(teamSide));
+        }
+      });
+
+      const rows = [home, away].flatMap((teamObj, side) =>
+        teamObj.players.map((player, idx) => ({
+          team: teamObj.name,
+          name: player.name,
+          teamDefOn: teamStatsBySide[side][idx].teamDefOn,
+          teamDefOff: teamStatsBySide[side][idx].teamDefOff,
+          defendedTotal: teamStatsBySide[side][idx].defendedTotal,
+          defendedClose: teamStatsBySide[side][idx].defendedClose,
+          defendedMid: teamStatsBySide[side][idx].defendedMid,
+          defendedThree: teamStatsBySide[side][idx].defendedThree
+        }))
+      );
+
+      document.getElementById("playerDefenseTable").innerHTML = `
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Team</th>
+            <th>Team Def On</th>
+            <th>Team Def Off</th>
+            <th>Defended Total</th>
+            <th>Defended Close</th>
+            <th>Defended Mid</th>
+            <th>Defended 3PT</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(row => `
+            <tr>
+              <td>${row.name}</td>
+              <td>${row.team}</td>
+              <td>${defensePctHtml(row.teamDefOn)}</td>
+              <td>${defensePctHtml(row.teamDefOff)}</td>
+              <td>${defenseStatHtml(row.defendedTotal)}</td>
+              <td>${defenseStatHtml(row.defendedClose)}</td>
+              <td>${defenseStatHtml(row.defendedMid)}</td>
+              <td>${defenseStatHtml(row.defendedThree)}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      `;
     }
 
     function renderPie(targetId, legendId, title, counts, madeCounts) {
@@ -1578,6 +1942,8 @@ REPORT_HTML = """<!doctype html>
     renderTeamTotals();
     renderTopScorers();
     renderPlayersTable();
+    renderPlayerMatchupOverview();
+    renderPlayerDefenseOverview();
     renderOffenseShotProfile();
     populateRangeFilters();
     renderRangeCharts();
