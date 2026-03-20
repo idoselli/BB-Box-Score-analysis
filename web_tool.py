@@ -7,6 +7,7 @@ import base64
 import contextlib
 import io
 from pathlib import Path
+import re
 from typing import Any
 
 from flask import Flask, render_template_string, request
@@ -91,6 +92,50 @@ FORM_HTML = """<!doctype html>
       font-weight: 700;
       cursor: pointer;
     }
+    .mode-switch {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .mode-btn {
+      border: 1px solid var(--line);
+      background: #f8fbff;
+      color: var(--ink);
+    }
+    .mode-btn.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    .mode-panel {
+      display: none;
+      gap: 12px;
+    }
+    .mode-panel.active {
+      display: grid;
+    }
+    .matches-list {
+      display: grid;
+      gap: 10px;
+    }
+    .match-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: end;
+    }
+    .ghost {
+      background: #fff;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+    .danger-btn {
+      background: #fff;
+      color: var(--danger);
+      border: 1px solid #f3c7c7;
+      padding: 10px 12px;
+    }
     .err {
       margin-bottom: 14px;
       border: 1px solid #f3c7c7;
@@ -116,19 +161,945 @@ FORM_HTML = """<!doctype html>
       <div class="err">{{ error }}</div>
       {% endif %}
       <form method="post" action="/report">
+        <input type="hidden" name="mode" id="modeInput" value="{{ mode }}" />
         <label>Username
           <input name="username" autocomplete="username" required value="{{ username }}" />
         </label>
         <label>Password
           <input name="password" type="password" autocomplete="current-password" required value="{{ password }}" />
         </label>
-        <label>Match ID
-          <input name="matchid" required value="{{ matchid }}" />
-        </label>
+        <div class="mode-switch">
+          <button type="button" class="mode-btn" data-mode="single">Single Match</button>
+          <button type="button" class="mode-btn" data-mode="multi">Multi Match Team Aggregate</button>
+        </div>
+
+        <section id="singlePanel" class="mode-panel">
+          <label>Match ID
+            <input name="matchid" value="{{ matchid }}" />
+          </label>
+        </section>
+
+        <section id="multiPanel" class="mode-panel">
+          <div class="small">Add multiple match IDs. The tool will auto-detect the common team and aggregate only that team.</div>
+          <div id="matchesList" class="matches-list">
+            {% for value in multi_matchids %}
+            <div class="match-row">
+              <label>Match ID
+                <input name="matchids" value="{{ value }}" />
+              </label>
+              <button type="button" class="danger-btn remove-match"{% if loop.index <= 2 %} hidden{% endif %}>Remove</button>
+            </div>
+            {% endfor %}
+          </div>
+          <button type="button" id="addMatchBtn" class="ghost">Add Match</button>
+        </section>
+
         <button type="submit">Generate Report</button>
       </form>
       <div class="hint">Credentials are only used for this request (server memory only).</div>
     </section>
+  </main>
+  <template id="matchRowTemplate">
+    <div class="match-row">
+      <label>Match ID
+        <input name="matchids" />
+      </label>
+      <button type="button" class="danger-btn remove-match">Remove</button>
+    </div>
+  </template>
+  <script>
+    const modeInput = document.getElementById("modeInput");
+    const singlePanel = document.getElementById("singlePanel");
+    const multiPanel = document.getElementById("multiPanel");
+    const modeButtons = [...document.querySelectorAll(".mode-btn")];
+    const matchesList = document.getElementById("matchesList");
+    const addMatchBtn = document.getElementById("addMatchBtn");
+    const rowTemplate = document.getElementById("matchRowTemplate");
+
+    function applyMode(mode) {
+      modeInput.value = mode;
+      singlePanel.classList.toggle("active", mode === "single");
+      multiPanel.classList.toggle("active", mode === "multi");
+      modeButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.mode === mode));
+    }
+
+    function updateRemoveButtons() {
+      const rows = [...matchesList.querySelectorAll(".match-row")];
+      rows.forEach((row, index) => {
+        const btn = row.querySelector(".remove-match");
+        if (btn) btn.hidden = rows.length <= 2 || index < 2;
+      });
+    }
+
+    modeButtons.forEach(btn => {
+      btn.addEventListener("click", () => applyMode(btn.dataset.mode));
+    });
+
+    addMatchBtn.addEventListener("click", () => {
+      const frag = rowTemplate.content.cloneNode(true);
+      matchesList.appendChild(frag);
+      updateRemoveButtons();
+    });
+
+    matchesList.addEventListener("click", (ev) => {
+      const btn = ev.target.closest(".remove-match");
+      if (!btn) return;
+      btn.closest(".match-row")?.remove();
+      updateRemoveButtons();
+    });
+
+    updateRemoveButtons();
+    applyMode({{ mode | tojson }});
+  </script>
+</body>
+</html>
+"""
+
+
+TEAM_CHOICE_HTML = """<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Select Team</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f6f8fb;
+      color: #1f2933;
+    }
+    .wrap {
+      max-width: 760px;
+      margin: 48px auto;
+      padding: 0 18px;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid #d9e1ea;
+      border-radius: 14px;
+      box-shadow: 0 8px 26px rgba(16, 24, 40, 0.08);
+      padding: 22px;
+    }
+    h1 { margin: 0 0 10px; }
+    p { color: #607285; }
+    .choices {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #0d47a1;
+      background: #0d47a1;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .back {
+      display: inline-block;
+      margin-top: 14px;
+      color: #0d47a1;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h1>Choose The Team</h1>
+      <p>The submitted matches match more than one team equally often. Pick which team you want to aggregate.</p>
+      <div class="choices">
+        {% for candidate in candidates %}
+        <form method="post" action="/report">
+          <input type="hidden" name="mode" value="multi" />
+          <input type="hidden" name="username" value="{{ username }}" />
+          <input type="hidden" name="password" value="{{ password }}" />
+          <input type="hidden" name="selected_team_key" value="{{ candidate.key }}" />
+          {% for value in matchids %}
+          <input type="hidden" name="matchids" value="{{ value }}" />
+          {% endfor %}
+          <button type="submit">{{ candidate.name }}</button>
+        </form>
+        {% endfor %}
+      </div>
+      <a href="/" class="back">Back to report form</a>
+    </section>
+  </main>
+</body>
+</html>
+"""
+
+
+MULTI_REPORT_HTML = """<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BBInsider Multi Match Aggregate</title>
+  <style>
+    :root {
+      --bg: #f7f7f2;
+      --panel: #ffffff;
+      --ink: #1f2328;
+      --muted: #5f6b76;
+      --line: #d9dee5;
+      --accent: #0d47a1;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --danger-bg: #fff4f4;
+      --danger-line: #f3c7c7;
+      --success-bg: #f0fdf4;
+      --success-line: #bbf7d0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 20%, #f0f5ff 0%, transparent 35%),
+        radial-gradient(circle at 85% 0%, #fff0f0 0%, transparent 30%),
+        var(--bg);
+    }
+    .wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .topbar {
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .topbar a {
+      text-decoration: none;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .hero, .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+    .hero {
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+    }
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .summary-card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      background: #fbfdff;
+    }
+    .summary-card .k {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .summary-card .v {
+      font-size: 22px;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+    .panel-summary {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px;
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      background: #f8fbff;
+    }
+    .card {
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+    .card h2 {
+      margin: 0;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      background: #fafcff;
+      font-size: 15px;
+    }
+    .card-body {
+      padding: 12px;
+    }
+    .table-wrap {
+      overflow: auto;
+      max-height: 520px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      border-bottom: 1px solid #eef1f5;
+      padding: 8px 10px;
+      text-align: right;
+      white-space: nowrap;
+    }
+    th:first-child, td:first-child { text-align: left; }
+    th {
+      background: #f7f9fc;
+      color: #36414b;
+      font-weight: 700;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    #playerMatchupTable th:first-child,
+    #playerMatchupTable td:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 4;
+      background: #fff;
+      box-shadow: 2px 0 0 #eef1f5;
+    }
+    #playerMatchupTable th:first-child {
+      background: #f7f9fc;
+      z-index: 6;
+    }
+    #playerMatchupTable th:nth-child(2),
+    #playerMatchupTable td:nth-child(2) {
+      background: #f7f8ff;
+      border-right: 3px solid #c7d2fe;
+    }
+    #playerMatchupTable th:nth-child(3),
+    #playerMatchupTable td:nth-child(3),
+    #playerMatchupTable th:nth-child(4),
+    #playerMatchupTable td:nth-child(4),
+    #playerMatchupTable th:nth-child(5),
+    #playerMatchupTable td:nth-child(5),
+    #playerMatchupTable th:nth-child(6),
+    #playerMatchupTable td:nth-child(6) {
+      background: #f0fdf4;
+    }
+    #playerMatchupTable th:nth-child(6),
+    #playerMatchupTable td:nth-child(6) {
+      border-right: 3px solid #86efac;
+    }
+    #playerMatchupTable th:nth-child(7),
+    #playerMatchupTable td:nth-child(7),
+    #playerMatchupTable th:nth-child(8),
+    #playerMatchupTable td:nth-child(8) {
+      background: #fff7ed;
+    }
+    #playerMatchupTable th:nth-child(8),
+    #playerMatchupTable td:nth-child(8) {
+      border-right: 3px solid #fdba74;
+    }
+    #playerMatchupTable th:nth-child(9),
+    #playerMatchupTable td:nth-child(9),
+    #playerMatchupTable th:nth-child(10),
+    #playerMatchupTable td:nth-child(10) {
+      background: #fef2f2;
+    }
+    #playerDefenseTable th:first-child,
+    #playerDefenseTable td:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 4;
+      background: #fff;
+      box-shadow: 2px 0 0 #eef1f5;
+    }
+    #playerDefenseTable th:first-child {
+      background: #f7f9fc;
+      z-index: 6;
+    }
+    #playerDefenseTable th:nth-child(2),
+    #playerDefenseTable td:nth-child(2),
+    #playerDefenseTable th:nth-child(3),
+    #playerDefenseTable td:nth-child(3) {
+      background: #eef6ff;
+    }
+    #playerDefenseTable th:nth-child(3),
+    #playerDefenseTable td:nth-child(3) {
+      border-right: 3px solid #93c5fd;
+    }
+    #playerDefenseTable th:nth-child(4),
+    #playerDefenseTable td:nth-child(4) {
+      background: #f6f3ff;
+      border-right: 3px solid #c4b5fd;
+    }
+    #playerDefenseTable th:nth-child(5),
+    #playerDefenseTable td:nth-child(5),
+    #playerDefenseTable th:nth-child(6),
+    #playerDefenseTable td:nth-child(6),
+    #playerDefenseTable th:nth-child(7),
+    #playerDefenseTable td:nth-child(7) {
+      background: #f0fdf4;
+    }
+    .warn-list {
+      margin: 0;
+      padding-left: 18px;
+      color: #8a1c1c;
+    }
+    .empty {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .events-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      background: #fcfdff;
+    }
+    .events-head input,
+    .events-head select {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 7px 9px;
+      font-size: 13px;
+      background: #fff;
+    }
+    .multi-dd {
+      position: relative;
+      min-width: 220px;
+    }
+    .multi-dd-btn {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 7px 9px;
+      font-size: 13px;
+      background: #fff;
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+    }
+    .multi-dd.open .multi-dd-btn {
+      border-color: #9fb4cf;
+      box-shadow: 0 0 0 2px rgba(13, 71, 161, 0.08);
+    }
+    .multi-dd-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      width: 100%;
+      max-height: 260px;
+      overflow: auto;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      z-index: 20;
+      padding: 6px;
+    }
+    .multi-dd.open .multi-dd-menu { display: block; }
+    .multi-dd-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--ink);
+      padding: 4px 2px;
+    }
+    .multi-dd-item.select-all {
+      border-bottom: 1px solid #edf1f5;
+      margin-bottom: 4px;
+      padding-bottom: 6px;
+      font-weight: 700;
+    }
+    .summary-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .badge {
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--line);
+      background: #f9fbff;
+    }
+    .badge.good {
+      background: var(--success-bg);
+      border-color: var(--success-line);
+    }
+    .badge.bad {
+      background: var(--danger-bg);
+      border-color: var(--danger-line);
+    }
+    @media (max-width: 960px) {
+      .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .panel-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="topbar">
+      <div class="small">Multi-match aggregate | BBAPI user: {{ username }}</div>
+      <a href="/">Run another report</a>
+    </div>
+
+    <section class="hero">
+      <h1 id="teamName"></h1>
+      <p id="summaryLine"></p>
+      <div class="summary-grid">
+        <div class="summary-card"><div class="k">Matches Submitted</div><div class="v" id="submittedCount"></div></div>
+        <div class="summary-card"><div class="k">Matches Used</div><div class="v" id="usedCount"></div></div>
+        <div class="summary-card"><div class="k">Matches Skipped</div><div class="v" id="skippedCount"></div></div>
+        <div class="summary-card"><div class="k">Record</div><div class="v" id="recordLine"></div></div>
+        <div class="summary-card"><div class="k">Tracked Players</div><div class="v" id="playerCount"></div></div>
+      </div>
+      <div class="summary-badges">
+        <span class="badge good" id="winsBadge"></span>
+        <span class="badge bad" id="lossesBadge"></span>
+        <span class="badge" id="warningsBadge"></span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Warnings</h2>
+      <div class="card-body">
+        <ul id="warningsList" class="warn-list"></ul>
+        <div id="warningsEmpty" class="empty">No warnings.</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Match Summary</h2>
+      <div class="table-wrap">
+        <table id="matchSummaryTable"></table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Player Summary</h2>
+      <div class="table-wrap">
+        <table id="playerSummaryTable"></table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Player Matchup Overview</h2>
+      <div class="table-wrap">
+        <table id="playerMatchupTable"></table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Player Defense Overview</h2>
+      <div class="table-wrap">
+        <table id="playerDefenseTable"></table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Offense Shot Profile By Player</h2>
+      <div class="table-wrap">
+        <table id="offPlayersTable"></table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Defended Shot Log</h2>
+      <div class="events-head">
+        <div class="multi-dd" id="defenderFilter"></div>
+        <div class="multi-dd" id="defShotTypeFilter"></div>
+        <div class="multi-dd" id="defResultFilter"></div>
+      </div>
+      <div id="defSummary" class="panel-summary"></div>
+      <div class="table-wrap">
+        <table id="defShotsTable"></table>
+      </div>
+    </section>
+
+    <script>
+      const data = {{ report_json | tojson }};
+      const shotTypeLabel = {
+        "100": "3PT Default",
+        "101": "3PT Top Key",
+        "102": "3PT Wing",
+        "103": "3PT Corner",
+        "104": "3PT Long",
+        "105": "3PT Halfcourt",
+        "200": "2PT Default",
+        "201": "2PT Elbow",
+        "202": "2PT Wing",
+        "203": "2PT Baseline",
+        "204": "2PT Top Key",
+        "401": "Dunk",
+        "402": "Layup",
+        "403": "Post Move",
+        "404": "Fade Away",
+        "405": "Hook",
+        "406": "Off Dribble J",
+        "407": "Putback Dunk",
+        "408": "Tip-in",
+        "409": "Rebound Shot",
+        "410": "Dunk",
+        "411": "Driving Layup"
+      };
+      const shotResultLabel = {
+        "0": "Missed",
+        "1": "Scored",
+        "2": "Goaltend",
+        "3": "Blocked",
+        "4": "Missed + Foul",
+        "5": "Scored + Foul"
+      };
+
+      function shotStatHtml(stat) {
+        if (!stat || !stat.a) return "";
+        const pct = ((stat.m / stat.a) * 100).toFixed(1);
+        return `${stat.m}/${stat.a}/${pct}%`;
+      }
+
+      function defenseStatHtml(stat) {
+        if (!stat || !stat.a) return "";
+        const allowed = stat.a - stat.m;
+        const pct = ((allowed / stat.a) * 100).toFixed(1);
+        return `${allowed}/${stat.a} ${pct}%`;
+      }
+
+      function defensePctHtml(stat) {
+        if (!stat || !stat.a) return "";
+        return `${(((stat.a - stat.m) / stat.a) * 100).toFixed(1)}%`;
+      }
+
+      function offCellHtml(cell) {
+        return `${cell.a}/${cell.m}/${cell.mi}/${cell.b}`;
+      }
+
+      function selectedValues(filterRoot) {
+        return new Set(
+          [...filterRoot.querySelectorAll("input[data-role='item']:checked")]
+            .map(node => node.value)
+        );
+      }
+
+      function updateFilterButtonLabel(filterRoot, options) {
+        const button = filterRoot.querySelector(".multi-dd-btn");
+        const selected = selectedValues(filterRoot);
+        if (selected.size === 0) {
+          button.textContent = "None selected";
+          return;
+        }
+        if (selected.size === options.length) {
+          button.textContent = "All selected";
+          return;
+        }
+        if (selected.size === 1) {
+          const val = [...selected][0];
+          const found = options.find(option => option.value === val);
+          button.textContent = found ? found.label : "1 selected";
+          return;
+        }
+        button.textContent = `${selected.size} selected`;
+      }
+
+      function syncSelectAllCheckbox(filterRoot) {
+        const allBox = filterRoot.querySelector("input[data-role='all']");
+        const allItems = [...filterRoot.querySelectorAll("input[data-role='item']")];
+        const checkedCount = allItems.filter(node => node.checked).length;
+        allBox.checked = checkedCount === allItems.length;
+        allBox.indeterminate = checkedCount > 0 && checkedCount < allItems.length;
+      }
+
+      function initMultiDropdown(filterRoot, options, onChange) {
+        filterRoot.className = "multi-dd";
+        filterRoot.innerHTML = "";
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "multi-dd-btn";
+        button.textContent = "All selected";
+        const menu = document.createElement("div");
+        menu.className = "multi-dd-menu";
+
+        const allRow = document.createElement("label");
+        allRow.className = "multi-dd-item select-all";
+        const allBox = document.createElement("input");
+        allBox.type = "checkbox";
+        allBox.checked = true;
+        allBox.dataset.role = "all";
+        allRow.appendChild(allBox);
+        const allText = document.createElement("span");
+        allText.textContent = "Select all";
+        allRow.appendChild(allText);
+        menu.appendChild(allRow);
+
+        options.forEach(opt => {
+          const row = document.createElement("label");
+          row.className = "multi-dd-item";
+          const cb = document.createElement("input");
+          cb.type = "checkbox";
+          cb.checked = true;
+          cb.value = opt.value;
+          cb.dataset.role = "item";
+          row.appendChild(cb);
+          const text = document.createElement("span");
+          text.textContent = opt.label;
+          row.appendChild(text);
+          menu.appendChild(row);
+        });
+
+        filterRoot.appendChild(button);
+        filterRoot.appendChild(menu);
+
+        button.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          document.querySelectorAll(".multi-dd.open").forEach(node => {
+            if (node !== filterRoot) node.classList.remove("open");
+          });
+          filterRoot.classList.toggle("open");
+        });
+
+        menu.addEventListener("click", (ev) => ev.stopPropagation());
+
+        allBox.addEventListener("change", () => {
+          filterRoot.querySelectorAll("input[data-role='item']").forEach(node => {
+            node.checked = allBox.checked;
+          });
+          syncSelectAllCheckbox(filterRoot);
+          updateFilterButtonLabel(filterRoot, options);
+          onChange();
+        });
+
+        menu.querySelectorAll("input[data-role='item']").forEach(node => {
+          node.addEventListener("change", () => {
+            syncSelectAllCheckbox(filterRoot);
+            updateFilterButtonLabel(filterRoot, options);
+            onChange();
+          });
+        });
+
+        syncSelectAllCheckbox(filterRoot);
+        updateFilterButtonLabel(filterRoot, options);
+      }
+
+      document.getElementById("teamName").textContent = data.team_name;
+      document.getElementById("summaryLine").textContent = `Aggregated full-game totals across ${data.used_matches} selected matches.`;
+      document.getElementById("submittedCount").textContent = data.submitted_matches;
+      document.getElementById("usedCount").textContent = data.used_matches;
+      document.getElementById("skippedCount").textContent = data.skipped_matches;
+      document.getElementById("recordLine").textContent = `${data.wins}-${data.losses}`;
+      document.getElementById("playerCount").textContent = data.player_summary.length;
+      document.getElementById("winsBadge").textContent = `${data.wins} wins`;
+      document.getElementById("lossesBadge").textContent = `${data.losses} losses`;
+      document.getElementById("warningsBadge").textContent = `${data.warnings.length} warnings`;
+
+      const warningsList = document.getElementById("warningsList");
+      const warningsEmpty = document.getElementById("warningsEmpty");
+      if (data.warnings.length) {
+        warningsList.innerHTML = data.warnings.map(item => `<li>${item}</li>`).join("");
+        warningsEmpty.hidden = true;
+      } else {
+        warningsList.innerHTML = "";
+        warningsEmpty.hidden = false;
+      }
+
+      document.getElementById("matchSummaryTable").innerHTML = `
+        <thead>
+          <tr>
+            <th>Match ID</th><th>Home Team</th><th>Away Team</th><th>Score</th><th>Detected Team Side</th><th>Result</th><th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data.matches.map(row => `
+            <tr>
+              <td>${row.matchid}</td>
+              <td>${row.home_team}</td>
+              <td>${row.away_team}</td>
+              <td>${row.score}</td>
+              <td>${row.detected_side}</td>
+              <td>${row.result}</td>
+              <td>${row.status}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      `;
+
+      const playerSummary = [...data.player_summary].sort((a, b) => b.fga - a.fga || b.pts - a.pts || a.name.localeCompare(b.name));
+      document.getElementById("playerSummaryTable").innerHTML = `
+        <thead>
+          <tr>
+            <th>Player</th><th>GP</th><th>MIN</th><th>PTS</th><th>FG</th><th>3PT</th><th>FT</th><th>REB</th><th>AST</th><th>TO</th><th>STL</th><th>BLK</th><th>PF</th><th>+/-</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${playerSummary.map(row => `
+            <tr>
+              <td>${row.name}</td>
+              <td>${row.gp}</td>
+              <td>${row.mins}</td>
+              <td>${row.pts}</td>
+              <td>${row.fgm}/${row.fga}</td>
+              <td>${row.tpm}/${row.tpa}</td>
+              <td>${row.ftm}/${row.fta}</td>
+              <td>${row.tr}</td>
+              <td>${row.ast}</td>
+              <td>${row.to}</td>
+              <td>${row.stl}</td>
+              <td>${row.blk}</td>
+              <td>${row.pf}</td>
+              <td>${row.pm}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      `;
+
+      const matchupRows = [...data.matchup].sort((a, b) => b.total_attempts - a.total_attempts || a.name.localeCompare(b.name));
+      document.getElementById("playerMatchupTable").innerHTML = `
+        <thead>
+          <tr>
+            <th>Player</th><th>With Defense</th><th>Open Close</th><th>Open Mid</th><th>Open 3PT</th><th>Open Total</th><th>Team FG On</th><th>Team FG Off</th><th>Pass Received</th><th>No Pass</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${matchupRows.map(row => `
+            <tr>
+              <td>${row.name}</td>
+              <td>${shotStatHtml(row.defended)}</td>
+              <td>${shotStatHtml(row.openClose)}</td>
+              <td>${shotStatHtml(row.openMid)}</td>
+              <td>${shotStatHtml(row.openThree)}</td>
+              <td>${shotStatHtml(row.openTotal)}</td>
+              <td>${shotStatHtml(row.teamOn)}</td>
+              <td>${shotStatHtml(row.teamOff)}</td>
+              <td>${shotStatHtml(row.withPass)}</td>
+              <td>${shotStatHtml(row.withoutPass)}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      `;
+
+      const defenseRows = [...data.defense].sort((a, b) => b.total_attempts - a.total_attempts || a.name.localeCompare(b.name));
+      document.getElementById("playerDefenseTable").innerHTML = `
+        <thead>
+          <tr>
+            <th>Player</th><th>Team Def On</th><th>Team Def Off</th><th>Defended Total</th><th>Defended Close</th><th>Defended Mid</th><th>Defended 3PT</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${defenseRows.map(row => `
+            <tr>
+              <td>${row.name}</td>
+              <td>${defensePctHtml(row.teamDefOn)}</td>
+              <td>${defensePctHtml(row.teamDefOff)}</td>
+              <td>${defenseStatHtml(row.defendedTotal)}</td>
+              <td>${defenseStatHtml(row.defendedClose)}</td>
+              <td>${defenseStatHtml(row.defendedMid)}</td>
+              <td>${defenseStatHtml(row.defendedThree)}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      `;
+
+      document.getElementById("offPlayersTable").innerHTML = `
+        <thead>
+          <tr>
+            <th>Player</th>
+            ${data.offense.shot_types.map(code => `<th>${shotTypeLabel[code] || code}</th>`).join("")}
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${[...data.offense.players].sort((a, b) => b.total.a - a.total.a || a.name.localeCompare(b.name)).map(row => `
+            <tr>
+              <td>${row.name}</td>
+              ${data.offense.shot_types.map(code => `<td>${offCellHtml(row.counts[code])}</td>`).join("")}
+              <td>${offCellHtml(row.total)}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      `;
+
+      const defenderFilter = document.getElementById("defenderFilter");
+      const defShotTypeFilter = document.getElementById("defShotTypeFilter");
+      const defResultFilter = document.getElementById("defResultFilter");
+      const defSummary = document.getElementById("defSummary");
+
+      initMultiDropdown(defenderFilter, data.defended_shots.players.map(name => ({ value: name, label: name })), renderDefendedShots);
+      initMultiDropdown(defShotTypeFilter, data.defended_shots.shot_types.map(code => ({ value: code, label: shotTypeLabel[code] || code })), renderDefendedShots);
+      initMultiDropdown(defResultFilter, data.defended_shots.results.map(code => ({ value: code, label: shotResultLabel[code] || code })), renderDefendedShots);
+
+      function renderDefendedShots() {
+        const selectedDefenders = selectedValues(defenderFilter);
+        const selectedShotTypes = selectedValues(defShotTypeFilter);
+        const selectedResults = selectedValues(defResultFilter);
+        const filtered = data.defended_shots.events.filter(ev => {
+          if (selectedDefenders.size && !selectedDefenders.has(ev.defender)) return false;
+          if (selectedShotTypes.size && !selectedShotTypes.has(ev.shot_type)) return false;
+          if (selectedResults.size && !selectedResults.has(ev.shot_result)) return false;
+          return true;
+        });
+
+        const madeCount = filtered.filter(ev => ["1", "2", "5"].includes(String(ev.shot_result))).length;
+        const missedCount = filtered.filter(ev => ["0", "3", "4"].includes(String(ev.shot_result))).length;
+        const blockedCount = filtered.filter(ev => String(ev.shot_result) === "3").length;
+        const foulCount = filtered.filter(ev => ["4", "5"].includes(String(ev.shot_result))).length;
+        const fgPct = filtered.length ? ((madeCount / filtered.length) * 100).toFixed(1) + "%" : "0.0%";
+
+        defSummary.innerHTML = `
+          <div class="summary-card"><div class="k">Total Shots Defended</div><div class="v">${filtered.length}</div></div>
+          <div class="summary-card"><div class="k">Made Against</div><div class="v">${madeCount}</div></div>
+          <div class="summary-card"><div class="k">Missed Against</div><div class="v">${missedCount}</div></div>
+          <div class="summary-card"><div class="k">Blocked</div><div class="v">${blockedCount}</div></div>
+          <div class="summary-card"><div class="k">With Foul</div><div class="v">${foulCount}</div></div>
+          <div class="summary-card"><div class="k">FG% Allowed</div><div class="v">${fgPct}</div></div>
+        `;
+
+        document.getElementById("defShotsTable").innerHTML = `
+          <thead>
+            <tr>
+              <th>Match ID</th><th>Defender</th><th>Shooter</th><th>Opponent</th><th>Shot Type</th><th>Result</th><th>Comment</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filtered.map(ev => `
+              <tr>
+                <td>${ev.matchid}</td>
+                <td>${ev.defender}</td>
+                <td>${ev.shooter}</td>
+                <td>${ev.opponent}</td>
+                <td>${shotTypeLabel[ev.shot_type] || ev.shot_type}</td>
+                <td>${shotResultLabel[ev.shot_result] || ev.shot_result}</td>
+                <td>${ev.comment}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        `;
+      }
+
+      document.addEventListener("click", () => {
+        document.querySelectorAll(".multi-dd.open").forEach(node => node.classList.remove("open"));
+      });
+
+      renderDefendedShots();
+    </script>
   </main>
 </body>
 </html>
@@ -1996,7 +2967,184 @@ def serialize_game(game: Game) -> dict[str, Any]:
     return {"teamHome": teams[0], "teamAway": teams[1], "events": events}
 
 
-def generate_report(matchid: str, username: str, password: str) -> dict[str, Any]:
+def normalize_team_key(name: str) -> str:
+    return " ".join(name.split()).casefold()
+
+
+def normalize_player_key(name: str) -> str:
+    cleaned = re.sub(r"[\W_]+", "", name.casefold())
+    return cleaned or normalize_team_key(name)
+
+
+def secs_to_minutes(total_seconds: int) -> int:
+    return round(total_seconds / 60)
+
+
+def normalize_slot(raw_slot: Any, players_len: int) -> int | None:
+    try:
+        n = int(raw_slot)
+    except (TypeError, ValueError):
+        return None
+    if 1 <= n <= players_len:
+        return n - 1
+    return None
+
+
+def normalize_player_index(raw_index: Any, players_len: int) -> int | None:
+    try:
+        n = int(raw_index)
+    except (TypeError, ValueError):
+        return None
+    if 0 <= n < players_len:
+        return n
+    return None
+
+
+def shot_stat() -> dict[str, int]:
+    return {"m": 0, "a": 0}
+
+
+def off_cell() -> dict[str, int]:
+    return {"a": 0, "m": 0, "mi": 0, "b": 0}
+
+
+def matchup_stats() -> dict[str, dict[str, int]]:
+    return {
+        "defended": shot_stat(),
+        "openClose": shot_stat(),
+        "openMid": shot_stat(),
+        "openThree": shot_stat(),
+        "openTotal": shot_stat(),
+        "withPass": shot_stat(),
+        "withoutPass": shot_stat(),
+        "teamOn": shot_stat(),
+        "teamOff": shot_stat(),
+    }
+
+
+def defense_stats() -> dict[str, dict[str, int]]:
+    return {
+        "teamDefOn": shot_stat(),
+        "teamDefOff": shot_stat(),
+        "defendedTotal": shot_stat(),
+        "defendedClose": shot_stat(),
+        "defendedMid": shot_stat(),
+        "defendedThree": shot_stat(),
+    }
+
+
+def add_shot_stat(target: dict[str, int], made: bool) -> None:
+    target["a"] += 1
+    if made:
+        target["m"] += 1
+
+
+def add_off_stat(target: dict[str, int], result_code: Any) -> None:
+    rc = str(result_code)
+    target["a"] += 1
+    if rc in {"1", "2", "5"}:
+        target["m"] += 1
+    elif rc == "3":
+        target["b"] += 1
+    else:
+        target["mi"] += 1
+
+
+def shot_range(shot_type: Any) -> str:
+    code = str(shot_type)
+    if code.startswith("10"):
+        return "three"
+    if code.startswith("20"):
+        return "jump"
+    return "paint"
+
+
+def empty_form_context(
+    *,
+    error: str = "",
+    username: str = "",
+    password: str = "",
+    matchid: str = "138595249",
+    mode: str = "single",
+    multi_matchids: list[str] | None = None,
+) -> dict[str, Any]:
+    vals = list(multi_matchids or [])
+    while len(vals) < 2:
+        vals.append("")
+    return {
+        "error": error,
+        "username": username,
+        "password": password,
+        "matchid": matchid,
+        "mode": mode,
+        "multi_matchids": vals,
+    }
+
+
+def parse_multi_matchids(form_values: list[str]) -> list[str]:
+    out: list[str] = []
+    seen: set[str] = set()
+    for value in form_values:
+        cleaned = value.strip()
+        if not cleaned:
+            continue
+        if cleaned in seen:
+            continue
+        seen.add(cleaned)
+        out.append(cleaned)
+    return out
+
+
+def game_team_entry(game_data: dict[str, Any], selected_team_key: str) -> tuple[int, dict[str, Any]] | None:
+    home = game_data["teamHome"]
+    away = game_data["teamAway"]
+    if normalize_team_key(home["name"]) == selected_team_key:
+        return (0, home)
+    if normalize_team_key(away["name"]) == selected_team_key:
+        return (1, away)
+    return None
+
+
+def canonical_player_names(players: list[dict[str, Any]], warnings: list[str], matchid: str) -> dict[int, tuple[str, str]]:
+    base_counts: dict[str, int] = {}
+    out: dict[int, tuple[str, str]] = {}
+    for idx, player in enumerate(players):
+        name = player["name"].strip()
+        if not name or name == "Lucky Fan":
+            continue
+        base_key = normalize_player_key(name)
+        base_counts[base_key] = base_counts.get(base_key, 0) + 1
+        if base_counts[base_key] > 1:
+            label = f"{name} ({base_counts[base_key]})"
+            warnings.append(
+                f"Match {matchid}: duplicate player name '{name}' detected on the selected team, so separate rows were kept."
+            )
+            out[idx] = (f"{base_key}__dup{base_counts[base_key]}", label)
+            continue
+        out[idx] = (base_key, name)
+    return out
+
+
+def format_score(game_data: dict[str, Any]) -> str:
+    home = game_data["teamHome"]
+    away = game_data["teamAway"]
+    return f'{home["stats"]["total"]["pts"]} - {away["stats"]["total"]["pts"]}'
+
+
+def build_team_candidates(games: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    counts: dict[str, dict[str, Any]] = {}
+    for game_data in games:
+        for team in (game_data["teamHome"], game_data["teamAway"]):
+            key = normalize_team_key(team["name"])
+            entry = counts.setdefault(key, {"key": key, "name": team["name"], "count": 0})
+            entry["count"] += 1
+    if not counts:
+        return []
+    top_count = max(entry["count"] for entry in counts.values())
+    return [entry for entry in counts.values() if entry["count"] == top_count]
+
+
+def load_game_report(matchid: str, username: str, password: str) -> dict[str, Any]:
     api = BBApi(username, password)
     if not getattr(api, "logged_in", False):
         raise ValueError("BBAPI login failed. Check username/password.")
@@ -2020,7 +3168,422 @@ def generate_report(matchid: str, username: str, password: str) -> dict[str, Any
         )
         game = Game(matchid, events, home_team, away_team, args, [])
         game.play()
-    return serialize_game(game)
+    report = serialize_game(game)
+    report["matchid"] = str(matchid)
+    return report
+
+
+def generate_report(matchid: str, username: str, password: str) -> dict[str, Any]:
+    return load_game_report(matchid, username, password)
+
+
+def aggregate_multi_match_report(
+    matchids: list[str],
+    username: str,
+    password: str,
+    selected_team_key: str | None = None,
+) -> tuple[str, dict[str, Any] | list[dict[str, Any]]]:
+    loaded_games: list[dict[str, Any]] = []
+    initial_rows: list[dict[str, str]] = []
+    warnings: list[str] = []
+
+    for matchid in matchids:
+        if not matchid.isdigit():
+            msg = "Match ID must be numeric."
+            warnings.append(f"Match {matchid}: {msg}")
+            initial_rows.append(
+                {
+                    "matchid": matchid,
+                    "home_team": "-",
+                    "away_team": "-",
+                    "score": "-",
+                    "detected_side": "-",
+                    "result": "-",
+                    "status": msg,
+                }
+            )
+            continue
+        try:
+            game_data = load_game_report(matchid, username, password)
+        except Exception as exc:
+            msg = f"Skipped: {exc}"
+            warnings.append(f"Match {matchid}: {exc}")
+            initial_rows.append(
+                {
+                    "matchid": matchid,
+                    "home_team": "-",
+                    "away_team": "-",
+                    "score": "-",
+                    "detected_side": "-",
+                    "result": "-",
+                    "status": msg,
+                }
+            )
+            continue
+
+        loaded_games.append(game_data)
+
+    if not loaded_games:
+        return (
+            "error",
+            {
+                "message": "No valid matches could be loaded.",
+                "rows": initial_rows,
+                "warnings": warnings,
+            },
+        )
+
+    candidates = build_team_candidates(loaded_games)
+    if not candidates:
+        return (
+            "error",
+            {
+                "message": "Could not detect a common team across the submitted matches.",
+                "rows": initial_rows,
+                "warnings": warnings,
+            },
+        )
+
+    if not selected_team_key:
+        if len(candidates) > 1:
+            return ("choose_team", candidates)
+        selected_team_key = candidates[0]["key"]
+
+    player_summary_map: dict[str, dict[str, Any]] = {}
+    matchup_map: dict[str, dict[str, Any]] = {}
+    defense_map: dict[str, dict[str, Any]] = {}
+    offense_map: dict[str, dict[str, Any]] = {}
+    defended_shot_events: list[dict[str, str]] = []
+    match_rows = list(initial_rows)
+    team_name = ""
+    used_matches = 0
+    wins = 0
+    losses = 0
+    shot_type_codes: set[str] = set()
+    defender_names: set[str] = set()
+    shot_result_codes: set[str] = set()
+
+    stat_fields = [
+        "pts",
+        "fgm",
+        "fga",
+        "tpm",
+        "tpa",
+        "ftm",
+        "fta",
+        "+/-",
+        "or",
+        "dr",
+        "tr",
+        "ast",
+        "to",
+        "stl",
+        "blk",
+        "pf",
+    ]
+
+    for game_data in loaded_games:
+        matchid = game_data["matchid"]
+        found = game_team_entry(game_data, selected_team_key)
+        if found is None:
+            msg = "Skipped: selected team not present in this match."
+            warnings.append(f"Match {matchid}: selected team not present.")
+            match_rows.append(
+                {
+                    "matchid": matchid,
+                    "home_team": game_data["teamHome"]["name"],
+                    "away_team": game_data["teamAway"]["name"],
+                    "score": format_score(game_data),
+                    "detected_side": "-",
+                    "result": "-",
+                    "status": msg,
+                }
+            )
+            continue
+
+        side, team_obj = found
+        opp_obj = game_data["teamAway"] if side == 0 else game_data["teamHome"]
+        team_name = team_obj["name"]
+        used_matches += 1
+
+        team_pts = team_obj["stats"]["total"]["pts"]
+        opp_pts = opp_obj["stats"]["total"]["pts"]
+        result = "W" if team_pts > opp_pts else "L"
+        if result == "W":
+            wins += 1
+        else:
+            losses += 1
+
+        match_rows.append(
+            {
+                "matchid": matchid,
+                "home_team": game_data["teamHome"]["name"],
+                "away_team": game_data["teamAway"]["name"],
+                "score": format_score(game_data),
+                "detected_side": "Home" if side == 0 else "Away",
+                "result": result,
+                "status": "Used",
+            }
+        )
+
+        slot_map = canonical_player_names(team_obj["players"], warnings, matchid)
+
+        for idx, player in enumerate(team_obj["players"]):
+            if idx not in slot_map:
+                continue
+            player_key, player_label = slot_map[idx]
+            totals = player["stats"]["total"]
+            entry = player_summary_map.setdefault(
+                player_key,
+                {
+                    "name": player_label,
+                    "gp": 0,
+                    "secs_pg": 0,
+                    "secs_sg": 0,
+                    "secs_sf": 0,
+                    "secs_pf": 0,
+                    "secs_c": 0,
+                    "pts": 0,
+                    "fgm": 0,
+                    "fga": 0,
+                    "tpm": 0,
+                    "tpa": 0,
+                    "ftm": 0,
+                    "fta": 0,
+                    "or": 0,
+                    "dr": 0,
+                    "tr": 0,
+                    "ast": 0,
+                    "to": 0,
+                    "stl": 0,
+                    "blk": 0,
+                    "pf": 0,
+                    "pm": 0,
+                },
+            )
+            entry["gp"] += 1
+            entry["secs_pg"] += totals["secs_pg"]
+            entry["secs_sg"] += totals["secs_sg"]
+            entry["secs_sf"] += totals["secs_sf"]
+            entry["secs_pf"] += totals["secs_pf"]
+            entry["secs_c"] += totals["secs_c"]
+            for field in stat_fields:
+                target = "pm" if field == "+/-" else field
+                entry[target] += totals[field]
+
+            matchup_map.setdefault(player_key, {"name": player_label, **matchup_stats()})
+            defense_map.setdefault(player_key, {"name": player_label, **defense_stats()})
+            offense_map.setdefault(player_key, {"name": player_label, "counts": {}})
+
+        active_keys = {
+            slot_map[idx][0]
+            for idx, player in enumerate(team_obj["players"])
+            if idx in slot_map and player.get("starter")
+        }
+
+        for ev in game_data["events"]:
+            if ev["event_type"] == "shot":
+                made = str(ev["shot_result"]) in {"1", "2", "5"}
+                shot_type = str(ev["shot_type"])
+                shot_result = str(ev["shot_result"])
+                shot_type_codes.add(shot_type)
+                shot_result_codes.add(shot_result)
+
+                if int(ev["attacking_team"]) == side:
+                    for player_key in slot_map.values():
+                        add_shot_stat(
+                            matchup_map[player_key[0]]["teamOn" if player_key[0] in active_keys else "teamOff"],
+                            made,
+                        )
+
+                    shooter_idx = normalize_slot(ev["attacker"], len(team_obj["players"]))
+                    if shooter_idx is not None and shooter_idx in slot_map:
+                        shooter_key, _ = slot_map[shooter_idx]
+                        shooter_stats = matchup_map[shooter_key]
+
+                        defender_idx = normalize_slot(ev["defender"], len(opp_obj["players"]))
+                        if defender_idx is not None:
+                            add_shot_stat(shooter_stats["defended"], made)
+                        else:
+                            range_key = shot_range(shot_type)
+                            if range_key == "paint":
+                                add_shot_stat(shooter_stats["openClose"], made)
+                            elif range_key == "jump":
+                                add_shot_stat(shooter_stats["openMid"], made)
+                            else:
+                                add_shot_stat(shooter_stats["openThree"], made)
+                            add_shot_stat(shooter_stats["openTotal"], made)
+
+                        if normalize_slot(ev["assistant"], len(team_obj["players"])) is not None:
+                            add_shot_stat(shooter_stats["withPass"], made)
+                        else:
+                            add_shot_stat(shooter_stats["withoutPass"], made)
+
+                        counts = offense_map[shooter_key]["counts"].setdefault(shot_type, off_cell())
+                        add_off_stat(counts, shot_result)
+
+                if int(ev["defending_team"]) == side:
+                    for player_key in slot_map.values():
+                        add_shot_stat(
+                            defense_map[player_key[0]]["teamDefOn" if player_key[0] in active_keys else "teamDefOff"],
+                            made,
+                        )
+
+                    defender_idx = normalize_slot(ev["defender"], len(team_obj["players"]))
+                    if defender_idx is not None and defender_idx in slot_map:
+                        defender_key, defender_label = slot_map[defender_idx]
+                        defender_names.add(defender_label)
+                        defender_stats = defense_map[defender_key]
+                        add_shot_stat(defender_stats["defendedTotal"], made)
+                        range_key = shot_range(shot_type)
+                        if range_key == "paint":
+                            add_shot_stat(defender_stats["defendedClose"], made)
+                        elif range_key == "jump":
+                            add_shot_stat(defender_stats["defendedMid"], made)
+                        else:
+                            add_shot_stat(defender_stats["defendedThree"], made)
+
+                        shooter_idx = normalize_slot(ev["attacker"], len(opp_obj["players"]))
+                        shooter_name = (
+                            opp_obj["players"][shooter_idx]["name"]
+                            if shooter_idx is not None and shooter_idx < len(opp_obj["players"])
+                            else f'#{ev["attacker"]}'
+                        )
+                        defended_shot_events.append(
+                            {
+                                "matchid": matchid,
+                                "defender": defender_label,
+                                "shooter": shooter_name,
+                                "opponent": opp_obj["name"],
+                                "shot_type": shot_type,
+                                "shot_result": shot_result,
+                                "comment": " ".join(ev.get("comments", [])) or "(no commentary)",
+                            }
+                        )
+
+                continue
+
+            if ev["event_type"] == "sub" and int(ev["team"]) == side:
+                if str(ev["sub_type"]) == "9520":
+                    continue
+                player_in_idx = normalize_player_index(ev["player_in"], len(team_obj["players"]))
+                player_out_idx = normalize_player_index(ev["player_out"], len(team_obj["players"]))
+                if player_out_idx is not None and player_out_idx in slot_map:
+                    active_keys.discard(slot_map[player_out_idx][0])
+                if player_in_idx is not None and player_in_idx in slot_map:
+                    active_keys.add(slot_map[player_in_idx][0])
+
+    if used_matches == 0:
+        return (
+            "error",
+            {
+                "message": "No matches included the selected team after validation.",
+                "rows": match_rows,
+                "warnings": warnings,
+            },
+        )
+
+    player_summary = []
+    for entry in player_summary_map.values():
+        total_secs = (
+            entry["secs_pg"]
+            + entry["secs_sg"]
+            + entry["secs_sf"]
+            + entry["secs_pf"]
+            + entry["secs_c"]
+        )
+        player_summary.append(
+            {
+                "name": entry["name"],
+                "gp": entry["gp"],
+                "mins": secs_to_minutes(total_secs),
+                "pts": entry["pts"],
+                "fgm": entry["fgm"],
+                "fga": entry["fga"],
+                "tpm": entry["tpm"],
+                "tpa": entry["tpa"],
+                "ftm": entry["ftm"],
+                "fta": entry["fta"],
+                "tr": entry["tr"],
+                "ast": entry["ast"],
+                "to": entry["to"],
+                "stl": entry["stl"],
+                "blk": entry["blk"],
+                "pf": entry["pf"],
+                "pm": entry["pm"],
+            }
+        )
+
+    offense_players = []
+    for player_key, item in offense_map.items():
+        counts = {code: item["counts"].get(code, off_cell()) for code in sorted(shot_type_codes, key=int)}
+        total = off_cell()
+        for cell in counts.values():
+            total["a"] += cell["a"]
+            total["m"] += cell["m"]
+            total["mi"] += cell["mi"]
+            total["b"] += cell["b"]
+        offense_players.append({"name": item["name"], "counts": counts, "total": total})
+
+    matchup_rows = []
+    for item in matchup_map.values():
+        matchup_rows.append(
+            {
+                "name": item["name"],
+                "defended": item["defended"],
+                "openClose": item["openClose"],
+                "openMid": item["openMid"],
+                "openThree": item["openThree"],
+                "openTotal": item["openTotal"],
+                "teamOn": item["teamOn"],
+                "teamOff": item["teamOff"],
+                "withPass": item["withPass"],
+                "withoutPass": item["withoutPass"],
+                "total_attempts": item["defended"]["a"] + item["openTotal"]["a"] + item["withPass"]["a"] + item["withoutPass"]["a"],
+            }
+        )
+
+    defense_rows = []
+    for item in defense_map.values():
+        defense_rows.append(
+            {
+                "name": item["name"],
+                "teamDefOn": item["teamDefOn"],
+                "teamDefOff": item["teamDefOff"],
+                "defendedTotal": item["defendedTotal"],
+                "defendedClose": item["defendedClose"],
+                "defendedMid": item["defendedMid"],
+                "defendedThree": item["defendedThree"],
+                "total_attempts": item["defendedTotal"]["a"],
+            }
+        )
+
+    return (
+        "ok",
+        {
+            "team_name": team_name,
+            "submitted_matches": len(matchids),
+            "used_matches": used_matches,
+            "skipped_matches": len(match_rows) - used_matches,
+            "wins": wins,
+            "losses": losses,
+            "warnings": warnings,
+            "matches": match_rows,
+            "player_summary": player_summary,
+            "matchup": matchup_rows,
+            "defense": defense_rows,
+            "offense": {
+                "shot_types": sorted(shot_type_codes, key=int),
+                "players": offense_players,
+            },
+            "defended_shots": {
+                "players": sorted(defender_names),
+                "shot_types": sorted(shot_type_codes, key=int),
+                "results": sorted(shot_result_codes, key=int),
+                "events": defended_shot_events,
+            },
+        },
+    )
 
 
 def get_court_image_data_url() -> str:
@@ -2033,25 +3596,105 @@ def get_court_image_data_url() -> str:
 
 @app.get("/")
 def form() -> str:
-    return render_template_string(
-        FORM_HTML, error="", username="", password="", matchid="138595249"
-    )
+    return render_template_string(FORM_HTML, **empty_form_context())
 
 
 @app.post("/report")
 def report() -> tuple[str, int] | str:
     username = request.form.get("username", "").strip()
     password = request.form.get("password", "").strip()
+    mode = request.form.get("mode", "single").strip() or "single"
     matchid = request.form.get("matchid", "").strip()
+    multi_matchids = parse_multi_matchids(request.form.getlist("matchids"))
+    selected_team_key = request.form.get("selected_team_key", "").strip() or None
 
-    if not username or not password or not matchid:
+    if not username or not password:
         return (
             render_template_string(
                 FORM_HTML,
-                error="All fields are required.",
+                **empty_form_context(
+                    error="Username and password are required.",
+                    username=username,
+                    password=password,
+                    matchid=matchid,
+                    mode=mode,
+                    multi_matchids=multi_matchids,
+                ),
+            ),
+            400,
+        )
+
+    if mode == "multi":
+        if not multi_matchids:
+            return (
+                render_template_string(
+                    FORM_HTML,
+                    **empty_form_context(
+                        error="Enter at least one match ID for multi-match mode.",
+                        username=username,
+                        password=password,
+                        matchid=matchid,
+                        mode=mode,
+                        multi_matchids=multi_matchids,
+                    ),
+                ),
+                400,
+            )
+
+        status, payload = aggregate_multi_match_report(
+            multi_matchids,
+            username,
+            password,
+            selected_team_key=selected_team_key,
+        )
+
+        if status == "choose_team":
+            return render_template_string(
+                TEAM_CHOICE_HTML,
                 username=username,
                 password=password,
-                matchid=matchid,
+                matchids=multi_matchids,
+                candidates=payload,
+            )
+
+        if status == "error":
+            message = payload["message"]
+            extra_warnings = payload.get("warnings", [])
+            if extra_warnings:
+                message = f'{message} {" | ".join(extra_warnings)}'
+            return (
+                render_template_string(
+                    FORM_HTML,
+                    **empty_form_context(
+                        error=message,
+                        username=username,
+                        password="",
+                        matchid=matchid,
+                        mode=mode,
+                        multi_matchids=multi_matchids,
+                    ),
+                ),
+                400,
+            )
+
+        return render_template_string(
+            MULTI_REPORT_HTML,
+            report_json=payload,
+            username=username,
+        )
+
+    if not matchid:
+        return (
+            render_template_string(
+                FORM_HTML,
+                **empty_form_context(
+                    error="Match ID is required.",
+                    username=username,
+                    password=password,
+                    matchid=matchid,
+                    mode=mode,
+                    multi_matchids=multi_matchids,
+                ),
             ),
             400,
         )
@@ -2060,10 +3703,14 @@ def report() -> tuple[str, int] | str:
         return (
             render_template_string(
                 FORM_HTML,
-                error="Match ID must be numeric.",
-                username=username,
-                password=password,
-                matchid=matchid,
+                **empty_form_context(
+                    error="Match ID must be numeric.",
+                    username=username,
+                    password=password,
+                    matchid=matchid,
+                    mode=mode,
+                    multi_matchids=multi_matchids,
+                ),
             ),
             400,
         )
@@ -2074,10 +3721,14 @@ def report() -> tuple[str, int] | str:
         return (
             render_template_string(
                 FORM_HTML,
-                error=f"Failed to generate report: {exc}",
-                username=username,
-                password="",
-                matchid=matchid,
+                **empty_form_context(
+                    error=f"Failed to generate report: {exc}",
+                    username=username,
+                    password="",
+                    matchid=matchid,
+                    mode=mode,
+                    multi_matchids=multi_matchids,
+                ),
             ),
             500,
         )
