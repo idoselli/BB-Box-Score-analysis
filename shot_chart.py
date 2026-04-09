@@ -1,9 +1,11 @@
 from PIL import Image, ImageDraw
+from pathlib import Path
 
 
 class ShotChart:
     def __init__(self) -> None:
-        self.img = Image.open("court.png")
+        court_path = Path(__file__).resolve().with_name("court.png")
+        self.img = Image.open(court_path)
         self.img_draw = ImageDraw.Draw(self.img)
 
     def add_made(self, x, y):

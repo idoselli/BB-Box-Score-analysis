@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "flask",
+  "functions": {
+    "app.py": {
+      "includeFiles": [
+        "commentary-en.xml",
+        "court.png"
+      ],
+      "maxDuration": 60
+    }
+  }
+}

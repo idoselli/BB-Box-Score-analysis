@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+from pathlib import Path
 import requests
 import xml.etree.ElementTree as XML
 from tabulate import tabulate, SEPARATING_LINE
@@ -10,6 +11,10 @@ from event import *
 from player import Player
 from team import Team
 from bbapi import *
+
+
+BASE_DIR = Path(__file__).resolve().parent
+CACHE_DIR = BASE_DIR / "matches"
 
 
 def parse_report(report: str, at: Team, ht: Team) -> list[BBEvent]:
@@ -162,22 +167,23 @@ def parse_xml(text: str) -> tuple[list[BBEvent], Team, Team]:
 
 
 def get_xml_text(matchid) -> str:
-    from os.path import exists
+    path = CACHE_DIR / f"report_{matchid}.xml"
 
-    path = f"matches/report_{matchid}.xml"
+    if path.exists():
+        return path.read_text(encoding="utf-8")
 
-    if exists(path):
-        with open(path, mode="r", encoding='utf-8') as f:
-            return f.read()
-    else:
-        data = requests.get(
-            f"https://buzzerbeater.com/match/viewmatch.aspx?matchid={matchid}"
-        )
+    data = requests.get(
+        f"https://buzzerbeater.com/match/viewmatch.aspx?matchid={matchid}"
+    )
+    data.raise_for_status()
 
-        with open(path, mode="w", encoding='utf-8') as f:
-            f.write(data.text)
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(data.text, encoding="utf-8")
+    except OSError:
+        pass
 
-        return data.text
+    return data.text
 
 
 def main():

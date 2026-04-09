@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Set
 import requests
 import xml.etree.ElementTree as xml
@@ -5,7 +6,10 @@ from pprint import pprint
 from team import Team
 from player import Player
 from stats import *
-from os.path import exists
+
+
+BASE_DIR = Path(__file__).resolve().parent
+CACHE_DIR = BASE_DIR / "matches"
 
 
 class Network:
@@ -76,52 +80,55 @@ class BBApi:
         return arena_name, arena_seats, arena_expansion
 
     def get_xml_boxscore(self, matchid) -> str:
+        path = CACHE_DIR / f"boxscore_{matchid}.xml"
+        p = {"matchid": matchid}
 
-        path = f"matches/boxscore_{matchid}.xml"
+        if path.exists():
+            return path.read_text(encoding="utf-8")
 
-        if exists(path):
-            with open(path, mode="r", encoding='utf-8') as f:
-                return f.read()
-        else:
-            p = {"matchid": matchid}
-            text = self.network.get("http://bbapi.buzzerbeater.com/boxscore.aspx", p)
+        text = self.network.get("http://bbapi.buzzerbeater.com/boxscore.aspx", p)
 
-            with open(path, mode="w", encoding='utf-8') as f:
-                f.write(text)
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text, encoding="utf-8")
+        except OSError:
+            pass
 
-            return text
+        return text
 
     def get_xml_standings(self, leagueid: int, season: int) -> str:
+        path = CACHE_DIR / f"standings_{leagueid}_{season}.xml"
 
-        path = f"matches/standings_{leagueid}_{season}.xml"
+        if path.exists():
+            return path.read_text(encoding="utf-8")
 
-        if exists(path):
-            with open(path, mode="r", encoding='utf-8') as f:
-                return f.read()
-        else:
-            p = {"leagueid": str(leagueid), "season": str(season)}
-            text = self.network.get("http://bbapi.buzzerbeater.com/standings.aspx", p)
+        p = {"leagueid": str(leagueid), "season": str(season)}
+        text = self.network.get("http://bbapi.buzzerbeater.com/standings.aspx", p)
 
-            with open(path, mode="w", encoding='utf-8') as f:
-                f.write(text)
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text, encoding="utf-8")
+        except OSError:
+            pass
 
-            return text
+        return text
 
     def get_xml_schedule(self, teamid, season) -> str:
+        path = CACHE_DIR / f"schedule_{teamid}_{season}.xml"
 
-        path = f"matches/schedule_{teamid}_{season}.xml"
+        if path.exists():
+            return path.read_text(encoding="utf-8")
 
-        if exists(path):
-            with open(path, mode="r", encoding='utf-8') as f:
-                return f.read()
-        else:
-            p = {"teamid": teamid, "season": season}
-            text = self.network.get("http://bbapi.buzzerbeater.com/schedule.aspx", p)
+        p = {"teamid": teamid, "season": season}
+        text = self.network.get("http://bbapi.buzzerbeater.com/schedule.aspx", p)
 
-            with open(path, mode="w", encoding='utf-8') as f:
-                f.write(text)
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text, encoding="utf-8")
+        except OSError:
+            pass
 
-            return text
+        return text
 
     def player(self, playerid) -> str:
         p = {"playerid": playerid}

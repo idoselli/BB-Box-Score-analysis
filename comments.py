@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as XML
+from pathlib import Path
 from event import *
 
 
@@ -6,8 +7,8 @@ class Comments:
     def __init__(self) -> None:
         self.comments: dict[str, dict[int, str]] = {}
 
-        input = "commentary-en.xml"
-        tree = XML.parse(input)
+        input_path = Path(__file__).resolve().with_name("commentary-en.xml")
+        tree = XML.parse(input_path)
         root = tree.getroot()
 
         for child in root:
