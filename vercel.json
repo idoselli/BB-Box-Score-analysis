@@ -3,10 +3,7 @@
   "framework": "flask",
   "functions": {
     "app.py": {
-      "includeFiles": [
-        "commentary-en.xml",
-        "court.png"
-      ],
+      "includeFiles": "{commentary-en.xml,court.png}",
       "maxDuration": 60
     }
   }
