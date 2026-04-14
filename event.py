@@ -247,6 +247,7 @@ class FreeThrowEvent(BaseEvent):
         return {
             "event_type": "free_throw",
             "free_throw_type": str(self.free_throw_type),
+            "shot_result": str(self.shot_result),
             "attacking_team": self.att_team,
             "attacker": self.attacker,
             "gameclock": self.gameclock,

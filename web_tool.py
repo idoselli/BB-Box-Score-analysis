@@ -94,7 +94,7 @@ FORM_HTML = """<!doctype html>
     }
     .mode-switch {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 10px;
       margin-bottom: 6px;
     }
@@ -171,9 +171,11 @@ FORM_HTML = """<!doctype html>
         <div class="mode-switch">
           <button type="button" class="mode-btn" data-mode="single">Single Match</button>
           <button type="button" class="mode-btn" data-mode="multi">Multi Match Team Aggregate</button>
+          <button type="button" class="mode-btn" data-mode="animation">Animation</button>
         </div>
 
         <section id="singlePanel" class="mode-panel">
+          <div class="small" id="singleModeHint">Generate a full report for one match.</div>
           <label>Match ID
             <input name="matchid" value="{{ matchid }}" />
           </label>
@@ -211,6 +213,7 @@ FORM_HTML = """<!doctype html>
     const modeInput = document.getElementById("modeInput");
     const singlePanel = document.getElementById("singlePanel");
     const multiPanel = document.getElementById("multiPanel");
+    const singleModeHint = document.getElementById("singleModeHint");
     const modeButtons = [...document.querySelectorAll(".mode-btn")];
     const matchesList = document.getElementById("matchesList");
     const addMatchBtn = document.getElementById("addMatchBtn");
@@ -218,9 +221,12 @@ FORM_HTML = """<!doctype html>
 
     function applyMode(mode) {
       modeInput.value = mode;
-      singlePanel.classList.toggle("active", mode === "single");
+      singlePanel.classList.toggle("active", mode === "single" || mode === "animation");
       multiPanel.classList.toggle("active", mode === "multi");
       modeButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.mode === mode));
+      singleModeHint.textContent = mode === "animation"
+        ? "Generate a live animated game view for one match."
+        : "Generate a full report for one match.";
     }
 
     function updateRemoveButtons() {
@@ -650,6 +656,37 @@ MULTI_REPORT_HTML = """<!doctype html>
     .badge.bad {
       background: var(--danger-bg);
       border-color: var(--danger-line);
+    }
+    .impact-marks {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .impact-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 6px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1;
+      cursor: help;
+    }
+    .impact-mark.pos {
+      color: #166534;
+      background: #f0fdf4;
+      border-color: #86efac;
+    }
+    .impact-mark.neg {
+      color: #991b1b;
+      background: #fef2f2;
+      border-color: #fca5a5;
     }
     @media (max-width: 960px) {
       .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -2153,6 +2190,10 @@ REPORT_HTML = """<!doctype html>
       return stat.a ? ((stat.m / stat.a) * 100).toFixed(1) : "0.0";
     }
 
+    function shotStatRatio(stat) {
+      return stat.a ? (stat.m / stat.a) : null;
+    }
+
     function shotStatHtml(stat) {
       if (!stat.a) return "";
       return `${stat.m}/${stat.a}/${shotStatPct(stat)}%`;
@@ -2160,6 +2201,10 @@ REPORT_HTML = """<!doctype html>
 
     function defensePct(stat) {
       return stat.a ? (((stat.a - stat.m) / stat.a) * 100).toFixed(1) : "";
+    }
+
+    function defensePctValue(stat) {
+      return stat.a ? ((stat.a - stat.m) / stat.a) : null;
     }
 
     function defensePctHtml(stat) {
@@ -2171,6 +2216,43 @@ REPORT_HTML = """<!doctype html>
       const pct = defensePct(stat);
       if (!pct) return "";
       return `${stat.a - stat.m}/${stat.a} ${pct}%`;
+    }
+
+    function formatSignedPctPoints(value) {
+      const prefix = value > 0 ? "+" : "";
+      return `${prefix}${value.toFixed(1)}pp`;
+    }
+
+    function impactScore(onValue, offValue, attemptsOn, attemptsOff) {
+      if (onValue === null || offValue === null) return null;
+      const totalAttempts = attemptsOn + attemptsOff;
+      if (!totalAttempts) return null;
+      return (onValue - offValue) * Math.log1p(totalAttempts);
+    }
+
+    function rankImpactMarks(rows, key) {
+      const ranked = rows
+        .map((row, idx) => ({ idx, score: row[key] }))
+        .filter(item => Number.isFinite(item.score));
+
+      const positive = ranked
+        .filter(item => item.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 2)
+        .map(item => item.idx);
+
+      const negative = ranked
+        .filter(item => item.score < 0)
+        .sort((a, b) => a.score - b.score)
+        .slice(0, 2)
+        .map(item => item.idx);
+
+      return { positive: new Set(positive), negative: new Set(negative) };
+    }
+
+    function impactMarksHtml(marks) {
+      if (!marks.length) return "";
+      return `<span class="impact-marks">${marks.join("")}</span>`;
     }
 
     function emptyPlayerMatchupStats() {
@@ -2274,9 +2356,22 @@ REPORT_HTML = """<!doctype html>
           teamOn: teamStatsBySide[side][idx].teamOn,
           teamOff: teamStatsBySide[side][idx].teamOff,
           withPass: teamStatsBySide[side][idx].withPass,
-          withoutPass: teamStatsBySide[side][idx].withoutPass
+          withoutPass: teamStatsBySide[side][idx].withoutPass,
+          fgImpactScore: impactScore(
+            shotStatRatio(teamStatsBySide[side][idx].teamOn),
+            shotStatRatio(teamStatsBySide[side][idx].teamOff),
+            teamStatsBySide[side][idx].teamOn.a,
+            teamStatsBySide[side][idx].teamOff.a
+          ),
+          fgImpactDiff: (() => {
+            const onValue = shotStatRatio(teamStatsBySide[side][idx].teamOn);
+            const offValue = shotStatRatio(teamStatsBySide[side][idx].teamOff);
+            return onValue === null || offValue === null ? null : (onValue - offValue) * 100;
+          })()
         }))
       );
+
+      const fgImpactRanks = rankImpactMarks(rows, "fgImpactScore");
 
       document.getElementById("playerMatchupTable").innerHTML = `
         <thead>
@@ -2295,9 +2390,17 @@ REPORT_HTML = """<!doctype html>
           </tr>
         </thead>
         <tbody>
-          ${rows.map(row => `
+          ${rows.map((row, idx) => {
+            const marks = [];
+            if (fgImpactRanks.positive.has(idx)) {
+              marks.push(`<span class="impact-mark pos" title="Top positive FG on/off impact. Swing: ${formatSignedPctPoints(row.fgImpactDiff)} | Score: ${row.fgImpactScore.toFixed(3)}">FG+</span>`);
+            }
+            if (fgImpactRanks.negative.has(idx)) {
+              marks.push(`<span class="impact-mark neg" title="Top negative FG on/off impact. Swing: ${formatSignedPctPoints(row.fgImpactDiff)} | Score: ${row.fgImpactScore.toFixed(3)}">FG-</span>`);
+            }
+            return `
             <tr>
-              <td>${row.name}</td>
+              <td>${row.name}${impactMarksHtml(marks)}</td>
               <td>${row.team}</td>
               <td>${shotStatHtml(row.defended)}</td>
               <td>${shotStatHtml(row.openClose)}</td>
@@ -2309,7 +2412,8 @@ REPORT_HTML = """<!doctype html>
               <td>${shotStatHtml(row.withPass)}</td>
               <td>${shotStatHtml(row.withoutPass)}</td>
             </tr>
-          `).join("")}
+          `;
+          }).join("")}
         </tbody>
       `;
     }
@@ -2374,9 +2478,22 @@ REPORT_HTML = """<!doctype html>
           defendedTotal: teamStatsBySide[side][idx].defendedTotal,
           defendedClose: teamStatsBySide[side][idx].defendedClose,
           defendedMid: teamStatsBySide[side][idx].defendedMid,
-          defendedThree: teamStatsBySide[side][idx].defendedThree
+          defendedThree: teamStatsBySide[side][idx].defendedThree,
+          defImpactScore: impactScore(
+            defensePctValue(teamStatsBySide[side][idx].teamDefOn),
+            defensePctValue(teamStatsBySide[side][idx].teamDefOff),
+            teamStatsBySide[side][idx].teamDefOn.a,
+            teamStatsBySide[side][idx].teamDefOff.a
+          ),
+          defImpactDiff: (() => {
+            const onValue = defensePctValue(teamStatsBySide[side][idx].teamDefOn);
+            const offValue = defensePctValue(teamStatsBySide[side][idx].teamDefOff);
+            return onValue === null || offValue === null ? null : (onValue - offValue) * 100;
+          })()
         }))
       );
+
+      const defImpactRanks = rankImpactMarks(rows, "defImpactScore");
 
       document.getElementById("playerDefenseTable").innerHTML = `
         <thead>
@@ -2392,9 +2509,17 @@ REPORT_HTML = """<!doctype html>
           </tr>
         </thead>
         <tbody>
-          ${rows.map(row => `
+          ${rows.map((row, idx) => {
+            const marks = [];
+            if (defImpactRanks.positive.has(idx)) {
+              marks.push(`<span class="impact-mark pos" title="Top positive DEF on/off impact. Swing: ${formatSignedPctPoints(row.defImpactDiff)} | Score: ${row.defImpactScore.toFixed(3)}">DEF+</span>`);
+            }
+            if (defImpactRanks.negative.has(idx)) {
+              marks.push(`<span class="impact-mark neg" title="Top negative DEF on/off impact. Swing: ${formatSignedPctPoints(row.defImpactDiff)} | Score: ${row.defImpactScore.toFixed(3)}">DEF-</span>`);
+            }
+            return `
             <tr>
-              <td>${row.name}</td>
+              <td>${row.name}${impactMarksHtml(marks)}</td>
               <td>${row.team}</td>
               <td>${defensePctHtml(row.teamDefOn)}</td>
               <td>${defensePctHtml(row.teamDefOff)}</td>
@@ -2403,7 +2528,8 @@ REPORT_HTML = """<!doctype html>
               <td>${defenseStatHtml(row.defendedMid)}</td>
               <td>${defenseStatHtml(row.defendedThree)}</td>
             </tr>
-          `).join("")}
+          `;
+          }).join("")}
         </tbody>
       `;
     }
@@ -2929,6 +3055,1214 @@ REPORT_HTML = """<!doctype html>
     renderDefenderShotPanel();
     renderStrengthWeaknessView();
     renderEvents();
+  </script>
+</body>
+</html>
+"""
+
+
+ANIMATION_REPORT_HTML = """<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BBInsider Animation {{ matchid }}</title>
+  <style>
+    :root {
+      --bg: #f4f7f8;
+      --panel: #ffffff;
+      --ink: #1f2328;
+      --muted: #5f6b76;
+      --line: #d9dee5;
+      --home: #0d3b66;
+      --away: #9a031e;
+      --court: #276749;
+      --wood: #d7a45f;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(180deg, #eef5f7, var(--bg));
+      color: var(--ink);
+    }
+    .wrap {
+      width: min(1280px, calc(100% - 28px));
+      margin: 22px auto 38px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    a { color: #0d47a1; font-weight: 700; text-decoration: none; }
+    h1 { margin: 0 0 5px; font-size: 28px; }
+    .small { color: var(--muted); font-size: 13px; }
+    .scoreboard {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 12px;
+      background: #111827;
+      color: #fff;
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: var(--shadow);
+      margin-bottom: 14px;
+    }
+    .team-score { min-width: 0; }
+    .team-score.away { text-align: right; }
+    .team-name {
+      font-size: 14px;
+      font-weight: 800;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .score {
+      font-size: 34px;
+      line-height: 1;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      margin-top: 4px;
+    }
+    .clock {
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      padding: 9px 16px;
+      min-width: 150px;
+    }
+    .clock-main {
+      font-size: 28px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.58fr) minmax(460px, 1.3fr) minmax(260px, 0.58fr);
+      gap: 14px;
+      align-items: start;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .panel h2 {
+      margin: 0;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      font-size: 16px;
+    }
+    .court-panel { padding: 12px; }
+    .court-stage {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 368 / 192;
+      min-height: 300px;
+      background-color: var(--wood);
+      background-size: 100% 100%;
+      background-position: center;
+      border: 4px solid #1f2937;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .controls {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border-top: 1px solid var(--line);
+      background: #fbfcfd;
+    }
+    .control-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    button, select, input {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 9px 10px;
+      font: inherit;
+      background: #fff;
+      color: var(--ink);
+    }
+    button {
+      background: #0d47a1;
+      border-color: #0d47a1;
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    button.secondary {
+      background: #fff;
+      color: #0d47a1;
+    }
+    input[type="range"] {
+      flex: 1 1 260px;
+      padding: 0;
+      accent-color: #0d47a1;
+    }
+    .jump-fields {
+      display: grid;
+      grid-template-columns: minmax(94px, auto) minmax(80px, auto) minmax(80px, auto) auto;
+      gap: 8px;
+      align-items: end;
+    }
+    .jump-fields label {
+      display: grid;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .event-card {
+      padding: 12px;
+      border-top: 1px solid var(--line);
+      background: #fff;
+      min-height: 90px;
+    }
+    .event-title {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+    .event-comment {
+      margin: 6px 0 0;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+    .box-score {
+      max-height: 720px;
+      overflow: auto;
+    }
+    .team-box h3 {
+      margin: 0;
+      padding: 10px 12px;
+      font-size: 15px;
+      background: #f7f9fc;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .team-color-chip {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 7px;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.22);
+      vertical-align: -1px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    th, td {
+      padding: 6px 6px;
+      border-bottom: 1px solid #edf1f5;
+      white-space: nowrap;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    th:first-child, td:first-child {
+      text-align: left;
+      min-width: 116px;
+      position: sticky;
+      left: 0;
+      background: #fff;
+    }
+    th {
+      color: var(--muted);
+      background: #fbfcfd;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+    tr.shot-made td {
+      background: #eefaf0;
+    }
+    tr.shot-missed td {
+      background: #fff1f1;
+    }
+    tr.shot-made td:first-child {
+      box-shadow: inset 4px 0 0 #22c55e;
+    }
+    tr.shot-missed td:first-child {
+      box-shadow: inset 4px 0 0 #ef4444;
+    }
+    .legend {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      padding: 10px 12px 0;
+    }
+    .swatch {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 5px;
+      vertical-align: -1px;
+    }
+    .home-dot { background: var(--home); }
+    .away-dot { background: var(--away); }
+    @media (max-width: 980px) {
+      .grid { grid-template-columns: 1fr; }
+      .court-wrap { order: 1; }
+      .home-box { order: 2; }
+      .away-box { order: 3; }
+      .court-stage { min-height: 230px; }
+      .jump-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .jump-fields button { grid-column: 1 / -1; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="topbar">
+      <div>
+        <h1>Game Animation</h1>
+        <div class="small">Match {{ matchid }} | BBAPI user: {{ username }}</div>
+      </div>
+      <a href="/">New report</a>
+    </div>
+
+    <section class="scoreboard">
+      <div class="team-score">
+        <div class="team-name" id="homeName"></div>
+        <div class="score" id="homeScore">0</div>
+      </div>
+      <div class="clock">
+        <div class="small" id="periodLabel">Q1</div>
+        <div class="clock-main" id="clockLabel">12:00</div>
+        <div class="small" id="speedLabel">1x speed</div>
+      </div>
+      <div class="team-score away">
+        <div class="team-name" id="awayName"></div>
+        <div class="score" id="awayScore">0</div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <aside class="panel team-box home-box">
+        <h2>Live Box Score</h2>
+        <div class="box-score" id="homeBoxScore"></div>
+      </aside>
+
+      <div class="panel court-wrap">
+        <div class="court-panel">
+          <div class="court-stage" id="courtStage">
+            <canvas id="courtCanvas"></canvas>
+          </div>
+          <div class="legend">
+            <span><span class="swatch home-dot"></span><span id="homeLegend"></span></span>
+            <span><span class="swatch away-dot"></span><span id="awayLegend"></span></span>
+            <span class="small">Dots move between inferred event positions; shot locations use tracked coordinates.</span>
+          </div>
+        </div>
+        <div class="controls">
+          <div class="control-row">
+            <button type="button" id="playBtn">Play</button>
+            <button type="button" class="secondary" id="restartBtn">Restart</button>
+            <button type="button" class="secondary" id="speedBtn">2x speed</button>
+            <input type="range" id="timeSlider" min="0" max="2880" step="1" value="0" />
+          </div>
+          <div class="jump-fields">
+            <label>Quarter
+              <select id="jumpQuarter"></select>
+            </label>
+            <label>Minute
+              <input id="jumpMinute" type="number" min="0" max="12" value="12" />
+            </label>
+            <label>Second
+              <input id="jumpSecond" type="number" min="0" max="59" value="0" />
+            </label>
+            <button type="button" id="jumpBtn">Jump</button>
+          </div>
+        </div>
+        <div class="event-card">
+          <div class="event-title" id="eventMeta">Opening tip</div>
+          <p class="event-comment" id="eventComment">Press play or jump to a game time.</p>
+        </div>
+      </div>
+
+      <aside class="panel team-box away-box">
+        <h2>Live Box Score</h2>
+        <div class="box-score" id="awayBoxScore"></div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const data = {{ report_json | tojson }};
+    const courtImageUrl = {{ court_image_url | tojson }};
+    const home = data.teamHome;
+    const away = data.teamAway;
+    const events = data.events
+      .map((ev, idx) => ({ ...ev, feed_index: idx + 1 }))
+      .filter(ev => typeof ev.gameclock === "number" && ev.gameclock >= 0)
+      .sort((a, b) => a.gameclock - b.gameclock || a.feed_index - b.feed_index);
+    const visualEvents = buildVisualEvents(events);
+    const maxClock = Math.max(2880, ...events.map(ev => ev.gameclock));
+    const madeResults = new Set(["1", "2", "5"]);
+    const missedNoFgResults = new Set(["4"]);
+
+    const canvas = document.getElementById("courtCanvas");
+    const ctx = canvas.getContext("2d");
+    const stage = document.getElementById("courtStage");
+    const playBtn = document.getElementById("playBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    const speedBtn = document.getElementById("speedBtn");
+    const slider = document.getElementById("timeSlider");
+    const jumpQuarter = document.getElementById("jumpQuarter");
+    const jumpMinute = document.getElementById("jumpMinute");
+    const jumpSecond = document.getElementById("jumpSecond");
+
+    let currentTime = 0;
+    let playing = false;
+    let speed = 1;
+    const baseGameSecondsPerRealSecond = 9;
+    let lastFrame = null;
+    let lastRenderedSecond = -1;
+    let visualState = createInitialVisualState();
+    let latestReplay = replayTo(0);
+
+    stage.style.backgroundImage = courtImageUrl ? `url("${courtImageUrl}")` : "none";
+    slider.max = String(maxClock);
+    document.getElementById("homeName").textContent = home.name;
+    document.getElementById("awayName").textContent = away.name;
+    document.getElementById("homeLegend").textContent = home.name;
+    document.getElementById("awayLegend").textContent = away.name;
+
+    function periodLength(period) {
+      return period <= 4 ? 720 : 420;
+    }
+
+    function periodStart(period) {
+      return period <= 4 ? (period - 1) * 720 : 2880 + (period - 5) * 420;
+    }
+
+    function periodFromClock(clock) {
+      if (clock < 720) return 1;
+      if (clock < 1440) return 2;
+      if (clock < 2160) return 3;
+      if (clock < 2880) return 4;
+      return 5 + Math.floor((clock - 2880) / 420);
+    }
+
+    function periodLabel(period) {
+      return period <= 4 ? `Q${period}` : `OT${period - 4}`;
+    }
+
+    function clockRemaining(clock) {
+      const period = periodFromClock(clock);
+      const start = periodStart(period);
+      const len = periodLength(period);
+      const remaining = Math.max(0, len - Math.floor(clock - start));
+      return {
+        period,
+        minutes: Math.floor(remaining / 60),
+        seconds: remaining % 60
+      };
+    }
+
+    function formatClock(clock) {
+      const item = clockRemaining(clock);
+      return `${String(item.minutes).padStart(2, "0")}:${String(item.seconds).padStart(2, "0")}`;
+    }
+
+    function formatComments(comments) {
+      if (!Array.isArray(comments) || comments.length === 0) return "(no commentary)";
+      return comments.join(" ");
+    }
+
+    function teamBySide(side) {
+      return Number(side) === 0 ? home : away;
+    }
+
+    function normalizeSlot(rawSlot, playersLen) {
+      const n = Number(rawSlot);
+      if (!Number.isFinite(n)) return null;
+      if (n >= 1 && n <= playersLen) return n - 1;
+      return null;
+    }
+
+    function playerName(side, slot, fallback = "") {
+      const team = teamBySide(side);
+      const idx = normalizeSlot(slot, team.players.length);
+      return idx === null ? fallback : (team.players[idx]?.name || fallback);
+    }
+
+    function playerIndex(rawIndex, playersLen) {
+      const n = Number(rawIndex);
+      if (!Number.isFinite(n)) return null;
+      if (n >= 0 && n < playersLen) return n;
+      return null;
+    }
+
+    function blankStats() {
+      return {
+        secs: 0, pts: 0, fgm: 0, fga: 0, tpm: 0, tpa: 0,
+        ftm: 0, fta: 0, or: 0, dr: 0, tr: 0,
+        ast: 0, to: 0, stl: 0, blk: 0, pf: 0, pm: 0
+      };
+    }
+
+    function cloneActiveStarters(team) {
+      const set = new Set();
+      team.players.forEach((player, idx) => {
+        if (player.starter) set.add(idx);
+      });
+      return set;
+    }
+
+    function addPlayerStat(stats, side, idx, key, value) {
+      if (idx === null || idx < 0 || !stats.players[side]?.[idx]) return;
+      stats.players[side][idx][key] += value;
+      if (key === "or" || key === "dr") stats.players[side][idx].tr += value;
+    }
+
+    function addTeamStat(stats, side, key, value) {
+      stats.teams[side][key] += value;
+      if (key === "or" || key === "dr") stats.teams[side].tr += value;
+    }
+
+    function addStat(stats, side, idx, key, value) {
+      addTeamStat(stats, side, key, value);
+      addPlayerStat(stats, side, idx, key, value);
+    }
+
+    function updateActiveSeconds(stats, side, active, activeSince, toTime) {
+      active[side].forEach(idx => {
+        const from = activeSince[side][idx] ?? 0;
+        const delta = Math.max(0, toTime - from);
+        stats.players[side][idx].secs += delta;
+        activeSince[side][idx] = toTime;
+      });
+    }
+
+    function applySub(active, activeSince, stats, ev, time) {
+      const side = Number(ev.team);
+      if (String(ev.sub_type) === "9520") return;
+      updateActiveSeconds(stats, side, active, activeSince, time);
+      const team = teamBySide(side);
+      const outIdx = playerIndex(ev.player_out, team.players.length);
+      const inIdx = playerIndex(ev.player_in, team.players.length);
+      if (outIdx !== null) active[side].delete(outIdx);
+      if (inIdx !== null) {
+        active[side].add(inIdx);
+        activeSince[side][inIdx] = time;
+      }
+    }
+
+    function replayTo(clock) {
+      const stats = {
+        teams: [blankStats(), blankStats()],
+        players: [home.players.map(blankStats), away.players.map(blankStats)]
+      };
+      const active = [cloneActiveStarters(home), cloneActiveStarters(away)];
+      const activeSince = [
+        home.players.map(() => 0),
+        away.players.map(() => 0)
+      ];
+      let lastEvent = null;
+
+      for (const ev of events) {
+        if (ev.gameclock > clock) break;
+        lastEvent = ev;
+
+        if (ev.event_type === "shot") {
+          const side = Number(ev.attacking_team);
+          const defSide = Number(ev.defending_team);
+          const team = teamBySide(side);
+          const defTeam = teamBySide(defSide);
+          const shooter = normalizeSlot(ev.attacker, team.players.length);
+          const defender = normalizeSlot(ev.defender, defTeam.players.length);
+          const assistant = normalizeSlot(ev.assistant, team.players.length);
+          const result = String(ev.shot_result);
+          const isThree = Number(ev.shot_type) >= 100 && Number(ev.shot_type) < 200;
+          const made = madeResults.has(result);
+          const countFg = !missedNoFgResults.has(result);
+
+          if (countFg) {
+            addStat(stats, side, shooter, "fga", 1);
+            if (isThree) addStat(stats, side, shooter, "tpa", 1);
+          }
+          if (made) {
+            const pts = isThree ? 3 : 2;
+            addStat(stats, side, shooter, "fgm", 1);
+            addStat(stats, side, shooter, "pts", pts);
+            if (isThree) addStat(stats, side, shooter, "tpm", 1);
+            if (assistant !== null) addStat(stats, side, assistant, "ast", 1);
+            active[side].forEach(idx => addPlayerStat(stats, side, idx, "pm", pts));
+            active[defSide].forEach(idx => addPlayerStat(stats, defSide, idx, "pm", -pts));
+            stats.teams[side].pm += pts;
+            stats.teams[defSide].pm -= pts;
+          }
+          if (result === "3" && defender !== null) addStat(stats, defSide, defender, "blk", 1);
+        } else if (ev.event_type === "free_throw") {
+          const side = Number(ev.attacking_team);
+          const defSide = side === 0 ? 1 : 0;
+          const team = teamBySide(side);
+          const shooter = normalizeSlot(ev.attacker, team.players.length);
+          addStat(stats, side, shooter, "fta", 1);
+          if (madeResults.has(String(ev.shot_result))) {
+            addStat(stats, side, shooter, "ftm", 1);
+            addStat(stats, side, shooter, "pts", 1);
+            active[side].forEach(idx => addPlayerStat(stats, side, idx, "pm", 1));
+            active[defSide].forEach(idx => addPlayerStat(stats, defSide, idx, "pm", -1));
+            stats.teams[side].pm += 1;
+            stats.teams[defSide].pm -= 1;
+          }
+        } else if (ev.event_type === "rebound") {
+          const off = String(ev.rebound_type) === "9317";
+          const side = off ? Number(ev.attacking_team) : Number(ev.defending_team);
+          const team = teamBySide(side);
+          const idx = normalizeSlot(ev.attacker, team.players.length);
+          addStat(stats, side, idx, off ? "or" : "dr", 1);
+        } else if (ev.event_type === "interrupt") {
+          const side = Number(ev.attacking_team);
+          const defSide = Number(ev.defending_team);
+          const team = teamBySide(side);
+          const defTeam = teamBySide(defSide);
+          const attacker = normalizeSlot(ev.attacker, team.players.length);
+          const defender = normalizeSlot(ev.defender, defTeam.players.length);
+          addStat(stats, side, attacker, "to", 1);
+          if (["807", "808"].includes(String(ev.interrupt_type)) && defender !== null) {
+            addStat(stats, defSide, defender, "stl", 1);
+          }
+        } else if (ev.event_type === "foul") {
+          const side = Number(ev.attacking_team);
+          const defSide = Number(ev.defending_team);
+          if (String(ev.foul_type) === "803") {
+            const team = teamBySide(side);
+            const attacker = normalizeSlot(ev.attacker, team.players.length);
+            addStat(stats, side, attacker, "to", 1);
+            addStat(stats, side, attacker, "pf", 1);
+          } else {
+            const defTeam = teamBySide(defSide);
+            const defender = normalizeSlot(ev.defender, defTeam.players.length);
+            addStat(stats, defSide, defender, "pf", 1);
+          }
+        } else if (ev.event_type === "sub") {
+          applySub(active, activeSince, stats, ev, ev.gameclock);
+        }
+      }
+
+      [0, 1].forEach(side => updateActiveSeconds(stats, side, active, activeSince, clock));
+      return { stats, active, lastEvent };
+    }
+
+    function createInitialVisualState() {
+      const positions = [[], []];
+      [home, away].forEach((team, side) => {
+        team.players.forEach((_, idx) => {
+          const row = idx % 5;
+          const xBase = side === 0 ? 92 : 276;
+          positions[side][idx] = {
+            x: xBase,
+            y: 38 + row * 29,
+            targetX: xBase,
+            targetY: 38 + row * 29
+          };
+        });
+      });
+      return {
+        positions,
+        visible: [cloneActiveStarters(home), cloneActiveStarters(away)],
+        ball: { x: 184, y: 96, targetX: 184, targetY: 96 }
+      };
+    }
+
+    function clamp(v, lo, hi) {
+      return Math.max(lo, Math.min(hi, v));
+    }
+
+    function easeInOut(t) {
+      const p = clamp(t, 0, 1);
+      return p * p * (3 - 2 * p);
+    }
+
+    function lerp(a, b, t) {
+      return a + (b - a) * t;
+    }
+
+    function mixPoint(a, b, t) {
+      const p = easeInOut(t);
+      return { x: lerp(a.x, b.x, p), y: lerp(a.y, b.y, p) };
+    }
+
+    function basketPoint(side) {
+      return { x: side === 0 ? 347 : 21, y: 96 };
+    }
+
+    function isNormalRebound(ev) {
+      return ev?.event_type === "rebound" && ["9317", "9318"].includes(String(ev.rebound_type));
+    }
+
+    function buildVisualEvents(feedEvents) {
+      const out = [];
+      let previousAction = null;
+      feedEvents.forEach(ev => {
+        if (["interrupt", "sub"].includes(ev.event_type)) return;
+
+        if (ev.event_type === "rebound") {
+          if (!isNormalRebound(ev) || previousAction?.event_type !== "shot") return;
+          out.push(ev);
+          previousAction = ev;
+          return;
+        }
+
+        out.push(ev);
+        if (["shot", "free_throw", "foul", "break"].includes(ev.event_type)) {
+          previousAction = ev;
+        }
+      });
+      return out;
+    }
+
+    function reboundPossessionSide(ev) {
+      if (!isNormalRebound(ev)) return null;
+      return String(ev.rebound_type) === "9317" ? Number(ev.attacking_team) : Number(ev.defending_team);
+    }
+
+    function eventPairAt(clock) {
+      let prev = null;
+      let next = null;
+      for (const ev of visualEvents) {
+        if (ev.gameclock <= clock) {
+          prev = ev;
+          continue;
+        }
+        next = ev;
+        break;
+      }
+
+      const start = prev ? prev.gameclock : 0;
+      const end = next ? next.gameclock : Math.max(start + 1, maxClock);
+      const span = Math.max(1, end - start);
+      return {
+        prev,
+        next,
+        progress: clamp((clock - start) / span, 0, 1)
+      };
+    }
+
+    function targetForPlayer(side, idx, active, ev) {
+      const activeList = [...active[side]];
+      const activeIndex = Math.max(0, activeList.indexOf(idx));
+      const possessionSide = ev ? Number(ev.attacking_team ?? ev.team ?? side) : 0;
+      const attacking = side === possessionSide;
+      const basketX = side === 0 ? 347 : 21;
+      const centerX = side === 0 ? 246 : 122;
+      const defendX = side === 0 ? 112 : 256;
+      const lanes = [45, 75, 100, 125, 154];
+      let x = attacking ? centerX + (side === 0 ? activeIndex * 12 : -activeIndex * 12) : defendX + (side === 0 ? activeIndex * 10 : -activeIndex * 10);
+      let y = lanes[activeIndex] || (42 + activeIndex * 24);
+
+      if (ev?.event_type === "shot") {
+        const shotX = Number(ev.shot_pos_x);
+        const shotY = Number(ev.shot_pos_y);
+        if (side === Number(ev.attacking_team)) {
+          const shooter = normalizeSlot(ev.attacker, teamBySide(side).players.length);
+          const assistant = normalizeSlot(ev.assistant, teamBySide(side).players.length);
+          if (idx === shooter && Number.isFinite(shotX) && Number.isFinite(shotY)) {
+            x = shotX;
+            y = shotY;
+          } else if (idx === assistant) {
+            x = (shotX + basketX) / 2;
+            y = clamp(shotY + 28, 20, 172);
+          }
+        } else if (side === Number(ev.defending_team)) {
+          const defender = normalizeSlot(ev.defender, teamBySide(side).players.length);
+          if (idx === defender && Number.isFinite(shotX) && Number.isFinite(shotY)) {
+            x = shotX + (side === 0 ? -16 : 16);
+            y = clamp(shotY + 10, 16, 176);
+          }
+        }
+      } else if (ev?.event_type === "rebound") {
+        x = side === 0 ? 322 : 46;
+        y = lanes[activeIndex] || 96;
+      } else if (ev?.event_type === "interrupt") {
+        x = attacking ? centerX : defendX;
+        y = lanes[activeIndex] || 96;
+      }
+
+      return { x: clamp(x, 14, 354), y: clamp(y, 14, 178) };
+    }
+
+    function reboundCrashTarget(side, idx, active, shotEvent) {
+      const activeList = [...active[side]];
+      const activeIndex = Math.max(0, activeList.indexOf(idx));
+      const shotSide = Number(shotEvent?.attacking_team ?? side);
+      const rim = basketPoint(shotSide);
+      const laneOffsets = [-26, -13, 0, 13, 26];
+      const depthOffsets = [-16, -5, 8, 19, 29];
+      const sideSign = shotSide === 0 ? -1 : 1;
+      const attacking = side === shotSide;
+      const playerSign = attacking ? 1 : -1;
+      const x = rim.x + sideSign * (attacking ? 16 : 27) + laneOffsets[activeIndex] * 0.22;
+      const y = rim.y + laneOffsets[activeIndex] + depthOffsets[activeIndex] * playerSign * 0.35;
+      return { x: clamp(x, 16, 352), y: clamp(y, 22, 170) };
+    }
+
+    function offenseBuildTarget(side, idx, active, possessionSide) {
+      const activeList = [...active[side]];
+      const activeIndex = Math.max(0, activeList.indexOf(idx));
+      const lanes = [96, 55, 136, 76, 116];
+      const attacking = side === possessionSide;
+      const direction = possessionSide === 0 ? 1 : -1;
+      const baseX = possessionSide === 0 ? 246 : 122;
+      const defenseX = possessionSide === 0 ? 300 : 68;
+
+      if (attacking) {
+        const spacing = [-36, -10, 18, 42, 66][activeIndex] ?? 0;
+        return {
+          x: clamp(baseX + direction * spacing, 24, 344),
+          y: clamp(lanes[activeIndex] ?? 96, 22, 170)
+        };
+      }
+
+      const defenseSpacing = [-22, -8, 7, 21, 34][activeIndex] ?? 0;
+      return {
+        x: clamp(defenseX - direction * defenseSpacing, 24, 344),
+        y: clamp((lanes[activeIndex] ?? 96) + (activeIndex % 2 ? 5 : -5), 22, 170)
+      };
+    }
+
+    function blendedPlayerTarget(side, idx, active, pair) {
+      const prev = pair.prev;
+      const next = pair.next || prev;
+      if (prev?.event_type !== "shot") {
+        const from = playerEventTarget(side, idx, active, prev);
+        const to = playerEventTarget(side, idx, active, next);
+        return mixPoint(from, to, pair.progress);
+      }
+
+      const shotSpot = playerEventTarget(side, idx, active, prev);
+      const crashSpot = reboundCrashTarget(side, idx, active, prev);
+      const nextSpot = playerEventTarget(side, idx, active, next);
+      const p = pair.progress;
+
+      if (p < 0.58) {
+        return mixPoint(shotSpot, crashSpot, p / 0.58);
+      }
+      return mixPoint(crashSpot, nextSpot, (p - 0.58) / 0.42);
+    }
+
+    function reboundBuildPlayerTarget(side, idx, active, pair) {
+      const prev = pair.prev;
+      const next = pair.next || prev;
+      const possessionSide = reboundPossessionSide(prev);
+      if (possessionSide === null) return blendedPlayerTarget(side, idx, active, pair);
+
+      const reboundSpot = playerEventTarget(side, idx, active, prev);
+      const buildSpot = offenseBuildTarget(side, idx, active, possessionSide);
+      const nextSpot = playerEventTarget(side, idx, active, next);
+      const p = pair.progress;
+
+      if (p < 0.24) {
+        return mixPoint(reboundSpot, reboundCrashTarget(side, idx, active, { attacking_team: possessionSide }), p / 0.24);
+      }
+      if (p < 0.78) {
+        return mixPoint(reboundCrashTarget(side, idx, active, { attacking_team: possessionSide }), buildSpot, (p - 0.24) / 0.54);
+      }
+      return mixPoint(buildSpot, nextSpot, (p - 0.78) / 0.22);
+    }
+
+    function playerEventTarget(side, idx, active, ev) {
+      return targetForPlayer(side, idx, active, ev);
+    }
+
+    function playerEventPoint(side, rawSlot, active, ev) {
+      const team = teamBySide(side);
+      const idx = normalizeSlot(rawSlot, team.players.length);
+      if (idx === null) return null;
+      return playerEventTarget(side, idx, active, ev);
+    }
+
+    function nextBallReceiver(ev, active) {
+      if (!ev) return null;
+      if (ev.event_type === "rebound") {
+        const side = String(ev.rebound_type) === "9317" ? Number(ev.attacking_team) : Number(ev.defending_team);
+        return playerEventPoint(side, ev.attacker, active, ev);
+      }
+      if (ev.event_type === "interrupt") {
+        const stolen = ["807", "808"].includes(String(ev.interrupt_type));
+        const side = stolen ? Number(ev.defending_team) : Number(ev.attacking_team);
+        const slot = stolen ? ev.defender : ev.attacker;
+        return playerEventPoint(side, slot, active, ev);
+      }
+      if (ev.event_type === "free_throw") {
+        return playerEventPoint(Number(ev.attacking_team), ev.attacker, active, ev);
+      }
+      if (ev.attacking_team !== undefined) {
+        return playerEventPoint(Number(ev.attacking_team), ev.attacker, active, ev);
+      }
+      return null;
+    }
+
+    function ballPointForEvent(ev, active) {
+      if (!ev) return { x: 184, y: 96 };
+      if (ev.event_type === "shot") {
+        const shotX = Number(ev.shot_pos_x);
+        const shotY = Number(ev.shot_pos_y);
+        if (Number.isFinite(shotX) && Number.isFinite(shotY)) return { x: shotX, y: shotY };
+      }
+      if (ev.event_type === "rebound") {
+        const side = String(ev.rebound_type) === "9317" ? Number(ev.attacking_team) : Number(ev.defending_team);
+        return playerEventPoint(side, ev.attacker, active, ev) || basketPoint(Number(ev.attacking_team));
+      }
+      if (ev.event_type === "interrupt") {
+        const stolen = ["807", "808"].includes(String(ev.interrupt_type));
+        const side = stolen ? Number(ev.defending_team) : Number(ev.attacking_team);
+        const slot = stolen ? ev.defender : ev.attacker;
+        return playerEventPoint(side, slot, active, ev) || { x: 184, y: 96 };
+      }
+      if (ev.attacking_team !== undefined) {
+        return playerEventPoint(Number(ev.attacking_team), ev.attacker, active, ev) || { x: 184, y: 96 };
+      }
+      return { x: 184, y: 96 };
+    }
+
+    function shotArcPoint(from, rim, receiver, progress) {
+      const p = clamp(progress, 0, 1);
+      if (p < 0.62) {
+        const t = easeInOut(p / 0.62);
+        const lift = Math.sin(t * Math.PI) * 18;
+        return { x: lerp(from.x, rim.x, t), y: lerp(from.y, rim.y, t) - lift };
+      }
+      const t = easeInOut((p - 0.62) / 0.38);
+      return { x: lerp(rim.x, receiver.x, t), y: lerp(rim.y, receiver.y, t) };
+    }
+
+    function looseBallPoint(from, receiver, progress) {
+      const p = easeInOut(progress);
+      const wobble = Math.sin(p * Math.PI * 2) * 8;
+      return {
+        x: lerp(from.x, receiver.x, p),
+        y: clamp(lerp(from.y, receiver.y, p) + wobble, 10, 182)
+      };
+    }
+
+    function activePointByOrder(side, active, order, possessionSide) {
+      const activeList = [...active[side]];
+      if (!activeList.length) return offenseBuildTarget(side, 0, active, possessionSide);
+      const idx = activeList[Math.abs(order) % activeList.length];
+      return offenseBuildTarget(side, idx, active, possessionSide);
+    }
+
+    function passAroundPoint(from, nextPoint, active, possessionSide, progress) {
+      const p = clamp(progress, 0, 1);
+      const p1 = activePointByOrder(possessionSide, active, 1, possessionSide);
+      const p2 = activePointByOrder(possessionSide, active, 3, possessionSide);
+      const p3 = activePointByOrder(possessionSide, active, 0, possessionSide);
+
+      if (p < 0.22) return mixPoint(from, p1, p / 0.22);
+      if (p < 0.46) return mixPoint(p1, p2, (p - 0.22) / 0.24);
+      if (p < 0.70) return mixPoint(p2, p3, (p - 0.46) / 0.24);
+      return mixPoint(p3, nextPoint || p3, (p - 0.70) / 0.30);
+    }
+
+    function ballMotionTarget(pair, active) {
+      const prev = pair.prev;
+      const next = pair.next;
+      const p = pair.progress;
+
+      if (!prev) {
+        const nextPoint = ballPointForEvent(next, active);
+        return mixPoint({ x: 184, y: 96 }, nextPoint, p);
+      }
+
+      const prevPoint = ballPointForEvent(prev, active);
+      const nextPoint = ballPointForEvent(next, active);
+
+      if (prev.event_type === "shot") {
+        const side = Number(prev.attacking_team);
+        const rim = basketPoint(side);
+        const receiver = nextBallReceiver(next, active) || rim;
+        return shotArcPoint(prevPoint, rim, receiver, p);
+      }
+
+      if (prev.event_type === "rebound") {
+        const possessionSide = reboundPossessionSide(prev);
+        if (possessionSide !== null) {
+          return passAroundPoint(prevPoint, nextPoint || activePointByOrder(possessionSide, active, 0, possessionSide), active, possessionSide, p);
+        }
+        return mixPoint(prevPoint, nextPoint || { x: 184, y: 96 }, Math.min(1, p * 0.85));
+      }
+
+      if (prev.event_type === "interrupt") {
+        return looseBallPoint(prevPoint, nextPoint || { x: 184, y: 96 }, p);
+      }
+
+      return mixPoint(prevPoint, nextPoint || prevPoint, p);
+    }
+
+    function stabilizeVisiblePlayers(active) {
+      [0, 1].forEach(side => {
+        const visible = visualState.visible[side];
+        active[side].forEach(idx => {
+          if (visible.has(idx)) return;
+          const teammates = [...visible]
+            .filter(otherIdx => active[side].has(otherIdx) && otherIdx !== idx)
+            .map(otherIdx => visualState.positions[side][otherIdx]);
+          const source = teammates.length
+            ? teammates[Math.floor(teammates.length / 2)]
+            : { x: side === 0 ? 92 : 276, y: 96, targetX: side === 0 ? 92 : 276, targetY: 96 };
+          const p = visualState.positions[side][idx];
+          p.x = source.x;
+          p.y = source.y;
+          p.targetX = source.targetX;
+          p.targetY = source.targetY;
+          visible.add(idx);
+        });
+        [...visible].forEach(idx => {
+          if (!active[side].has(idx)) visible.delete(idx);
+        });
+      });
+    }
+
+    function updateTargets(replay, clock) {
+      const pair = eventPairAt(clock);
+      stabilizeVisiblePlayers(replay.active);
+      [0, 1].forEach(side => {
+        replay.active[side].forEach(idx => {
+          const target = pair.prev?.event_type === "rebound"
+            ? reboundBuildPlayerTarget(side, idx, replay.active, pair)
+            : blendedPlayerTarget(side, idx, replay.active, pair);
+          visualState.positions[side][idx].targetX = target.x;
+          visualState.positions[side][idx].targetY = target.y;
+        });
+      });
+
+      const ball = ballMotionTarget(pair, replay.active);
+      visualState.ball.targetX = clamp(ball.x, 4, 364);
+      visualState.ball.targetY = clamp(ball.y, 4, 188);
+    }
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      const scale = window.devicePixelRatio || 1;
+      canvas.width = Math.max(1, Math.round(rect.width * scale));
+      canvas.height = Math.max(1, Math.round(rect.height * scale));
+      ctx.setTransform(scale, 0, 0, scale, 0, 0);
+    }
+
+    function drawCourt() {
+      const rect = canvas.getBoundingClientRect();
+      const sx = rect.width / 368;
+      const sy = rect.height / 192;
+      ctx.clearRect(0, 0, rect.width, rect.height);
+      ctx.save();
+      ctx.scale(sx, sy);
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = "rgba(255,255,255,0.55)";
+      ctx.beginPath();
+      ctx.moveTo(184, 0);
+      ctx.lineTo(184, 192);
+      ctx.stroke();
+
+      [0, 1].forEach(side => {
+        const active = latestReplay.active[side];
+        active.forEach(idx => {
+          const p = visualState.positions[side][idx];
+          p.x += (p.targetX - p.x) * 0.055;
+          p.y += (p.targetY - p.y) * 0.055;
+          ctx.beginPath();
+          ctx.fillStyle = side === 0 ? "#0d3b66" : "#9a031e";
+          ctx.strokeStyle = "#fff";
+          ctx.lineWidth = 2;
+          ctx.arc(p.x, p.y, 7.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = "#fff";
+          ctx.font = "700 7px Segoe UI";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(String(idx + 1), p.x, p.y + 0.3);
+        });
+      });
+
+      visualState.ball.x += (visualState.ball.targetX - visualState.ball.x) * 0.22;
+      visualState.ball.y += (visualState.ball.targetY - visualState.ball.y) * 0.22;
+      ctx.beginPath();
+      ctx.fillStyle = "#f97316";
+      ctx.strokeStyle = "#7c2d12";
+      ctx.lineWidth = 1.5;
+      ctx.arc(visualState.ball.x, visualState.ball.y, 4.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function renderBox(replay) {
+      const headers = "<tr><th>Player</th><th>MIN</th><th>PTS</th><th>FG</th><th>3PT</th><th>FT</th><th>REB</th><th>AST</th><th>TO</th><th>STL</th><th>BLK</th><th>PF</th><th>+/-</th></tr>";
+      const currentVisualEvent = eventPairAt(currentTime).prev;
+      const highlightedShot = currentVisualEvent?.event_type === "shot" ? currentVisualEvent : null;
+      const renderTeamBox = (team, side) => {
+        const rows = team.players.map((player, idx) => {
+          const s = replay.stats.players[side][idx];
+          const activeClass = replay.active[side].has(idx) ? " *" : "";
+          const shotIdx = highlightedShot && Number(highlightedShot.attacking_team) === side
+            ? normalizeSlot(highlightedShot.attacker, team.players.length)
+            : null;
+          const rowClass = shotIdx === idx
+            ? (madeResults.has(String(highlightedShot.shot_result)) ? "shot-made" : "shot-missed")
+            : "";
+          return `<tr class="${rowClass}">
+            <td>${player.name}${activeClass}</td>
+            <td>${Math.floor(s.secs / 60)}</td>
+            <td>${s.pts}</td>
+            <td>${s.fgm}/${s.fga}</td>
+            <td>${s.tpm}/${s.tpa}</td>
+            <td>${s.ftm}/${s.fta}</td>
+            <td>${s.tr}</td>
+            <td>${s.ast}</td>
+            <td>${s.to}</td>
+            <td>${s.stl}</td>
+            <td>${s.blk}</td>
+            <td>${s.pf}</td>
+            <td>${s.pm}</td>
+          </tr>`;
+        }).join("");
+        const t = replay.stats.teams[side];
+        const total = `<tr>
+          <td><strong>Total</strong></td><td></td><td><strong>${t.pts}</strong></td>
+          <td>${t.fgm}/${t.fga}</td><td>${t.tpm}/${t.tpa}</td><td>${t.ftm}/${t.fta}</td>
+          <td>${t.tr}</td><td>${t.ast}</td><td>${t.to}</td><td>${t.stl}</td><td>${t.blk}</td><td>${t.pf}</td><td>${t.pm}</td>
+        </tr>`;
+        const chipClass = side === 0 ? "home-dot" : "away-dot";
+        return `<section class="team-box"><h3><span class="team-color-chip ${chipClass}"></span>${team.name}</h3><table><thead>${headers}</thead><tbody>${rows}${total}</tbody></table></section>`;
+      };
+      document.getElementById("homeBoxScore").innerHTML = renderTeamBox(home, 0);
+      document.getElementById("awayBoxScore").innerHTML = renderTeamBox(away, 1);
+      document.getElementById("homeScore").textContent = replay.stats.teams[0].pts;
+      document.getElementById("awayScore").textContent = replay.stats.teams[1].pts;
+    }
+
+    function renderEvent() {
+      const ev = eventPairAt(currentTime).prev;
+      if (!ev) {
+        document.getElementById("eventMeta").textContent = "Opening tip";
+        document.getElementById("eventComment").textContent = "Press play or jump to a game time.";
+        return;
+      }
+      const period = clockRemaining(ev.gameclock);
+      const side = ev.attacking_team !== undefined ? Number(ev.attacking_team) : Number(ev.team ?? 0);
+      const team = teamBySide(side);
+      document.getElementById("eventMeta").textContent = `Feed #${ev.feed_index} | ${periodLabel(period.period)} ${formatClock(ev.gameclock)} | ${team.name} | ${ev.event_type}`;
+      document.getElementById("eventComment").textContent = formatComments(ev.comments);
+    }
+
+    function renderUi(force = false) {
+      const whole = Math.floor(currentTime);
+      if (!force && whole === lastRenderedSecond) return;
+      lastRenderedSecond = whole;
+      currentTime = clamp(currentTime, 0, maxClock);
+      slider.value = String(Math.floor(currentTime));
+      const clock = clockRemaining(currentTime);
+      document.getElementById("periodLabel").textContent = periodLabel(clock.period);
+      document.getElementById("clockLabel").textContent = formatClock(currentTime);
+      document.getElementById("speedLabel").textContent = `${speed}x speed`;
+      latestReplay = replayTo(currentTime);
+      updateTargets(latestReplay, currentTime);
+      renderBox(latestReplay);
+      renderEvent();
+    }
+
+    function step(timestamp) {
+      if (lastFrame === null) lastFrame = timestamp;
+      const delta = Math.min(0.08, (timestamp - lastFrame) / 1000);
+      lastFrame = timestamp;
+      if (playing) {
+        currentTime += delta * baseGameSecondsPerRealSecond * speed;
+        if (currentTime >= maxClock) {
+          currentTime = maxClock;
+          playing = false;
+          playBtn.textContent = "Play";
+        }
+        renderUi();
+      }
+      updateTargets(latestReplay, currentTime);
+      drawCourt();
+      requestAnimationFrame(step);
+    }
+
+    function seekTo(clock) {
+      currentTime = clamp(clock, 0, maxClock);
+      lastRenderedSecond = -1;
+      renderUi(true);
+    }
+
+    function initJumpControls() {
+      const maxPeriod = periodFromClock(maxClock);
+      for (let p = 1; p <= maxPeriod; p += 1) {
+        const opt = document.createElement("option");
+        opt.value = String(p);
+        opt.textContent = periodLabel(p);
+        jumpQuarter.appendChild(opt);
+      }
+      jumpQuarter.addEventListener("change", () => {
+        jumpMinute.max = String(Math.floor(periodLength(Number(jumpQuarter.value)) / 60));
+      });
+      jumpQuarter.dispatchEvent(new Event("change"));
+    }
+
+    playBtn.addEventListener("click", () => {
+      playing = !playing;
+      playBtn.textContent = playing ? "Pause" : "Play";
+      lastFrame = null;
+    });
+    restartBtn.addEventListener("click", () => {
+      playing = false;
+      playBtn.textContent = "Play";
+      visualState = createInitialVisualState();
+      seekTo(0);
+    });
+    speedBtn.addEventListener("click", () => {
+      speed = speed === 1 ? 2 : 1;
+      speedBtn.textContent = speed === 1 ? "2x speed" : "1x speed";
+      renderUi(true);
+    });
+    slider.addEventListener("input", () => seekTo(Number(slider.value)));
+    document.getElementById("jumpBtn").addEventListener("click", () => {
+      const period = Number(jumpQuarter.value);
+      const len = periodLength(period);
+      const mins = clamp(Number(jumpMinute.value) || 0, 0, Math.floor(len / 60));
+      const secs = clamp(Number(jumpSecond.value) || 0, 0, 59);
+      const remaining = clamp(mins * 60 + secs, 0, len);
+      seekTo(periodStart(period) + (len - remaining));
+    });
+
+    window.addEventListener("resize", () => {
+      resizeCanvas();
+      drawCourt();
+    });
+
+    initJumpControls();
+    resizeCanvas();
+    renderUi(true);
+    requestAnimationFrame(step);
   </script>
 </body>
 </html>
@@ -3731,6 +5065,15 @@ def report() -> tuple[str, int] | str:
                 ),
             ),
             500,
+        )
+
+    if mode == "animation":
+        return render_template_string(
+            ANIMATION_REPORT_HTML,
+            report_json=report_json,
+            matchid=matchid,
+            username=username,
+            court_image_url=get_court_image_data_url(),
         )
 
     return render_template_string(
