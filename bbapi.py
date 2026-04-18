@@ -130,6 +130,12 @@ class BBApi:
 
         return text
 
+    def get_xml_countries(self) -> str:
+        return self.network.get("http://bbapi.buzzerbeater.com/countries.aspx")
+
+    def get_xml_seasons(self) -> str:
+        return self.network.get("http://bbapi.buzzerbeater.com/seasons.aspx")
+
     def player(self, playerid) -> str:
         p = {"playerid": playerid}
         data = self.network.get("http://bbapi.buzzerbeater.com/player.aspx", p)
@@ -267,6 +273,90 @@ class BBApi:
             for match in matches
             if match.attrib["type"].startswith("league")
         ]
+
+        return match_ids
+
+    def countries(self) -> list[dict[str, str]]:
+        data = self.get_xml_countries()
+        root = xml.fromstring(data)
+        countries: list[dict[str, str]] = []
+
+        for country in root.findall(".//country"):
+            country_id = (
+                country.attrib.get("id")
+                or country.attrib.get("countryid")
+                or country.attrib.get("countryId")
+            )
+            name = country.attrib.get("name")
+            if name is None:
+                name_node = country.find("./name")
+                name = name_node.text if name_node is not None else None
+            if name is None and country.text:
+                name = country.text.strip()
+            if country_id and name:
+                countries.append({"id": str(country_id), "name": name})
+
+        return sorted(countries, key=lambda item: item["name"].casefold())
+
+    def seasons(self) -> list[dict[str, str | bool]]:
+        data = self.get_xml_seasons()
+        root = xml.fromstring(data)
+        seasons: list[dict[str, str | bool]] = []
+
+        for season in root.findall(".//season"):
+            season_id = (
+                season.attrib.get("id")
+                or season.attrib.get("season")
+                or season.attrib.get("number")
+            )
+            if not season_id:
+                continue
+            is_current = str(season.attrib.get("current", "")).lower() in {"1", "true", "yes"}
+            end = season.attrib.get("end") or season.attrib.get("finish") or ""
+            start = season.attrib.get("start") or ""
+            seasons.append(
+                {
+                    "id": str(season_id),
+                    "label": f"Season {season_id}",
+                    "current": is_current,
+                    "start": start,
+                    "end": end,
+                }
+            )
+
+        seasons.sort(key=lambda item: int(str(item["id"])), reverse=True)
+        if seasons and not any(season["current"] for season in seasons):
+            seasons[0]["current"] = True
+
+        return seasons
+
+    def national_team_schedule(
+        self,
+        country_id: str,
+        team_kind: str,
+        season: str,
+        include_friendlies: bool,
+    ) -> list[str]:
+        team_id = int(country_id) + (1000 if team_kind == "u21" else 0)
+        data = self.get_xml_schedule(str(team_id), season)
+
+        root = xml.fromstring(data)
+        matches = root.findall("./schedule/match")
+        match_ids: list[str] = []
+
+        for match in matches:
+            match_id = match.attrib.get("id")
+            if not match_id:
+                continue
+            match_type = match.attrib.get("type", "").casefold()
+            is_friendly = (
+                "friendly" in match_type
+                or "scrimmage" in match_type
+                or match_type in {"sc", "scrimmage"}
+            )
+            if is_friendly and not include_friendlies:
+                continue
+            match_ids.append(match_id)
 
         return match_ids
 

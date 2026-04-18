@@ -1,0 +1,29 @@
+{
+  "countries": [
+    { "id": "1", "name": "USA" },
+    { "id": "10", "name": "Italia" },
+    { "id": "11", "name": "France" },
+    { "id": "15", "name": "Israel" },
+    { "id": "28", "name": "Schweiz" },
+    { "id": "33", "name": "Ukraina" },
+    { "id": "36", "name": "Bulgaria" },
+    { "id": "41", "name": "Eesti" },
+    { "id": "43", "name": "Indonesia" },
+    { "id": "70", "name": "Taiwan" },
+    { "id": "76", "name": "Crna Gora" },
+    { "id": "77", "name": "Cyprus" },
+    { "id": "80", "name": "Puerto Rico" }
+  ],
+  "seasons": [
+    { "id": "71", "label": "Season 71", "current": true },
+    { "id": "70", "label": "Season 70", "current": false },
+    { "id": "69", "label": "Season 69", "current": false },
+    { "id": "68", "label": "Season 68", "current": false },
+    { "id": "67", "label": "Season 67", "current": false },
+    { "id": "66", "label": "Season 66", "current": false },
+    { "id": "65", "label": "Season 65", "current": false },
+    { "id": "64", "label": "Season 64", "current": false },
+    { "id": "63", "label": "Season 63", "current": false },
+    { "id": "62", "label": "Season 62", "current": false }
+  ]
+}

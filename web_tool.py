@@ -6,17 +6,20 @@ from argparse import Namespace
 import base64
 import contextlib
 import io
+import json
 from pathlib import Path
 import re
 from typing import Any
 
-from flask import Flask, render_template_string, request
+from flask import Flask, jsonify, render_template_string, request
 
 from bbapi import BBApi
 from game import Game
 from main import get_xml_text, parse_xml
 
 app = Flask(__name__)
+
+LOCAL_NATIONAL_OPTIONS_PATH = Path(__file__).with_name("national_options.json")
 
 
 FORM_HTML = """<!doctype html>
@@ -72,7 +75,8 @@ FORM_HTML = """<!doctype html>
       font-weight: 600;
       color: #344054;
     }
-    input {
+    input,
+    select {
       width: 100%;
       margin-top: 6px;
       padding: 10px 12px;
@@ -91,6 +95,11 @@ FORM_HTML = """<!doctype html>
       font-size: 14px;
       font-weight: 700;
       cursor: pointer;
+    }
+    input[type="checkbox"],
+    input[type="radio"] {
+      width: auto;
+      margin: 0;
     }
     .mode-switch {
       display: grid;
@@ -118,6 +127,35 @@ FORM_HTML = """<!doctype html>
     .matches-list {
       display: grid;
       gap: 10px;
+    }
+    .multi-source {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdff;
+    }
+    .choice-row,
+    .inline-check {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: #344054;
+    }
+    .auto-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .source-panel {
+      display: none;
+      gap: 10px;
+    }
+    .source-panel.active {
+      display: grid;
     }
     .match-row {
       display: grid;
@@ -182,18 +220,57 @@ FORM_HTML = """<!doctype html>
         </section>
 
         <section id="multiPanel" class="mode-panel">
-          <div class="small">Add multiple match IDs. The tool will auto-detect the common team and aggregate only that team.</div>
-          <div id="matchesList" class="matches-list">
-            {% for value in multi_matchids %}
-            <div class="match-row">
-              <label>Match ID
-                <input name="matchids" value="{{ value }}" />
-              </label>
-              <button type="button" class="danger-btn remove-match"{% if loop.index <= 2 %} hidden{% endif %}>Remove</button>
+          <div class="small">Add match IDs manually, or pull them from a national team schedule.</div>
+          <input type="hidden" name="multi_source" id="multiSourceInput" value="{{ multi_source }}" />
+          <div class="multi-source">
+            <label class="choice-row">
+              <input type="radio" name="multi_source_choice" value="manual" />
+              Manual match IDs
+            </label>
+            <div id="manualMatchPanel" class="source-panel">
+              <div id="matchesList" class="matches-list">
+                {% for value in multi_matchids %}
+                <div class="match-row">
+                  <label>Match ID
+                    <input name="matchids" value="{{ value }}" />
+                  </label>
+                  <button type="button" class="danger-btn remove-match"{% if loop.index <= 2 %} hidden{% endif %}>Remove</button>
+                </div>
+                {% endfor %}
+              </div>
+              <button type="button" id="addMatchBtn" class="ghost">Add Match</button>
             </div>
-            {% endfor %}
+            <label class="choice-row">
+              <input type="radio" name="multi_source_choice" value="national" />
+              National team schedule
+            </label>
+            <div id="nationalMatchPanel" class="source-panel">
+              <button type="button" id="loadNationalOptionsBtn" class="ghost">Load Teams And Seasons</button>
+              <div class="auto-grid">
+                <label>Team
+                  <select name="national_country_id" id="nationalCountrySelect" data-selected="{{ national_country_id }}">
+                    <option value="">Select a team</option>
+                  </select>
+                </label>
+                <label>Team Type
+                  <select name="national_team_kind" id="nationalTeamKind">
+                    <option value="nt"{% if national_team_kind == "nt" %} selected{% endif %}>National team</option>
+                    <option value="u21"{% if national_team_kind == "u21" %} selected{% endif %}>U21 national team</option>
+                  </select>
+                </label>
+                <label>Season
+                  <select name="national_season" id="nationalSeasonSelect" data-selected="{{ national_season }}">
+                    <option value="">Current season</option>
+                  </select>
+                </label>
+                <label class="inline-check">
+                  <input type="checkbox" name="include_friendlies" value="1"{% if include_friendlies %} checked{% endif %} />
+                  Include friendlies
+                </label>
+              </div>
+              <div class="hint" id="nationalOptionsStatus">Use the button after entering credentials.</div>
+            </div>
           </div>
-          <button type="button" id="addMatchBtn" class="ghost">Add Match</button>
         </section>
 
         <button type="submit">Generate Report</button>
@@ -218,6 +295,15 @@ FORM_HTML = """<!doctype html>
     const matchesList = document.getElementById("matchesList");
     const addMatchBtn = document.getElementById("addMatchBtn");
     const rowTemplate = document.getElementById("matchRowTemplate");
+    const multiSourceInput = document.getElementById("multiSourceInput");
+    const sourceChoices = [...document.querySelectorAll("input[name='multi_source_choice']")];
+    const manualMatchPanel = document.getElementById("manualMatchPanel");
+    const nationalMatchPanel = document.getElementById("nationalMatchPanel");
+    const loadNationalOptionsBtn = document.getElementById("loadNationalOptionsBtn");
+    const nationalCountrySelect = document.getElementById("nationalCountrySelect");
+    const nationalSeasonSelect = document.getElementById("nationalSeasonSelect");
+    const nationalOptionsStatus = document.getElementById("nationalOptionsStatus");
+    const localNationalOptions = {{ national_options | tojson }};
 
     function applyMode(mode) {
       modeInput.value = mode;
@@ -241,7 +327,20 @@ FORM_HTML = """<!doctype html>
       btn.addEventListener("click", () => applyMode(btn.dataset.mode));
     });
 
-    addMatchBtn.addEventListener("click", () => {
+    function applyMultiSource(source) {
+      multiSourceInput.value = source;
+      sourceChoices.forEach(choice => {
+        choice.checked = choice.value === source;
+      });
+      manualMatchPanel.classList.toggle("active", source === "manual");
+      nationalMatchPanel.classList.toggle("active", source === "national");
+    }
+
+    sourceChoices.forEach(choice => {
+      choice.addEventListener("change", () => applyMultiSource(choice.value));
+    });
+
+    addMatchBtn?.addEventListener("click", () => {
       const frag = rowTemplate.content.cloneNode(true);
       matchesList.appendChild(frag);
       updateRemoveButtons();
@@ -254,7 +353,59 @@ FORM_HTML = """<!doctype html>
       updateRemoveButtons();
     });
 
+    function fillSelect(select, rows, selectedValue, fallbackLabel) {
+      select.textContent = "";
+      const fallback = document.createElement("option");
+      fallback.value = "";
+      fallback.textContent = fallbackLabel;
+      select.appendChild(fallback);
+      rows.forEach(row => {
+        const opt = document.createElement("option");
+        opt.value = row.id;
+        opt.textContent = row.label || row.name;
+        if (String(row.id) === String(selectedValue) || (!selectedValue && row.current)) {
+          opt.selected = true;
+        }
+        select.appendChild(opt);
+      });
+    }
+
+    function loadOptionsIntoForm(payload, statusText) {
+      fillSelect(nationalCountrySelect, payload.countries || [], nationalCountrySelect.dataset.selected, "Select a team");
+      fillSelect(nationalSeasonSelect, payload.seasons || [], nationalSeasonSelect.dataset.selected, "Current season");
+      nationalOptionsStatus.textContent = statusText;
+    }
+
+    loadNationalOptionsBtn?.addEventListener("click", async () => {
+      const username = document.querySelector("input[name='username']").value.trim();
+      const password = document.querySelector("input[name='password']").value.trim();
+      if (!username || !password) {
+        nationalOptionsStatus.textContent = "Enter username and password first.";
+        return;
+      }
+      nationalOptionsStatus.textContent = "Loading teams and seasons...";
+      loadNationalOptionsBtn.disabled = true;
+      try {
+        const response = await fetch("/national-options", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        });
+        const payload = await response.json();
+        if (!response.ok) {
+          throw new Error(payload.error || "Could not load national teams.");
+        }
+        loadOptionsIntoForm(payload, "Loaded from BBAPI and saved locally.");
+      } catch (err) {
+        nationalOptionsStatus.textContent = err.message;
+      } finally {
+        loadNationalOptionsBtn.disabled = false;
+      }
+    });
+
     updateRemoveButtons();
+    loadOptionsIntoForm(localNationalOptions, "Loaded from local file. Use the button to refresh.");
+    applyMultiSource({{ multi_source | tojson }});
     applyMode({{ mode | tojson }});
   </script>
 </body>
@@ -4401,6 +4552,11 @@ def empty_form_context(
     matchid: str = "138595249",
     mode: str = "single",
     multi_matchids: list[str] | None = None,
+    multi_source: str = "manual",
+    national_country_id: str = "",
+    national_team_kind: str = "nt",
+    national_season: str = "",
+    include_friendlies: bool = False,
 ) -> dict[str, Any]:
     vals = list(multi_matchids or [])
     while len(vals) < 2:
@@ -4412,6 +4568,12 @@ def empty_form_context(
         "matchid": matchid,
         "mode": mode,
         "multi_matchids": vals,
+        "multi_source": multi_source,
+        "national_country_id": national_country_id,
+        "national_team_kind": national_team_kind,
+        "national_season": national_season,
+        "include_friendlies": include_friendlies,
+        "national_options": load_local_national_options(),
     }
 
 
@@ -4427,6 +4589,91 @@ def parse_multi_matchids(form_values: list[str]) -> list[str]:
         seen.add(cleaned)
         out.append(cleaned)
     return out
+
+
+def default_local_seasons() -> list[dict[str, Any]]:
+    current = 71
+    return [
+        {"id": str(season), "label": f"Season {season}", "current": season == current}
+        for season in range(current, max(current - 10, 0), -1)
+    ]
+
+
+def load_local_national_options() -> dict[str, Any]:
+    fallback = {"countries": [], "seasons": default_local_seasons()}
+    if not LOCAL_NATIONAL_OPTIONS_PATH.exists():
+        return fallback
+    try:
+        with LOCAL_NATIONAL_OPTIONS_PATH.open("r", encoding="utf-8") as fh:
+            payload = json.load(fh)
+    except (OSError, json.JSONDecodeError):
+        return fallback
+
+    countries = payload.get("countries")
+    seasons = payload.get("seasons")
+    return {
+        "countries": countries if isinstance(countries, list) else fallback["countries"],
+        "seasons": seasons if isinstance(seasons, list) and seasons else fallback["seasons"],
+    }
+
+
+def save_local_national_options(payload: dict[str, Any]) -> None:
+    try:
+        LOCAL_NATIONAL_OPTIONS_PATH.write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+    except OSError:
+        pass
+
+
+def load_national_options(username: str, password: str) -> dict[str, Any]:
+    api = BBApi(username, password)
+    if not getattr(api, "logged_in", False):
+        raise ValueError("BBAPI login failed. Check username/password.")
+    payload = {"countries": api.countries(), "seasons": api.seasons()}
+    if not payload["countries"]:
+        local_payload = load_local_national_options()
+        if local_payload["countries"]:
+            return local_payload
+    if payload["countries"]:
+        save_local_national_options(payload)
+    return payload
+
+
+def current_season_from_options(seasons: list[dict[str, Any]]) -> str:
+    for season in seasons:
+        if season.get("current"):
+            return str(season["id"])
+    if not seasons:
+        return ""
+    return str(max(seasons, key=lambda season: int(str(season["id"])))["id"])
+
+
+def fetch_national_matchids(
+    username: str,
+    password: str,
+    country_id: str,
+    team_kind: str,
+    season: str,
+    include_friendlies: bool,
+) -> list[str]:
+    api = BBApi(username, password)
+    if not getattr(api, "logged_in", False):
+        raise ValueError("BBAPI login failed. Check username/password.")
+
+    selected_season = season
+    if not selected_season:
+        selected_season = current_season_from_options(api.seasons())
+    if not selected_season:
+        raise ValueError("Could not detect the current BB season.")
+
+    return api.national_team_schedule(
+        country_id=country_id,
+        team_kind=team_kind,
+        season=selected_season,
+        include_friendlies=include_friendlies,
+    )
 
 
 def game_team_entry(game_data: dict[str, Any], selected_team_key: str) -> tuple[int, dict[str, Any]] | None:
@@ -4933,6 +5180,55 @@ def form() -> str:
     return render_template_string(FORM_HTML, **empty_form_context())
 
 
+@app.post("/national-options")
+def national_options() -> tuple[Any, int] | Any:
+    payload = request.get_json(silent=True) or {}
+    username = str(payload.get("username", "")).strip()
+    password = str(payload.get("password", "")).strip()
+    if not username or not password:
+        return jsonify({"error": "Username and password are required."}), 400
+    try:
+        return jsonify(load_national_options(username, password))
+    except Exception as exc:
+        return jsonify({"error": str(exc)}), 400
+
+
+def form_error_response(
+    message: str,
+    status_code: int,
+    *,
+    username: str,
+    password: str,
+    matchid: str,
+    mode: str,
+    multi_matchids: list[str],
+    multi_source: str,
+    national_country_id: str,
+    national_team_kind: str,
+    national_season: str,
+    include_friendlies: bool,
+) -> tuple[str, int]:
+    return (
+        render_template_string(
+            FORM_HTML,
+            **empty_form_context(
+                error=message,
+                username=username,
+                password=password,
+                matchid=matchid,
+                mode=mode,
+                multi_matchids=multi_matchids,
+                multi_source=multi_source,
+                national_country_id=national_country_id,
+                national_team_kind=national_team_kind,
+                national_season=national_season,
+                include_friendlies=include_friendlies,
+            ),
+        ),
+        status_code,
+    )
+
+
 @app.post("/report")
 def report() -> tuple[str, int] | str:
     username = request.form.get("username", "").strip()
@@ -4941,39 +5237,51 @@ def report() -> tuple[str, int] | str:
     matchid = request.form.get("matchid", "").strip()
     multi_matchids = parse_multi_matchids(request.form.getlist("matchids"))
     selected_team_key = request.form.get("selected_team_key", "").strip() or None
+    multi_source = request.form.get("multi_source", "manual").strip() or "manual"
+    national_country_id = request.form.get("national_country_id", "").strip()
+    national_team_kind = request.form.get("national_team_kind", "nt").strip() or "nt"
+    national_season = request.form.get("national_season", "").strip()
+    include_friendlies = request.form.get("include_friendlies") == "1"
 
-    if not username or not password:
-        return (
-            render_template_string(
-                FORM_HTML,
-                **empty_form_context(
-                    error="Username and password are required.",
-                    username=username,
-                    password=password,
-                    matchid=matchid,
-                    mode=mode,
-                    multi_matchids=multi_matchids,
-                ),
-            ),
-            400,
+    def form_error(message: str, status_code: int, *, keep_password: bool = True) -> tuple[str, int]:
+        return form_error_response(
+            message,
+            status_code,
+            username=username,
+            password=password if keep_password else "",
+            matchid=matchid,
+            mode=mode,
+            multi_matchids=multi_matchids,
+            multi_source=multi_source,
+            national_country_id=national_country_id,
+            national_team_kind=national_team_kind,
+            national_season=national_season,
+            include_friendlies=include_friendlies,
         )
 
+    if not username or not password:
+        return form_error("Username and password are required.", 400)
+
     if mode == "multi":
+        if multi_source == "national":
+            if not national_country_id:
+                return form_error("Choose a national team before generating the report.", 400)
+            try:
+                multi_matchids = fetch_national_matchids(
+                    username=username,
+                    password=password,
+                    country_id=national_country_id,
+                    team_kind=national_team_kind,
+                    season=national_season,
+                    include_friendlies=include_friendlies,
+                )
+            except Exception as exc:
+                return form_error(f"Could not load national team schedule: {exc}", 400, keep_password=False)
+
         if not multi_matchids:
-            return (
-                render_template_string(
-                    FORM_HTML,
-                    **empty_form_context(
-                        error="Enter at least one match ID for multi-match mode.",
-                        username=username,
-                        password=password,
-                        matchid=matchid,
-                        mode=mode,
-                        multi_matchids=multi_matchids,
-                    ),
-                ),
-                400,
-            )
+            if multi_source == "national":
+                return form_error("No matches were found for that national team schedule.", 400)
+            return form_error("Enter at least one match ID for multi-match mode.", 400)
 
         status, payload = aggregate_multi_match_report(
             multi_matchids,
@@ -4996,20 +5304,7 @@ def report() -> tuple[str, int] | str:
             extra_warnings = payload.get("warnings", [])
             if extra_warnings:
                 message = f'{message} {" | ".join(extra_warnings)}'
-            return (
-                render_template_string(
-                    FORM_HTML,
-                    **empty_form_context(
-                        error=message,
-                        username=username,
-                        password="",
-                        matchid=matchid,
-                        mode=mode,
-                        multi_matchids=multi_matchids,
-                    ),
-                ),
-                400,
-            )
+            return form_error(message, 400, keep_password=False)
 
         return render_template_string(
             MULTI_REPORT_HTML,
@@ -5018,54 +5313,15 @@ def report() -> tuple[str, int] | str:
         )
 
     if not matchid:
-        return (
-            render_template_string(
-                FORM_HTML,
-                **empty_form_context(
-                    error="Match ID is required.",
-                    username=username,
-                    password=password,
-                    matchid=matchid,
-                    mode=mode,
-                    multi_matchids=multi_matchids,
-                ),
-            ),
-            400,
-        )
+        return form_error("Match ID is required.", 400)
 
     if not matchid.isdigit():
-        return (
-            render_template_string(
-                FORM_HTML,
-                **empty_form_context(
-                    error="Match ID must be numeric.",
-                    username=username,
-                    password=password,
-                    matchid=matchid,
-                    mode=mode,
-                    multi_matchids=multi_matchids,
-                ),
-            ),
-            400,
-        )
+        return form_error("Match ID must be numeric.", 400)
 
     try:
         report_json = generate_report(matchid, username, password)
     except Exception as exc:
-        return (
-            render_template_string(
-                FORM_HTML,
-                **empty_form_context(
-                    error=f"Failed to generate report: {exc}",
-                    username=username,
-                    password="",
-                    matchid=matchid,
-                    mode=mode,
-                    multi_matchids=multi_matchids,
-                ),
-            ),
-            500,
-        )
+        return form_error(f"Failed to generate report: {exc}", 500, keep_password=False)
 
     if mode == "animation":
         return render_template_string(
