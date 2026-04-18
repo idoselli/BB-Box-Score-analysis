@@ -4609,12 +4609,36 @@ def load_local_national_options() -> dict[str, Any]:
     except (OSError, json.JSONDecodeError):
         return fallback
 
-    countries = payload.get("countries")
+    countries = normalize_country_options(payload.get("countries"))
     seasons = payload.get("seasons")
     return {
-        "countries": countries if isinstance(countries, list) else fallback["countries"],
+        "countries": countries or fallback["countries"],
         "seasons": seasons if isinstance(seasons, list) and seasons else fallback["seasons"],
     }
+
+
+def normalize_country_options(countries: Any) -> list[dict[str, str]]:
+    if not isinstance(countries, list):
+        return []
+
+    by_id: dict[str, dict[str, str]] = {}
+    for country in countries:
+        if not isinstance(country, dict):
+            continue
+        country_id = str(country.get("id", "")).strip()
+        name = str(country.get("name", "")).strip()
+        if country_id and name:
+            by_id[country_id] = {"id": country_id, "name": name}
+
+    return sorted(by_id.values(), key=lambda item: item["name"].casefold())
+
+
+def merge_country_options(*country_lists: Any) -> list[dict[str, str]]:
+    by_id: dict[str, dict[str, str]] = {}
+    for countries in country_lists:
+        for country in normalize_country_options(countries):
+            by_id[country["id"]] = country
+    return sorted(by_id.values(), key=lambda item: item["name"].casefold())
 
 
 def save_local_national_options(payload: dict[str, Any]) -> None:
@@ -4631,9 +4655,12 @@ def load_national_options(username: str, password: str) -> dict[str, Any]:
     api = BBApi(username, password)
     if not getattr(api, "logged_in", False):
         raise ValueError("BBAPI login failed. Check username/password.")
-    payload = {"countries": api.countries(), "seasons": api.seasons()}
+    local_payload = load_local_national_options()
+    api_countries = api.countries()
+    countries = merge_country_options(local_payload["countries"], api_countries)
+    api_seasons = api.seasons()
+    payload = {"countries": countries, "seasons": api_seasons or local_payload["seasons"]}
     if not payload["countries"]:
-        local_payload = load_local_national_options()
         if local_payload["countries"]:
             return local_payload
     if payload["countries"]:
