@@ -1106,7 +1106,7 @@ MULTI_REPORT_HTML = """<!doctype html>
         return stat && stat.a ? stat.m / stat.a : null;
       }
 
-      function defenseAllowedRatio(stat) {
+      function defenseSuccessRatio(stat) {
         return stat && stat.a ? (stat.a - stat.m) / stat.a : null;
       }
 
@@ -1195,17 +1195,17 @@ MULTI_REPORT_HTML = """<!doctype html>
         });
 
         (data.defense || []).forEach(row => {
-          const on = defenseAllowedRatio(row.teamDefOn);
-          const off = defenseAllowedRatio(row.teamDefOff);
+          const on = defenseSuccessRatio(row.teamDefOn);
+          const off = defenseSuccessRatio(row.teamDefOff);
           if (on === null || off === null || row.teamDefOn.a < MIN_DETECTION_ATTEMPTS || row.teamDefOff.a < MIN_DETECTION_ATTEMPTS) return;
-          const lift = (off - on) * 100;
+          const lift = (on - off) * 100;
           const score = Math.abs(lift) * Math.log1p(Math.min(row.teamDefOn.a, row.teamDefOff.a));
           const better = lift > 0;
           pushDetection(rows, {
             type: "Defensive On/Off Lift",
             player: row.name,
-            finding: `Opponent FG allowed ${better ? "drops" : "rises"} ${formatSignedPp(Math.abs(lift))} when he plays`,
-            evidence: `On ${formatPctRatio(on)} allowed (${row.teamDefOn.a - row.teamDefOn.m}/${row.teamDefOn.a}), off ${formatPctRatio(off)} allowed (${row.teamDefOff.a - row.teamDefOff.m}/${row.teamDefOff.a})`,
+            finding: `Defensive success rate ${better ? "rises" : "falls"} by ${Math.abs(lift).toFixed(1)}pp when he plays`,
+            evidence: `On ${formatPctRatio(on)} (${row.teamDefOn.a - row.teamDefOn.m}/${row.teamDefOn.a}), off ${formatPctRatio(off)} (${row.teamDefOff.a - row.teamDefOff.m}/${row.teamDefOff.a})`,
             suggestion: better ? "Prioritize him in defensive stretches and protect his role fit." : "Review matchup assignments, help coverage, and the lineups around his minutes.",
             score,
             sentiment: better ? "good" : "bad"
@@ -1223,25 +1223,25 @@ MULTI_REPORT_HTML = """<!doctype html>
             addOffCells(acc, { a: row[key]?.a || 0, m: row[key]?.m || 0, mi: 0, b: 0 });
             return acc;
           }, emptyOffCell());
-          const teamAllowed = defenseAllowedRatio(total);
-          if (teamAllowed === null) return;
+          const teamSuccess = defenseSuccessRatio(total);
+          if (teamSuccess === null) return;
           (data.defense || []).forEach(row => {
             const stat = row[key];
-            const allowed = defenseAllowedRatio(stat);
-            if (allowed === null || stat.a < MIN_DETECTION_ATTEMPTS) return;
-            const diff = (teamAllowed - allowed) * 100;
+            const success = defenseSuccessRatio(stat);
+            if (success === null || stat.a < MIN_DETECTION_ATTEMPTS) return;
+            const diff = (success - teamSuccess) * 100;
             const score = Math.abs(diff) * Math.log1p(stat.a);
             const better = diff > 0;
             pushDetection(rows, {
               type: "Defended Shot Signal",
               player: row.name,
-            finding: `${better ? "Strong" : "Concerning"} result on ${label}`,
-            evidence: `${formatPctRatio(allowed)} allowed (${stat.a - stat.m}/${stat.a}) vs team ${formatPctRatio(teamAllowed)}, ${formatSignedPp(diff)}`,
-            suggestion: better ? "Use him as a primary contest option in this coverage." : "Review whether these contests need earlier help or a different matchup.",
-            score,
-            range: label,
-            sentiment: better ? "good" : "bad"
-          });
+              finding: `${better ? "Strong" : "Concerning"} result on ${label}`,
+              evidence: `${formatPctRatio(success)} success (${stat.a - stat.m}/${stat.a}) vs team ${formatPctRatio(teamSuccess)}, ${formatSignedPp(diff)}`,
+              suggestion: better ? "Use him as a primary contest option in this coverage." : "Review whether these contests need earlier help or a different matchup.",
+              score,
+              range: label,
+              sentiment: better ? "good" : "bad"
+            });
           });
         });
 
