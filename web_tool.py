@@ -839,9 +839,107 @@ MULTI_REPORT_HTML = """<!doctype html>
       background: #fef2f2;
       border-color: #fca5a5;
     }
+    .insight-note {
+      margin: 0;
+      padding: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      border-bottom: 1px solid var(--line);
+      background: #fcfdff;
+    }
+    .insight-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+    .insight-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fff;
+      box-shadow: 0 6px 18px rgba(13, 39, 65, 0.05);
+    }
+    .insight-card.good {
+      border-color: var(--success-line);
+      background: var(--success-bg);
+    }
+    .insight-card.bad {
+      border-color: var(--danger-line);
+      background: var(--danger-bg);
+    }
+    .insight-card h3 {
+      margin: 7px 0 6px;
+      font-size: 16px;
+    }
+    .insight-card p {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .insight-type {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 3px 8px;
+      background: #fff;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .insight-evidence {
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .insight-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .insight-range {
+      border-top: 1px solid rgba(95, 107, 118, 0.22);
+      padding-top: 8px;
+    }
+    .insight-range:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+    .insight-range-title {
+      margin-bottom: 4px;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .insight-mini {
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .insight-mini:last-child {
+      margin-bottom: 0;
+    }
+    .sortable-th {
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .sortable-th .sort-indicator {
+      display: inline-block;
+      min-width: 12px;
+      margin-left: 4px;
+      color: var(--muted);
+      font-size: 11px;
+    }
     @media (max-width: 960px) {
       .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .panel-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .insight-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -902,6 +1000,16 @@ MULTI_REPORT_HTML = """<!doctype html>
       <h2>Player Defense Overview</h2>
       <div class="table-wrap">
         <table id="playerDefenseTable"></table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Detections &amp; Suggestions</h2>
+      <p class="insight-note">Findings favor large percentage swings with enough relevant attempts. Small samples are filtered out, but the evidence stays visible.</p>
+      <div id="detectionsEmpty" class="card-body empty" hidden>Not enough qualified attempts for detection yet.</div>
+      <div id="detectionsCards" class="insight-grid"></div>
+      <div class="table-wrap">
+        <table id="detectionsTable"></table>
       </div>
     </section>
 
@@ -980,6 +1088,340 @@ MULTI_REPORT_HTML = """<!doctype html>
 
       function offCellHtml(cell) {
         return `${cell.a}/${cell.m}/${cell.mi}/${cell.b}`;
+      }
+
+      const MIN_DETECTION_ATTEMPTS = 8;
+      const detectionColumns = [
+        { key: "type", label: "Type", numeric: false },
+        { key: "player", label: "Player", numeric: false },
+        { key: "finding", label: "Finding", numeric: false },
+        { key: "evidence", label: "Evidence", numeric: false },
+        { key: "suggestion", label: "Suggestion", numeric: false },
+        { key: "score", label: "Score", numeric: true }
+      ];
+      let detectionRows = [];
+      let detectionSort = { key: "score", dir: "desc" };
+
+      function shotStatRatio(stat) {
+        return stat && stat.a ? stat.m / stat.a : null;
+      }
+
+      function defenseAllowedRatio(stat) {
+        return stat && stat.a ? (stat.a - stat.m) / stat.a : null;
+      }
+
+      function formatPctRatio(value) {
+        return value === null || !Number.isFinite(value) ? "N/A" : `${(value * 100).toFixed(1)}%`;
+      }
+
+      function formatSignedPp(value) {
+        const prefix = value > 0 ? "+" : "";
+        return `${prefix}${value.toFixed(1)}pp`;
+      }
+
+      function getShotRange(code) {
+        const value = String(code);
+        if (value.startsWith("10")) return "three";
+        if (value.startsWith("20")) return "jump";
+        return "paint";
+      }
+
+      function rangeLabel(range) {
+        if (range === "three") return "3PT";
+        if (range === "jump") return "mid-range";
+        return "paint";
+      }
+
+      function emptyOffCell() {
+        return { a: 0, m: 0, mi: 0, b: 0 };
+      }
+
+      function addOffCells(target, source) {
+        if (!source) return;
+        target.a += source.a || 0;
+        target.m += source.m || 0;
+        target.mi += source.mi || 0;
+        target.b += source.b || 0;
+      }
+
+      function groupPlayerOffenseByRange(player) {
+        const out = { three: emptyOffCell(), jump: emptyOffCell(), paint: emptyOffCell() };
+        Object.entries(player.counts || {}).forEach(([code, cell]) => {
+          addOffCells(out[getShotRange(code)], cell);
+        });
+        return out;
+      }
+
+      function offRatio(cell) {
+        return cell && cell.a ? cell.m / cell.a : null;
+      }
+
+      function pushDetection(rows, item) {
+        if (!Number.isFinite(item.score) || item.score <= 0) return;
+        rows.push(item);
+      }
+
+      function buildDetections() {
+        const rows = [];
+        const offensePlayers = data.offense.players || [];
+        const teamRangeTotals = { three: emptyOffCell(), jump: emptyOffCell(), paint: emptyOffCell() };
+        offensePlayers.forEach(player => {
+          const ranges = groupPlayerOffenseByRange(player);
+          Object.keys(teamRangeTotals).forEach(range => addOffCells(teamRangeTotals[range], ranges[range]));
+        });
+        const avgTotalAttempts = offensePlayers.length
+          ? offensePlayers.reduce((sum, player) => sum + (player.total?.a || 0), 0) / offensePlayers.length
+          : 0;
+        const avgRangeAttempts = Object.fromEntries(
+          Object.entries(teamRangeTotals).map(([range, cell]) => [range, offensePlayers.length ? cell.a / offensePlayers.length : 0])
+        );
+
+        (data.matchup || []).forEach(row => {
+          const on = shotStatRatio(row.teamOn);
+          const off = shotStatRatio(row.teamOff);
+          if (on === null || off === null || row.teamOn.a < MIN_DETECTION_ATTEMPTS || row.teamOff.a < MIN_DETECTION_ATTEMPTS) return;
+          const diff = (on - off) * 100;
+          const score = Math.abs(diff) * Math.log1p(Math.min(row.teamOn.a, row.teamOff.a));
+          const better = diff > 0;
+          pushDetection(rows, {
+            type: "FG On/Off Lift",
+            player: row.name,
+            finding: `Team FG ${better ? "rises" : "falls"} ${formatSignedPp(diff)} with him on court`,
+            evidence: `On ${formatPctRatio(on)} (${row.teamOn.m}/${row.teamOn.a}), off ${formatPctRatio(off)} (${row.teamOff.m}/${row.teamOff.a})`,
+            suggestion: better ? "Lean into lineups and actions where he stays involved." : "Check whether his minutes overlap with tougher shots or stagnant possessions.",
+            score,
+            sentiment: better ? "good" : "bad"
+          });
+        });
+
+        (data.defense || []).forEach(row => {
+          const on = defenseAllowedRatio(row.teamDefOn);
+          const off = defenseAllowedRatio(row.teamDefOff);
+          if (on === null || off === null || row.teamDefOn.a < MIN_DETECTION_ATTEMPTS || row.teamDefOff.a < MIN_DETECTION_ATTEMPTS) return;
+          const lift = (off - on) * 100;
+          const score = Math.abs(lift) * Math.log1p(Math.min(row.teamDefOn.a, row.teamDefOff.a));
+          const better = lift > 0;
+          pushDetection(rows, {
+            type: "Defensive On/Off Lift",
+            player: row.name,
+            finding: `Opponent FG allowed ${better ? "drops" : "rises"} ${formatSignedPp(Math.abs(lift))} when he plays`,
+            evidence: `On ${formatPctRatio(on)} allowed (${row.teamDefOn.a - row.teamDefOn.m}/${row.teamDefOn.a}), off ${formatPctRatio(off)} allowed (${row.teamDefOff.a - row.teamDefOff.m}/${row.teamDefOff.a})`,
+            suggestion: better ? "Prioritize him in defensive stretches and protect his role fit." : "Review matchup assignments, help coverage, and the lineups around his minutes.",
+            score,
+            sentiment: better ? "good" : "bad"
+          });
+        });
+
+        const defendedKeys = [
+          { key: "defendedTotal", label: "all defended shots" },
+          { key: "defendedClose", label: "close defended shots" },
+          { key: "defendedMid", label: "mid-range defended shots" },
+          { key: "defendedThree", label: "3PT defended shots" }
+        ];
+        defendedKeys.forEach(({ key, label }) => {
+          const total = (data.defense || []).reduce((acc, row) => {
+            addOffCells(acc, { a: row[key]?.a || 0, m: row[key]?.m || 0, mi: 0, b: 0 });
+            return acc;
+          }, emptyOffCell());
+          const teamAllowed = defenseAllowedRatio(total);
+          if (teamAllowed === null) return;
+          (data.defense || []).forEach(row => {
+            const stat = row[key];
+            const allowed = defenseAllowedRatio(stat);
+            if (allowed === null || stat.a < MIN_DETECTION_ATTEMPTS) return;
+            const diff = (teamAllowed - allowed) * 100;
+            const score = Math.abs(diff) * Math.log1p(stat.a);
+            const better = diff > 0;
+            pushDetection(rows, {
+              type: "Defended Shot Signal",
+              player: row.name,
+            finding: `${better ? "Strong" : "Concerning"} result on ${label}`,
+            evidence: `${formatPctRatio(allowed)} allowed (${stat.a - stat.m}/${stat.a}) vs team ${formatPctRatio(teamAllowed)}, ${formatSignedPp(diff)}`,
+            suggestion: better ? "Use him as a primary contest option in this coverage." : "Review whether these contests need earlier help or a different matchup.",
+            score,
+            range: label,
+            sentiment: better ? "good" : "bad"
+          });
+          });
+        });
+
+        offensePlayers.forEach(player => {
+          const totalAttempts = player.total?.a || 0;
+          if (totalAttempts >= MIN_DETECTION_ATTEMPTS && totalAttempts >= Math.max(MIN_DETECTION_ATTEMPTS, avgTotalAttempts * 1.35)) {
+            pushDetection(rows, {
+              type: "High Usage",
+              player: player.name,
+              finding: "Shot volume is carrying a large share of the offense",
+              evidence: `${totalAttempts} attempts, team player average ${avgTotalAttempts.toFixed(1)}`,
+              suggestion: "Check whether this is intentional usage or a sign other options are not being created.",
+              score: totalAttempts,
+              sentiment: "neutral"
+            });
+          }
+
+          const ranges = groupPlayerOffenseByRange(player);
+          Object.entries(ranges).forEach(([range, stat]) => {
+            if (stat.a >= MIN_DETECTION_ATTEMPTS && stat.a >= Math.max(MIN_DETECTION_ATTEMPTS, avgRangeAttempts[range] * 1.5)) {
+              pushDetection(rows, {
+                type: "Shot Diet Concentration",
+                player: player.name,
+                finding: `Notable ${rangeLabel(range)} volume`,
+                evidence: `${stat.a} ${rangeLabel(range)} attempts, player average in this range ${avgRangeAttempts[range].toFixed(1)}`,
+                suggestion: "Decide if this range should be fed, diversified, or paired with a counter.",
+                score: stat.a * Math.log1p(stat.a),
+                range: rangeLabel(range),
+                sentiment: "neutral"
+              });
+            }
+
+            const playerRatio = offRatio(stat);
+            const teamRatio = offRatio(teamRangeTotals[range]);
+            if (playerRatio === null || teamRatio === null || stat.a < MIN_DETECTION_ATTEMPTS) return;
+            const diff = (playerRatio - teamRatio) * 100;
+            const score = Math.abs(diff) * Math.log1p(stat.a);
+            const better = diff > 0;
+            pushDetection(rows, {
+              type: "Range Efficiency Outlier",
+              player: player.name,
+              finding: `${better ? "Hot" : "cold"} from ${rangeLabel(range)}`,
+              evidence: `${formatPctRatio(playerRatio)} (${stat.m}/${stat.a}) vs team ${formatPctRatio(teamRatio)}, ${formatSignedPp(diff)}`,
+              suggestion: better ? "Look for repeatable actions that create this shot." : "Consider reducing this shot type unless the context explains the miss pattern.",
+              score,
+              range: rangeLabel(range),
+              sentiment: better ? "good" : "bad"
+            });
+          });
+        });
+
+        return rows.sort((a, b) => b.score - a.score || a.player.localeCompare(b.player));
+      }
+
+      function cardSentiment(rows) {
+        const top = rows[0];
+        return top?.sentiment || "neutral";
+      }
+
+      function summarizeRowsForCard(rows) {
+        const limitedRows = rows.slice(0, 4);
+        if (!limitedRows.some(row => row.range)) {
+          return `
+            <div class="insight-list">
+              ${limitedRows.map(row => `
+                <p class="insight-mini"><strong>${row.player}</strong>: ${row.finding}. ${row.evidence}</p>
+              `).join("")}
+            </div>
+          `;
+        }
+
+        const byRange = new Map();
+        limitedRows.forEach(row => {
+          const key = row.range || "Other";
+          if (!byRange.has(key)) byRange.set(key, []);
+          byRange.get(key).push(row);
+        });
+
+        return `
+          <div class="insight-list">
+            ${[...byRange.entries()].map(([range, rangeRows]) => `
+              <div class="insight-range">
+                <div class="insight-range-title">${range}</div>
+                ${rangeRows.map(row => `
+                  <p class="insight-mini"><strong>${row.player}</strong>: ${row.finding}. ${row.evidence}</p>
+                `).join("")}
+              </div>
+            `).join("")}
+          </div>
+        `;
+      }
+
+      function renderDetectionCards(rows) {
+        const cards = document.getElementById("detectionsCards");
+        const byType = new Map();
+        rows.forEach(row => {
+          if (!byType.has(row.type)) byType.set(row.type, []);
+          byType.get(row.type).push(row);
+        });
+        const groups = [...byType.entries()]
+          .map(([type, typeRows]) => ({
+            type,
+            rows: typeRows.sort((a, b) => b.score - a.score),
+            score: Math.max(...typeRows.map(row => row.score))
+          }))
+          .sort((a, b) => b.score - a.score || a.type.localeCompare(b.type));
+
+        cards.innerHTML = groups.map(group => `
+          <article class="insight-card ${cardSentiment(group.rows)}">
+            <span class="insight-type">${group.type}</span>
+            <h3>${group.rows.length} finding${group.rows.length === 1 ? "" : "s"}</h3>
+            <p>${group.rows[0].suggestion}</p>
+            ${summarizeRowsForCard(group.rows)}
+          </article>
+        `).join("");
+      }
+
+      function sortDetectionRows(rows) {
+        const column = detectionColumns.find(item => item.key === detectionSort.key);
+        const dir = detectionSort.dir === "asc" ? 1 : -1;
+        return [...rows].sort((a, b) => {
+          const av = a[detectionSort.key];
+          const bv = b[detectionSort.key];
+          if (column?.numeric) return ((Number(av) || 0) - (Number(bv) || 0)) * dir;
+          return String(av || "").localeCompare(String(bv || ""), undefined, { sensitivity: "base" }) * dir;
+        });
+      }
+
+      function renderDetectionsTable() {
+        const table = document.getElementById("detectionsTable");
+        const sorted = sortDetectionRows(detectionRows);
+        table.innerHTML = `
+          <thead>
+            <tr>
+              ${detectionColumns.map(column => `
+                <th class="sortable-th" data-sort-key="${column.key}" aria-sort="${detectionSort.key === column.key ? (detectionSort.dir === "asc" ? "ascending" : "descending") : "none"}">
+                  ${column.label}<span class="sort-indicator">${detectionSort.key === column.key ? (detectionSort.dir === "asc" ? "^" : "v") : ""}</span>
+                </th>
+              `).join("")}
+            </tr>
+          </thead>
+          <tbody>
+            ${sorted.map(row => `
+              <tr>
+                <td>${row.type}</td>
+                <td>${row.player}</td>
+                <td>${row.finding}</td>
+                <td>${row.evidence}</td>
+                <td>${row.suggestion}</td>
+                <td>${row.score.toFixed(1)}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        `;
+        table.querySelectorAll("th[data-sort-key]").forEach(th => {
+          th.addEventListener("click", () => {
+            const key = th.dataset.sortKey;
+            detectionSort = {
+              key,
+              dir: detectionSort.key === key && detectionSort.dir === "desc" ? "asc" : "desc"
+            };
+            renderDetectionsTable();
+          });
+        });
+      }
+
+      function renderDetections() {
+        detectionRows = buildDetections();
+        const empty = document.getElementById("detectionsEmpty");
+        const cards = document.getElementById("detectionsCards");
+        const table = document.getElementById("detectionsTable");
+        if (!detectionRows.length) {
+          empty.hidden = false;
+          cards.innerHTML = "";
+          table.innerHTML = "";
+          return;
+        }
+        empty.hidden = true;
+        renderDetectionCards(detectionRows);
+        renderDetectionsTable();
       }
 
       function selectedValues(filterRoot) {
@@ -1205,6 +1647,8 @@ MULTI_REPORT_HTML = """<!doctype html>
           `).join("")}
         </tbody>
       `;
+
+      renderDetections();
 
       document.getElementById("offPlayersTable").innerHTML = `
         <thead>
