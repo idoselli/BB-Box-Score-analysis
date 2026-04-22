@@ -954,6 +954,38 @@ MULTI_REPORT_HTML = """<!doctype html>
       cursor: pointer;
       text-decoration: underline;
     }
+    .tactic-row-outside td {
+      background: #eef7ff;
+    }
+    .tactic-row-inside td {
+      background: #fff8df;
+    }
+    .gdp-line {
+      white-space: nowrap;
+    }
+    .gdp-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 18px;
+      height: 18px;
+      margin-left: 5px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1;
+      border: 1px solid transparent;
+    }
+    .gdp-mark.hit {
+      color: #166534;
+      background: #dcfce7;
+      border-color: #86efac;
+    }
+    .gdp-mark.miss {
+      color: #991b1b;
+      background: #fee2e2;
+      border-color: #fca5a5;
+    }
     .tactic-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -972,6 +1004,12 @@ MULTI_REPORT_HTML = """<!doctype html>
       font-size: 16px;
       border-bottom: 1px solid var(--line);
       background: #f9fbff;
+    }
+    .tactic-card.outside h3 {
+      background: #eef7ff;
+    }
+    .tactic-card.inside h3 {
+      background: #fff8df;
     }
     .position-block {
       padding: 10px 12px;
@@ -1175,11 +1213,29 @@ MULTI_REPORT_HTML = """<!doctype html>
         return `${cell.a}/${cell.m}/${cell.mi}/${cell.b}`;
       }
 
-      function gdpText(part) {
+      function tacticGroupKey(tactics) {
+        const code = tactics?.offense || "";
+        if (["LookInside", "LowPost"].includes(code)) return "inside";
+        if (["Motion", "RunAndGun", "Princeton"].includes(code)) return "outside";
+        if (["Base", "Push", "Patient", "InsideIsolation", "OutsideIsolation"].includes(code)) return "balanced";
+        return "";
+      }
+
+      function tacticGroupClass(tactics) {
+        const group = tacticGroupKey(tactics);
+        if (group === "outside") return "tactic-row-outside";
+        if (group === "inside") return "tactic-row-inside";
+        return "";
+      }
+
+      function gdpPartHtml(part) {
         if (!part) return "N/A";
-        if (part.value === "N/A" && part.result === "N/A") return "N/A";
-        if (part.result === "N/A") return part.value || "N/A";
-        return `${part.value} (${part.result})`;
+        const value = part.value || "N/A";
+        const result = part.result || "N/A";
+        if (value === "N/A" && result === "N/A") return "N/A";
+        if (result === "Correct") return `${value}<span class="gdp-mark hit" title="Correct">V</span>`;
+        if (result === "Incorrect") return `${value}<span class="gdp-mark miss" title="Incorrect">X</span>`;
+        return value;
       }
 
       function tacticSummary(tactics) {
@@ -1193,8 +1249,8 @@ MULTI_REPORT_HTML = """<!doctype html>
       function gdpSummary(tactics) {
         const gdp = tactics?.gdp || {};
         return `
-          <div><strong>Focus:</strong> ${gdpText(gdp.focus)}</div>
-          <div><strong>Pace:</strong> ${gdpText(gdp.pace)}</div>
+          <div class="gdp-line"><strong>Focus:</strong> ${gdpPartHtml(gdp.focus)}</div>
+          <div class="gdp-line"><strong>Pace:</strong> ${gdpPartHtml(gdp.pace)}</div>
         `;
       }
 
@@ -1207,7 +1263,7 @@ MULTI_REPORT_HTML = """<!doctype html>
       function renderTacticMinutes() {
         const panel = document.getElementById("tacticMinutesPanel");
         panel.innerHTML = (data.tactic_minutes || []).map(group => `
-          <article class="tactic-card">
+          <article class="tactic-card ${group.key}">
             <h3>${group.label}</h3>
             ${group.positions.map(position => `
               <div class="position-block">
@@ -1761,7 +1817,7 @@ MULTI_REPORT_HTML = """<!doctype html>
         </thead>
         <tbody>
           ${data.matches.map(row => `
-            <tr>
+            <tr class="${tacticGroupClass(row.selected_tactics)}">
               <td>${String(row.matchid).match(/^\\d+$/) ? `<button type="button" class="link-btn" data-match-id="${row.matchid}">${row.matchid}</button>` : row.matchid}</td>
               <td>${row.home_team}</td>
               <td>${row.away_team}</td>
