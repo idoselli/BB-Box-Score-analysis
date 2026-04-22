@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 import re
 from typing import Any
+import xml.etree.ElementTree as xml
 
 from flask import Flask, jsonify, render_template_string, request
 
@@ -478,6 +479,13 @@ TEAM_CHOICE_HTML = """<!doctype html>
           <input type="hidden" name="username" value="{{ username }}" />
           <input type="hidden" name="password" value="{{ password }}" />
           <input type="hidden" name="selected_team_key" value="{{ candidate.key }}" />
+          <input type="hidden" name="multi_source" value="{{ multi_source }}" />
+          <input type="hidden" name="national_country_id" value="{{ national_country_id }}" />
+          <input type="hidden" name="national_team_kind" value="{{ national_team_kind }}" />
+          <input type="hidden" name="national_season" value="{{ national_season }}" />
+          {% if include_friendlies %}
+          <input type="hidden" name="include_friendlies" value="1" />
+          {% endif %}
           {% for value in matchids %}
           <input type="hidden" name="matchids" value="{{ value }}" />
           {% endfor %}
@@ -936,10 +944,63 @@ MULTI_REPORT_HTML = """<!doctype html>
       color: var(--muted);
       font-size: 11px;
     }
+    .link-btn {
+      border: 0;
+      background: none;
+      color: var(--accent);
+      padding: 0;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .tactic-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      padding: 12px;
+    }
+    .tactic-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      overflow: hidden;
+    }
+    .tactic-card h3 {
+      margin: 0;
+      padding: 12px;
+      font-size: 16px;
+      border-bottom: 1px solid var(--line);
+      background: #f9fbff;
+    }
+    .position-block {
+      padding: 10px 12px;
+      border-bottom: 1px solid #edf1f5;
+    }
+    .position-block:last-child {
+      border-bottom: 0;
+    }
+    .position-title {
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .minutes-list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .minutes-list span {
+      color: var(--muted);
+      font-size: 12px;
+    }
     @media (max-width: 960px) {
       .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .panel-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .insight-grid { grid-template-columns: 1fr; }
+      .tactic-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -980,6 +1041,11 @@ MULTI_REPORT_HTML = """<!doctype html>
       <div class="table-wrap">
         <table id="matchSummaryTable"></table>
       </div>
+    </section>
+
+    <section class="card">
+      <h2>Tactic Position Minutes</h2>
+      <div id="tacticMinutesPanel" class="tactic-grid"></div>
     </section>
 
     <section class="card">
@@ -1032,6 +1098,25 @@ MULTI_REPORT_HTML = """<!doctype html>
         <table id="defShotsTable"></table>
       </div>
     </section>
+
+    <form id="singleMatchForm" method="post" action="/report" hidden>
+      <input type="hidden" name="mode" value="single" />
+      <input type="hidden" name="username" value="{{ username }}" />
+      <input type="hidden" name="password" value="{{ password }}" />
+      <input type="hidden" name="from_multi" value="1" />
+      <input type="hidden" name="selected_team_key" value="{{ report_json.selected_team_key }}" />
+      <input type="hidden" name="multi_source" value="{{ report_json.return_state.multi_source }}" />
+      <input type="hidden" name="national_country_id" value="{{ report_json.return_state.national_country_id }}" />
+      <input type="hidden" name="national_team_kind" value="{{ report_json.return_state.national_team_kind }}" />
+      <input type="hidden" name="national_season" value="{{ report_json.return_state.national_season }}" />
+      {% if report_json.return_state.include_friendlies %}
+      <input type="hidden" name="include_friendlies" value="1" />
+      {% endif %}
+      {% for value in report_json.input_matchids %}
+      <input type="hidden" name="matchids" value="{{ value }}" />
+      {% endfor %}
+      <input type="hidden" name="matchid" id="singleMatchId" value="" />
+    </form>
 
     <script>
       const data = {{ report_json | tojson }};
@@ -1088,6 +1173,54 @@ MULTI_REPORT_HTML = """<!doctype html>
 
       function offCellHtml(cell) {
         return `${cell.a}/${cell.m}/${cell.mi}/${cell.b}`;
+      }
+
+      function gdpText(part) {
+        if (!part) return "N/A";
+        if (part.value === "N/A" && part.result === "N/A") return "N/A";
+        if (part.result === "N/A") return part.value || "N/A";
+        return `${part.value} (${part.result})`;
+      }
+
+      function tacticSummary(tactics) {
+        if (!tactics) return "-";
+        return `
+          <div><strong>O:</strong> ${tactics.offense_label || tactics.offense || "-"}</div>
+          <div><strong>D:</strong> ${tactics.defense_label || tactics.defense || "-"}</div>
+        `;
+      }
+
+      function gdpSummary(tactics) {
+        const gdp = tactics?.gdp || {};
+        return `
+          <div><strong>Focus:</strong> ${gdpText(gdp.focus)}</div>
+          <div><strong>Pace:</strong> ${gdpText(gdp.pace)}</div>
+        `;
+      }
+
+      function openSingleMatch(matchid) {
+        const form = document.getElementById("singleMatchForm");
+        document.getElementById("singleMatchId").value = matchid;
+        form.submit();
+      }
+
+      function renderTacticMinutes() {
+        const panel = document.getElementById("tacticMinutesPanel");
+        panel.innerHTML = (data.tactic_minutes || []).map(group => `
+          <article class="tactic-card">
+            <h3>${group.label}</h3>
+            ${group.positions.map(position => `
+              <div class="position-block">
+                <div class="position-title">${position.label}</div>
+                ${
+                  position.players.length
+                    ? `<ol class="minutes-list">${position.players.map(player => `<li>${player.name} <span>${player.mins} min</span></li>`).join("")}</ol>`
+                    : `<div class="empty">No minutes</div>`
+                }
+              </div>
+            `).join("")}
+          </article>
+        `).join("");
       }
 
       const MIN_DETECTION_ATTEMPTS = 8;
@@ -1554,23 +1687,32 @@ MULTI_REPORT_HTML = """<!doctype html>
       document.getElementById("matchSummaryTable").innerHTML = `
         <thead>
           <tr>
-            <th>Match ID</th><th>Home Team</th><th>Away Team</th><th>Score</th><th>Detected Team Side</th><th>Result</th><th>Status</th>
+            <th>Match ID</th><th>Home Team</th><th>Away Team</th><th>Score</th><th>Detected Team Side</th><th>Result</th><th>Selected Tactics</th><th>Selected GDP</th><th>Opponent Tactics</th><th>Opponent GDP</th><th>Status</th>
           </tr>
         </thead>
         <tbody>
           ${data.matches.map(row => `
             <tr>
-              <td>${row.matchid}</td>
+              <td>${String(row.matchid).match(/^\\d+$/) ? `<button type="button" class="link-btn" data-match-id="${row.matchid}">${row.matchid}</button>` : row.matchid}</td>
               <td>${row.home_team}</td>
               <td>${row.away_team}</td>
               <td>${row.score}</td>
               <td>${row.detected_side}</td>
               <td>${row.result}</td>
+              <td>${tacticSummary(row.selected_tactics)}</td>
+              <td>${gdpSummary(row.selected_tactics)}</td>
+              <td>${tacticSummary(row.opponent_tactics)}</td>
+              <td>${gdpSummary(row.opponent_tactics)}</td>
               <td>${row.status}</td>
             </tr>
           `).join("")}
         </tbody>
       `;
+      document.querySelectorAll("#matchSummaryTable [data-match-id]").forEach(button => {
+        button.addEventListener("click", () => openSingleMatch(button.dataset.matchId));
+      });
+
+      renderTacticMinutes();
 
       const playerSummary = [...data.player_summary].sort((a, b) => b.fga - a.fga || b.pts - a.pts || a.name.localeCompare(b.name));
       document.getElementById("playerSummaryTable").innerHTML = `
@@ -2236,6 +2378,26 @@ REPORT_HTML = """<!doctype html>
       font-size: 13px;
       font-weight: 600;
     }
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .topbar form {
+      margin: 0;
+    }
+    .topbar button {
+      border: 0;
+      background: none;
+      color: #0d47a1;
+      padding: 0;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
     @media (max-width: 940px) {
       .scoreboard { grid-template-columns: 1fr; }
       .score { order: -1; font-size: 42px; }
@@ -2251,7 +2413,28 @@ REPORT_HTML = """<!doctype html>
   <main class="wrap">
     <div class="topbar">
       <div class="small">Match {{ matchid }} | BBAPI user: {{ username }}</div>
-      <a href="/">Run another report</a>
+      <div class="topbar-actions">
+        {% if from_multi %}
+        <form method="post" action="/report">
+          <input type="hidden" name="mode" value="multi" />
+          <input type="hidden" name="username" value="{{ username }}" />
+          <input type="hidden" name="password" value="{{ password }}" />
+          <input type="hidden" name="selected_team_key" value="{{ selected_team_key }}" />
+          <input type="hidden" name="multi_source" value="{{ multi_source }}" />
+          <input type="hidden" name="national_country_id" value="{{ national_country_id }}" />
+          <input type="hidden" name="national_team_kind" value="{{ national_team_kind }}" />
+          <input type="hidden" name="national_season" value="{{ national_season }}" />
+          {% if include_friendlies %}
+          <input type="hidden" name="include_friendlies" value="1" />
+          {% endif %}
+          {% for value in multi_matchids %}
+          <input type="hidden" name="matchids" value="{{ value }}" />
+          {% endfor %}
+          <button type="submit">Back to Multi Match</button>
+        </form>
+        {% endif %}
+        <a href="/">Run another report</a>
+      </div>
     </div>
 
     <section class="hero">
@@ -4988,6 +5171,95 @@ def shot_range(shot_type: Any) -> str:
     return "paint"
 
 
+TACTIC_LABELS = {
+    "LookInside": "Look inside",
+    "LowPost": "Low post",
+    "Motion": "Motion",
+    "RunAndGun": "Run and gun",
+    "Princeton": "Princeton",
+    "Base": "Base Offense",
+    "Push": "Push the ball",
+    "Patient": "Patient",
+    "InsideIsolation": "inside isolation",
+    "OutsideIsolation": "outside isolation",
+}
+
+TACTIC_GROUPS = {
+    "inside": {"label": "Inside", "tactics": {"LookInside", "LowPost"}},
+    "outside": {"label": "Outside", "tactics": {"Motion", "RunAndGun", "Princeton"}},
+    "balanced": {
+        "label": "Balanced",
+        "tactics": {"Base", "Push", "Patient", "InsideIsolation", "OutsideIsolation"},
+    },
+}
+
+POSITION_SECONDS = [
+    ("pg", "PG", "secs_pg"),
+    ("sg", "SG", "secs_sg"),
+    ("sf", "SF", "secs_sf"),
+    ("pf", "PF", "secs_pf"),
+    ("c", "C", "secs_c"),
+]
+
+
+def tactic_label(code: Any) -> str:
+    cleaned = str(code or "").strip()
+    if not cleaned:
+        return "-"
+    return TACTIC_LABELS.get(cleaned, cleaned)
+
+
+def tactic_group_key(code: Any) -> str | None:
+    cleaned = str(code or "").strip()
+    for key, group in TACTIC_GROUPS.items():
+        if cleaned in group["tactics"]:
+            return key
+    return None
+
+
+def parse_gdp_value(value: str | None) -> dict[str, str]:
+    raw = (value or "N/A").strip() or "N/A"
+    if raw.upper() == "N/A":
+        return {"raw": "N/A", "value": "N/A", "result": "N/A"}
+    if "." not in raw:
+        return {"raw": raw, "value": raw, "result": "N/A"}
+    base, suffix = raw.rsplit(".", 1)
+    result_map = {"hit": "Correct", "miss": "Incorrect"}
+    return {"raw": raw, "value": base or raw, "result": result_map.get(suffix.casefold(), suffix)}
+
+
+def parse_team_tactics(xml_team: xml.Element | None) -> dict[str, Any]:
+    if xml_team is None:
+        return {
+            "offense": "-",
+            "offense_label": "-",
+            "defense": "-",
+            "defense_label": "-",
+            "gdp": {"focus": parse_gdp_value(None), "pace": parse_gdp_value(None)},
+        }
+
+    off_strategy = (xml_team.findtext("./offStrategy") or "-").strip()
+    def_strategy = (xml_team.findtext("./defStrategy") or "-").strip()
+    return {
+        "offense": off_strategy,
+        "offense_label": tactic_label(off_strategy),
+        "defense": def_strategy,
+        "defense_label": tactic_label(def_strategy),
+        "gdp": {
+            "focus": parse_gdp_value(xml_team.findtext("./gdp/focus")),
+            "pace": parse_gdp_value(xml_team.findtext("./gdp/pace")),
+        },
+    }
+
+
+def parse_boxscore_metadata(xml_text: str) -> dict[str, dict[str, Any]]:
+    root = xml.fromstring(xml_text)
+    return {
+        "away": parse_team_tactics(root.find("./match/awayTeam")),
+        "home": parse_team_tactics(root.find("./match/homeTeam")),
+    }
+
+
 def empty_form_context(
     *,
     error: str = "",
@@ -5183,6 +5455,91 @@ def format_score(game_data: dict[str, Any]) -> str:
     return f'{home["stats"]["total"]["pts"]} - {away["stats"]["total"]["pts"]}'
 
 
+def empty_match_tactics() -> dict[str, Any]:
+    return {
+        "offense": "-",
+        "offense_label": "-",
+        "defense": "-",
+        "defense_label": "-",
+        "gdp": {"focus": parse_gdp_value(None), "pace": parse_gdp_value(None)},
+    }
+
+
+def blank_match_row(matchid: str, status: str) -> dict[str, Any]:
+    return {
+        "matchid": matchid,
+        "home_team": "-",
+        "away_team": "-",
+        "score": "-",
+        "detected_side": "-",
+        "result": "-",
+        "status": status,
+        "selected_tactics": empty_match_tactics(),
+        "opponent_tactics": empty_match_tactics(),
+    }
+
+
+def init_tactic_minutes() -> dict[str, Any]:
+    return {
+        key: {
+            "label": group["label"],
+            "positions": {
+                pos_key: {"label": pos_label, "players": {}}
+                for pos_key, pos_label, _ in POSITION_SECONDS
+            },
+        }
+        for key, group in TACTIC_GROUPS.items()
+    }
+
+
+def add_tactic_minutes(
+    tactic_minutes: dict[str, Any],
+    tactic_code: Any,
+    players: list[dict[str, Any]],
+    slot_map: dict[int, tuple[str, str]],
+) -> None:
+    group_key = tactic_group_key(tactic_code)
+    if group_key is None:
+        return
+
+    for idx, player in enumerate(players):
+        if idx not in slot_map:
+            continue
+        player_key, player_label = slot_map[idx]
+        totals = player["stats"]["total"]
+        for pos_key, _, secs_key in POSITION_SECONDS:
+            secs = int(totals.get(secs_key, 0) or 0)
+            if secs <= 0:
+                continue
+            players_by_pos = tactic_minutes[group_key]["positions"][pos_key]["players"]
+            entry = players_by_pos.setdefault(player_key, {"name": player_label, "secs": 0})
+            entry["secs"] += secs
+
+
+def finalize_tactic_minutes(tactic_minutes: dict[str, Any]) -> list[dict[str, Any]]:
+    out = []
+    for group_key in ("inside", "outside", "balanced"):
+        group = tactic_minutes[group_key]
+        positions = []
+        for pos_key, pos_label, _ in POSITION_SECONDS:
+            players = sorted(
+                group["positions"][pos_key]["players"].values(),
+                key=lambda item: (-item["secs"], item["name"].casefold()),
+            )[:3]
+            positions.append(
+                {
+                    "key": pos_key,
+                    "label": pos_label,
+                    "players": [
+                        {"name": item["name"], "mins": secs_to_minutes(item["secs"])}
+                        for item in players
+                    ],
+                }
+            )
+        out.append({"key": group_key, "label": group["label"], "positions": positions})
+    return out
+
+
 def build_team_candidates(games: list[dict[str, Any]]) -> list[dict[str, Any]]:
     counts: dict[str, dict[str, Any]] = {}
     for game_data in games:
@@ -5203,6 +5560,7 @@ def load_game_report(matchid: str, username: str, password: str) -> dict[str, An
 
     # Ensure at least one authenticated BBAPI call succeeds.
     api.boxscore(matchid=int(matchid))
+    boxscore_metadata = parse_boxscore_metadata(api.get_xml_boxscore(matchid=int(matchid)))
 
     # Silence verbose debug prints from parsing/game simulation in web mode.
     with contextlib.redirect_stdout(io.StringIO()):
@@ -5222,6 +5580,8 @@ def load_game_report(matchid: str, username: str, password: str) -> dict[str, An
         game.play()
     report = serialize_game(game)
     report["matchid"] = str(matchid)
+    report["teamHome"]["tactics"] = boxscore_metadata["home"]
+    report["teamAway"]["tactics"] = boxscore_metadata["away"]
     return report
 
 
@@ -5234,43 +5594,29 @@ def aggregate_multi_match_report(
     username: str,
     password: str,
     selected_team_key: str | None = None,
+    *,
+    multi_source: str = "manual",
+    national_country_id: str = "",
+    national_team_kind: str = "nt",
+    national_season: str = "",
+    include_friendlies: bool = False,
 ) -> tuple[str, dict[str, Any] | list[dict[str, Any]]]:
     loaded_games: list[dict[str, Any]] = []
-    initial_rows: list[dict[str, str]] = []
+    initial_rows: list[dict[str, Any]] = []
     warnings: list[str] = []
 
     for matchid in matchids:
         if not matchid.isdigit():
             msg = "Match ID must be numeric."
             warnings.append(f"Match {matchid}: {msg}")
-            initial_rows.append(
-                {
-                    "matchid": matchid,
-                    "home_team": "-",
-                    "away_team": "-",
-                    "score": "-",
-                    "detected_side": "-",
-                    "result": "-",
-                    "status": msg,
-                }
-            )
+            initial_rows.append(blank_match_row(matchid, msg))
             continue
         try:
             game_data = load_game_report(matchid, username, password)
         except Exception as exc:
             msg = f"Skipped: {exc}"
             warnings.append(f"Match {matchid}: {exc}")
-            initial_rows.append(
-                {
-                    "matchid": matchid,
-                    "home_team": "-",
-                    "away_team": "-",
-                    "score": "-",
-                    "detected_side": "-",
-                    "result": "-",
-                    "status": msg,
-                }
-            )
+            initial_rows.append(blank_match_row(matchid, msg))
             continue
 
         loaded_games.append(game_data)
@@ -5305,6 +5651,7 @@ def aggregate_multi_match_report(
     matchup_map: dict[str, dict[str, Any]] = {}
     defense_map: dict[str, dict[str, Any]] = {}
     offense_map: dict[str, dict[str, Any]] = {}
+    tactic_minutes = init_tactic_minutes()
     defended_shot_events: list[dict[str, str]] = []
     match_rows = list(initial_rows)
     team_name = ""
@@ -5349,6 +5696,8 @@ def aggregate_multi_match_report(
                     "detected_side": "-",
                     "result": "-",
                     "status": msg,
+                    "selected_tactics": empty_match_tactics(),
+                    "opponent_tactics": empty_match_tactics(),
                 }
             )
             continue
@@ -5375,10 +5724,18 @@ def aggregate_multi_match_report(
                 "detected_side": "Home" if side == 0 else "Away",
                 "result": result,
                 "status": "Used",
+                "selected_tactics": team_obj.get("tactics", empty_match_tactics()),
+                "opponent_tactics": opp_obj.get("tactics", empty_match_tactics()),
             }
         )
 
         slot_map = canonical_player_names(team_obj["players"], warnings, matchid)
+        add_tactic_minutes(
+            tactic_minutes,
+            team_obj.get("tactics", {}).get("offense"),
+            team_obj["players"],
+            slot_map,
+        )
 
         for idx, player in enumerate(team_obj["players"]):
             if idx not in slot_map:
@@ -5621,6 +5978,16 @@ def aggregate_multi_match_report(
             "losses": losses,
             "warnings": warnings,
             "matches": match_rows,
+            "selected_team_key": selected_team_key,
+            "input_matchids": matchids,
+            "return_state": {
+                "multi_source": multi_source,
+                "national_country_id": national_country_id,
+                "national_team_kind": national_team_kind,
+                "national_season": national_season,
+                "include_friendlies": include_friendlies,
+            },
+            "tactic_minutes": finalize_tactic_minutes(tactic_minutes),
             "player_summary": player_summary,
             "matchup": matchup_rows,
             "defense": defense_rows,
@@ -5713,6 +6080,7 @@ def report() -> tuple[str, int] | str:
     national_team_kind = request.form.get("national_team_kind", "nt").strip() or "nt"
     national_season = request.form.get("national_season", "").strip()
     include_friendlies = request.form.get("include_friendlies") == "1"
+    from_multi = request.form.get("from_multi") == "1"
 
     def form_error(message: str, status_code: int, *, keep_password: bool = True) -> tuple[str, int]:
         return form_error_response(
@@ -5759,6 +6127,11 @@ def report() -> tuple[str, int] | str:
             username,
             password,
             selected_team_key=selected_team_key,
+            multi_source=multi_source,
+            national_country_id=national_country_id,
+            national_team_kind=national_team_kind,
+            national_season=national_season,
+            include_friendlies=include_friendlies,
         )
 
         if status == "choose_team":
@@ -5768,6 +6141,11 @@ def report() -> tuple[str, int] | str:
                 password=password,
                 matchids=multi_matchids,
                 candidates=payload,
+                multi_source=multi_source,
+                national_country_id=national_country_id,
+                national_team_kind=national_team_kind,
+                national_season=national_season,
+                include_friendlies=include_friendlies,
             )
 
         if status == "error":
@@ -5781,6 +6159,7 @@ def report() -> tuple[str, int] | str:
             MULTI_REPORT_HTML,
             report_json=payload,
             username=username,
+            password=password,
         )
 
     if not matchid:
@@ -5808,6 +6187,15 @@ def report() -> tuple[str, int] | str:
         report_json=report_json,
         matchid=matchid,
         username=username,
+        password=password,
+        from_multi=from_multi,
+        multi_matchids=multi_matchids,
+        selected_team_key=selected_team_key or "",
+        multi_source=multi_source,
+        national_country_id=national_country_id,
+        national_team_kind=national_team_kind,
+        national_season=national_season,
+        include_friendlies=include_friendlies,
         court_image_url=get_court_image_data_url(),
     )
 
