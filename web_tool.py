@@ -1234,6 +1234,11 @@ MULTI_REPORT_HTML = """<!doctype html>
       ];
       let detectionRows = [];
       let detectionSort = { key: "score", dir: "desc" };
+      const tableSorts = {
+        playerSummary: { key: "fga", dir: "desc" },
+        matchup: { key: "total_attempts", dir: "desc" },
+        defense: { key: "total_attempts", dir: "desc" }
+      };
 
       function shotStatRatio(stat) {
         return stat && stat.a ? stat.m / stat.a : null;
@@ -1292,6 +1297,70 @@ MULTI_REPORT_HTML = """<!doctype html>
       function pushDetection(rows, item) {
         if (!Number.isFinite(item.score) || item.score <= 0) return;
         rows.push(item);
+      }
+
+      function statRatio(stat) {
+        return stat && stat.a ? stat.m / stat.a : -1;
+      }
+
+      function defenseRatio(stat) {
+        return stat && stat.a ? (stat.a - stat.m) / stat.a : -1;
+      }
+
+      function compareNumbers(av, bv, dir) {
+        return ((Number(av) || 0) - (Number(bv) || 0)) * dir;
+      }
+
+      function compareStats(a, b, column, dir) {
+        const av = column.get(a);
+        const bv = column.get(b);
+        if (column.type === "text") {
+          return String(av || "").localeCompare(String(bv || ""), undefined, { sensitivity: "base" }) * dir;
+        }
+        if (column.type === "shot") {
+          return (
+            (statRatio(av) - statRatio(bv)) * dir ||
+            compareNumbers(av?.a, bv?.a, dir) ||
+            compareNumbers(av?.m, bv?.m, dir)
+          );
+        }
+        if (column.type === "defense") {
+          return (
+            (defenseRatio(av) - defenseRatio(bv)) * dir ||
+            compareNumbers(av?.a, bv?.a, dir) ||
+            compareNumbers((av?.a || 0) - (av?.m || 0), (bv?.a || 0) - (bv?.m || 0), dir)
+          );
+        }
+        return compareNumbers(av, bv, dir);
+      }
+
+      function sortRows(rows, columns, sortState) {
+        const column = columns.find(item => item.key === sortState.key) || columns[0];
+        const dir = sortState.dir === "asc" ? 1 : -1;
+        return [...rows].sort((a, b) => (
+          compareStats(a, b, column, dir) ||
+          String(a.name || "").localeCompare(String(b.name || ""), undefined, { sensitivity: "base" })
+        ));
+      }
+
+      function sortableHeader(column, sortState) {
+        const active = sortState.key === column.key;
+        return `
+          <th class="sortable-th" data-sort-key="${column.key}" aria-sort="${active ? (sortState.dir === "asc" ? "ascending" : "descending") : "none"}">
+            ${column.label}<span class="sort-indicator">${active ? (sortState.dir === "asc" ? "^" : "v") : ""}</span>
+          </th>
+        `;
+      }
+
+      function attachSortHandlers(table, sortState, renderFn) {
+        table.querySelectorAll("th[data-sort-key]").forEach(th => {
+          th.addEventListener("click", () => {
+            const key = th.dataset.sortKey;
+            sortState.dir = sortState.key === key && sortState.dir === "desc" ? "asc" : "desc";
+            sortState.key = key;
+            renderFn();
+          });
+        });
       }
 
       function buildDetections() {
@@ -1714,81 +1783,127 @@ MULTI_REPORT_HTML = """<!doctype html>
 
       renderTacticMinutes();
 
-      const playerSummary = [...data.player_summary].sort((a, b) => b.fga - a.fga || b.pts - a.pts || a.name.localeCompare(b.name));
-      document.getElementById("playerSummaryTable").innerHTML = `
-        <thead>
-          <tr>
-            <th>Player</th><th>GP</th><th>MIN</th><th>PTS</th><th>FG</th><th>3PT</th><th>FT</th><th>REB</th><th>AST</th><th>TO</th><th>STL</th><th>BLK</th><th>PF</th><th>+/-</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${playerSummary.map(row => `
-            <tr>
-              <td>${row.name}</td>
-              <td>${row.gp}</td>
-              <td>${row.mins}</td>
-              <td>${row.pts}</td>
-              <td>${row.fgm}/${row.fga}</td>
-              <td>${row.tpm}/${row.tpa}</td>
-              <td>${row.ftm}/${row.fta}</td>
-              <td>${row.tr}</td>
-              <td>${row.ast}</td>
-              <td>${row.to}</td>
-              <td>${row.stl}</td>
-              <td>${row.blk}</td>
-              <td>${row.pf}</td>
-              <td>${row.pm}</td>
-            </tr>
-          `).join("")}
-        </tbody>
-      `;
+      const playerSummaryColumns = [
+        { key: "name", label: "Player", type: "text", get: row => row.name },
+        { key: "gp", label: "GP", type: "number", get: row => row.gp },
+        { key: "mins", label: "MIN", type: "number", get: row => row.mins },
+        { key: "pts", label: "PTS", type: "number", get: row => row.pts },
+        { key: "fga", label: "FG", type: "shot", get: row => ({ m: row.fgm, a: row.fga }) },
+        { key: "tpa", label: "3PT", type: "shot", get: row => ({ m: row.tpm, a: row.tpa }) },
+        { key: "fta", label: "FT", type: "shot", get: row => ({ m: row.ftm, a: row.fta }) },
+        { key: "tr", label: "REB", type: "number", get: row => row.tr },
+        { key: "ast", label: "AST", type: "number", get: row => row.ast },
+        { key: "to", label: "TO", type: "number", get: row => row.to },
+        { key: "stl", label: "STL", type: "number", get: row => row.stl },
+        { key: "blk", label: "BLK", type: "number", get: row => row.blk },
+        { key: "pf", label: "PF", type: "number", get: row => row.pf },
+        { key: "pm", label: "+/-", type: "number", get: row => row.pm }
+      ];
 
-      const matchupRows = [...data.matchup].sort((a, b) => b.total_attempts - a.total_attempts || a.name.localeCompare(b.name));
-      document.getElementById("playerMatchupTable").innerHTML = `
-        <thead>
-          <tr>
-            <th>Player</th><th>With Defense</th><th>Open Close</th><th>Open Mid</th><th>Open 3PT</th><th>Open Total</th><th>Team FG On</th><th>Team FG Off</th><th>Pass Received</th><th>No Pass</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${matchupRows.map(row => `
-            <tr>
-              <td>${row.name}</td>
-              <td>${shotStatHtml(row.defended)}</td>
-              <td>${shotStatHtml(row.openClose)}</td>
-              <td>${shotStatHtml(row.openMid)}</td>
-              <td>${shotStatHtml(row.openThree)}</td>
-              <td>${shotStatHtml(row.openTotal)}</td>
-              <td>${shotStatHtml(row.teamOn)}</td>
-              <td>${shotStatHtml(row.teamOff)}</td>
-              <td>${shotStatHtml(row.withPass)}</td>
-              <td>${shotStatHtml(row.withoutPass)}</td>
-            </tr>
-          `).join("")}
-        </tbody>
-      `;
+      const matchupColumns = [
+        { key: "name", label: "Player", type: "text", get: row => row.name },
+        { key: "defended", label: "With Defense", type: "shot", get: row => row.defended },
+        { key: "openClose", label: "Open Close", type: "shot", get: row => row.openClose },
+        { key: "openMid", label: "Open Mid", type: "shot", get: row => row.openMid },
+        { key: "openThree", label: "Open 3PT", type: "shot", get: row => row.openThree },
+        { key: "openTotal", label: "Open Total", type: "shot", get: row => row.openTotal },
+        { key: "teamOn", label: "Team FG On", type: "shot", get: row => row.teamOn },
+        { key: "teamOff", label: "Team FG Off", type: "shot", get: row => row.teamOff },
+        { key: "withPass", label: "Pass Received", type: "shot", get: row => row.withPass },
+        { key: "withoutPass", label: "No Pass", type: "shot", get: row => row.withoutPass },
+        { key: "total_attempts", label: "Attempts", type: "number", get: row => row.total_attempts }
+      ];
 
-      const defenseRows = [...data.defense].sort((a, b) => b.total_attempts - a.total_attempts || a.name.localeCompare(b.name));
-      document.getElementById("playerDefenseTable").innerHTML = `
-        <thead>
-          <tr>
-            <th>Player</th><th>Team Def On</th><th>Team Def Off</th><th>Defended Total</th><th>Defended Close</th><th>Defended Mid</th><th>Defended 3PT</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${defenseRows.map(row => `
-            <tr>
-              <td>${row.name}</td>
-              <td>${defensePctHtml(row.teamDefOn)}</td>
-              <td>${defensePctHtml(row.teamDefOff)}</td>
-              <td>${defenseStatHtml(row.defendedTotal)}</td>
-              <td>${defenseStatHtml(row.defendedClose)}</td>
-              <td>${defenseStatHtml(row.defendedMid)}</td>
-              <td>${defenseStatHtml(row.defendedThree)}</td>
-            </tr>
-          `).join("")}
-        </tbody>
-      `;
+      const defenseColumns = [
+        { key: "name", label: "Player", type: "text", get: row => row.name },
+        { key: "teamDefOn", label: "Team Def On", type: "defense", get: row => row.teamDefOn },
+        { key: "teamDefOff", label: "Team Def Off", type: "defense", get: row => row.teamDefOff },
+        { key: "defendedTotal", label: "Defended Total", type: "defense", get: row => row.defendedTotal },
+        { key: "defendedClose", label: "Defended Close", type: "defense", get: row => row.defendedClose },
+        { key: "defendedMid", label: "Defended Mid", type: "defense", get: row => row.defendedMid },
+        { key: "defendedThree", label: "Defended 3PT", type: "defense", get: row => row.defendedThree },
+        { key: "total_attempts", label: "Attempts", type: "number", get: row => row.total_attempts }
+      ];
+
+      function renderPlayerSummaryTable() {
+        const table = document.getElementById("playerSummaryTable");
+        const rows = sortRows(data.player_summary || [], playerSummaryColumns, tableSorts.playerSummary);
+        table.innerHTML = `
+          <thead><tr>${playerSummaryColumns.map(column => sortableHeader(column, tableSorts.playerSummary)).join("")}</tr></thead>
+          <tbody>
+            ${rows.map(row => `
+              <tr>
+                <td>${row.name}</td>
+                <td>${row.gp}</td>
+                <td>${row.mins}</td>
+                <td>${row.pts}</td>
+                <td>${row.fgm}/${row.fga}</td>
+                <td>${row.tpm}/${row.tpa}</td>
+                <td>${row.ftm}/${row.fta}</td>
+                <td>${row.tr}</td>
+                <td>${row.ast}</td>
+                <td>${row.to}</td>
+                <td>${row.stl}</td>
+                <td>${row.blk}</td>
+                <td>${row.pf}</td>
+                <td>${row.pm}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        `;
+        attachSortHandlers(table, tableSorts.playerSummary, renderPlayerSummaryTable);
+      }
+
+      function renderPlayerMatchupTable() {
+        const table = document.getElementById("playerMatchupTable");
+        const rows = sortRows(data.matchup || [], matchupColumns, tableSorts.matchup);
+        table.innerHTML = `
+          <thead><tr>${matchupColumns.filter(column => column.key !== "total_attempts").map(column => sortableHeader(column, tableSorts.matchup)).join("")}</tr></thead>
+          <tbody>
+            ${rows.map(row => `
+              <tr>
+                <td>${row.name}</td>
+                <td>${shotStatHtml(row.defended)}</td>
+                <td>${shotStatHtml(row.openClose)}</td>
+                <td>${shotStatHtml(row.openMid)}</td>
+                <td>${shotStatHtml(row.openThree)}</td>
+                <td>${shotStatHtml(row.openTotal)}</td>
+                <td>${shotStatHtml(row.teamOn)}</td>
+                <td>${shotStatHtml(row.teamOff)}</td>
+                <td>${shotStatHtml(row.withPass)}</td>
+                <td>${shotStatHtml(row.withoutPass)}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        `;
+        attachSortHandlers(table, tableSorts.matchup, renderPlayerMatchupTable);
+      }
+
+      function renderPlayerDefenseTable() {
+        const table = document.getElementById("playerDefenseTable");
+        const rows = sortRows(data.defense || [], defenseColumns, tableSorts.defense);
+        table.innerHTML = `
+          <thead><tr>${defenseColumns.filter(column => column.key !== "total_attempts").map(column => sortableHeader(column, tableSorts.defense)).join("")}</tr></thead>
+          <tbody>
+            ${rows.map(row => `
+              <tr>
+                <td>${row.name}</td>
+                <td>${defensePctHtml(row.teamDefOn)}</td>
+                <td>${defensePctHtml(row.teamDefOff)}</td>
+                <td>${defenseStatHtml(row.defendedTotal)}</td>
+                <td>${defenseStatHtml(row.defendedClose)}</td>
+                <td>${defenseStatHtml(row.defendedMid)}</td>
+                <td>${defenseStatHtml(row.defendedThree)}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        `;
+        attachSortHandlers(table, tableSorts.defense, renderPlayerDefenseTable);
+      }
+
+      renderPlayerSummaryTable();
+      renderPlayerMatchupTable();
+      renderPlayerDefenseTable();
 
       renderDetections();
 
