@@ -276,6 +276,37 @@ class BBApi:
 
         return match_ids
 
+    def schedule_matches(self, team_id, season) -> list[dict[str, str]]:
+        data = self.get_xml_schedule(team_id, season)
+
+        root = xml.fromstring(data)
+        matches = root.findall("./schedule/match")
+        rows: list[dict[str, str]] = []
+
+        for match in matches:
+            match_id = match.attrib.get("id", "")
+            if not match_id:
+                continue
+
+            away = match.find("./awayTeam")
+            home = match.find("./homeTeam")
+            away_score = away.findtext("./score", "") if away is not None else ""
+            home_score = home.findtext("./score", "") if home is not None else ""
+
+            rows.append(
+                {
+                    "id": match_id,
+                    "start": match.attrib.get("start", ""),
+                    "type": match.attrib.get("type", ""),
+                    "away_team": away.findtext("./teamName", "") if away is not None else "",
+                    "home_team": home.findtext("./teamName", "") if home is not None else "",
+                    "away_score": away_score.strip() if away_score else "",
+                    "home_score": home_score.strip() if home_score else "",
+                }
+            )
+
+        return rows
+
     def countries(self) -> list[dict[str, str]]:
         data = self.get_xml_countries()
         root = xml.fromstring(data)

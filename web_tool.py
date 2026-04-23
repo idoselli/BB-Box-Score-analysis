@@ -28,7 +28,7 @@ FORM_HTML = """<!doctype html>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BBInsider Web Tool</title>
+  <title>Box Score Analysis Web Tool</title>
   <style>
     :root {
       --bg: #f6f8fb;
@@ -194,7 +194,7 @@ FORM_HTML = """<!doctype html>
 <body>
   <main class="wrap">
     <section class="card">
-      <h1>BBInsider Match Report</h1>
+      <h1>Box Score Analysis</h1>
       <p>Enter your BBAPI credentials and a match ID to generate a full report.</p>
       {% if error %}
       <div class="err">{{ error }}</div>
@@ -221,7 +221,7 @@ FORM_HTML = """<!doctype html>
         </section>
 
         <section id="multiPanel" class="mode-panel">
-          <div class="small">Add match IDs manually, or pull them from a national team schedule.</div>
+          <div class="small">Add match IDs manually, pull them from a national team schedule, or load a team schedule.</div>
           <input type="hidden" name="multi_source" id="multiSourceInput" value="{{ multi_source }}" />
           <div class="multi-source">
             <label class="choice-row">
@@ -271,6 +271,40 @@ FORM_HTML = """<!doctype html>
               </div>
               <div class="hint" id="nationalOptionsStatus">Use the button after entering credentials.</div>
             </div>
+            <label class="choice-row">
+              <input type="radio" name="multi_source_choice" value="team" />
+              Team schedule
+            </label>
+            <div id="teamSchedulePanel" class="source-panel">
+              <div class="auto-grid">
+                <label>Team ID
+                  <input name="team_schedule_team_id" value="{{ team_schedule_team_id }}" />
+                </label>
+                <label>Season
+                  <select name="team_schedule_season" id="teamScheduleSeasonSelect" data-selected="{{ team_schedule_season }}">
+                    <option value="">Current season</option>
+                  </select>
+                </label>
+                <label>Games
+                  <select name="team_schedule_limit" id="teamScheduleLimit">
+                    <option value="5"{% if team_schedule_limit == "5" %} selected{% endif %}>Last 5</option>
+                    <option value="10"{% if team_schedule_limit == "10" %} selected{% endif %}>Last 10</option>
+                    <option value="15"{% if team_schedule_limit == "15" %} selected{% endif %}>Last 15</option>
+                    <option value="20"{% if team_schedule_limit == "20" %} selected{% endif %}>Last 20</option>
+                    <option value="all"{% if team_schedule_limit == "all" %} selected{% endif %}>All</option>
+                  </select>
+                </label>
+              </div>
+              <div class="auto-grid">
+                {% for option in team_schedule_type_options %}
+                <label class="inline-check">
+                  <input type="checkbox" name="team_schedule_types" value="{{ option.value }}"{% if option.value in team_schedule_types %} checked{% endif %} />
+                  {{ option.label }}
+                </label>
+                {% endfor %}
+              </div>
+              <div class="hint">Only completed games from the selected season are used; if fewer games exist, fewer will be loaded.</div>
+            </div>
           </div>
         </section>
 
@@ -300,9 +334,11 @@ FORM_HTML = """<!doctype html>
     const sourceChoices = [...document.querySelectorAll("input[name='multi_source_choice']")];
     const manualMatchPanel = document.getElementById("manualMatchPanel");
     const nationalMatchPanel = document.getElementById("nationalMatchPanel");
+    const teamSchedulePanel = document.getElementById("teamSchedulePanel");
     const loadNationalOptionsBtn = document.getElementById("loadNationalOptionsBtn");
     const nationalCountrySelect = document.getElementById("nationalCountrySelect");
     const nationalSeasonSelect = document.getElementById("nationalSeasonSelect");
+    const teamScheduleSeasonSelect = document.getElementById("teamScheduleSeasonSelect");
     const nationalOptionsStatus = document.getElementById("nationalOptionsStatus");
     const localNationalOptions = {{ national_options | tojson }};
 
@@ -335,6 +371,7 @@ FORM_HTML = """<!doctype html>
       });
       manualMatchPanel.classList.toggle("active", source === "manual");
       nationalMatchPanel.classList.toggle("active", source === "national");
+      teamSchedulePanel.classList.toggle("active", source === "team");
     }
 
     sourceChoices.forEach(choice => {
@@ -374,6 +411,7 @@ FORM_HTML = """<!doctype html>
     function loadOptionsIntoForm(payload, statusText) {
       fillSelect(nationalCountrySelect, payload.countries || [], nationalCountrySelect.dataset.selected, "Select a team");
       fillSelect(nationalSeasonSelect, payload.seasons || [], nationalSeasonSelect.dataset.selected, "Current season");
+      fillSelect(teamScheduleSeasonSelect, payload.seasons || [], teamScheduleSeasonSelect.dataset.selected, "Current season");
       nationalOptionsStatus.textContent = statusText;
     }
 
@@ -483,6 +521,12 @@ TEAM_CHOICE_HTML = """<!doctype html>
           <input type="hidden" name="national_country_id" value="{{ national_country_id }}" />
           <input type="hidden" name="national_team_kind" value="{{ national_team_kind }}" />
           <input type="hidden" name="national_season" value="{{ national_season }}" />
+          <input type="hidden" name="team_schedule_team_id" value="{{ team_schedule_team_id }}" />
+          <input type="hidden" name="team_schedule_season" value="{{ team_schedule_season }}" />
+          <input type="hidden" name="team_schedule_limit" value="{{ team_schedule_limit }}" />
+          {% for value in team_schedule_types %}
+          <input type="hidden" name="team_schedule_types" value="{{ value }}" />
+          {% endfor %}
           {% if include_friendlies %}
           <input type="hidden" name="include_friendlies" value="1" />
           {% endif %}
@@ -506,7 +550,7 @@ MULTI_REPORT_HTML = """<!doctype html>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BBInsider Multi Match Aggregate</title>
+  <title>Box Score Analysis Multi Match Aggregate</title>
   <style>
     :root {
       --bg: #f7f7f2;
@@ -986,6 +1030,22 @@ MULTI_REPORT_HTML = """<!doctype html>
       background: #fee2e2;
       border-color: #fca5a5;
     }
+    .effort-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 22px;
+      max-width: 240px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      color: #0f172a;
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      font-weight: 900;
+      letter-spacing: 0;
+      white-space: nowrap;
+      cursor: help;
+    }
     .tactic-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1147,6 +1207,12 @@ MULTI_REPORT_HTML = """<!doctype html>
       <input type="hidden" name="national_country_id" value="{{ report_json.return_state.national_country_id }}" />
       <input type="hidden" name="national_team_kind" value="{{ report_json.return_state.national_team_kind }}" />
       <input type="hidden" name="national_season" value="{{ report_json.return_state.national_season }}" />
+      <input type="hidden" name="team_schedule_team_id" value="{{ report_json.return_state.team_schedule_team_id }}" />
+      <input type="hidden" name="team_schedule_season" value="{{ report_json.return_state.team_schedule_season }}" />
+      <input type="hidden" name="team_schedule_limit" value="{{ report_json.return_state.team_schedule_limit }}" />
+      {% for value in report_json.return_state.team_schedule_types %}
+      <input type="hidden" name="team_schedule_types" value="{{ value }}" />
+      {% endfor %}
       {% if report_json.return_state.include_friendlies %}
       <input type="hidden" name="include_friendlies" value="1" />
       {% endif %}
@@ -1252,6 +1318,14 @@ MULTI_REPORT_HTML = """<!doctype html>
           <div class="gdp-line"><strong>Focus:</strong> ${gdpPartHtml(gdp.focus)}</div>
           <div class="gdp-line"><strong>Pace:</strong> ${gdpPartHtml(gdp.pace)}</div>
         `;
+      }
+
+      function effortMark(row) {
+        const display = row.effort_display || {};
+        const stronger = display.stronger || "-";
+        const other = display.other || "-";
+        const symbol = display.symbol || "==";
+        return `<span class="effort-mark" title="${row.effort || ""}">${stronger} ${symbol} ${other}</span>`;
       }
 
       function openSingleMatch(matchid) {
@@ -1812,7 +1886,7 @@ MULTI_REPORT_HTML = """<!doctype html>
       document.getElementById("matchSummaryTable").innerHTML = `
         <thead>
           <tr>
-            <th>Match ID</th><th>Home Team</th><th>Away Team</th><th>Score</th><th>Detected Team Side</th><th>Result</th><th>Selected Tactics</th><th>Selected GDP</th><th>Opponent Tactics</th><th>Opponent GDP</th><th>Status</th>
+            <th>Match ID</th><th>Home Team</th><th>Away Team</th><th>Score</th><th>Detected Team Side</th><th>Result</th><th>Selected Tactics</th><th>Selected GDP</th><th>Opponent Tactics</th><th>Opponent GDP</th><th>Status</th><th>Effort</th>
           </tr>
         </thead>
         <tbody>
@@ -1829,6 +1903,7 @@ MULTI_REPORT_HTML = """<!doctype html>
               <td>${tacticSummary(row.opponent_tactics)}</td>
               <td>${gdpSummary(row.opponent_tactics)}</td>
               <td>${row.status}</td>
+              <td>${effortMark(row)}</td>
             </tr>
           `).join("")}
         </tbody>
@@ -2056,7 +2131,7 @@ REPORT_HTML = """<!doctype html>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BBInsider Match {{ matchid }}</title>
+  <title>Box Score Analysis Match {{ matchid }}</title>
   <style>
     :root {
       --bg: #f7f7f2;
@@ -2595,6 +2670,12 @@ REPORT_HTML = """<!doctype html>
           <input type="hidden" name="national_country_id" value="{{ national_country_id }}" />
           <input type="hidden" name="national_team_kind" value="{{ national_team_kind }}" />
           <input type="hidden" name="national_season" value="{{ national_season }}" />
+          <input type="hidden" name="team_schedule_team_id" value="{{ team_schedule_team_id }}" />
+          <input type="hidden" name="team_schedule_season" value="{{ team_schedule_season }}" />
+          <input type="hidden" name="team_schedule_limit" value="{{ team_schedule_limit }}" />
+          {% for value in team_schedule_types %}
+          <input type="hidden" name="team_schedule_types" value="{{ value }}" />
+          {% endfor %}
           {% if include_friendlies %}
           <input type="hidden" name="include_friendlies" value="1" />
           {% endif %}
@@ -4015,7 +4096,7 @@ ANIMATION_REPORT_HTML = """<!doctype html>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BBInsider Animation {{ matchid }}</title>
+  <title>Box Score Analysis Animation {{ matchid }}</title>
   <style>
     :root {
       --bg: #f4f7f8;
@@ -5372,6 +5453,19 @@ POSITION_SECONDS = [
     ("c", "C", "secs_c"),
 ]
 
+TEAM_SCHEDULE_TYPE_OPTIONS = [
+    {"value": "league", "label": "League"},
+    {"value": "cup", "label": "Cup"},
+    {"value": "bbm", "label": "BBM"},
+    {"value": "pl", "label": "Private league"},
+    {"value": "friendly", "label": "Friendly"},
+    {"value": "nt", "label": "National team"},
+    {"value": "bbb", "label": "BBB"},
+    {"value": "unknown", "label": "Unknown"},
+]
+
+DEFAULT_TEAM_SCHEDULE_TYPES = [option["value"] for option in TEAM_SCHEDULE_TYPE_OPTIONS]
+
 
 def tactic_label(code: Any) -> str:
     cleaned = str(code or "").strip()
@@ -5406,6 +5500,7 @@ def parse_team_tactics(xml_team: xml.Element | None) -> dict[str, Any]:
             "offense_label": "-",
             "defense": "-",
             "defense_label": "-",
+            "effort": "",
             "gdp": {"focus": parse_gdp_value(None), "pace": parse_gdp_value(None)},
         }
 
@@ -5416,6 +5511,7 @@ def parse_team_tactics(xml_team: xml.Element | None) -> dict[str, Any]:
         "offense_label": tactic_label(off_strategy),
         "defense": def_strategy,
         "defense_label": tactic_label(def_strategy),
+        "effort": (xml_team.findtext("./effort") or "").strip(),
         "gdp": {
             "focus": parse_gdp_value(xml_team.findtext("./gdp/focus")),
             "pace": parse_gdp_value(xml_team.findtext("./gdp/pace")),
@@ -5423,11 +5519,82 @@ def parse_team_tactics(xml_team: xml.Element | None) -> dict[str, Any]:
     }
 
 
-def parse_boxscore_metadata(xml_text: str) -> dict[str, dict[str, Any]]:
+def parse_int(value: str | None, default: int = 0) -> int:
+    try:
+        return int(str(value or "").strip())
+    except ValueError:
+        return default
+
+
+def effort_summary(delta: int, away_name: str, home_name: str, away_effort: str = "", home_effort: str = "") -> str:
+    # BBAPI appears to expose effortDelta as home effort minus away effort.
+    if delta > 0:
+        stronger = home_name
+        other = away_name
+        visible_effort = home_effort
+    elif delta < 0:
+        stronger = away_name
+        other = home_name
+        visible_effort = away_effort
+    else:
+        if away_effort and home_effort and away_effort == home_effort:
+            detail = f" Effort: {away_effort}"
+        else:
+            details = []
+            if away_effort:
+                details.append(f"{away_name}: {away_effort}")
+            if home_effort:
+                details.append(f"{home_name}: {home_effort}")
+            detail = f" Effort: {', '.join(details)}" if details else ""
+        return f"Both teams put similar effort into this game.{detail}"
+
+    if abs(delta) >= 2:
+        sentence = f"{stronger} looked like the only team trying out there"
+    else:
+        sentence = f"{stronger} put more into this game than {other}"
+    if visible_effort:
+        sentence = f"{sentence}. Effort: {visible_effort}"
+    return sentence
+
+
+def effort_display(delta: int, away_name: str, home_name: str) -> dict[str, str]:
+    if delta > 0:
+        return {
+            "stronger": home_name,
+            "other": away_name,
+            "symbol": ">>" if abs(delta) >= 2 else ">",
+        }
+    if delta < 0:
+        return {
+            "stronger": away_name,
+            "other": home_name,
+            "symbol": ">>" if abs(delta) >= 2 else ">",
+        }
+    return {"stronger": home_name, "other": away_name, "symbol": "=="}
+
+
+def parse_boxscore_metadata(xml_text: str) -> dict[str, Any]:
     root = xml.fromstring(xml_text)
+    match = root.find("./match")
+    away = root.find("./match/awayTeam")
+    home = root.find("./match/homeTeam")
+    away_tactics = parse_team_tactics(away)
+    home_tactics = parse_team_tactics(home)
+    delta = parse_int(match.findtext("./effortDelta") if match is not None else None)
+    away_name = away.findtext("./teamName", "Away") if away is not None else "Away"
+    home_name = home.findtext("./teamName", "Home") if home is not None else "Home"
     return {
-        "away": parse_team_tactics(root.find("./match/awayTeam")),
-        "home": parse_team_tactics(root.find("./match/homeTeam")),
+        "away": away_tactics,
+        "home": home_tactics,
+        "effort_delta": delta,
+        "effort_display": effort_display(delta, away_name, home_name),
+        "effort_summary": effort_summary(
+            delta,
+            away_name,
+            home_name,
+            away_tactics.get("effort", ""),
+            home_tactics.get("effort", ""),
+        ),
     }
 
 
@@ -5437,13 +5604,17 @@ def empty_form_context(
     username: str = "",
     password: str = "",
     matchid: str = "138595249",
-    mode: str = "single",
+    mode: str = "multi",
     multi_matchids: list[str] | None = None,
-    multi_source: str = "manual",
+    multi_source: str = "national",
     national_country_id: str = "",
     national_team_kind: str = "nt",
     national_season: str = "",
     include_friendlies: bool = False,
+    team_schedule_team_id: str = "",
+    team_schedule_season: str = "",
+    team_schedule_limit: str = "10",
+    team_schedule_types: list[str] | None = None,
 ) -> dict[str, Any]:
     vals = list(multi_matchids or [])
     while len(vals) < 2:
@@ -5460,6 +5631,11 @@ def empty_form_context(
         "national_team_kind": national_team_kind,
         "national_season": national_season,
         "include_friendlies": include_friendlies,
+        "team_schedule_team_id": team_schedule_team_id,
+        "team_schedule_season": team_schedule_season,
+        "team_schedule_limit": team_schedule_limit,
+        "team_schedule_types": list(team_schedule_types or DEFAULT_TEAM_SCHEDULE_TYPES),
+        "team_schedule_type_options": TEAM_SCHEDULE_TYPE_OPTIONS,
         "national_options": load_local_national_options(),
     }
 
@@ -5590,6 +5766,70 @@ def fetch_national_matchids(
     )
 
 
+def schedule_type_category(match_type: str) -> str:
+    value = match_type.casefold()
+    if value.startswith("league."):
+        return "league"
+    if value.startswith("cup"):
+        return "cup"
+    if value.startswith("bbm"):
+        return "bbm"
+    if value.startswith("pl."):
+        return "pl"
+    if value == "friendly" or value.startswith("friendly."):
+        return "friendly"
+    if value.startswith("nt."):
+        return "nt"
+    if value.startswith("bbb"):
+        return "bbb"
+    return "unknown"
+
+
+def schedule_match_completed(row: dict[str, str]) -> bool:
+    return bool(row.get("id")) and row.get("away_score", "").isdigit() and row.get("home_score", "").isdigit()
+
+
+def fetch_team_schedule_matchids(
+    username: str,
+    password: str,
+    team_id: str,
+    season: str,
+    limit: str,
+    selected_types: list[str],
+) -> tuple[list[str], list[str]]:
+    if not team_id.isdigit():
+        raise ValueError("Team ID must be numeric.")
+
+    api = BBApi(username, password)
+    if not getattr(api, "logged_in", False):
+        raise ValueError("BBAPI login failed. Check username/password.")
+
+    selected_season = season
+    if not selected_season:
+        selected_season = current_season_from_options(api.seasons())
+    if not selected_season:
+        raise ValueError("Could not detect the current BB season.")
+
+    selected_type_set = set(selected_types or DEFAULT_TEAM_SCHEDULE_TYPES)
+    rows = [
+        row
+        for row in api.schedule_matches(team_id, selected_season)
+        if schedule_match_completed(row) and schedule_type_category(row.get("type", "")) in selected_type_set
+    ]
+    rows.sort(key=lambda row: row.get("start", ""), reverse=True)
+
+    warnings: list[str] = [
+        f"Team schedule source: only completed games from season {selected_season} were considered."
+    ]
+    if limit != "all":
+        requested = int(limit) if limit.isdigit() else 10
+        if len(rows) < requested:
+            warnings.append(f"Team schedule source: found {len(rows)} completed matching games, fewer than the requested {requested}.")
+        rows = rows[:requested]
+
+    return [row["id"] for row in rows], warnings
+
+
 def game_team_entry(game_data: dict[str, Any], selected_team_key: str) -> tuple[int, dict[str, Any]] | None:
     home = game_data["teamHome"]
     away = game_data["teamAway"]
@@ -5632,6 +5872,7 @@ def empty_match_tactics() -> dict[str, Any]:
         "offense_label": "-",
         "defense": "-",
         "defense_label": "-",
+        "effort": "",
         "gdp": {"focus": parse_gdp_value(None), "pace": parse_gdp_value(None)},
     }
 
@@ -5645,6 +5886,9 @@ def blank_match_row(matchid: str, status: str) -> dict[str, Any]:
         "detected_side": "-",
         "result": "-",
         "status": status,
+        "effort": "-",
+        "effort_delta": 0,
+        "effort_display": {"stronger": "-", "other": "-", "symbol": "=="},
         "selected_tactics": empty_match_tactics(),
         "opponent_tactics": empty_match_tactics(),
     }
@@ -5753,6 +5997,9 @@ def load_game_report(matchid: str, username: str, password: str) -> dict[str, An
     report["matchid"] = str(matchid)
     report["teamHome"]["tactics"] = boxscore_metadata["home"]
     report["teamAway"]["tactics"] = boxscore_metadata["away"]
+    report["effort_delta"] = boxscore_metadata["effort_delta"]
+    report["effort_display"] = boxscore_metadata["effort_display"]
+    report["effort_summary"] = boxscore_metadata["effort_summary"]
     return report
 
 
@@ -5771,6 +6018,10 @@ def aggregate_multi_match_report(
     national_team_kind: str = "nt",
     national_season: str = "",
     include_friendlies: bool = False,
+    team_schedule_team_id: str = "",
+    team_schedule_season: str = "",
+    team_schedule_limit: str = "10",
+    team_schedule_types: list[str] | None = None,
 ) -> tuple[str, dict[str, Any] | list[dict[str, Any]]]:
     loaded_games: list[dict[str, Any]] = []
     initial_rows: list[dict[str, Any]] = []
@@ -5867,6 +6118,9 @@ def aggregate_multi_match_report(
                     "detected_side": "-",
                     "result": "-",
                     "status": msg,
+                    "effort": game_data.get("effort_summary", "-"),
+                    "effort_delta": game_data.get("effort_delta", 0),
+                    "effort_display": game_data.get("effort_display", {"stronger": "-", "other": "-", "symbol": "=="}),
                     "selected_tactics": empty_match_tactics(),
                     "opponent_tactics": empty_match_tactics(),
                 }
@@ -5895,6 +6149,9 @@ def aggregate_multi_match_report(
                 "detected_side": "Home" if side == 0 else "Away",
                 "result": result,
                 "status": "Used",
+                "effort": game_data.get("effort_summary", "-"),
+                "effort_delta": game_data.get("effort_delta", 0),
+                "effort_display": game_data.get("effort_display", {"stronger": "-", "other": "-", "symbol": "=="}),
                 "selected_tactics": team_obj.get("tactics", empty_match_tactics()),
                 "opponent_tactics": opp_obj.get("tactics", empty_match_tactics()),
             }
@@ -6157,6 +6414,10 @@ def aggregate_multi_match_report(
                 "national_team_kind": national_team_kind,
                 "national_season": national_season,
                 "include_friendlies": include_friendlies,
+                "team_schedule_team_id": team_schedule_team_id,
+                "team_schedule_season": team_schedule_season,
+                "team_schedule_limit": team_schedule_limit,
+                "team_schedule_types": list(team_schedule_types or DEFAULT_TEAM_SCHEDULE_TYPES),
             },
             "tactic_minutes": finalize_tactic_minutes(tactic_minutes),
             "player_summary": player_summary,
@@ -6216,6 +6477,10 @@ def form_error_response(
     national_team_kind: str,
     national_season: str,
     include_friendlies: bool,
+    team_schedule_team_id: str,
+    team_schedule_season: str,
+    team_schedule_limit: str,
+    team_schedule_types: list[str],
 ) -> tuple[str, int]:
     return (
         render_template_string(
@@ -6232,6 +6497,10 @@ def form_error_response(
                 national_team_kind=national_team_kind,
                 national_season=national_season,
                 include_friendlies=include_friendlies,
+                team_schedule_team_id=team_schedule_team_id,
+                team_schedule_season=team_schedule_season,
+                team_schedule_limit=team_schedule_limit,
+                team_schedule_types=team_schedule_types,
             ),
         ),
         status_code,
@@ -6251,6 +6520,10 @@ def report() -> tuple[str, int] | str:
     national_team_kind = request.form.get("national_team_kind", "nt").strip() or "nt"
     national_season = request.form.get("national_season", "").strip()
     include_friendlies = request.form.get("include_friendlies") == "1"
+    team_schedule_team_id = request.form.get("team_schedule_team_id", "").strip()
+    team_schedule_season = request.form.get("team_schedule_season", "").strip()
+    team_schedule_limit = request.form.get("team_schedule_limit", "10").strip() or "10"
+    team_schedule_types = request.form.getlist("team_schedule_types") or DEFAULT_TEAM_SCHEDULE_TYPES
     from_multi = request.form.get("from_multi") == "1"
 
     def form_error(message: str, status_code: int, *, keep_password: bool = True) -> tuple[str, int]:
@@ -6267,12 +6540,17 @@ def report() -> tuple[str, int] | str:
             national_team_kind=national_team_kind,
             national_season=national_season,
             include_friendlies=include_friendlies,
+            team_schedule_team_id=team_schedule_team_id,
+            team_schedule_season=team_schedule_season,
+            team_schedule_limit=team_schedule_limit,
+            team_schedule_types=team_schedule_types,
         )
 
     if not username or not password:
         return form_error("Username and password are required.", 400)
 
     if mode == "multi":
+        source_warnings: list[str] = []
         if multi_source == "national":
             if not national_country_id:
                 return form_error("Choose a national team before generating the report.", 400)
@@ -6287,10 +6565,26 @@ def report() -> tuple[str, int] | str:
                 )
             except Exception as exc:
                 return form_error(f"Could not load national team schedule: {exc}", 400, keep_password=False)
+        elif multi_source == "team":
+            if not team_schedule_team_id:
+                return form_error("Enter a team ID before generating the report.", 400)
+            try:
+                multi_matchids, source_warnings = fetch_team_schedule_matchids(
+                    username=username,
+                    password=password,
+                    team_id=team_schedule_team_id,
+                    season=team_schedule_season,
+                    limit=team_schedule_limit,
+                    selected_types=team_schedule_types,
+                )
+            except Exception as exc:
+                return form_error(f"Could not load team schedule: {exc}", 400, keep_password=False)
 
         if not multi_matchids:
             if multi_source == "national":
                 return form_error("No matches were found for that national team schedule.", 400)
+            if multi_source == "team":
+                return form_error("No completed matches were found for that team schedule and filter.", 400)
             return form_error("Enter at least one match ID for multi-match mode.", 400)
 
         status, payload = aggregate_multi_match_report(
@@ -6303,6 +6597,10 @@ def report() -> tuple[str, int] | str:
             national_team_kind=national_team_kind,
             national_season=national_season,
             include_friendlies=include_friendlies,
+            team_schedule_team_id=team_schedule_team_id,
+            team_schedule_season=team_schedule_season,
+            team_schedule_limit=team_schedule_limit,
+            team_schedule_types=team_schedule_types,
         )
 
         if status == "choose_team":
@@ -6317,6 +6615,10 @@ def report() -> tuple[str, int] | str:
                 national_team_kind=national_team_kind,
                 national_season=national_season,
                 include_friendlies=include_friendlies,
+                team_schedule_team_id=team_schedule_team_id,
+                team_schedule_season=team_schedule_season,
+                team_schedule_limit=team_schedule_limit,
+                team_schedule_types=team_schedule_types,
             )
 
         if status == "error":
@@ -6326,6 +6628,7 @@ def report() -> tuple[str, int] | str:
                 message = f'{message} {" | ".join(extra_warnings)}'
             return form_error(message, 400, keep_password=False)
 
+        payload["warnings"].extend(source_warnings)
         return render_template_string(
             MULTI_REPORT_HTML,
             report_json=payload,
@@ -6367,6 +6670,10 @@ def report() -> tuple[str, int] | str:
         national_team_kind=national_team_kind,
         national_season=national_season,
         include_friendlies=include_friendlies,
+        team_schedule_team_id=team_schedule_team_id,
+        team_schedule_season=team_schedule_season,
+        team_schedule_limit=team_schedule_limit,
+        team_schedule_types=team_schedule_types,
         court_image_url=get_court_image_data_url(),
     )
 
