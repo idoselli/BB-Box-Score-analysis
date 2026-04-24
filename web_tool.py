@@ -5586,6 +5586,7 @@ def parse_boxscore_metadata(xml_text: str) -> dict[str, Any]:
     return {
         "away": away_tactics,
         "home": home_tactics,
+        "start_time": (match.findtext("./startTime") or "").strip() if match is not None else "",
         "effort_delta": delta,
         "effort_display": effort_display(delta, away_name, home_name),
         "effort_summary": effort_summary(
@@ -5880,6 +5881,7 @@ def empty_match_tactics() -> dict[str, Any]:
 def blank_match_row(matchid: str, status: str) -> dict[str, Any]:
     return {
         "matchid": matchid,
+        "start_time": "",
         "home_team": "-",
         "away_team": "-",
         "score": "-",
@@ -5995,6 +5997,7 @@ def load_game_report(matchid: str, username: str, password: str) -> dict[str, An
         game.play()
     report = serialize_game(game)
     report["matchid"] = str(matchid)
+    report["start_time"] = boxscore_metadata.get("start_time", "")
     report["teamHome"]["tactics"] = boxscore_metadata["home"]
     report["teamAway"]["tactics"] = boxscore_metadata["away"]
     report["effort_delta"] = boxscore_metadata["effort_delta"]
@@ -6112,6 +6115,7 @@ def aggregate_multi_match_report(
             match_rows.append(
                 {
                     "matchid": matchid,
+                    "start_time": game_data.get("start_time", ""),
                     "home_team": game_data["teamHome"]["name"],
                     "away_team": game_data["teamAway"]["name"],
                     "score": format_score(game_data),
@@ -6143,6 +6147,7 @@ def aggregate_multi_match_report(
         match_rows.append(
             {
                 "matchid": matchid,
+                "start_time": game_data.get("start_time", ""),
                 "home_team": game_data["teamHome"]["name"],
                 "away_team": game_data["teamAway"]["name"],
                 "score": format_score(game_data),
@@ -6319,6 +6324,8 @@ def aggregate_multi_match_report(
                 "warnings": warnings,
             },
         )
+
+    match_rows.sort(key=lambda row: row.get("start_time", ""), reverse=True)
 
     player_summary = []
     for entry in player_summary_map.values():
