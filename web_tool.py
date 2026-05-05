@@ -189,74 +189,10 @@ FORM_HTML = """<!doctype html>
       color: var(--muted);
       font-size: 12px;
     }
-    /* THEME START */
-    :root {
-      --field: #ffffff;
-      --soft: #fbfdff;
-      --head: #fafcff;
-      --theme-toggle-bg: #ffffff;
-      --theme-toggle-ink: var(--accent);
-    }
-    html[data-theme="dark"] {
-      --bg: #111827;
-      --panel: #172033;
-      --line: #334155;
-      --ink: #e5e7eb;
-      --muted: #a7b3c4;
-      --accent: #7db2ff;
-      --danger: #fca5a5;
-      --shadow: 0 12px 34px rgba(0, 0, 0, 0.34);
-      --field: #0f172a;
-      --soft: #121c2d;
-      --head: #152238;
-      --theme-toggle-bg: #0f172a;
-      --theme-toggle-ink: #dbeafe;
-    }
-    html[data-theme="dark"] body {
-      background: var(--bg);
-    }
-    html[data-theme="dark"] label,
-    html[data-theme="dark"] .choice-row,
-    html[data-theme="dark"] .inline-check {
-      color: var(--ink);
-    }
-    input,
-    select,
-    .multi-source,
-    .mode-btn,
-    .ghost,
-    .danger-btn {
-      background-color: var(--field);
-      color: var(--ink);
-    }
-    .multi-source,
-    .mode-btn {
-      background-color: var(--soft);
-    }
-    .theme-shell {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 10px;
-    }
-    .theme-toggle {
-      margin: 0;
-      width: auto;
-      border: 1px solid var(--line);
-      background: var(--theme-toggle-bg);
-      color: var(--theme-toggle-ink);
-      border-radius: 999px;
-      padding: 7px 10px;
-      font-size: 12px;
-      font-weight: 800;
-    }
-    /* THEME END */
   </style>
 </head>
 <body>
   <main class="wrap">
-    <div class="theme-shell">
-      <button type="button" class="theme-toggle" data-theme-toggle>Dark mode</button>
-    </div>
     <section class="card">
       <h1>Box Score Analysis</h1>
       <p>Enter your BBAPI credentials and a match ID to generate a full report.</p>
@@ -511,29 +447,6 @@ FORM_HTML = """<!doctype html>
     applyMultiSource({{ multi_source | tojson }});
     applyMode({{ mode | tojson }});
 
-    /* THEME JS START */
-    (function initTheme() {
-      const storageKey = "bbinsider-theme";
-      const root = document.documentElement;
-      const saved = localStorage.getItem(storageKey);
-      const buttons = [...document.querySelectorAll("[data-theme-toggle]")];
-      function apply(theme) {
-        root.dataset.theme = theme === "dark" ? "dark" : "light";
-        buttons.forEach(button => {
-          button.textContent = root.dataset.theme === "dark" ? "Light mode" : "Dark mode";
-          button.setAttribute("aria-pressed", String(root.dataset.theme === "dark"));
-        });
-      }
-      apply(saved || "light");
-      buttons.forEach(button => {
-        button.addEventListener("click", () => {
-          const next = root.dataset.theme === "dark" ? "light" : "dark";
-          localStorage.setItem(storageKey, next);
-          apply(next);
-        });
-      });
-    })();
-    /* THEME JS END */
   </script>
 </body>
 </html>
@@ -547,21 +460,11 @@ TEAM_CHOICE_HTML = """<!doctype html>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Select Team</title>
   <style>
-    :root {
-      --bg: #f6f8fb;
-      --panel: #ffffff;
-      --line: #d9e1ea;
-      --ink: #1f2933;
-      --muted: #607285;
-      --accent: #0d47a1;
-      --field: #ffffff;
-      --shadow: 0 8px 26px rgba(16, 24, 40, 0.08);
-    }
     body {
       margin: 0;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--bg);
-      color: var(--ink);
+      background: #f6f8fb;
+      color: #1f2933;
     }
     .wrap {
       max-width: 760px;
@@ -569,14 +472,14 @@ TEAM_CHOICE_HTML = """<!doctype html>
       padding: 0 18px;
     }
     .card {
-      background: var(--panel);
-      border: 1px solid var(--line);
+      background: #fff;
+      border: 1px solid #d9e1ea;
       border-radius: 14px;
-      box-shadow: var(--shadow);
+      box-shadow: 0 8px 26px rgba(16, 24, 40, 0.08);
       padding: 22px;
     }
     h1 { margin: 0 0 10px; }
-    p { color: var(--muted); }
+    p { color: #607285; }
     .choices {
       display: grid;
       gap: 10px;
@@ -586,8 +489,8 @@ TEAM_CHOICE_HTML = """<!doctype html>
       width: 100%;
       padding: 12px 14px;
       border-radius: 10px;
-      border: 1px solid var(--accent);
-      background: var(--accent);
+      border: 1px solid #0d47a1;
+      background: #0d47a1;
       color: #fff;
       font-size: 14px;
       font-weight: 700;
@@ -596,45 +499,15 @@ TEAM_CHOICE_HTML = """<!doctype html>
     .back {
       display: inline-block;
       margin-top: 14px;
-      color: var(--accent);
+      color: #0d47a1;
       text-decoration: none;
       font-size: 13px;
       font-weight: 600;
     }
-    /* THEME START */
-    html[data-theme="dark"] {
-      --bg: #111827;
-      --panel: #172033;
-      --line: #334155;
-      --ink: #e5e7eb;
-      --muted: #a7b3c4;
-      --accent: #7db2ff;
-      --field: #0f172a;
-      --shadow: 0 12px 34px rgba(0, 0, 0, 0.34);
-    }
-    .theme-shell {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 10px;
-    }
-    .theme-toggle {
-      width: auto;
-      border: 1px solid var(--line);
-      background: var(--field);
-      color: var(--accent);
-      border-radius: 999px;
-      padding: 7px 10px;
-      font-size: 12px;
-      font-weight: 800;
-    }
-    /* THEME END */
   </style>
 </head>
 <body>
   <main class="wrap">
-    <div class="theme-shell">
-      <button type="button" class="theme-toggle" data-theme-toggle>Dark mode</button>
-    </div>
     <section class="card">
       <h1>Choose The Team</h1>
       <p>The submitted matches match more than one team equally often. Pick which team you want to aggregate.</p>
@@ -669,29 +542,6 @@ TEAM_CHOICE_HTML = """<!doctype html>
     </section>
   </main>
   <script>
-    /* THEME JS START */
-    (function initTheme() {
-      const storageKey = "bbinsider-theme";
-      const root = document.documentElement;
-      const saved = localStorage.getItem(storageKey);
-      const buttons = [...document.querySelectorAll("[data-theme-toggle]")];
-      function apply(theme) {
-        root.dataset.theme = theme === "dark" ? "dark" : "light";
-        buttons.forEach(button => {
-          button.textContent = root.dataset.theme === "dark" ? "Light mode" : "Dark mode";
-          button.setAttribute("aria-pressed", String(root.dataset.theme === "dark"));
-        });
-      }
-      apply(saved || "light");
-      buttons.forEach(button => {
-        button.addEventListener("click", () => {
-          const next = root.dataset.theme === "dark" ? "light" : "dark";
-          localStorage.setItem(storageKey, next);
-          apply(next);
-        });
-      });
-    })();
-    /* THEME JS END */
   </script>
 </body>
 </html>
@@ -1247,135 +1097,18 @@ MULTI_REPORT_HTML = """<!doctype html>
       color: var(--muted);
       font-size: 12px;
     }
-    /* THEME START */
-    :root {
-      --field: #ffffff;
-      --soft: #fbfdff;
-      --head: #fafcff;
-      --table-line: #eef1f5;
-      --sticky-cell: #ffffff;
-      --good-ink: #166534;
-      --bad-ink: #991b1b;
-      --volume-ink: #1e3a8a;
-      --volume-bg: #eef6ff;
-      --volume-line: #bfdbfe;
-      --row-outside: #eef7ff;
-      --row-inside: #fff8df;
-      --theme-toggle-bg: #ffffff;
-      --theme-toggle-ink: var(--accent);
-    }
-    html[data-theme="dark"] {
-      --bg: #111827;
-      --panel: #172033;
-      --ink: #e5e7eb;
-      --muted: #a7b3c4;
-      --line: #334155;
-      --accent: #7db2ff;
-      --shadow: 0 12px 34px rgba(0, 0, 0, 0.34);
-      --danger-bg: #3a1820;
-      --danger-line: #7f1d1d;
-      --success-bg: #10291e;
-      --success-line: #166534;
-      --field: #0f172a;
-      --soft: #121c2d;
-      --head: #152238;
-      --table-line: #253449;
-      --sticky-cell: #172033;
-      --good-ink: #86efac;
-      --bad-ink: #fca5a5;
-      --volume-ink: #bfdbfe;
-      --volume-bg: #142641;
-      --volume-line: #1d4ed8;
-      --row-outside: #10283d;
-      --row-inside: #31260f;
-      --theme-toggle-bg: #0f172a;
-      --theme-toggle-ink: #dbeafe;
-    }
-    html[data-theme="dark"] body {
-      background: var(--bg);
-    }
-    html[data-theme="dark"] th,
-    html[data-theme="dark"] .card h2,
-    html[data-theme="dark"] .tactic-card h3 {
-      background: var(--head);
-      color: var(--ink);
-    }
-    html[data-theme="dark"] td,
-    html[data-theme="dark"] th {
-      border-bottom-color: var(--table-line);
-    }
-    html[data-theme="dark"] #playerMatchupTable th:first-child,
-    html[data-theme="dark"] #playerMatchupTable td:first-child,
-    html[data-theme="dark"] #playerDefenseTable th:first-child,
-    html[data-theme="dark"] #playerDefenseTable td:first-child {
-      background: var(--sticky-cell);
-      box-shadow: 2px 0 0 var(--table-line);
-    }
-    html[data-theme="dark"] .multi-dd-btn,
-    html[data-theme="dark"] .multi-dd-menu,
-    html[data-theme="dark"] .filter-bar input,
-    html[data-theme="dark"] .filter-bar select {
-      background: var(--field);
-      color: var(--ink);
-    }
-    html[data-theme="dark"] .insight-card,
-    html[data-theme="dark"] .tactic-card,
-    html[data-theme="dark"] .summary-card,
-    html[data-theme="dark"] .badge,
-    html[data-theme="dark"] .insight-type {
-      background: var(--field);
-      color: var(--ink);
-    }
-    html[data-theme="dark"] .tactic-row-outside td,
-    .tactic-row-outside td {
-      background: var(--row-outside);
-    }
-    html[data-theme="dark"] .tactic-row-inside td,
-    .tactic-row-inside td {
-      background: var(--row-inside);
-    }
-    html[data-theme="dark"] .tactic-card.outside h3 {
-      background: var(--row-outside);
-    }
-    html[data-theme="dark"] .tactic-card.inside h3 {
-      background: var(--row-inside);
-    }
-    .theme-toggle {
-      border: 1px solid var(--line);
-      background: var(--theme-toggle-bg);
-      color: var(--theme-toggle-ink);
-      border-radius: 999px;
-      padding: 7px 10px;
-      font-size: 12px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-    .topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    /* THEME END */
     /* MULTI FILTERS START */
     .filter-bar {
-      position: sticky;
-      top: 0;
-      z-index: 30;
       display: grid;
       grid-template-columns: minmax(180px, 1.2fr) repeat(4, minmax(120px, 0.75fr)) auto;
       gap: 10px;
       align-items: end;
       margin: -4px 0 18px;
       padding: 12px;
-      background: rgba(255, 255, 255, 0.94);
+      background: #fff;
       border: 1px solid var(--line);
       border-radius: 12px;
       box-shadow: var(--shadow);
-      backdrop-filter: blur(12px);
-    }
-    html[data-theme="dark"] .filter-bar {
-      background: rgba(23, 32, 51, 0.94);
     }
     .filter-field {
       display: grid;
@@ -1392,7 +1125,7 @@ MULTI_REPORT_HTML = """<!doctype html>
       border: 1px solid var(--line);
       border-radius: 8px;
       padding: 8px 9px;
-      background: var(--field);
+      background: #fff;
       color: var(--ink);
       font-size: 13px;
       text-transform: none;
@@ -1401,7 +1134,7 @@ MULTI_REPORT_HTML = """<!doctype html>
       border: 1px solid var(--line);
       border-radius: 8px;
       padding: 8px 10px;
-      background: var(--field);
+      background: #fff;
       color: var(--accent);
       font-size: 13px;
       font-weight: 800;
@@ -1413,62 +1146,6 @@ MULTI_REPORT_HTML = """<!doctype html>
       font-size: 12px;
     }
     /* MULTI FILTERS END */
-    /* MULTI OUTLIERS START */
-    .outlier-cell {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      min-width: 100%;
-      justify-content: flex-end;
-      position: relative;
-    }
-    .volume-bar {
-      position: absolute;
-      inset: 3px 0 3px auto;
-      width: var(--bar-width, 0%);
-      max-width: 100%;
-      border-radius: 6px;
-      background: var(--volume-bg);
-      opacity: 0.72;
-      z-index: 0;
-    }
-    .outlier-value,
-    .outlier-mark {
-      position: relative;
-      z-index: 1;
-    }
-    .outlier-mark {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 22px;
-      height: 20px;
-      padding: 0 7px;
-      border-radius: 999px;
-      border: 1px solid transparent;
-      font-size: 11px;
-      font-weight: 900;
-      line-height: 1;
-    }
-    .outlier-mark.good {
-      color: var(--good-ink);
-      background: var(--success-bg);
-      border-color: var(--success-line);
-    }
-    .outlier-mark.bad {
-      color: var(--bad-ink);
-      background: var(--danger-bg);
-      border-color: var(--danger-line);
-    }
-    .outlier-mark.volume {
-      color: var(--volume-ink);
-      background: var(--volume-bg);
-      border-color: var(--volume-line);
-    }
-    .muted-cell {
-      color: var(--muted);
-    }
-    /* MULTI OUTLIERS END */
     @media (max-width: 960px) {
       .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .panel-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1484,7 +1161,6 @@ MULTI_REPORT_HTML = """<!doctype html>
     <div class="topbar">
       <div class="small">Multi-match aggregate | BBAPI user: {{ username }}</div>
       <div class="topbar-actions">
-        <button type="button" class="theme-toggle" data-theme-toggle>Dark mode</button>
         <a href="/">Run another report</a>
       </div>
     </div>
@@ -1638,29 +1314,6 @@ MULTI_REPORT_HTML = """<!doctype html>
     <script>
       const data = {{ report_json | tojson }};
 
-      /* THEME JS START */
-      (function initTheme() {
-        const storageKey = "bbinsider-theme";
-        const root = document.documentElement;
-        const saved = localStorage.getItem(storageKey);
-        const buttons = [...document.querySelectorAll("[data-theme-toggle]")];
-        function apply(theme) {
-          root.dataset.theme = theme === "dark" ? "dark" : "light";
-          buttons.forEach(button => {
-            button.textContent = root.dataset.theme === "dark" ? "Light mode" : "Dark mode";
-            button.setAttribute("aria-pressed", String(root.dataset.theme === "dark"));
-          });
-        }
-        apply(saved || "light");
-        buttons.forEach(button => {
-          button.addEventListener("click", () => {
-            const next = root.dataset.theme === "dark" ? "light" : "dark";
-            localStorage.setItem(storageKey, next);
-            apply(next);
-          });
-        });
-      })();
-      /* THEME JS END */
 
       const shotTypeLabel = {
         "100": "3PT Default",
@@ -1915,105 +1568,6 @@ MULTI_REPORT_HTML = """<!doctype html>
       }
       /* MULTI FILTERS END */
 
-      /* MULTI OUTLIERS START */
-      function percentile(values, pct) {
-        const nums = values.filter(value => Number.isFinite(value)).sort((a, b) => a - b);
-        if (!nums.length) return 0;
-        return nums[Math.min(nums.length - 1, Math.max(0, Math.floor((nums.length - 1) * pct)))];
-      }
-
-      function cssPct(value, max) {
-        if (!max || !Number.isFinite(value)) return "0%";
-        return `${Math.min(100, Math.max(0, (value / max) * 100)).toFixed(1)}%`;
-      }
-
-      function outlierMark(kind, label, title) {
-        if (!kind) return "";
-        return `<span class="outlier-mark ${kind}" title="${title || label}">${label}</span>`;
-      }
-
-      function volumeCell(value, max, html = value, title = "High volume") {
-        const isHigh = max > 0 && Number(value) >= max * 0.75;
-        return `
-          <span class="outlier-cell">
-            <span class="volume-bar" style="--bar-width:${cssPct(Number(value) || 0, max)}"></span>
-            <span class="outlier-value">${html}</span>
-            ${isHigh ? outlierMark("volume", "V", title) : ""}
-          </span>
-        `;
-      }
-
-      function signedCell(value, goodThreshold = 8, badThreshold = -8) {
-        const n = Number(value) || 0;
-        const kind = n >= goodThreshold ? "good" : (n <= badThreshold ? "bad" : "");
-        const label = n > 0 ? "+" : (n < 0 ? "-" : "");
-        return `
-          <span class="outlier-cell">
-            <span class="outlier-value">${n}</span>
-            ${kind ? outlierMark(kind, label, `${n > 0 ? "Positive" : "Negative"} plus/minus outlier`) : ""}
-          </span>
-        `;
-      }
-
-      function riskCell(value, threshold) {
-        const n = Number(value) || 0;
-        return `
-          <span class="outlier-cell">
-            <span class="outlier-value">${n}</span>
-            ${threshold > 0 && n >= threshold ? outlierMark("bad", "!", "High risk outlier") : ""}
-          </span>
-        `;
-      }
-
-      function numberOutlierCell(value, threshold, max, title) {
-        const n = Number(value) || 0;
-        const mark = threshold > 0 && n >= threshold ? outlierMark("good", "+", title) : "";
-        return `
-          <span class="outlier-cell">
-            <span class="volume-bar" style="--bar-width:${cssPct(n, max)}"></span>
-            <span class="outlier-value">${n}</span>
-            ${mark}
-          </span>
-        `;
-      }
-
-      function shotDeltaCell(stat, compareStat) {
-        const html = shotStatHtml(stat) || '<span class="muted-cell">-</span>';
-        const ratio = shotStatRatio(stat);
-        const compare = shotStatRatio(compareStat);
-        if (ratio === null || compare === null || !stat?.a) return html;
-        const diff = (ratio - compare) * 100;
-        const kind = diff >= 8 ? "good" : (diff <= -8 ? "bad" : "");
-        return `
-          <span class="outlier-cell">
-            <span class="outlier-value">${html}</span>
-            ${kind ? outlierMark(kind, diff > 0 ? "+" : "-", `${formatSignedPp(diff)} vs comparison`) : ""}
-          </span>
-        `;
-      }
-
-      function defenseDeltaCell(stat, compareStat, mode = "pct") {
-        const html = mode === "pct"
-          ? (defensePctHtml(stat) || '<span class="muted-cell">-</span>')
-          : (defenseStatHtml(stat) || '<span class="muted-cell">-</span>');
-        const ratio = defenseSuccessRatio(stat);
-        const compare = defenseSuccessRatio(compareStat);
-        if (ratio === null || compare === null || !stat?.a) return html;
-        const diff = (ratio - compare) * 100;
-        const kind = diff >= 8 ? "good" : (diff <= -8 ? "bad" : "");
-        return `
-          <span class="outlier-cell">
-            <span class="outlier-value">${html}</span>
-            ${kind ? outlierMark(kind, diff > 0 ? "+" : "-", `${formatSignedPp(diff)} defensive success vs comparison`) : ""}
-          </span>
-        `;
-      }
-
-      function offCellOutlierHtml(cell, maxAttempts) {
-        if (!cell) return "";
-        return volumeCell(cell.a || 0, maxAttempts, offCellHtml(cell), "High shot volume");
-      }
-      /* MULTI OUTLIERS END */
 
       function shotStatRatio(stat) {
         return stat && stat.a ? stat.m / stat.a : null;
@@ -2608,9 +2162,6 @@ MULTI_REPORT_HTML = """<!doctype html>
         const table = document.getElementById("playerSummaryTable");
         const baseRows = (data.player_summary || []).filter(row => playerPassesGlobalFilters(row, row.fga || 0, row.mins || 0));
         const rows = sortRows(baseRows, playerSummaryColumns, tableSorts.playerSummary);
-        const allRows = data.player_summary || [];
-        const max = key => Math.max(0, ...allRows.map(row => Number(row[key]) || 0));
-        const threshold = key => percentile(allRows.map(row => Number(row[key]) || 0), 0.8);
         table.innerHTML = `
           <thead><tr>${playerSummaryColumns.map(column => sortableHeader(column, tableSorts.playerSummary)).join("")}</tr></thead>
           <tbody>
@@ -2618,18 +2169,18 @@ MULTI_REPORT_HTML = """<!doctype html>
               <tr>
                 <td>${row.name}</td>
                 <td>${row.gp}</td>
-                <td>${volumeCell(row.mins, max("mins"), row.mins, "High minutes")}</td>
-                <td>${numberOutlierCell(row.pts, threshold("pts"), max("pts"), "Scoring outlier")}</td>
-                <td>${volumeCell(row.fga, max("fga"), `${row.fgm}/${row.fga}`, "High usage")}</td>
-                <td>${volumeCell(row.tpa, max("tpa"), `${row.tpm}/${row.tpa}`, "High 3PT volume")}</td>
-                <td>${volumeCell(row.fta, max("fta"), `${row.ftm}/${row.fta}`, "High FT volume")}</td>
-                <td>${numberOutlierCell(row.tr, threshold("tr"), max("tr"), "Rebounding outlier")}</td>
-                <td>${numberOutlierCell(row.ast, threshold("ast"), max("ast"), "Assist outlier")}</td>
-                <td>${riskCell(row.to, threshold("to"))}</td>
-                <td>${numberOutlierCell(row.stl, threshold("stl"), max("stl"), "Steal outlier")}</td>
-                <td>${numberOutlierCell(row.blk, threshold("blk"), max("blk"), "Block outlier")}</td>
-                <td>${riskCell(row.pf, threshold("pf"))}</td>
-                <td>${signedCell(row.pm)}</td>
+                <td>${row.mins}</td>
+                <td>${row.pts}</td>
+                <td>${row.fgm}/${row.fga}</td>
+                <td>${row.tpm}/${row.tpa}</td>
+                <td>${row.ftm}/${row.fta}</td>
+                <td>${row.tr}</td>
+                <td>${row.ast}</td>
+                <td>${row.to}</td>
+                <td>${row.stl}</td>
+                <td>${row.blk}</td>
+                <td>${row.pf}</td>
+                <td>${row.pm}</td>
               </tr>
             `).join("") || `<tr><td colspan="14" class="empty">No players match the current filters.</td></tr>`}
           </tbody>
@@ -2655,10 +2206,10 @@ MULTI_REPORT_HTML = """<!doctype html>
                 <td>${shotStatHtml(row.openMid)}</td>
                 <td>${shotStatHtml(row.openThree)}</td>
                 <td>${shotStatHtml(row.openTotal)}</td>
-                <td>${shotDeltaCell(row.teamOn, row.teamOff)}</td>
-                <td>${shotDeltaCell(row.teamOff, row.teamOn)}</td>
-                <td>${shotDeltaCell(row.withPass, row.withoutPass)}</td>
-                <td>${shotDeltaCell(row.withoutPass, row.withPass)}</td>
+                <td>${shotStatHtml(row.teamOn)}</td>
+                <td>${shotStatHtml(row.teamOff)}</td>
+                <td>${shotStatHtml(row.withPass)}</td>
+                <td>${shotStatHtml(row.withoutPass)}</td>
               </tr>
             `).join("") || `<tr><td colspan="10" class="empty">No matchup rows match the current filters.</td></tr>`}
           </tbody>
@@ -2679,12 +2230,12 @@ MULTI_REPORT_HTML = """<!doctype html>
             ${rows.map(row => `
               <tr>
                 <td>${row.name}</td>
-                <td>${defenseDeltaCell(row.teamDefOn, row.teamDefOff, "pct")}</td>
-                <td>${defenseDeltaCell(row.teamDefOff, row.teamDefOn, "pct")}</td>
-                <td>${defenseDeltaCell(row.defendedTotal, row.teamDefOn, "stat")}</td>
-                <td>${defenseDeltaCell(row.defendedClose, row.defendedTotal, "stat")}</td>
-                <td>${defenseDeltaCell(row.defendedMid, row.defendedTotal, "stat")}</td>
-                <td>${defenseDeltaCell(row.defendedThree, row.defendedTotal, "stat")}</td>
+                <td>${defensePctHtml(row.teamDefOn)}</td>
+                <td>${defensePctHtml(row.teamDefOff)}</td>
+                <td>${defenseStatHtml(row.defendedTotal)}</td>
+                <td>${defenseStatHtml(row.defendedClose)}</td>
+                <td>${defenseStatHtml(row.defendedMid)}</td>
+                <td>${defenseStatHtml(row.defendedThree)}</td>
               </tr>
             `).join("") || `<tr><td colspan="7" class="empty">No defense rows match the current filters.</td></tr>`}
           </tbody>
@@ -2695,7 +2246,6 @@ MULTI_REPORT_HTML = """<!doctype html>
       renderDetections();
 
       function renderOffensePlayersTable() {
-        const maxAttempts = Math.max(0, ...(data.offense.players || []).map(row => row.total?.a || 0));
         const rows = [...(data.offense.players || [])]
           .filter(row => playerPassesGlobalFilters(row, row.total?.a || 0, 0))
           .sort((a, b) => b.total.a - a.total.a || a.name.localeCompare(b.name));
@@ -2711,8 +2261,8 @@ MULTI_REPORT_HTML = """<!doctype html>
             ${rows.map(row => `
               <tr>
                 <td>${row.name}</td>
-                ${data.offense.shot_types.map(code => `<td>${offCellOutlierHtml(row.counts[code], maxAttempts)}</td>`).join("")}
-                <td>${offCellOutlierHtml(row.total, maxAttempts)}</td>
+                ${data.offense.shot_types.map(code => `<td>${offCellHtml(row.counts[code])}</td>`).join("")}
+                <td>${offCellHtml(row.total)}</td>
               </tr>
             `).join("") || `<tr><td colspan="${(data.offense.shot_types || []).length + 2}" class="empty">No offense rows match the current filters.</td></tr>`}
           </tbody>
@@ -3315,84 +2865,6 @@ REPORT_HTML = """<!doctype html>
       font-weight: 600;
       cursor: pointer;
     }
-    /* THEME START */
-    :root {
-      --field: #ffffff;
-      --soft: #fbfdff;
-      --head: #fafcff;
-      --table-line: #eef1f5;
-      --sticky-cell: #ffffff;
-      --theme-toggle-bg: #ffffff;
-      --theme-toggle-ink: #0d47a1;
-    }
-    html[data-theme="dark"] {
-      --bg: #111827;
-      --panel: #172033;
-      --ink: #e5e7eb;
-      --muted: #a7b3c4;
-      --line: #334155;
-      --home: #7db2ff;
-      --away: #fda4af;
-      --shadow: 0 12px 34px rgba(0, 0, 0, 0.34);
-      --field: #0f172a;
-      --soft: #121c2d;
-      --head: #152238;
-      --table-line: #253449;
-      --sticky-cell: #172033;
-      --theme-toggle-bg: #0f172a;
-      --theme-toggle-ink: #dbeafe;
-    }
-    html[data-theme="dark"] body {
-      background: var(--bg);
-    }
-    html[data-theme="dark"] .hero {
-      background: linear-gradient(135deg, var(--panel), var(--head));
-    }
-    html[data-theme="dark"] th,
-    html[data-theme="dark"] .card h3,
-    html[data-theme="dark"] .events-head,
-    html[data-theme="dark"] .off-legend,
-    html[data-theme="dark"] .summary-grid {
-      background: var(--head);
-      color: var(--ink);
-    }
-    html[data-theme="dark"] td,
-    html[data-theme="dark"] th {
-      border-bottom-color: var(--table-line);
-    }
-    html[data-theme="dark"] #offPlayersTable th:first-child,
-    html[data-theme="dark"] #offPlayersTable td:first-child,
-    html[data-theme="dark"] #offTeamsTable th:first-child,
-    html[data-theme="dark"] #offTeamsTable td:first-child,
-    html[data-theme="dark"] #playerMatchupTable th:first-child,
-    html[data-theme="dark"] #playerMatchupTable td:first-child,
-    html[data-theme="dark"] #playerDefenseTable th:first-child,
-    html[data-theme="dark"] #playerDefenseTable td:first-child {
-      background: var(--sticky-cell);
-      box-shadow: 2px 0 0 var(--table-line);
-    }
-    html[data-theme="dark"] .team,
-    html[data-theme="dark"] .range-panel,
-    html[data-theme="dark"] .summary-card,
-    html[data-theme="dark"] .ev,
-    html[data-theme="dark"] .pie-hole,
-    html[data-theme="dark"] .multi-dd-menu,
-    html[data-theme="dark"] .multi-dd-btn,
-    html[data-theme="dark"] input,
-    html[data-theme="dark"] select {
-      background: var(--field);
-      color: var(--ink);
-    }
-    .topbar .theme-toggle {
-      border: 1px solid var(--line);
-      background: var(--theme-toggle-bg);
-      color: var(--theme-toggle-ink);
-      border-radius: 999px;
-      padding: 7px 10px;
-      font-size: 12px;
-      font-weight: 800;
-    }
-    /* THEME END */
     @media (max-width: 940px) {
       .scoreboard { grid-template-columns: 1fr; }
       .score { order: -1; font-size: 42px; }
@@ -3409,7 +2881,6 @@ REPORT_HTML = """<!doctype html>
     <div class="topbar">
       <div class="small">Match {{ matchid }} | BBAPI user: {{ username }}</div>
       <div class="topbar-actions">
-        <button type="button" class="theme-toggle" data-theme-toggle>Dark mode</button>
         {% if from_multi %}
         <form method="post" action="/report">
           <input type="hidden" name="mode" value="multi" />
@@ -3607,29 +3078,6 @@ REPORT_HTML = """<!doctype html>
   <script>
     const data = {{ report_json | tojson }};
 
-    /* THEME JS START */
-    (function initTheme() {
-      const storageKey = "bbinsider-theme";
-      const root = document.documentElement;
-      const saved = localStorage.getItem(storageKey);
-      const buttons = [...document.querySelectorAll("[data-theme-toggle]")];
-      function apply(theme) {
-        root.dataset.theme = theme === "dark" ? "dark" : "light";
-        buttons.forEach(button => {
-          button.textContent = root.dataset.theme === "dark" ? "Light mode" : "Dark mode";
-          button.setAttribute("aria-pressed", String(root.dataset.theme === "dark"));
-        });
-      }
-      apply(saved || "light");
-      buttons.forEach(button => {
-        button.addEventListener("click", () => {
-          const next = root.dataset.theme === "dark" ? "light" : "dark";
-          localStorage.setItem(storageKey, next);
-          apply(next);
-        });
-      });
-    })();
-    /* THEME JS END */
 
     const courtImageUrl = {{ court_image_url | tojson }};
 
@@ -5130,67 +4578,6 @@ ANIMATION_REPORT_HTML = """<!doctype html>
     }
     .home-dot { background: var(--home); }
     .away-dot { background: var(--away); }
-    /* THEME START */
-    :root {
-      --field: #ffffff;
-      --head: #f7f9fc;
-      --table-line: #edf1f5;
-      --theme-toggle-bg: #ffffff;
-      --theme-toggle-ink: #0d47a1;
-    }
-    html[data-theme="dark"] {
-      --bg: #111827;
-      --panel: #172033;
-      --ink: #e5e7eb;
-      --muted: #a7b3c4;
-      --line: #334155;
-      --home: #7db2ff;
-      --away: #fda4af;
-      --court: #1f5f49;
-      --wood: #8a5d2a;
-      --shadow: 0 12px 34px rgba(0, 0, 0, 0.34);
-      --field: #0f172a;
-      --head: #152238;
-      --table-line: #253449;
-      --theme-toggle-bg: #0f172a;
-      --theme-toggle-ink: #dbeafe;
-    }
-    html[data-theme="dark"] body {
-      background: var(--bg);
-    }
-    html[data-theme="dark"] .scoreboard {
-      background: #020617;
-    }
-    html[data-theme="dark"] .controls,
-    html[data-theme="dark"] .event-card,
-    html[data-theme="dark"] .team-box h3,
-    html[data-theme="dark"] th {
-      background: var(--head);
-      color: var(--ink);
-    }
-    html[data-theme="dark"] td,
-    html[data-theme="dark"] th {
-      border-bottom-color: var(--table-line);
-    }
-    html[data-theme="dark"] th:first-child,
-    html[data-theme="dark"] td:first-child,
-    html[data-theme="dark"] button.secondary,
-    html[data-theme="dark"] select,
-    html[data-theme="dark"] input {
-      background: var(--field);
-      color: var(--ink);
-    }
-    .theme-toggle {
-      border: 1px solid var(--line);
-      background: var(--theme-toggle-bg);
-      color: var(--theme-toggle-ink);
-      border-radius: 999px;
-      padding: 7px 10px;
-      font-size: 12px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-    /* THEME END */
     @media (max-width: 980px) {
       .grid { grid-template-columns: 1fr; }
       .court-wrap { order: 1; }
@@ -5210,7 +4597,6 @@ ANIMATION_REPORT_HTML = """<!doctype html>
         <div class="small">Match {{ matchid }} | BBAPI user: {{ username }}</div>
       </div>
       <div class="topbar-actions">
-        <button type="button" class="theme-toggle" data-theme-toggle>Dark mode</button>
         <a href="/">New report</a>
       </div>
     </div>
@@ -5284,29 +4670,6 @@ ANIMATION_REPORT_HTML = """<!doctype html>
   <script>
     const data = {{ report_json | tojson }};
 
-    /* THEME JS START */
-    (function initTheme() {
-      const storageKey = "bbinsider-theme";
-      const root = document.documentElement;
-      const saved = localStorage.getItem(storageKey);
-      const buttons = [...document.querySelectorAll("[data-theme-toggle]")];
-      function apply(theme) {
-        root.dataset.theme = theme === "dark" ? "dark" : "light";
-        buttons.forEach(button => {
-          button.textContent = root.dataset.theme === "dark" ? "Light mode" : "Dark mode";
-          button.setAttribute("aria-pressed", String(root.dataset.theme === "dark"));
-        });
-      }
-      apply(saved || "light");
-      buttons.forEach(button => {
-        button.addEventListener("click", () => {
-          const next = root.dataset.theme === "dark" ? "light" : "dark";
-          localStorage.setItem(storageKey, next);
-          apply(next);
-        });
-      });
-    })();
-    /* THEME JS END */
 
     const courtImageUrl = {{ court_image_url | tojson }};
     const home = data.teamHome;
