@@ -1005,7 +1005,10 @@ MULTI_REPORT_HTML = """<!doctype html>
       background: #eef7ff;
     }
     .tactic-row-inside td {
-      background: #fff8df;
+      background: #fff3e8;
+    }
+    .tactic-row-balanced td {
+      background: #f7f7fb;
     }
     .gdp-line {
       white-space: nowrap;
@@ -1146,6 +1149,105 @@ MULTI_REPORT_HTML = """<!doctype html>
       font-size: 12px;
     }
     /* MULTI FILTERS END */
+    .card-head-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      background: #fafcff;
+    }
+    .card-head-actions h2 {
+      padding: 0;
+      border-bottom: 0;
+      background: transparent;
+    }
+    .nba-controls {
+      display: grid;
+      grid-template-columns: minmax(180px, 1.3fr) repeat(5, minmax(120px, 1fr));
+      gap: 10px;
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      background: #fcfdff;
+    }
+    .nba-note {
+      padding: 10px 12px;
+      color: var(--muted);
+      font-size: 12px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+    .nba-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .mini-btn {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 7px 10px;
+      background: #fff;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(15, 23, 42, 0.45);
+      z-index: 100;
+    }
+    .modal-backdrop.open {
+      display: flex;
+    }
+    .modal {
+      width: min(760px, 100%);
+      max-height: min(720px, 90vh);
+      overflow: auto;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      background: #fafcff;
+    }
+    .modal-head h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+    .modal-body {
+      padding: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .modal-body dl {
+      display: grid;
+      grid-template-columns: minmax(100px, 0.35fr) 1fr;
+      gap: 8px 14px;
+      margin: 0;
+    }
+    .modal-body dt {
+      color: var(--ink);
+      font-weight: 800;
+    }
+    .modal-body dd {
+      margin: 0;
+    }
     @media (max-width: 960px) {
       .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .panel-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1153,6 +1255,8 @@ MULTI_REPORT_HTML = """<!doctype html>
       .tactic-grid { grid-template-columns: 1fr; }
       .filter-bar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .filter-reset { grid-column: 1 / -1; }
+      .nba-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .modal-body dl { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -1257,6 +1361,71 @@ MULTI_REPORT_HTML = """<!doctype html>
     </section>
 
     <section class="card">
+      <h2>Defended Shot Log</h2>
+      <div class="events-head">
+        <div class="multi-dd" id="defenderFilter"></div>
+        <div class="multi-dd" id="defShotTypeFilter"></div>
+        <div class="multi-dd" id="defResultFilter"></div>
+      </div>
+      <div id="defSummary" class="panel-summary"></div>
+      <div class="table-wrap">
+        <table id="defShotsTable"></table>
+      </div>
+    </section>
+
+    <section class="card" id="nbaDashboardCard">
+      <div class="card-head-actions">
+        <h2>NBA-Style Dashboard</h2>
+        <div class="nba-actions">
+          <button type="button" id="nbaGlossaryBtn" class="mini-btn">Glossary</button>
+        </div>
+      </div>
+      <div class="nba-controls" aria-label="NBA-style dashboard filters">
+        <label class="filter-field">Player
+          <select id="nbaPlayerFilter">
+            <option value="all">All players</option>
+          </select>
+        </label>
+        <label class="filter-field">Result
+          <select id="nbaResultFilter">
+            <option value="all">All</option>
+            <option value="win">Wins</option>
+            <option value="loss">Losses</option>
+          </select>
+        </label>
+        <label class="filter-field">Tactic Group
+          <select id="nbaTacticFilter">
+            <option value="all">All</option>
+            <option value="outside">Outside</option>
+            <option value="inside">Inside</option>
+            <option value="balanced">Other</option>
+          </select>
+        </label>
+        <label class="filter-field">Min Minutes
+          <input id="nbaMinMinutes" type="number" min="0" step="1" value="0" />
+        </label>
+        <label class="filter-field">Min FGA
+          <input id="nbaMinFga" type="number" min="0" step="1" value="0" />
+        </label>
+        <label class="filter-field">Stat View
+          <select id="nbaViewFilter">
+            <option value="traditional">Traditional</option>
+            <option value="advanced">Advanced Lite</option>
+            <option value="shooting">Shooting</option>
+            <option value="defense">Defense</option>
+            <option value="clutch">Clutch</option>
+            <option value="fourFactors">Four Factors</option>
+          </select>
+        </label>
+      </div>
+      <div id="nbaDashboardNote" class="nba-note"></div>
+      <div id="nbaSummary" class="panel-summary"></div>
+      <div class="table-wrap">
+        <table id="nbaDashboardTable"></table>
+      </div>
+    </section>
+
+    <section class="card">
       <h2>Detections &amp; Suggestions</h2>
       <p class="insight-note">Findings favor large percentage swings with enough relevant attempts. Small samples are filtered out, but the evidence stays visible.</p>
       <div id="detectionsEmpty" class="card-body empty" hidden>Not enough qualified attempts for detection yet.</div>
@@ -1273,18 +1442,31 @@ MULTI_REPORT_HTML = """<!doctype html>
       </div>
     </section>
 
-    <section class="card">
-      <h2>Defended Shot Log</h2>
-      <div class="events-head">
-        <div class="multi-dd" id="defenderFilter"></div>
-        <div class="multi-dd" id="defShotTypeFilter"></div>
-        <div class="multi-dd" id="defResultFilter"></div>
+    <div id="nbaGlossaryModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="nbaGlossaryTitle">
+      <div class="modal">
+        <div class="modal-head">
+          <h3 id="nbaGlossaryTitle">NBA-Style Dashboard Glossary</h3>
+          <button type="button" id="nbaGlossaryClose" class="mini-btn">Close</button>
+        </div>
+        <div class="modal-body">
+          <dl>
+            <dt>Traditional</dt><dd>Exact boxscore totals aggregated from the selected multi-match rows.</dd>
+            <dt>FG%, 3P%, FT%</dt><dd>Exact makes divided by attempts for field goals, threes, and free throws.</dd>
+            <dt>eFG%</dt><dd>Estimated effective field goal percentage: (FGM + 0.5 * 3PM) / FGA.</dd>
+            <dt>TS%</dt><dd>Estimated true shooting percentage: PTS / (2 * (FGA + 0.44 * FTA)).</dd>
+            <dt>AST/TO</dt><dd>Exact assists divided by turnovers; shown as N/A when turnovers are zero.</dd>
+            <dt>FTr</dt><dd>Free throw rate: FTA / FGA.</dd>
+            <dt>Usage Proxy</dt><dd>Estimated share of team shooting possessions: player (FGA + 0.44 * FTA + TO) divided by the same total for all filtered players.</dd>
+            <dt>Per 36</dt><dd>Estimated rate per 36 minutes from exact totals and minutes.</dd>
+            <dt>Shot Mix</dt><dd>Event-derived share of attempts from close, mid-range, and three-point groups.</dd>
+            <dt>Open / Defended</dt><dd>Event-derived split based on whether the play-by-play identified a defender on the shot.</dd>
+            <dt>Stop Rate</dt><dd>Estimated defensive success: defended attempts not made by the opponent divided by defended attempts.</dd>
+            <dt>Clutch</dt><dd>Event-derived final 5 minutes of Q4 or overtime while score margin is 5 or less.</dd>
+            <dt>Four Factors</dt><dd>Team-level estimates: eFG%, turnover rate, offensive rebound rate, and free throw rate.</dd>
+          </dl>
+        </div>
       </div>
-      <div id="defSummary" class="panel-summary"></div>
-      <div class="table-wrap">
-        <table id="defShotsTable"></table>
-      </div>
-    </section>
+    </div>
 
     <form id="singleMatchForm" method="post" action="/report" hidden>
       <input type="hidden" name="mode" value="single" />
@@ -1382,6 +1564,7 @@ MULTI_REPORT_HTML = """<!doctype html>
         const group = tacticGroupKey(tactics);
         if (group === "outside") return "tactic-row-outside";
         if (group === "inside") return "tactic-row-inside";
+        if (group === "balanced") return "tactic-row-balanced";
         return "";
       }
 
@@ -2329,10 +2512,396 @@ MULTI_REPORT_HTML = """<!doctype html>
         `;
       }
 
+      const nbaPlayerFilter = document.getElementById("nbaPlayerFilter");
+      const nbaResultFilter = document.getElementById("nbaResultFilter");
+      const nbaTacticFilter = document.getElementById("nbaTacticFilter");
+      const nbaMinMinutes = document.getElementById("nbaMinMinutes");
+      const nbaMinFga = document.getElementById("nbaMinFga");
+      const nbaViewFilter = document.getElementById("nbaViewFilter");
+      const nbaSummary = document.getElementById("nbaSummary");
+      const nbaDashboardNote = document.getElementById("nbaDashboardNote");
+      const nbaDashboardTable = document.getElementById("nbaDashboardTable");
+      const nbaGlossaryModal = document.getElementById("nbaGlossaryModal");
+      const nbaGlossaryBtn = document.getElementById("nbaGlossaryBtn");
+      const nbaGlossaryClose = document.getElementById("nbaGlossaryClose");
+      const nbaSorts = {
+        traditional: { key: "pts", dir: "desc" },
+        advanced: { key: "efg", dir: "desc" },
+        shooting: { key: "fga", dir: "desc" },
+        defense: { key: "defendedShots", dir: "desc" },
+        clutch: { key: "clutchPts", dir: "desc" },
+        fourFactors: { key: "efg", dir: "desc" }
+      };
+
+      function nbaFilterState() {
+        return {
+          player: nbaPlayerFilter.value,
+          result: nbaResultFilter.value,
+          tactic: nbaTacticFilter.value,
+          minMinutes: Math.max(0, Number(nbaMinMinutes.value) || 0),
+          minFga: Math.max(0, Number(nbaMinFga.value) || 0),
+          view: nbaViewFilter.value
+        };
+      }
+
+      function nbaRowPassesFilters(row, state) {
+        if (state.player !== "all" && row.name !== state.player) return false;
+        if (state.result !== "all") {
+          if (state.result === "win" && row.result !== "W") return false;
+          if (state.result === "loss" && row.result !== "L") return false;
+        }
+        if (state.tactic !== "all" && row.tactic_group !== state.tactic) return false;
+        return true;
+      }
+
+      function nbaTeamRowPassesFilters(row, state) {
+        if (state.result !== "all") {
+          if (state.result === "win" && row.result !== "W") return false;
+          if (state.result === "loss" && row.result !== "L") return false;
+        }
+        if (state.tactic !== "all" && row.tactic_group !== state.tactic) return false;
+        return true;
+      }
+
+      function emptyNbaSplit() {
+        return { m: 0, a: 0 };
+      }
+
+      function addNbaSplit(target, source) {
+        target.m += source?.m || 0;
+        target.a += source?.a || 0;
+      }
+
+      function emptyNbaAggregate(name) {
+        return {
+          name,
+          matches: new Set(),
+          mins: 0,
+          pts: 0,
+          fgm: 0,
+          fga: 0,
+          tpm: 0,
+          tpa: 0,
+          ftm: 0,
+          fta: 0,
+          or: 0,
+          dr: 0,
+          tr: 0,
+          ast: 0,
+          to: 0,
+          stl: 0,
+          blk: 0,
+          pf: 0,
+          pm: 0,
+          shots_close: emptyNbaSplit(),
+          shots_mid: emptyNbaSplit(),
+          shots_three: emptyNbaSplit(),
+          assisted: emptyNbaSplit(),
+          unassisted: emptyNbaSplit(),
+          open: emptyNbaSplit(),
+          defended: emptyNbaSplit(),
+          team_def_on: emptyNbaSplit(),
+          team_def_off: emptyNbaSplit(),
+          defended_total: emptyNbaSplit(),
+          defended_close: emptyNbaSplit(),
+          defended_mid: emptyNbaSplit(),
+          defended_three: emptyNbaSplit(),
+          clutch: { pts: 0, fgm: 0, fga: 0, tpm: 0, tpa: 0, ast: 0, to: 0, pm: 0 }
+        };
+      }
+
+      function aggregateNbaPlayers(state) {
+        const byName = new Map();
+        (data.nba_dashboard?.players || []).forEach(row => {
+          if (!nbaRowPassesFilters(row, state)) return;
+          const item = byName.get(row.name) || emptyNbaAggregate(row.name);
+          byName.set(row.name, item);
+          item.matches.add(row.matchid);
+          ["mins", "pts", "fgm", "fga", "tpm", "tpa", "ftm", "fta", "or", "dr", "tr", "ast", "to", "stl", "blk", "pf", "pm"].forEach(key => {
+            item[key] += Number(row[key]) || 0;
+          });
+          ["shots_close", "shots_mid", "shots_three", "assisted", "unassisted", "open", "defended", "team_def_on", "team_def_off", "defended_total", "defended_close", "defended_mid", "defended_three"].forEach(key => {
+            addNbaSplit(item[key], row[key]);
+          });
+          ["pts", "fgm", "fga", "tpm", "tpa", "ast", "to", "pm"].forEach(key => {
+            item.clutch[key] += Number(row.clutch?.[key]) || 0;
+          });
+        });
+        return [...byName.values()]
+          .map(row => ({ ...row, gp: row.matches.size }))
+          .filter(row => row.mins >= state.minMinutes && row.fga >= state.minFga)
+          .sort((a, b) => b.fga - a.fga || b.pts - a.pts || a.name.localeCompare(b.name));
+      }
+
+      function aggregateNbaTeamRows(state) {
+        return (data.nba_dashboard?.team_rows || []).filter(row => nbaTeamRowPassesFilters(row, state));
+      }
+
+      function pct(made, attempts) {
+        return attempts ? `${((made / attempts) * 100).toFixed(1)}%` : "";
+      }
+
+      function ratio(value, denom) {
+        return denom ? value / denom : null;
+      }
+
+      function formatRatio(value, digits = 2) {
+        return value === null || !Number.isFinite(value) ? "N/A" : value.toFixed(digits);
+      }
+
+      function per36(value, mins) {
+        return mins ? ((value / mins) * 36).toFixed(1) : "";
+      }
+
+      function splitMadeAttemptPct(split) {
+        return split?.a ? `${split.m}/${split.a} ${pct(split.m, split.a)}` : "";
+      }
+
+      function stopRate(split) {
+        return split?.a ? `${split.a - split.m}/${split.a} ${pct(split.a - split.m, split.a)}` : "";
+      }
+
+      function sumTeamStats(rows, side) {
+        const out = { pts: 0, fgm: 0, fga: 0, tpm: 0, tpa: 0, ftm: 0, fta: 0, or: 0, dr: 0, tr: 0, to: 0 };
+        rows.forEach(row => {
+          const source = row[side] || {};
+          Object.keys(out).forEach(key => {
+            out[key] += Number(source[key]) || 0;
+          });
+        });
+        return out;
+      }
+
+      function estimatedPoss(stats) {
+        return stats.fga + (0.44 * stats.fta) - stats.or + stats.to;
+      }
+
+      function nullableRatio(value, denom) {
+        return denom ? value / denom : null;
+      }
+
+      function compareNullable(av, bv, dir) {
+        const aMissing = av === null || av === undefined || Number.isNaN(av);
+        const bMissing = bv === null || bv === undefined || Number.isNaN(bv);
+        if (aMissing && bMissing) return 0;
+        if (aMissing) return 1;
+        if (bMissing) return -1;
+        return (av - bv) * dir;
+      }
+
+      function nbaSortValue(row, column) {
+        const value = column.sortValue ? column.sortValue(row) : column.value(row);
+        if (column.type === "text") return String(value || "");
+        return value === "" ? null : Number(value);
+      }
+
+      function sortNbaRows(rows, columns, sortState) {
+        const column = columns.find(item => item.key === sortState.key) || columns[0];
+        const dir = sortState.dir === "asc" ? 1 : -1;
+        return [...rows].sort((a, b) => {
+          const av = nbaSortValue(a, column);
+          const bv = nbaSortValue(b, column);
+          if (column.type === "text") {
+            return String(av).localeCompare(String(bv), undefined, { sensitivity: "base" }) * dir;
+          }
+          return compareNullable(av, bv, dir) || String(a.name || a.label || "").localeCompare(String(b.name || b.label || ""), undefined, { sensitivity: "base" });
+        });
+      }
+
+      function nbaSortableHeader(column, sortState) {
+        const active = sortState.key === column.key;
+        return `
+          <th class="sortable-th" data-nba-sort-key="${column.key}" aria-sort="${active ? (sortState.dir === "asc" ? "ascending" : "descending") : "none"}">
+            ${column.label}<span class="sort-indicator">${active ? (sortState.dir === "asc" ? "^" : "v") : ""}</span>
+          </th>
+        `;
+      }
+
+      function renderNbaTable(columns, rows, emptyColspan, emptyMessage) {
+        const sortState = nbaSorts[nbaViewFilter.value] || nbaSorts.traditional;
+        const sorted = sortNbaRows(rows, columns, sortState);
+        nbaDashboardTable.innerHTML = `
+          <thead><tr>${columns.map(column => nbaSortableHeader(column, sortState)).join("")}</tr></thead>
+          <tbody>
+            ${sorted.map(row => `<tr>${columns.map(column => `<td>${column.render ? column.render(row) : column.value(row)}</td>`).join("")}</tr>`).join("") || `<tr><td colspan="${emptyColspan}" class="empty">${emptyMessage}</td></tr>`}
+          </tbody>
+        `;
+        nbaDashboardTable.querySelectorAll("th[data-nba-sort-key]").forEach(th => {
+          th.addEventListener("click", () => {
+            const key = th.dataset.nbaSortKey;
+            sortState.dir = sortState.key === key && sortState.dir === "desc" ? "asc" : "desc";
+            sortState.key = key;
+            renderNbaDashboard();
+          });
+        });
+      }
+
+      function renderNbaSummary(rows, teamRows, view) {
+        const teamStats = sumTeamStats(teamRows, "team");
+        const oppStats = sumTeamStats(teamRows, "opponent");
+        const teamPoss = estimatedPoss(teamStats);
+        const oppPoss = estimatedPoss(oppStats);
+        nbaSummary.innerHTML = `
+          <div class="summary-card"><div class="k">Players Shown</div><div class="v">${rows.length}</div></div>
+          <div class="summary-card"><div class="k">Matches</div><div class="v">${teamRows.length}</div></div>
+          <div class="summary-card"><div class="k">Team eFG%</div><div class="v">${pct(teamStats.fgm + 0.5 * teamStats.tpm, teamStats.fga) || "0.0%"}</div></div>
+          <div class="summary-card"><div class="k">Opp eFG%</div><div class="v">${pct(oppStats.fgm + 0.5 * oppStats.tpm, oppStats.fga) || "0.0%"}</div></div>
+          <div class="summary-card"><div class="k">Poss Est.</div><div class="v">${teamPoss ? teamPoss.toFixed(1) : "0.0"}</div></div>
+          <div class="summary-card"><div class="k">View</div><div class="v">${view.replace(/([A-Z])/g, " $1")}</div></div>
+        `;
+      }
+
+      function renderNbaTraditional(rows) {
+        const columns = [
+          { key: "name", label: "Player", type: "text", value: row => row.name },
+          { key: "gp", label: "GP", value: row => row.gp },
+          { key: "mins", label: "MIN", value: row => row.mins },
+          { key: "pts", label: "PTS", value: row => row.pts },
+          { key: "tr", label: "REB", value: row => row.tr },
+          { key: "ast", label: "AST", value: row => row.ast },
+          { key: "to", label: "TO", value: row => row.to },
+          { key: "stl", label: "STL", value: row => row.stl },
+          { key: "blk", label: "BLK", value: row => row.blk },
+          { key: "pf", label: "PF", value: row => row.pf },
+          { key: "pm", label: "+/-", value: row => row.pm },
+          { key: "fgPct", label: "FG%", value: row => pct(row.fgm, row.fga), sortValue: row => nullableRatio(row.fgm, row.fga) },
+          { key: "threePct", label: "3P%", value: row => pct(row.tpm, row.tpa), sortValue: row => nullableRatio(row.tpm, row.tpa) },
+          { key: "ftPct", label: "FT%", value: row => pct(row.ftm, row.fta), sortValue: row => nullableRatio(row.ftm, row.fta) }
+        ];
+        renderNbaTable(columns, rows, columns.length, "No players match the NBA dashboard filters.");
+      }
+
+      function renderNbaAdvanced(rows) {
+        const usageDenom = rows.reduce((sum, row) => sum + row.fga + (0.44 * row.fta) + row.to, 0);
+        const usageValue = row => usageDenom ? (row.fga + (0.44 * row.fta) + row.to) / usageDenom : null;
+        const columns = [
+          { key: "name", label: "Player", type: "text", value: row => row.name },
+          { key: "efg", label: "eFG%", value: row => pct(row.fgm + 0.5 * row.tpm, row.fga), sortValue: row => nullableRatio(row.fgm + 0.5 * row.tpm, row.fga) },
+          { key: "ts", label: "TS% Est.", value: row => pct(row.pts, 2 * (row.fga + 0.44 * row.fta)), sortValue: row => nullableRatio(row.pts, 2 * (row.fga + 0.44 * row.fta)) },
+          { key: "astTo", label: "AST/TO", value: row => formatRatio(ratio(row.ast, row.to)), sortValue: row => ratio(row.ast, row.to) },
+          { key: "ftr", label: "FTr", value: row => formatRatio(ratio(row.fta, row.fga)), sortValue: row => ratio(row.fta, row.fga) },
+          { key: "pps", label: "PTS/FGA", value: row => formatRatio(ratio(row.pts, row.fga)), sortValue: row => ratio(row.pts, row.fga) },
+          { key: "usage", label: "Usage Proxy", value: row => usageValue(row) === null ? "N/A" : `${(usageValue(row) * 100).toFixed(1)}%`, sortValue: usageValue },
+          { key: "pts36", label: "PTS/36", value: row => per36(row.pts, row.mins), sortValue: row => ratio(row.pts * 36, row.mins) },
+          { key: "reb36", label: "REB/36", value: row => per36(row.tr, row.mins), sortValue: row => ratio(row.tr * 36, row.mins) },
+          { key: "ast36", label: "AST/36", value: row => per36(row.ast, row.mins), sortValue: row => ratio(row.ast * 36, row.mins) }
+        ];
+        renderNbaTable(columns, rows, columns.length, "No players match the NBA dashboard filters.");
+      }
+
+      function renderNbaShooting(rows) {
+        const shotAttempts = row => row.shots_close.a + row.shots_mid.a + row.shots_three.a;
+        const columns = [
+          { key: "name", label: "Player", type: "text", value: row => row.name },
+          { key: "closeMix", label: "Close Mix", value: row => pct(row.shots_close.a, shotAttempts(row)), sortValue: row => nullableRatio(row.shots_close.a, shotAttempts(row)) },
+          { key: "closeFg", label: "Close FG", value: row => splitMadeAttemptPct(row.shots_close), sortValue: row => nullableRatio(row.shots_close.m, row.shots_close.a) },
+          { key: "midMix", label: "Mid Mix", value: row => pct(row.shots_mid.a, shotAttempts(row)), sortValue: row => nullableRatio(row.shots_mid.a, shotAttempts(row)) },
+          { key: "midFg", label: "Mid FG", value: row => splitMadeAttemptPct(row.shots_mid), sortValue: row => nullableRatio(row.shots_mid.m, row.shots_mid.a) },
+          { key: "threeMix", label: "3PT Mix", value: row => pct(row.shots_three.a, shotAttempts(row)), sortValue: row => nullableRatio(row.shots_three.a, shotAttempts(row)) },
+          { key: "threeFg", label: "3PT FG", value: row => splitMadeAttemptPct(row.shots_three), sortValue: row => nullableRatio(row.shots_three.m, row.shots_three.a) },
+          { key: "assisted", label: "Assisted", value: row => splitMadeAttemptPct(row.assisted), sortValue: row => nullableRatio(row.assisted.m, row.assisted.a) },
+          { key: "unassisted", label: "Unassisted", value: row => splitMadeAttemptPct(row.unassisted), sortValue: row => nullableRatio(row.unassisted.m, row.unassisted.a) },
+          { key: "open", label: "Open", value: row => splitMadeAttemptPct(row.open), sortValue: row => nullableRatio(row.open.m, row.open.a) },
+          { key: "defended", label: "Defended", value: row => splitMadeAttemptPct(row.defended), sortValue: row => nullableRatio(row.defended.m, row.defended.a) },
+          { key: "fga", label: "FGA", value: row => row.fga }
+        ];
+        renderNbaTable(columns, rows, columns.length, "No players match the NBA dashboard filters.");
+      }
+
+      function renderNbaDefense(rows) {
+        const stopValue = split => split?.a ? (split.a - split.m) / split.a : null;
+        const columns = [
+          { key: "name", label: "Player", type: "text", value: row => row.name },
+          { key: "defendedShots", label: "Defended Shots", value: row => row.defended_total.a },
+          { key: "stopRate", label: "Stop Rate", value: row => stopRate(row.defended_total), sortValue: row => stopValue(row.defended_total) },
+          { key: "closeStops", label: "Close Stops", value: row => stopRate(row.defended_close), sortValue: row => stopValue(row.defended_close) },
+          { key: "midStops", label: "Mid Stops", value: row => stopRate(row.defended_mid), sortValue: row => stopValue(row.defended_mid) },
+          { key: "threeStops", label: "3PT Stops", value: row => stopRate(row.defended_three), sortValue: row => stopValue(row.defended_three) },
+          { key: "teamDefOn", label: "Team Def On", value: row => stopRate(row.team_def_on), sortValue: row => stopValue(row.team_def_on) },
+          { key: "teamDefOff", label: "Team Def Off", value: row => stopRate(row.team_def_off), sortValue: row => stopValue(row.team_def_off) }
+        ];
+        renderNbaTable(columns, rows, columns.length, "No players match the NBA dashboard filters.");
+      }
+
+      function renderNbaClutch(rows) {
+        const columns = [
+          { key: "name", label: "Player", type: "text", value: row => row.name },
+          { key: "clutchPts", label: "PTS", value: row => row.clutch.pts },
+          { key: "clutchFga", label: "FGA", value: row => row.clutch.fga },
+          { key: "clutchFgPct", label: "FG%", value: row => pct(row.clutch.fgm, row.clutch.fga), sortValue: row => nullableRatio(row.clutch.fgm, row.clutch.fga) },
+          { key: "clutchTpa", label: "3PA", value: row => row.clutch.tpa },
+          { key: "clutchThreePct", label: "3P%", value: row => pct(row.clutch.tpm, row.clutch.tpa), sortValue: row => nullableRatio(row.clutch.tpm, row.clutch.tpa) },
+          { key: "clutchAst", label: "AST", value: row => row.clutch.ast },
+          { key: "clutchTo", label: "TO", value: row => row.clutch.to },
+          { key: "clutchPm", label: "+/-", value: row => row.clutch.pm }
+        ];
+        renderNbaTable(columns, rows, columns.length, "No players match the NBA dashboard filters.");
+      }
+
+      function renderNbaFourFactors(teamRows) {
+        const rows = [
+          { label: data.team_name, stats: sumTeamStats(teamRows, "team"), opp: sumTeamStats(teamRows, "opponent") },
+          { label: "Opponents", stats: sumTeamStats(teamRows, "opponent"), opp: sumTeamStats(teamRows, "team") }
+        ];
+        const possValue = row => estimatedPoss(row.stats);
+        const columns = [
+          { key: "label", label: "Side", type: "text", value: row => row.label },
+          { key: "efg", label: "eFG%", value: row => pct(row.stats.fgm + 0.5 * row.stats.tpm, row.stats.fga), sortValue: row => nullableRatio(row.stats.fgm + 0.5 * row.stats.tpm, row.stats.fga) },
+          { key: "tov", label: "TOV% Est.", value: row => pct(row.stats.to, possValue(row)), sortValue: row => nullableRatio(row.stats.to, possValue(row)) },
+          { key: "orb", label: "ORB%", value: row => pct(row.stats.or, row.stats.or + row.opp.dr), sortValue: row => nullableRatio(row.stats.or, row.stats.or + row.opp.dr) },
+          { key: "ftr", label: "FTr", value: row => formatRatio(ratio(row.stats.fta, row.stats.fga)), sortValue: row => ratio(row.stats.fta, row.stats.fga) },
+          { key: "poss", label: "Poss Est.", value: row => possValue(row) ? possValue(row).toFixed(1) : "0.0", sortValue: possValue },
+          { key: "ptsPoss", label: "PTS/Poss Est.", value: row => formatRatio(ratio(row.stats.pts, possValue(row))), sortValue: row => ratio(row.stats.pts, possValue(row)) }
+        ];
+        renderNbaTable(columns, rows, columns.length, "No team rows match the NBA dashboard filters.");
+      }
+
+      function renderNbaDashboard() {
+        const state = nbaFilterState();
+        const playerState = state.view === "fourFactors"
+          ? { ...state, player: "all", minMinutes: 0, minFga: 0 }
+          : state;
+        const rows = aggregateNbaPlayers(playerState);
+        const teamRows = aggregateNbaTeamRows(state);
+        renderNbaSummary(rows, teamRows, state.view);
+        nbaDashboardNote.textContent = state.view === "fourFactors"
+          ? "Four Factors are team-level estimates from the selected matches. Player and minute filters are ignored in this view."
+          : "These filters apply only to this NBA-style dashboard. Estimated and proxy metrics are labeled in the glossary.";
+        if (state.view === "traditional") renderNbaTraditional(rows);
+        else if (state.view === "advanced") renderNbaAdvanced(rows);
+        else if (state.view === "shooting") renderNbaShooting(rows);
+        else if (state.view === "defense") renderNbaDefense(rows);
+        else if (state.view === "clutch") renderNbaClutch(rows);
+        else renderNbaFourFactors(teamRows);
+      }
+
+      function populateNbaFilters() {
+        const names = new Set();
+        (data.nba_dashboard?.players || []).forEach(row => names.add(row.name));
+        [...names].sort((a, b) => a.localeCompare(b)).forEach(name => {
+          const opt = document.createElement("option");
+          opt.value = name;
+          opt.textContent = name;
+          nbaPlayerFilter.appendChild(opt);
+        });
+      }
+
+      nbaGlossaryBtn.addEventListener("click", () => nbaGlossaryModal.classList.add("open"));
+      nbaGlossaryClose.addEventListener("click", () => nbaGlossaryModal.classList.remove("open"));
+      nbaGlossaryModal.addEventListener("click", ev => {
+        if (ev.target === nbaGlossaryModal) nbaGlossaryModal.classList.remove("open");
+      });
+      [nbaPlayerFilter, nbaResultFilter, nbaTacticFilter, nbaMinMinutes, nbaMinFga, nbaViewFilter].forEach(node => {
+        node.addEventListener("change", renderNbaDashboard);
+        node.addEventListener("input", renderNbaDashboard);
+      });
+
       document.addEventListener("click", () => {
         document.querySelectorAll(".multi-dd.open").forEach(node => node.classList.remove("open"));
       });
 
+      populateNbaFilters();
+      renderNbaDashboard();
       populateGlobalFilters();
       [globalPlayerFilter, globalResultFilter, globalTacticFilter, globalMinAttempts, globalMinMinutes].forEach(node => {
         node.addEventListener("change", renderFilteredTables);
@@ -6058,6 +6627,138 @@ def fetch_team_schedule_matchids(
     return [row["id"] for row in rows], warnings
 
 
+def empty_nba_shot_split() -> dict[str, int]:
+    return {"m": 0, "a": 0}
+
+
+def empty_nba_player_row(
+    matchid: str,
+    result: str,
+    tactic_group: str,
+    player_name: str,
+) -> dict[str, Any]:
+    return {
+        "matchid": matchid,
+        "result": result,
+        "tactic_group": tactic_group,
+        "name": player_name,
+        "mins": 0,
+        "pts": 0,
+        "fgm": 0,
+        "fga": 0,
+        "tpm": 0,
+        "tpa": 0,
+        "ftm": 0,
+        "fta": 0,
+        "or": 0,
+        "dr": 0,
+        "tr": 0,
+        "ast": 0,
+        "to": 0,
+        "stl": 0,
+        "blk": 0,
+        "pf": 0,
+        "pm": 0,
+        "shots_close": empty_nba_shot_split(),
+        "shots_mid": empty_nba_shot_split(),
+        "shots_three": empty_nba_shot_split(),
+        "assisted": empty_nba_shot_split(),
+        "unassisted": empty_nba_shot_split(),
+        "open": empty_nba_shot_split(),
+        "defended": empty_nba_shot_split(),
+        "team_def_on": empty_nba_shot_split(),
+        "team_def_off": empty_nba_shot_split(),
+        "defended_total": empty_nba_shot_split(),
+        "defended_close": empty_nba_shot_split(),
+        "defended_mid": empty_nba_shot_split(),
+        "defended_three": empty_nba_shot_split(),
+        "clutch": {
+            "pts": 0,
+            "fgm": 0,
+            "fga": 0,
+            "tpm": 0,
+            "tpa": 0,
+            "ast": 0,
+            "to": 0,
+            "pm": 0,
+        },
+    }
+
+
+def add_nba_shot_split(target: dict[str, int], made: bool) -> None:
+    target["a"] += 1
+    if made:
+        target["m"] += 1
+
+
+def is_nba_made_result(value: Any) -> bool:
+    return str(value) in {"1", "2", "5"}
+
+
+def shot_points(shot_type: Any) -> int:
+    return 3 if str(shot_type).startswith("10") else 2
+
+
+def nba_tactic_group(code: Any) -> str:
+    return tactic_group_key(code) or "balanced"
+
+
+def nba_is_clutch(gameclock: Any, selected_score: int, opponent_score: int) -> bool:
+    try:
+        clock = int(gameclock)
+    except (TypeError, ValueError):
+        return False
+    if abs(selected_score - opponent_score) > 5:
+        return False
+    if 2580 <= clock < 2880:
+        return True
+    if clock >= 2880:
+        return ((clock - 2880) % 420) >= 120
+    return False
+
+
+def build_nba_team_row(
+    matchid: str,
+    result: str,
+    tactic_group: str,
+    team_obj: dict[str, Any],
+    opp_obj: dict[str, Any],
+) -> dict[str, Any]:
+    team = team_obj["stats"]["total"]
+    opp = opp_obj["stats"]["total"]
+    return {
+        "matchid": matchid,
+        "result": result,
+        "tactic_group": tactic_group,
+        "team": {
+            "pts": team["pts"],
+            "fgm": team["fgm"],
+            "fga": team["fga"],
+            "tpm": team["tpm"],
+            "tpa": team["tpa"],
+            "ftm": team["ftm"],
+            "fta": team["fta"],
+            "or": team["or"],
+            "dr": team["dr"],
+            "tr": team["tr"],
+            "to": team["to"],
+        },
+        "opponent": {
+            "pts": opp["pts"],
+            "fgm": opp["fgm"],
+            "fga": opp["fga"],
+            "tpm": opp["tpm"],
+            "tpa": opp["tpa"],
+            "ftm": opp["ftm"],
+            "fta": opp["fta"],
+            "or": opp["or"],
+            "dr": opp["dr"],
+            "tr": opp["tr"],
+            "to": opp["to"],
+        },
+    }
+
+
 def game_team_entry(game_data: dict[str, Any], selected_team_key: str) -> tuple[int, dict[str, Any]] | None:
     home = game_data["teamHome"]
     away = game_data["teamAway"]
@@ -6304,6 +7005,8 @@ def aggregate_multi_match_report(
     defense_map: dict[str, dict[str, Any]] = {}
     offense_map: dict[str, dict[str, Any]] = {}
     tactic_minutes = init_tactic_minutes()
+    nba_player_rows: list[dict[str, Any]] = []
+    nba_team_rows: list[dict[str, Any]] = []
     defended_shot_events: list[dict[str, str]] = []
     match_rows = list(initial_rows)
     team_name = ""
@@ -6366,6 +7069,7 @@ def aggregate_multi_match_report(
         team_pts = team_obj["stats"]["total"]["pts"]
         opp_pts = opp_obj["stats"]["total"]["pts"]
         result = "W" if team_pts > opp_pts else "L"
+        tactic_group = nba_tactic_group(team_obj.get("tactics", {}).get("offense"))
         if result == "W":
             wins += 1
         else:
@@ -6449,6 +7153,40 @@ def aggregate_multi_match_report(
             for idx, player in enumerate(team_obj["players"])
             if idx in slot_map and player.get("starter")
         }
+        nba_match_rows: dict[str, dict[str, Any]] = {}
+        for idx, player in enumerate(team_obj["players"]):
+            if idx not in slot_map:
+                continue
+            player_key, player_label = slot_map[idx]
+            totals = player["stats"]["total"]
+            total_secs = sum(int(totals.get(key, 0) or 0) for _, _, key in POSITION_SECONDS)
+            row = empty_nba_player_row(matchid, result, tactic_group, player_label)
+            row.update(
+                {
+                    "mins": secs_to_minutes(total_secs),
+                    "pts": totals["pts"],
+                    "fgm": totals["fgm"],
+                    "fga": totals["fga"],
+                    "tpm": totals["tpm"],
+                    "tpa": totals["tpa"],
+                    "ftm": totals["ftm"],
+                    "fta": totals["fta"],
+                    "or": totals["or"],
+                    "dr": totals["dr"],
+                    "tr": totals["tr"],
+                    "ast": totals["ast"],
+                    "to": totals["to"],
+                    "stl": totals["stl"],
+                    "blk": totals["blk"],
+                    "pf": totals["pf"],
+                    "pm": totals["+/-"],
+                }
+            )
+            nba_match_rows[player_key] = row
+        nba_team_rows.append(build_nba_team_row(matchid, result, tactic_group, team_obj, opp_obj))
+
+        selected_score = 0
+        opponent_score = 0
 
         for ev in game_data["events"]:
             if ev["event_type"] == "shot":
@@ -6457,6 +7195,9 @@ def aggregate_multi_match_report(
                 shot_result = str(ev["shot_result"])
                 shot_type_codes.add(shot_type)
                 shot_result_codes.add(shot_result)
+                points = shot_points(shot_type)
+                clutch = nba_is_clutch(ev.get("gameclock"), selected_score, opponent_score)
+                counted_fg_attempt = shot_result != "4"
 
                 if int(ev["attacking_team"]) == side:
                     for player_key in slot_map.values():
@@ -6490,6 +7231,37 @@ def aggregate_multi_match_report(
 
                         counts = offense_map[shooter_key]["counts"].setdefault(shot_type, off_cell())
                         add_off_stat(counts, shot_result)
+                        nba_row = nba_match_rows.get(shooter_key)
+                        if nba_row is not None:
+                            range_key = shot_range(shot_type)
+                            if range_key == "paint":
+                                add_nba_shot_split(nba_row["shots_close"], made)
+                            elif range_key == "jump":
+                                add_nba_shot_split(nba_row["shots_mid"], made)
+                            else:
+                                add_nba_shot_split(nba_row["shots_three"], made)
+                            defender_idx = normalize_slot(ev["defender"], len(opp_obj["players"]))
+                            add_nba_shot_split(nba_row["defended" if defender_idx is not None else "open"], made)
+                            assistant_idx = normalize_slot(ev["assistant"], len(team_obj["players"]))
+                            add_nba_shot_split(nba_row["assisted" if assistant_idx is not None else "unassisted"], made)
+                            if clutch:
+                                if counted_fg_attempt:
+                                    nba_row["clutch"]["fga"] += 1
+                                if made:
+                                    nba_row["clutch"]["fgm"] += 1
+                                    nba_row["clutch"]["pts"] += points
+                                if shot_type.startswith("10") and counted_fg_attempt:
+                                    nba_row["clutch"]["tpa"] += 1
+                                    if made:
+                                        nba_row["clutch"]["tpm"] += 1
+                                if assistant_idx is not None and made:
+                                    assistant_key = slot_map.get(assistant_idx, ("", ""))[0]
+                                    if assistant_key in nba_match_rows:
+                                        nba_match_rows[assistant_key]["clutch"]["ast"] += 1
+                        if clutch and made:
+                            for active_key in active_keys:
+                                if active_key in nba_match_rows:
+                                    nba_match_rows[active_key]["clutch"]["pm"] += points
 
                 if int(ev["defending_team"]) == side:
                     for player_key in slot_map.values():
@@ -6497,6 +7269,9 @@ def aggregate_multi_match_report(
                             defense_map[player_key[0]]["teamDefOn" if player_key[0] in active_keys else "teamDefOff"],
                             made,
                         )
+                        nba_key = player_key[0]
+                        if nba_key in nba_match_rows:
+                            add_nba_shot_split(nba_match_rows[nba_key]["team_def_on" if nba_key in active_keys else "team_def_off"], made)
 
                     defender_idx = normalize_slot(ev["defender"], len(team_obj["players"]))
                     if defender_idx is not None and defender_idx in slot_map:
@@ -6511,6 +7286,15 @@ def aggregate_multi_match_report(
                             add_shot_stat(defender_stats["defendedMid"], made)
                         else:
                             add_shot_stat(defender_stats["defendedThree"], made)
+                        nba_row = nba_match_rows.get(defender_key)
+                        if nba_row is not None:
+                            add_nba_shot_split(nba_row["defended_total"], made)
+                            if range_key == "paint":
+                                add_nba_shot_split(nba_row["defended_close"], made)
+                            elif range_key == "jump":
+                                add_nba_shot_split(nba_row["defended_mid"], made)
+                            else:
+                                add_nba_shot_split(nba_row["defended_three"], made)
 
                         shooter_idx = normalize_slot(ev["attacker"], len(opp_obj["players"]))
                         shooter_name = (
@@ -6529,7 +7313,59 @@ def aggregate_multi_match_report(
                                 "comment": " ".join(ev.get("comments", [])) or "(no commentary)",
                             }
                         )
+                    if clutch and made:
+                        for active_key in active_keys:
+                            if active_key in nba_match_rows:
+                                nba_match_rows[active_key]["clutch"]["pm"] -= points
 
+                if made:
+                    if int(ev["attacking_team"]) == side:
+                        selected_score += points
+                    else:
+                        opponent_score += points
+
+                continue
+
+            if ev["event_type"] == "free_throw":
+                made = is_nba_made_result(ev.get("shot_result"))
+                clutch = nba_is_clutch(ev.get("gameclock"), selected_score, opponent_score)
+                if int(ev["attacking_team"]) == side:
+                    shooter_idx = normalize_slot(ev["attacker"], len(team_obj["players"]))
+                    if clutch and shooter_idx is not None and shooter_idx in slot_map:
+                        shooter_key, _ = slot_map[shooter_idx]
+                        if shooter_key in nba_match_rows and made:
+                            nba_match_rows[shooter_key]["clutch"]["pts"] += 1
+                    if clutch and made:
+                        for active_key in active_keys:
+                            if active_key in nba_match_rows:
+                                nba_match_rows[active_key]["clutch"]["pm"] += 1
+                    if made:
+                        selected_score += 1
+                else:
+                    if clutch and made:
+                        for active_key in active_keys:
+                            if active_key in nba_match_rows:
+                                nba_match_rows[active_key]["clutch"]["pm"] -= 1
+                    if made:
+                        opponent_score += 1
+                continue
+
+            if ev["event_type"] == "interrupt" and int(ev["attacking_team"]) == side:
+                if clutch := nba_is_clutch(ev.get("gameclock"), selected_score, opponent_score):
+                    player_idx = normalize_slot(ev.get("attacker"), len(team_obj["players"]))
+                    if player_idx is not None and player_idx in slot_map:
+                        player_key, _ = slot_map[player_idx]
+                        if player_key in nba_match_rows:
+                            nba_match_rows[player_key]["clutch"]["to"] += 1
+                continue
+
+            if ev["event_type"] == "foul" and int(ev["attacking_team"]) == side and str(ev.get("foul_type")) == "803":
+                if clutch := nba_is_clutch(ev.get("gameclock"), selected_score, opponent_score):
+                    player_idx = normalize_slot(ev.get("attacker"), len(team_obj["players"]))
+                    if player_idx is not None and player_idx in slot_map:
+                        player_key, _ = slot_map[player_idx]
+                        if player_key in nba_match_rows:
+                            nba_match_rows[player_key]["clutch"]["to"] += 1
                 continue
 
             if ev["event_type"] == "sub" and int(ev["team"]) == side:
@@ -6541,6 +7377,8 @@ def aggregate_multi_match_report(
                     active_keys.discard(slot_map[player_out_idx][0])
                 if player_in_idx is not None and player_in_idx in slot_map:
                     active_keys.add(slot_map[player_in_idx][0])
+
+        nba_player_rows.extend(nba_match_rows.values())
 
     if used_matches == 0:
         return (
@@ -6666,6 +7504,10 @@ def aggregate_multi_match_report(
                 "shot_types": sorted(shot_type_codes, key=int),
                 "results": sorted(shot_result_codes, key=int),
                 "events": defended_shot_events,
+            },
+            "nba_dashboard": {
+                "players": nba_player_rows,
+                "team_rows": nba_team_rows,
             },
         },
     )
