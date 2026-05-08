@@ -1007,9 +1007,6 @@ MULTI_REPORT_HTML = """<!doctype html>
     .tactic-row-inside td {
       background: #fff3e8;
     }
-    .tactic-row-balanced td {
-      background: #f7f7fb;
-    }
     .gdp-line {
       white-space: nowrap;
     }
@@ -1564,7 +1561,6 @@ MULTI_REPORT_HTML = """<!doctype html>
         const group = tacticGroupKey(tactics);
         if (group === "outside") return "tactic-row-outside";
         if (group === "inside") return "tactic-row-inside";
-        if (group === "balanced") return "tactic-row-balanced";
         return "";
       }
 
