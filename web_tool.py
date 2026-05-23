@@ -5,6 +5,7 @@ from __future__ import annotations
 from argparse import Namespace
 import base64
 import contextlib
+from datetime import datetime
 import io
 import json
 from pathlib import Path
@@ -15,12 +16,16 @@ import xml.etree.ElementTree as xml
 from flask import Flask, jsonify, render_template_string, request
 
 from bbapi import BBApi
+from bb_site import BBSiteClient
+from coachparrot_model import SKILLS
 from game import Game
 from main import get_xml_text, parse_xml
+from u21_training import PlayerMetadata, estimate_player, target_seasons_for_player
 
 app = Flask(__name__)
 
 LOCAL_NATIONAL_OPTIONS_PATH = Path(__file__).with_name("national_options.json")
+DEFAULT_CURRENT_SEASON = 72
 
 
 FORM_HTML = """<!doctype html>
@@ -104,7 +109,7 @@ FORM_HTML = """<!doctype html>
     }
     .mode-switch {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
       gap: 10px;
       margin-bottom: 6px;
     }
@@ -117,6 +122,15 @@ FORM_HTML = """<!doctype html>
       background: var(--accent);
       color: #fff;
       border-color: var(--accent);
+    }
+    .beta-label {
+      display: block;
+      margin-top: 2px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      opacity: 0.75;
     }
     .mode-panel {
       display: none;
@@ -210,7 +224,8 @@ FORM_HTML = """<!doctype html>
         <div class="mode-switch">
           <button type="button" class="mode-btn" data-mode="single">Single Match</button>
           <button type="button" class="mode-btn" data-mode="multi">Multi Match Team Aggregate</button>
-          <button type="button" class="mode-btn" data-mode="animation">Animation</button>
+          <button type="button" class="mode-btn" data-mode="animation">Animation<span class="beta-label">Beta</span></button>
+          <button type="button" class="mode-btn" data-mode="u21_training">U21 squad analysis<span class="beta-label">Beta</span></button>
         </div>
 
         <section id="singlePanel" class="mode-panel">
@@ -308,6 +323,27 @@ FORM_HTML = """<!doctype html>
           </div>
         </section>
 
+        <section id="u21TrainingPanel" class="mode-panel">
+          <div class="small">Estimate a current U21 roster from player club-game minutes and CoachParrot formulas.</div>
+          <label>BB Site Password
+            <input name="bb_site_password" type="password" autocomplete="current-password" value="{{ bb_site_password }}" />
+          </label>
+          <button type="button" id="loadEstimatorOptionsBtn" class="ghost">Load Teams And Seasons</button>
+          <div class="auto-grid">
+            <label>Country U21 Team
+              <select name="estimator_country_id" id="estimatorCountrySelect" data-selected="{{ estimator_country_id }}">
+                <option value="">Select a team</option>
+              </select>
+            </label>
+            <label>Current Season
+              <select name="estimator_season" id="estimatorSeasonSelect" data-selected="{{ estimator_season }}">
+                <option value="">Current season</option>
+              </select>
+            </label>
+          </div>
+          <div class="hint" id="estimatorOptionsStatus">Use the button after entering BBAPI credentials.</div>
+        </section>
+
         <button type="submit">Generate Report</button>
       </form>
       <div class="hint">Credentials are only used for this request (server memory only).</div>
@@ -325,6 +361,7 @@ FORM_HTML = """<!doctype html>
     const modeInput = document.getElementById("modeInput");
     const singlePanel = document.getElementById("singlePanel");
     const multiPanel = document.getElementById("multiPanel");
+    const u21TrainingPanel = document.getElementById("u21TrainingPanel");
     const singleModeHint = document.getElementById("singleModeHint");
     const modeButtons = [...document.querySelectorAll(".mode-btn")];
     const matchesList = document.getElementById("matchesList");
@@ -340,12 +377,17 @@ FORM_HTML = """<!doctype html>
     const nationalSeasonSelect = document.getElementById("nationalSeasonSelect");
     const teamScheduleSeasonSelect = document.getElementById("teamScheduleSeasonSelect");
     const nationalOptionsStatus = document.getElementById("nationalOptionsStatus");
+    const loadEstimatorOptionsBtn = document.getElementById("loadEstimatorOptionsBtn");
+    const estimatorCountrySelect = document.getElementById("estimatorCountrySelect");
+    const estimatorSeasonSelect = document.getElementById("estimatorSeasonSelect");
+    const estimatorOptionsStatus = document.getElementById("estimatorOptionsStatus");
     const localNationalOptions = {{ national_options | tojson }};
 
     function applyMode(mode) {
       modeInput.value = mode;
       singlePanel.classList.toggle("active", mode === "single" || mode === "animation");
       multiPanel.classList.toggle("active", mode === "multi");
+      u21TrainingPanel.classList.toggle("active", mode === "u21_training");
       modeButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.mode === mode));
       singleModeHint.textContent = mode === "animation"
         ? "Generate a live animated game view for one match."
@@ -392,6 +434,7 @@ FORM_HTML = """<!doctype html>
     });
 
     function fillSelect(select, rows, selectedValue, fallbackLabel) {
+      if (!select) return;
       select.textContent = "";
       const fallback = document.createElement("option");
       fallback.value = "";
@@ -412,18 +455,21 @@ FORM_HTML = """<!doctype html>
       fillSelect(nationalCountrySelect, payload.countries || [], nationalCountrySelect.dataset.selected, "Select a team");
       fillSelect(nationalSeasonSelect, payload.seasons || [], nationalSeasonSelect.dataset.selected, "Current season");
       fillSelect(teamScheduleSeasonSelect, payload.seasons || [], teamScheduleSeasonSelect.dataset.selected, "Current season");
+      fillSelect(estimatorCountrySelect, payload.countries || [], estimatorCountrySelect.dataset.selected, "Select a team");
+      fillSelect(estimatorSeasonSelect, payload.seasons || [], estimatorSeasonSelect.dataset.selected, "Current season");
       nationalOptionsStatus.textContent = statusText;
+      estimatorOptionsStatus.textContent = statusText;
     }
 
-    loadNationalOptionsBtn?.addEventListener("click", async () => {
+    async function fetchNationalOptions(statusEl, button) {
       const username = document.querySelector("input[name='username']").value.trim();
       const password = document.querySelector("input[name='password']").value.trim();
       if (!username || !password) {
-        nationalOptionsStatus.textContent = "Enter username and password first.";
+        statusEl.textContent = "Enter username and password first.";
         return;
       }
-      nationalOptionsStatus.textContent = "Loading teams and seasons...";
-      loadNationalOptionsBtn.disabled = true;
+      statusEl.textContent = "Loading teams and seasons...";
+      button.disabled = true;
       try {
         const response = await fetch("/national-options", {
           method: "POST",
@@ -436,11 +482,14 @@ FORM_HTML = """<!doctype html>
         }
         loadOptionsIntoForm(payload, "Loaded from BBAPI and saved locally.");
       } catch (err) {
-        nationalOptionsStatus.textContent = err.message;
+        statusEl.textContent = err.message;
       } finally {
-        loadNationalOptionsBtn.disabled = false;
+        button.disabled = false;
       }
-    });
+    }
+
+    loadNationalOptionsBtn?.addEventListener("click", () => fetchNationalOptions(nationalOptionsStatus, loadNationalOptionsBtn));
+    loadEstimatorOptionsBtn?.addEventListener("click", () => fetchNationalOptions(estimatorOptionsStatus, loadEstimatorOptionsBtn));
 
     updateRemoveButtons();
     loadOptionsIntoForm(localNationalOptions, "Loaded from local file. Use the button to refresh.");
@@ -543,6 +592,393 @@ TEAM_CHOICE_HTML = """<!doctype html>
   </main>
   <script>
   </script>
+</body>
+</html>
+"""
+
+
+U21_TRAINING_REPORT_HTML = """<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>U21 squad analysis</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --panel: #fff;
+      --line: #d9e1ea;
+      --ink: #1f2933;
+      --muted: #607285;
+      --accent: #0d47a1;
+      --warn-bg: #fff7ed;
+      --warn-line: #fdba74;
+      --shadow: 0 8px 26px rgba(16, 24, 40, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: radial-gradient(circle at 10% 10%, #eef4ff 0%, transparent 35%), var(--bg);
+      color: var(--ink);
+    }
+    .wrap {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .topbar {
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    a { color: var(--accent); font-weight: 700; text-decoration: none; }
+    .hero, .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+    .hero {
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    h1 { margin: 0 0 8px; font-size: 28px; }
+    h2 { margin: 0; padding: 12px 14px; border-bottom: 1px solid var(--line); font-size: 15px; }
+    p { margin: 0; color: var(--muted); }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .summary-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fbfdff;
+    }
+    .k {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .v { margin-top: 4px; font-size: 21px; font-weight: 800; }
+    .card { overflow: hidden; }
+    .table-wrap { overflow: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      border-bottom: 1px solid #eef1f5;
+      padding: 8px 10px;
+      text-align: right;
+      vertical-align: top;
+      white-space: nowrap;
+    }
+    th:first-child, td:first-child { text-align: left; }
+    th {
+      background: #f7f9fc;
+      color: #36414b;
+      font-weight: 700;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .skills {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(118px, 1fr));
+      gap: 5px 8px;
+      min-width: 260px;
+      white-space: normal;
+      text-align: left;
+    }
+    .skill-pill {
+      border: 1px solid #e5eaf1;
+      border-radius: 6px;
+      padding: 4px 6px;
+      background: #fbfdff;
+    }
+    .skill-pill b { display: inline-block; min-width: 22px; }
+    .skill-label {
+      margin-left: 5px;
+      font-weight: 800;
+    }
+    .badges {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      white-space: normal;
+      min-width: 140px;
+    }
+    .badge {
+      border: 1px solid var(--warn-line);
+      border-radius: 999px;
+      background: var(--warn-bg);
+      color: #8a4b12;
+      padding: 3px 7px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    details summary {
+      cursor: pointer;
+      color: var(--accent);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.38fr);
+      gap: 12px;
+      align-items: start;
+    }
+    .subcard {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .subcard h3 {
+      margin: 0;
+      padding: 9px 10px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfdff;
+      font-size: 13px;
+    }
+    .subcard .inner { padding: 10px; }
+    .mini-table th, .mini-table td { padding: 6px 8px; }
+    .weekly-scroll {
+      max-height: 260px;
+      overflow: auto;
+    }
+    .training-scroll {
+      max-height: 260px;
+      overflow: auto;
+    }
+    .ignored-games summary {
+      margin: 0;
+      padding: 9px 10px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfdff;
+      font-size: 13px;
+    }
+    .ignored-games:not([open]) summary {
+      border-bottom: 0;
+    }
+    .ignored-scroll {
+      max-height: 180px;
+      overflow: auto;
+    }
+    .muted { color: var(--muted); }
+    .empty { color: var(--muted); padding: 12px; }
+    .warnings {
+      margin: 0;
+      padding-left: 18px;
+      color: #8a1c1c;
+    }
+    @media (max-width: 860px) {
+      .wrap { padding: 14px; }
+      .detail-grid { grid-template-columns: 1fr; }
+      .skills { grid-template-columns: repeat(2, minmax(112px, 1fr)); min-width: 230px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="topbar">
+      <a href="/">Back to report form</a>
+      <span class="muted">Generated {{ report.generated_at }}</span>
+    </div>
+    <section class="hero">
+      <h1>U21 squad analysis</h1>
+      <p>{{ report.team_name }}{% if report.country_name %} · {{ report.country_name }}{% endif %} · Season {{ report.season }}</p>
+      <div class="summary-grid">
+        <div class="summary-card"><div class="k">Roster Players</div><div class="v">{{ report.players|length }}</div></div>
+        <div class="summary-card"><div class="k">Coach Level</div><div class="v">7</div></div>
+        <div class="summary-card"><div class="k">Skill Anchor</div><div class="v">Salary</div></div>
+        <div class="summary-card"><div class="k">Minutes Source</div><div class="v">Club Logs</div></div>
+      </div>
+      {% if report.warnings %}
+      <ul class="warnings">
+        {% for warning in report.warnings %}
+        <li>{{ warning }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </section>
+
+    <section class="card">
+      <h2>Roster Estimate</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>Age</th>
+              <th>Height</th>
+              <th>Salary</th>
+              <th>Best Pos</th>
+              <th>Potential</th>
+              <th>Start Skills</th>
+              <th>Modeled Current</th>
+              <th>Residual</th>
+              <th>Warnings</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for player in report.players %}
+            <tr>
+              <td><strong>{{ player.name }}</strong><br><span class="muted">#{{ player.player_id }}</span></td>
+              <td>{{ player.age if player.age is not none else "N/A" }}</td>
+              <td>{{ player.height_cm_used }} cm</td>
+              <td>{{ "{:,}".format(player.salary) if player.salary else "N/A" }}</td>
+              <td>{{ player.best_position }}</td>
+              <td>{{ player.potential }}</td>
+              <td>
+                <div class="skills">
+                  {% for row in player.estimated_start_skill_rows %}
+                  {% for skill in row %}
+                  <span class="skill-pill">
+                    <b>{{ skill.skill }}</b> {{ skill.rounded }}
+                    <span class="skill-label" style="color: {{ skill.color }}">{{ skill.label }}</span>
+                  </span>
+                  {% endfor %}
+                  {% endfor %}
+                </div>
+              </td>
+              <td>{{ "{:,}".format(player.estimated_current_salary) if player.estimated_current_salary else "N/A" }}</td>
+              <td>{{ "%+d"|format(player.salary_residual) if player.salary_residual is not none else "N/A" }}</td>
+              <td>
+                <div class="badges">
+                  {% for warning in player.warnings %}
+                  <span class="badge">{{ warning }}</span>
+                  {% endfor %}
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="10">
+                <details>
+                  <summary>Weekly minutes, inferred training, and reverse-out details</summary>
+                  <div class="detail-grid">
+                    <div class="subcard">
+                      <h3>Club-Game Weekly Minutes</h3>
+                      <div class="table-wrap weekly-scroll">
+                        <table class="mini-table">
+                          <thead>
+                            <tr>
+                              <th>Season</th><th>Week</th><th>Age</th><th>PG</th><th>SG</th><th>SF</th><th>PF</th><th>C</th><th>46+ Pos</th><th>Training</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for row in player.weekly_rows %}
+                            <tr>
+                              <td>{{ row.season }}</td>
+                              <td>{{ row.week }}</td>
+                              <td>{{ row.age if row.age is not none else "N/A" }}</td>
+                              <td>{{ row.position_minutes.PG }}</td>
+                              <td>{{ row.position_minutes.SG }}</td>
+                              <td>{{ row.position_minutes.SF }}</td>
+                              <td>{{ row.position_minutes.PF }}</td>
+                              <td>{{ row.position_minutes.C }}</td>
+                              <td>{{ row.selected_position or "." }}</td>
+                              <td>{{ row.training }}</td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="10" class="empty">No counting club-game rows found.</td></tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="subcard">
+                      <h3>Training Summary</h3>
+                      <div class="inner training-scroll">
+                        <p class="muted">46+ minute weeks by selected position</p>
+                        <table class="mini-table">
+                          <thead><tr><th>Age</th><th>Weeks</th><th>PG</th><th>SG</th><th>SF</th><th>PF</th><th>C</th></tr></thead>
+                          <tbody>
+                            {% for summary in player.training_summary_by_age %}
+                            <tr>
+                              <td>{{ summary.age }}</td>
+                              <td>{{ summary.weeks }}</td>
+                              <td>{{ summary.counts_by_position.PG }}</td>
+                              <td>{{ summary.counts_by_position.SG }}</td>
+                              <td>{{ summary.counts_by_position.SF }}</td>
+                              <td>{{ summary.counts_by_position.PF }}</td>
+                              <td>{{ summary.counts_by_position.C }}</td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="7" class="empty">No age summary available.</td></tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                        {% for summary in player.training_summary_by_age %}
+                        <p class="muted">Age {{ summary.age }} inferred training</p>
+                        <table class="mini-table">
+                          <tbody>
+                            {% for item in summary.trainings %}
+                            <tr><td>S{{ item.season }} W{{ item.week }}</td><td>{{ item.training }}</td></tr>
+                            {% else %}
+                            <tr><td colspan="2" class="empty">No training inferred.</td></tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                        {% endfor %}
+                        <p class="muted">Current-season training reversed out of the start estimate</p>
+                        <table class="mini-table">
+                          <tbody>
+                            {% for row in player.current_season_training %}
+                            <tr><td>W{{ row.week }}</td><td>{{ row.training }}</td></tr>
+                            {% else %}
+                            <tr><td colspan="2" class="empty">No current-season training inferred.</td></tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <details class="subcard ignored-games">
+                      <summary>Ignored Games ({{ player.ignored_games|length }})</summary>
+                      <div class="table-wrap ignored-scroll">
+                        <table class="mini-table">
+                          <thead><tr><th>Season</th><th>Date</th><th>Type</th><th>Pos</th><th>Min</th><th>Reason</th></tr></thead>
+                          <tbody>
+                            {% for game in player.ignored_games %}
+                            <tr>
+                              <td>{{ game.season }}</td>
+                              <td>{{ game.date }}</td>
+                              <td>{{ game.game_type }}</td>
+                              <td>{{ game.position }}</td>
+                              <td>{{ game.minutes }}</td>
+                              <td>{{ game.reason }}</td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="6" class="empty">No ignored rows in selected seasons.</td></tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </details>
+                  </div>
+                </details>
+              </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="10" class="empty">No roster players were found.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
 </body>
 </html>
 """
@@ -6408,6 +6844,9 @@ def empty_form_context(
     team_schedule_season: str = "",
     team_schedule_limit: str = "10",
     team_schedule_types: list[str] | None = None,
+    bb_site_password: str = "",
+    estimator_country_id: str = "",
+    estimator_season: str = "",
 ) -> dict[str, Any]:
     vals = list(multi_matchids or [])
     while len(vals) < 2:
@@ -6428,6 +6867,9 @@ def empty_form_context(
         "team_schedule_season": team_schedule_season,
         "team_schedule_limit": team_schedule_limit,
         "team_schedule_types": list(team_schedule_types or DEFAULT_TEAM_SCHEDULE_TYPES),
+        "bb_site_password": bb_site_password,
+        "estimator_country_id": estimator_country_id,
+        "estimator_season": estimator_season,
         "team_schedule_type_options": TEAM_SCHEDULE_TYPE_OPTIONS,
         "national_options": load_local_national_options(),
     }
@@ -6448,11 +6890,40 @@ def parse_multi_matchids(form_values: list[str]) -> list[str]:
 
 
 def default_local_seasons() -> list[dict[str, Any]]:
-    current = 71
     return [
-        {"id": str(season), "label": f"Season {season}", "current": season == current}
-        for season in range(current, max(current - 10, 0), -1)
+        {"id": str(season), "label": f"Season {season}", "current": season == DEFAULT_CURRENT_SEASON}
+        for season in range(DEFAULT_CURRENT_SEASON, max(DEFAULT_CURRENT_SEASON - 10, 0), -1)
     ]
+
+
+def normalize_season_options(seasons: Any) -> list[dict[str, Any]]:
+    fallback = default_local_seasons()
+    if not isinstance(seasons, list):
+        return fallback
+
+    by_id: dict[str, dict[str, Any]] = {}
+    for season in seasons:
+        if not isinstance(season, dict):
+            continue
+        season_id = str(season.get("id", "")).strip()
+        if not season_id.isdigit():
+            continue
+        by_id[season_id] = {
+            "id": season_id,
+            "label": str(season.get("label") or f"Season {season_id}"),
+            "current": False,
+            "start": str(season.get("start") or ""),
+            "end": str(season.get("end") or ""),
+        }
+
+    current_id = str(DEFAULT_CURRENT_SEASON)
+    if current_id not in by_id:
+        by_id[current_id] = {"id": current_id, "label": f"Season {current_id}", "current": False, "start": "", "end": ""}
+    for season in by_id.values():
+        season["current"] = season["id"] == current_id
+
+    rows = sorted(by_id.values(), key=lambda item: int(str(item["id"])), reverse=True)
+    return rows or fallback
 
 
 def load_local_national_options() -> dict[str, Any]:
@@ -6466,10 +6937,10 @@ def load_local_national_options() -> dict[str, Any]:
         return fallback
 
     countries = normalize_country_options(payload.get("countries"))
-    seasons = payload.get("seasons")
+    seasons = normalize_season_options(payload.get("seasons"))
     return {
         "countries": countries or fallback["countries"],
-        "seasons": seasons if isinstance(seasons, list) and seasons else fallback["seasons"],
+        "seasons": seasons or fallback["seasons"],
     }
 
 
@@ -6525,6 +6996,9 @@ def load_national_options(username: str, password: str) -> dict[str, Any]:
 
 
 def current_season_from_options(seasons: list[dict[str, Any]]) -> str:
+    for season in seasons:
+        if str(season.get("id")) == str(DEFAULT_CURRENT_SEASON):
+            return str(season["id"])
     for season in seasons:
         if season.get("current"):
             return str(season["id"])
@@ -6621,6 +7095,94 @@ def fetch_team_schedule_matchids(
         rows = rows[:requested]
 
     return [row["id"] for row in rows], warnings
+
+
+def country_name_from_options(country_id: str) -> str:
+    for country in load_local_national_options().get("countries", []):
+        if str(country.get("id")) == str(country_id):
+            return str(country.get("name", ""))
+    return ""
+
+
+def build_u21_training_report(
+    username: str,
+    password: str,
+    site_password: str,
+    country_id: str,
+    season: str,
+) -> dict[str, Any]:
+    api = BBApi(username, password)
+    if not getattr(api, "logged_in", False):
+        raise ValueError("BBAPI login failed. Check username/security code.")
+
+    selected_season = season or current_season_from_options(api.seasons())
+    if not selected_season:
+        raise ValueError("Could not detect the current BB season.")
+    try:
+        current_season = int(selected_season)
+    except ValueError as exc:
+        raise ValueError("Season must be numeric.") from exc
+
+    site = BBSiteClient(username, site_password)
+    site.login()
+    team_name, roster = site.fetch_u21_roster(country_id)
+
+    players: list[dict[str, Any]] = []
+    report_warnings: list[str] = []
+    if not roster:
+        report_warnings.append("No players were found on the selected U21 roster page.")
+
+    for roster_player in roster:
+        player_warnings: list[str] = []
+        try:
+            info = api.player_info(roster_player.player_id)
+        except Exception as exc:
+            info = {"player_id": roster_player.player_id}
+            player_warnings.append(f"BBAPI metadata failed: {exc}")
+
+        metadata = PlayerMetadata(
+            player_id=roster_player.player_id,
+            first_name=str(info.get("first_name") or ""),
+            last_name=str(info.get("last_name") or ""),
+            age=info.get("age"),
+            height=info.get("height"),
+            salary=info.get("salary"),
+            best_position=str(info.get("best_position") or ""),
+            potential=info.get("potential"),
+            game_shape=info.get("game_shape"),
+            dmi=info.get("dmi"),
+        )
+
+        logs_by_season: dict[int, list[Any]] = {}
+        for target_season in target_seasons_for_player(metadata.age, current_season):
+            try:
+                logs_by_season[target_season] = site.fetch_player_game_log(
+                    roster_player.player_id,
+                    target_season,
+                )
+            except Exception as exc:
+                logs_by_season[target_season] = []
+                player_warnings.append(f"Could not load player log for season {target_season}: {exc}")
+
+        estimate = estimate_player(
+            roster_player,
+            metadata,
+            logs_by_season,
+            current_season=current_season,
+        )
+        estimate["warnings"] = player_warnings + estimate.get("warnings", [])
+        players.append(estimate)
+
+    return {
+        "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "country_id": str(country_id),
+        "country_name": country_name_from_options(country_id),
+        "team_name": team_name,
+        "season": current_season,
+        "skills": list(SKILLS),
+        "players": players,
+        "warnings": report_warnings,
+    }
 
 
 def empty_nba_shot_split() -> dict[str, int]:
@@ -7553,6 +8115,9 @@ def form_error_response(
     team_schedule_season: str,
     team_schedule_limit: str,
     team_schedule_types: list[str],
+    bb_site_password: str,
+    estimator_country_id: str,
+    estimator_season: str,
 ) -> tuple[str, int]:
     return (
         render_template_string(
@@ -7573,6 +8138,9 @@ def form_error_response(
                 team_schedule_season=team_schedule_season,
                 team_schedule_limit=team_schedule_limit,
                 team_schedule_types=team_schedule_types,
+                bb_site_password=bb_site_password,
+                estimator_country_id=estimator_country_id,
+                estimator_season=estimator_season,
             ),
         ),
         status_code,
@@ -7596,6 +8164,9 @@ def report() -> tuple[str, int] | str:
     team_schedule_season = request.form.get("team_schedule_season", "").strip()
     team_schedule_limit = request.form.get("team_schedule_limit", "10").strip() or "10"
     team_schedule_types = request.form.getlist("team_schedule_types") or DEFAULT_TEAM_SCHEDULE_TYPES
+    bb_site_password = request.form.get("bb_site_password", "").strip()
+    estimator_country_id = request.form.get("estimator_country_id", "").strip()
+    estimator_season = request.form.get("estimator_season", "").strip()
     from_multi = request.form.get("from_multi") == "1"
 
     def form_error(message: str, status_code: int, *, keep_password: bool = True) -> tuple[str, int]:
@@ -7616,10 +8187,31 @@ def report() -> tuple[str, int] | str:
             team_schedule_season=team_schedule_season,
             team_schedule_limit=team_schedule_limit,
             team_schedule_types=team_schedule_types,
+            bb_site_password=bb_site_password if keep_password else "",
+            estimator_country_id=estimator_country_id,
+            estimator_season=estimator_season,
         )
 
     if not username or not password:
         return form_error("Username and password are required.", 400)
+
+    if mode == "u21_training":
+        if not bb_site_password:
+            return form_error("BB site password is required for U21 squad analysis.", 400)
+        if not estimator_country_id:
+            return form_error("Choose a country U21 team before generating the estimator.", 400)
+        try:
+            payload = build_u21_training_report(
+                username=username,
+                password=password,
+                site_password=bb_site_password,
+                country_id=estimator_country_id,
+                season=estimator_season,
+            )
+        except Exception as exc:
+            return form_error(f"Failed to build U21 squad analysis: {exc}", 400, keep_password=False)
+
+        return render_template_string(U21_TRAINING_REPORT_HTML, report=payload)
 
     if mode == "multi":
         source_warnings: list[str] = []

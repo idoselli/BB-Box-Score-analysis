@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Set
+from typing import Any, Set
 import requests
 import xml.etree.ElementTree as xml
 from pprint import pprint
@@ -136,14 +136,55 @@ class BBApi:
     def get_xml_seasons(self) -> str:
         return self.network.get("http://bbapi.buzzerbeater.com/seasons.aspx")
 
-    def player(self, playerid) -> str:
+    def get_xml_player(self, playerid, *, use_cache: bool = False) -> str:
+        path = CACHE_DIR / f"player_{playerid}.xml"
+
+        if use_cache and path.exists():
+            return path.read_text(encoding="utf-8")
+
         p = {"playerid": playerid}
-        data = self.network.get("http://bbapi.buzzerbeater.com/player.aspx", p)
+        text = self.network.get("http://bbapi.buzzerbeater.com/player.aspx", p)
 
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text, encoding="utf-8")
+        except OSError:
+            pass
+
+        return text
+
+    def player(self, playerid) -> str:
+        return self.player_info(playerid).get("best_position", "")
+
+    def player_info(self, playerid) -> dict[str, Any]:
+        data = self.get_xml_player(playerid)
         root = xml.fromstring(data)
-        position = root.find("./player/bestPosition")
+        player = root.find("./player")
+        if player is None:
+            return {"player_id": int(playerid)}
 
-        return position.text
+        def int_text(path: str) -> int | None:
+            value = player.findtext(path)
+            if value is None:
+                return None
+            cleaned = value.strip().replace(",", "")
+            try:
+                return int(cleaned)
+            except ValueError:
+                return None
+
+        return {
+            "player_id": int(player.attrib.get("id", playerid)),
+            "first_name": (player.findtext("./firstName") or "").strip(),
+            "last_name": (player.findtext("./lastName") or "").strip(),
+            "age": int_text("./age"),
+            "height": int_text("./height"),
+            "dmi": int_text("./dmi"),
+            "salary": int_text("./salary"),
+            "best_position": (player.findtext("./bestPosition") or "").strip(),
+            "game_shape": int_text("./skills/gameShape"),
+            "potential": int_text("./skills/potential"),
+        }
 
     def strategy(self, matchid=0):
         data = self.get_xml_boxscore(matchid)
