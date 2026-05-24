@@ -828,7 +828,7 @@ U21_TRAINING_REPORT_HTML = """<!doctype html>
               <th>Best Pos</th>
               <th>Potential</th>
               <th>Start Skills</th>
-              <th>Modeled Current</th>
+              <th>Modeled Start Salary</th>
               <th>Residual</th>
               <th>Warnings</th>
             </tr>
@@ -854,7 +854,7 @@ U21_TRAINING_REPORT_HTML = """<!doctype html>
                   {% endfor %}
                 </div>
               </td>
-              <td>{{ "{:,}".format(player.estimated_current_salary) if player.estimated_current_salary else "N/A" }}</td>
+              <td>{{ "{:,}".format(player.modeled_start_salary) if player.modeled_start_salary else "N/A" }}</td>
               <td>{{ "%+d"|format(player.salary_residual) if player.salary_residual is not none else "N/A" }}</td>
               <td>
                 <div class="badges">

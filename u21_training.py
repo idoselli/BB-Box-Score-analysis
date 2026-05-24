@@ -352,15 +352,11 @@ def estimate_player(
         warnings.append("No club-game minutes found in selected age window.")
 
     pre_actions = [item.action for item in inferred if item.season < current_season]
-    current_actions = [item.action for item in inferred if item.season == current_season]
     pre_profile = replay_training(base_profile, pre_actions, height_cm=height_cm, potential=potential)
-    start_profile, modeled_current_salary, residual = solve_start_profile(
+    start_profile, modeled_start_salary, residual = solve_start_profile(
         pre_profile,
-        current_actions,
         current_salary=metadata.salary,
         best_pos=best_pos,
-        height_cm=height_cm,
-        potential=potential,
     )
 
     if residual is not None and metadata.salary:
@@ -407,7 +403,8 @@ def estimate_player(
         "dmi": metadata.dmi,
         "estimated_start_skills": start_skills,
         "estimated_start_skill_rows": skill_display_rows(start_skills),
-        "estimated_current_salary": round(modeled_current_salary) if modeled_current_salary is not None else None,
+        "estimated_current_salary": round(modeled_start_salary) if modeled_start_salary is not None else None,
+        "modeled_start_salary": round(modeled_start_salary) if modeled_start_salary is not None else None,
         "salary_residual": round(residual) if residual is not None else None,
         "start_best_position_salary": round(listed_salary(start_profile, best_pos)),
         "training_counts_by_position": counts_by_position,

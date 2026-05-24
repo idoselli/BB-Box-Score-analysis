@@ -102,6 +102,8 @@ class U21ModeFlaskTests(unittest.TestCase):
         self.assertEqual(player["training_counts_by_position"]["PG"], 1)
         self.assertEqual(player["training_summary_by_age"][-1]["age"], 21)
         self.assertEqual(player["current_season_training"][0]["training"], "0.5 OD for 1 + 0.5 PA for 1")
+        self.assertEqual(player["modeled_start_salary"], player["salary"])
+        self.assertEqual(player["start_best_position_salary"], player["salary"])
         self.assertEqual(len(player["ignored_games"]), 1)
 
     def test_mocked_u21_route_renders_report(self):
@@ -128,6 +130,7 @@ class U21ModeFlaskTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"Olegas Sergadejevas", response.data)
         self.assertIn(b"Coach Level</div><div class=\"v\">7", response.data)
+        self.assertIn(b"Modeled Start Salary", response.data)
         self.assertIn(b"tremendous", response.data)
         self.assertIn(b"0.5 OD for 1 + 0.5 PA for 1", response.data)
 

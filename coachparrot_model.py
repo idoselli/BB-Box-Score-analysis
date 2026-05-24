@@ -214,12 +214,9 @@ def replay_training(
 
 def solve_start_profile(
     pre_current_profile: list[float],
-    current_actions: list[TrainingAction],
     *,
     current_salary: int | None,
     best_pos: str,
-    height_cm: int,
-    potential: int,
 ) -> tuple[list[float], float | None, float | None]:
     if not current_salary or current_salary <= 0:
         return pre_current_profile, None, None
@@ -228,8 +225,7 @@ def solve_start_profile(
 
     def modeled(offset: float) -> float:
         start = [value + offset for value in pre_current_profile]
-        current = replay_training(start, current_actions, height_cm=height_cm, potential=potential)
-        return listed_salary(current, pos)
+        return listed_salary(start, pos)
 
     lo, hi = -8.0, 18.0
     best_offset = 0.0
