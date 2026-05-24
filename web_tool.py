@@ -340,6 +340,12 @@ FORM_HTML = """<!doctype html>
                 <option value="">Current season</option>
               </select>
             </label>
+            <label>NT Strength
+              <select name="estimator_nt_strength" id="estimatorNtStrengthSelect">
+                <option value="weak"{% if estimator_nt_strength == "weak" %} selected{% endif %}>Weak NT</option>
+                <option value="strong"{% if estimator_nt_strength == "strong" %} selected{% endif %}>Strong NT</option>
+              </select>
+            </label>
           </div>
           <div class="hint" id="estimatorOptionsStatus">Use the button after entering BBAPI credentials.</div>
         </section>
@@ -803,6 +809,7 @@ U21_TRAINING_REPORT_HTML = """<!doctype html>
       <div class="summary-grid">
         <div class="summary-card"><div class="k">Roster Players</div><div class="v">{{ report.players|length }}</div></div>
         <div class="summary-card"><div class="k">Coach Level</div><div class="v">7</div></div>
+        <div class="summary-card"><div class="k">NT Strength</div><div class="v">{{ "Strong" if report.nt_strength == "strong" else "Weak" }}</div></div>
         <div class="summary-card"><div class="k">Skill Anchor</div><div class="v">Salary</div></div>
         <div class="summary-card"><div class="k">Minutes Source</div><div class="v">Club Logs</div></div>
       </div>
@@ -6847,6 +6854,7 @@ def empty_form_context(
     bb_site_password: str = "",
     estimator_country_id: str = "",
     estimator_season: str = "",
+    estimator_nt_strength: str = "weak",
 ) -> dict[str, Any]:
     vals = list(multi_matchids or [])
     while len(vals) < 2:
@@ -6870,6 +6878,7 @@ def empty_form_context(
         "bb_site_password": bb_site_password,
         "estimator_country_id": estimator_country_id,
         "estimator_season": estimator_season,
+        "estimator_nt_strength": estimator_nt_strength if estimator_nt_strength in {"weak", "strong"} else "weak",
         "team_schedule_type_options": TEAM_SCHEDULE_TYPE_OPTIONS,
         "national_options": load_local_national_options(),
     }
@@ -7110,6 +7119,7 @@ def build_u21_training_report(
     site_password: str,
     country_id: str,
     season: str,
+    nt_strength: str = "weak",
 ) -> dict[str, Any]:
     api = BBApi(username, password)
     if not getattr(api, "logged_in", False):
@@ -7169,6 +7179,7 @@ def build_u21_training_report(
             metadata,
             logs_by_season,
             current_season=current_season,
+            nt_strength=nt_strength,
         )
         estimate["warnings"] = player_warnings + estimate.get("warnings", [])
         players.append(estimate)
@@ -7179,6 +7190,8 @@ def build_u21_training_report(
         "country_name": country_name_from_options(country_id),
         "team_name": team_name,
         "season": current_season,
+        "nt_strength": nt_strength if nt_strength in {"weak", "strong"} else "weak",
+        "training_multiplier": 1.5 if nt_strength == "strong" else 1.0,
         "skills": list(SKILLS),
         "players": players,
         "warnings": report_warnings,
@@ -8118,6 +8131,7 @@ def form_error_response(
     bb_site_password: str,
     estimator_country_id: str,
     estimator_season: str,
+    estimator_nt_strength: str,
 ) -> tuple[str, int]:
     return (
         render_template_string(
@@ -8141,6 +8155,7 @@ def form_error_response(
                 bb_site_password=bb_site_password,
                 estimator_country_id=estimator_country_id,
                 estimator_season=estimator_season,
+                estimator_nt_strength=estimator_nt_strength,
             ),
         ),
         status_code,
@@ -8167,6 +8182,9 @@ def report() -> tuple[str, int] | str:
     bb_site_password = request.form.get("bb_site_password", "").strip()
     estimator_country_id = request.form.get("estimator_country_id", "").strip()
     estimator_season = request.form.get("estimator_season", "").strip()
+    estimator_nt_strength = request.form.get("estimator_nt_strength", "weak").strip()
+    if estimator_nt_strength not in {"weak", "strong"}:
+        estimator_nt_strength = "weak"
     from_multi = request.form.get("from_multi") == "1"
 
     def form_error(message: str, status_code: int, *, keep_password: bool = True) -> tuple[str, int]:
@@ -8190,6 +8208,7 @@ def report() -> tuple[str, int] | str:
             bb_site_password=bb_site_password if keep_password else "",
             estimator_country_id=estimator_country_id,
             estimator_season=estimator_season,
+            estimator_nt_strength=estimator_nt_strength,
         )
 
     if not username or not password:
@@ -8207,6 +8226,7 @@ def report() -> tuple[str, int] | str:
                 site_password=bb_site_password,
                 country_id=estimator_country_id,
                 season=estimator_season,
+                nt_strength=estimator_nt_strength,
             )
         except Exception as exc:
             return form_error(f"Failed to build U21 squad analysis: {exc}", 400, keep_password=False)

@@ -166,6 +166,7 @@ def train_week(
     height_cm: int,
     potential: int = DEFAULT_POTENTIAL,
     coach_level: int = COACH_LEVEL,
+    training_multiplier: float = 1.0,
 ) -> list[float]:
     values = normalize_profile(profile)
     if action.name not in TRAINING_WEIGHTS or action.fraction <= 0:
@@ -187,6 +188,7 @@ def train_week(
         pot = 1.0 if potential >= max_skill else POTENTIAL_CAP_FACTOR
         out[i] += (
             base_weight
+            * training_multiplier
             * action.fraction
             * age_multiplier
             * h_factor
@@ -205,10 +207,18 @@ def replay_training(
     height_cm: int,
     potential: int = DEFAULT_POTENTIAL,
     coach_level: int = COACH_LEVEL,
+    training_multiplier: float = 1.0,
 ) -> list[float]:
     out = normalize_profile(profile)
     for action in actions:
-        out = train_week(out, action, height_cm=height_cm, potential=potential, coach_level=coach_level)
+        out = train_week(
+            out,
+            action,
+            height_cm=height_cm,
+            potential=potential,
+            coach_level=coach_level,
+            training_multiplier=training_multiplier,
+        )
     return out
 
 

@@ -26,6 +26,7 @@ SEASON_72_START = datetime(2026, 5, 2, tzinfo=timezone.utc)
 SEASON_DURATION_DAYS = 98
 TRAINING_THRESHOLD_MINUTES = 46
 NON_COUNTING_EXACT = {"bbm", "bbb", "national team", "private"}
+NT_STRENGTH_MULTIPLIERS = {"weak": 1.0, "strong": 1.5}
 SKILL_LABELS = {
     4: ("inept", "#30139F"),
     5: ("mediocre", "#700BA2"),
@@ -328,6 +329,7 @@ def estimate_player(
     logs_by_season: dict[int, list[GameLogEntry]],
     *,
     current_season: int,
+    nt_strength: str = "weak",
 ) -> dict[str, Any]:
     warnings: list[str] = []
     if metadata.potential is None:
@@ -341,6 +343,10 @@ def estimate_player(
     potential = metadata.potential if metadata.potential is not None else DEFAULT_POTENTIAL
     best_pos = normalize_position(metadata.best_position)
     base_profile = list(POSITION_PRESETS[best_pos])
+    strength_key = (nt_strength or "weak").strip().casefold()
+    if strength_key not in NT_STRENGTH_MULTIPLIERS:
+        strength_key = "weak"
+    training_multiplier = NT_STRENGTH_MULTIPLIERS[strength_key]
 
     minutes_map, ignored_games = aggregate_minutes(logs_by_season)
     inferred, weekly_rows, counts_by_position = infer_training(
@@ -352,7 +358,13 @@ def estimate_player(
         warnings.append("No club-game minutes found in selected age window.")
 
     pre_actions = [item.action for item in inferred if item.season < current_season]
-    pre_profile = replay_training(base_profile, pre_actions, height_cm=height_cm, potential=potential)
+    pre_profile = replay_training(
+        base_profile,
+        pre_actions,
+        height_cm=height_cm,
+        potential=potential,
+        training_multiplier=training_multiplier,
+    )
     start_profile, modeled_start_salary, residual = solve_start_profile(
         pre_profile,
         current_salary=metadata.salary,
@@ -401,6 +413,8 @@ def estimate_player(
         "potential": potential,
         "game_shape": metadata.game_shape,
         "dmi": metadata.dmi,
+        "nt_strength": strength_key,
+        "training_multiplier": training_multiplier,
         "estimated_start_skills": start_skills,
         "estimated_start_skill_rows": skill_display_rows(start_skills),
         "estimated_current_salary": round(modeled_start_salary) if modeled_start_salary is not None else None,

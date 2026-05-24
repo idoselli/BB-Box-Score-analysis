@@ -90,12 +90,14 @@ class U21ModeFlaskTests(unittest.TestCase):
         web_tool.BBApi = FakeBBApi
         web_tool.BBSiteClient = FakeBBSiteClient
         try:
-            report = web_tool.build_u21_training_report("u", "code", "site", "1104", "72")
+            report = web_tool.build_u21_training_report("u", "code", "site", "1104", "72", nt_strength="strong")
         finally:
             web_tool.BBApi = old_api
             web_tool.BBSiteClient = old_site
 
         self.assertEqual(report["team_name"], "Lietuva U21")
+        self.assertEqual(report["nt_strength"], "strong")
+        self.assertEqual(report["training_multiplier"], 1.5)
         self.assertEqual(len(report["players"]), 1)
         player = report["players"][0]
         self.assertEqual(player["training_counts_by_position"]["SG"], 1)
@@ -121,6 +123,7 @@ class U21ModeFlaskTests(unittest.TestCase):
                     "bb_site_password": "site",
                     "estimator_country_id": "1104",
                     "estimator_season": "72",
+                    "estimator_nt_strength": "strong",
                 },
             )
         finally:
@@ -130,6 +133,7 @@ class U21ModeFlaskTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"Olegas Sergadejevas", response.data)
         self.assertIn(b"Coach Level</div><div class=\"v\">7", response.data)
+        self.assertIn(b"NT Strength</div><div class=\"v\">Strong", response.data)
         self.assertIn(b"Modeled Start Salary", response.data)
         self.assertIn(b"tremendous", response.data)
         self.assertIn(b"0.5 OD for 1 + 0.5 PA for 1", response.data)

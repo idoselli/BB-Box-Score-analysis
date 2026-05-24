@@ -1,7 +1,7 @@
 import unittest
 
 from bb_site import GameLogEntry
-from coachparrot_model import POSITION_PRESETS, listed_salary
+from coachparrot_model import POSITION_PRESETS, TrainingAction, listed_salary, replay_training
 from u21_training import (
     aggregate_minutes,
     get_game_week,
@@ -95,6 +95,25 @@ class U21TrainingTests(unittest.TestCase):
         self.assertEqual(rows[0][0]["label"], "respectable")
         self.assertEqual(rows[0][1]["rounded"], 8)
         self.assertEqual(rows[1][0]["label"], "legendary")
+
+    def test_strong_nt_multiplier_boosts_training_gain(self):
+        base = list(POSITION_PRESETS["PG"])
+        weak = replay_training(
+            base,
+            [TrainingAction("OD for 1", 20)],
+            height_cm=201,
+            potential=8,
+            training_multiplier=1.0,
+        )
+        strong = replay_training(
+            base,
+            [TrainingAction("OD for 1", 20)],
+            height_cm=201,
+            potential=8,
+            training_multiplier=1.5,
+        )
+
+        self.assertGreater(strong[2], weak[2])
 
     def test_center_age_20_split_remainder_priority(self):
         _, rows, _ = infer_training(
