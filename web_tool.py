@@ -4077,6 +4077,14 @@ REPORT_HTML = """<!doctype html>
         <label class="small">Contains text
           <input id="textFilter" type="text" placeholder="shot, foul, rebound..." />
         </label>
+        <div class="small filter-block">
+          <span>Player</span>
+          <div id="eventPlayerFilter"></div>
+        </div>
+        <div class="small filter-block">
+          <span>Event Type</span>
+          <div id="eventTypeFilter"></div>
+        </div>
         <span class="small" id="eventCount"></span>
       </div>
       <div class="events-feed" id="eventsFeed"></div>
@@ -5261,14 +5269,161 @@ REPORT_HTML = """<!doctype html>
     const eventsFeed = document.getElementById("eventsFeed");
     const teamFilter = document.getElementById("teamFilter");
     const textFilter = document.getElementById("textFilter");
+    const eventPlayerFilter = document.getElementById("eventPlayerFilter");
+    const eventTypeFilter = document.getElementById("eventTypeFilter");
     const eventCount = document.getElementById("eventCount");
+    const eventPlayerFilterOptions = eventPlayerOptions();
+    const eventTypeOptions = [
+      { value: "passes", label: "Passes" },
+      { value: "shot_close", label: "Shots Taken - Close" },
+      { value: "shot_mid", label: "Shots Taken - Mid" },
+      { value: "shot_three", label: "Shots Taken - 3PT" },
+      { value: "rebound", label: "Rebound" },
+      { value: "turnover", label: "Turnover" },
+      { value: "score", label: "Score" },
+      { value: "miss", label: "Miss" },
+      { value: "assist", label: "Assist" },
+      { value: "block", label: "Block" },
+      { value: "foul", label: "Foul" }
+    ];
+
+    function eventPlayerOptions() {
+      return [
+        ...home.players.map((p, i) => ({ value: `0:${i}`, label: `${p.name} (${home.name})` })),
+        ...away.players.map((p, i) => ({ value: `1:${i}`, label: `${p.name} (${away.name})` }))
+      ];
+    }
+
+    function addEventPlayerKey(out, side, rawSlot) {
+      const teamObj = getTeamBySide(Number(side));
+      if (!teamObj || !Array.isArray(teamObj.players)) return;
+      const idx = normalizeSlot(rawSlot, teamObj.players.length);
+      if (idx !== null) out.add(`${Number(side)}:${idx}`);
+    }
+
+    function addEventPlayerIndexKey(out, side, rawIndex) {
+      const teamObj = getTeamBySide(Number(side));
+      if (!teamObj || !Array.isArray(teamObj.players)) return;
+      const idx = normalizePlayerIndex(rawIndex, teamObj.players.length);
+      if (idx !== null) out.add(`${Number(side)}:${idx}`);
+    }
+
+    function involvedPlayerKeys(ev) {
+      const out = new Set();
+      if (ev.event_type === "shot") {
+        addEventPlayerKey(out, ev.attacking_team, ev.attacker);
+        addEventPlayerKey(out, ev.defending_team, ev.defender);
+        addEventPlayerKey(out, ev.attacking_team, ev.assistant);
+      } else if (ev.event_type === "free_throw") {
+        addEventPlayerKey(out, ev.attacking_team, ev.attacker);
+      } else if (["interrupt", "foul", "rebound"].includes(ev.event_type)) {
+        addEventPlayerKey(out, ev.attacking_team, ev.attacker);
+        addEventPlayerKey(out, ev.defending_team, ev.defender);
+      } else if (ev.event_type === "sub") {
+        addEventPlayerIndexKey(out, ev.team, ev.player_in);
+        addEventPlayerIndexKey(out, ev.team, ev.player_out);
+      } else if (ev.event_type === "injury") {
+        addEventPlayerKey(out, ev.injured_team, ev.injured_player);
+        addEventPlayerKey(out, ev.causedby_team, ev.causedby_player);
+      }
+      return out;
+    }
+
+    function eventHasSelectedPlayer(ev, selectedPlayers) {
+      if (selectedPlayers.size === 0 || selectedPlayers.size === eventPlayerFilterOptions.length) return true;
+      const involved = involvedPlayerKeys(ev);
+      return [...selectedPlayers].some(key => involved.has(key));
+    }
+
+    function eventTypeKeys(ev) {
+      const keys = new Set();
+      if (ev.event_type === "shot") {
+        const range = getShotRange(ev.shot_type);
+        if (range === "paint") keys.add("shot_close");
+        else if (range === "jump") keys.add("shot_mid");
+        else if (range === "three") keys.add("shot_three");
+
+        if (madeResults.has(String(ev.shot_result))) keys.add("score");
+        else keys.add("miss");
+
+        if (String(ev.shot_result) === "3") keys.add("block");
+        if (normalizeSlot(ev.assistant, getTeamBySide(Number(ev.attacking_team)).players.length) !== null) {
+          keys.add("passes");
+          if (madeResults.has(String(ev.shot_result))) keys.add("assist");
+        }
+      } else if (ev.event_type === "free_throw") {
+        if (madeResults.has(String(ev.shot_result))) keys.add("score");
+        else keys.add("miss");
+      } else if (ev.event_type === "rebound") {
+        if (!["933", "934"].includes(String(ev.rebound_type))) keys.add("rebound");
+      } else if (ev.event_type === "interrupt") {
+        keys.add("turnover");
+      } else if (ev.event_type === "foul") {
+        keys.add("foul");
+      }
+      return keys;
+    }
+
+    function eventTypeActorKeys(ev, typeKey) {
+      const keys = new Set();
+      if (ev.event_type === "shot") {
+        if (["shot_close", "shot_mid", "shot_three", "score", "miss"].includes(typeKey)) {
+          addEventPlayerKey(keys, ev.attacking_team, ev.attacker);
+        } else if (["passes", "assist"].includes(typeKey)) {
+          addEventPlayerKey(keys, ev.attacking_team, ev.assistant);
+        } else if (typeKey === "block") {
+          addEventPlayerKey(keys, ev.defending_team, ev.defender);
+        }
+      } else if (ev.event_type === "free_throw" && ["score", "miss"].includes(typeKey)) {
+        addEventPlayerKey(keys, ev.attacking_team, ev.attacker);
+      } else if (ev.event_type === "rebound" && typeKey === "rebound") {
+        addEventPlayerKey(keys, ev.attacking_team, ev.attacker);
+        addEventPlayerKey(keys, ev.defending_team, ev.defender);
+      } else if (ev.event_type === "interrupt" && typeKey === "turnover") {
+        addEventPlayerKey(keys, ev.attacking_team, ev.attacker);
+        addEventPlayerKey(keys, ev.defending_team, ev.defender);
+      } else if (ev.event_type === "foul" && typeKey === "foul") {
+        addEventPlayerKey(keys, ev.attacking_team, ev.attacker);
+        addEventPlayerKey(keys, ev.defending_team, ev.defender);
+      }
+      return keys;
+    }
+
+    function eventMatchesSelectedTypes(ev, selectedTypes) {
+      if (selectedTypes.size === 0 || selectedTypes.size === eventTypeOptions.length) return true;
+      const keys = eventTypeKeys(ev);
+      return [...selectedTypes].some(key => keys.has(key));
+    }
+
+    function eventMatchesSelectedTypeRoles(ev, selectedTypes, selectedPlayers) {
+      if (selectedPlayers.size === 0 || selectedPlayers.size === eventPlayerFilterOptions.length) {
+        return eventMatchesSelectedTypes(ev, selectedTypes);
+      }
+      if (selectedTypes.size === 0 || selectedTypes.size === eventTypeOptions.length) return true;
+
+      const eventKeys = eventTypeKeys(ev);
+      return [...selectedTypes].some(typeKey => {
+        if (!eventKeys.has(typeKey)) return false;
+        const actorKeys = eventTypeActorKeys(ev, typeKey);
+        return [...selectedPlayers].some(playerKey => actorKeys.has(playerKey));
+      });
+    }
+
+    function setupEventFeedFilters() {
+      initMultiDropdown(eventPlayerFilter, eventPlayerFilterOptions, renderEvents);
+      initMultiDropdown(eventTypeFilter, eventTypeOptions, renderEvents);
+    }
 
     function renderEvents() {
       const teamVal = teamFilter.value;
       const textVal = textFilter.value.trim().toLowerCase();
+      const selectedPlayers = selectedValues(eventPlayerFilter);
+      const selectedTypes = selectedValues(eventTypeFilter);
       const filtered = data.events.filter(ev => {
         const side = eventSide(ev.attacking_team);
         if (teamVal !== "all" && side !== teamVal) return false;
+        if (!eventHasSelectedPlayer(ev, selectedPlayers)) return false;
+        if (!eventMatchesSelectedTypeRoles(ev, selectedTypes, selectedPlayers)) return false;
         if (!textVal) return true;
         const text = `${formatComments(ev.comments)} ${ev.event_type}`.toLowerCase();
         return text.includes(textVal);
@@ -5315,6 +5470,7 @@ REPORT_HTML = """<!doctype html>
     setupDefenderFilters();
     renderDefenderShotPanel();
     renderStrengthWeaknessView();
+    setupEventFeedFilters();
     renderEvents();
   </script>
 </body>
