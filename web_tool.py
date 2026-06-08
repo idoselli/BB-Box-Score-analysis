@@ -26,6 +26,33 @@ app = Flask(__name__)
 
 LOCAL_NATIONAL_OPTIONS_PATH = Path(__file__).with_name("national_options.json")
 DEFAULT_CURRENT_SEASON = 72
+VERCEL_ANALYTICS_HTML = """<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>"""
+
+
+@app.after_request
+def add_vercel_analytics(response):
+    if response.status_code != 200 or response.direct_passthrough:
+        return response
+    if not response.content_type.startswith("text/html"):
+        return response
+
+    html = response.get_data(as_text=True)
+    if "/_vercel/insights/script.js" in html:
+        return response
+
+    analytics_html = f"\n{VERCEL_ANALYTICS_HTML}\n"
+    if re.search(r"</body\s*>", html, flags=re.IGNORECASE):
+        html = re.sub(r"</body\s*>", f"{analytics_html}</body>", html, count=1, flags=re.IGNORECASE)
+    elif re.search(r"</html\s*>", html, flags=re.IGNORECASE):
+        html = re.sub(r"</html\s*>", f"{analytics_html}</html>", html, count=1, flags=re.IGNORECASE)
+    else:
+        html = f"{html}{analytics_html}"
+
+    response.set_data(html)
+    return response
 
 
 FORM_HTML = """<!doctype html>
