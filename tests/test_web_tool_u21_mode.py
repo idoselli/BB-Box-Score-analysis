@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 
 import web_tool
 from bb_site import GameLogEntry, RosterPlayer
@@ -55,6 +56,32 @@ class U21ModeFlaskTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"U21 squad analysis", response.data)
         self.assertIn(b"Beta", response.data)
+        self.assertIn(b"Analyzer Password", response.data)
+        self.assertIn(b'id="u21LockedFields" class="u21-locked-fields locked"', response.data)
+
+    def test_u21_unlock_requires_configured_password(self):
+        client = web_tool.app.test_client()
+        with patch.dict(web_tool.os.environ, {}, clear=True):
+            response = client.post("/u21-analyzer-unlock", json={"password": "anything"})
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.get_json()["error"], "Analyzer password is incorrect or not configured.")
+
+    def test_u21_unlock_rejects_wrong_password(self):
+        client = web_tool.app.test_client()
+        with patch.dict(web_tool.os.environ, {"U21_ANALYZER_PASSWORD": "correct"}, clear=True):
+            response = client.post("/u21-analyzer-unlock", json={"password": "wrong"})
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.get_json()["error"], "Analyzer password is incorrect or not configured.")
+
+    def test_u21_unlock_accepts_configured_password(self):
+        client = web_tool.app.test_client()
+        with patch.dict(web_tool.os.environ, {"U21_ANALYZER_PASSWORD": "correct"}, clear=True):
+            response = client.post("/u21-analyzer-unlock", json={"password": "correct"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.get_json(), {"ok": True})
 
     def test_local_menu_defaults_to_current_season(self):
         seasons = web_tool.load_local_national_options()["seasons"]

@@ -6,8 +6,10 @@ from argparse import Namespace
 import base64
 import contextlib
 from datetime import datetime
+import hmac
 import io
 import json
+import os
 from pathlib import Path
 import re
 from typing import Any
@@ -230,6 +232,34 @@ FORM_HTML = """<!doctype html>
       color: var(--muted);
       font-size: 12px;
     }
+    .u21-gate {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdff;
+    }
+    .u21-gate-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: end;
+    }
+    .u21-locked-fields {
+      display: grid;
+      gap: 12px;
+      transition: filter 160ms ease, opacity 160ms ease;
+    }
+    .u21-locked-fields.locked {
+      filter: blur(3px);
+      opacity: 0.45;
+      pointer-events: none;
+      user-select: none;
+    }
+    .u21-unlock-status {
+      min-height: 16px;
+    }
   </style>
 </head>
 <body>
@@ -352,29 +382,40 @@ FORM_HTML = """<!doctype html>
 
         <section id="u21TrainingPanel" class="mode-panel">
           <div class="small">Estimate a current U21 roster from player club-game minutes and CoachParrot formulas.</div>
-          <label>BB Site Password
-            <input name="bb_site_password" type="password" autocomplete="current-password" value="{{ bb_site_password }}" />
-          </label>
-          <button type="button" id="loadEstimatorOptionsBtn" class="ghost">Load Teams And Seasons</button>
-          <div class="auto-grid">
-            <label>Country U21 Team
-              <select name="estimator_country_id" id="estimatorCountrySelect" data-selected="{{ estimator_country_id }}">
-                <option value="">Select a team</option>
-              </select>
-            </label>
-            <label>Current Season
-              <select name="estimator_season" id="estimatorSeasonSelect" data-selected="{{ estimator_season }}">
-                <option value="">Current season</option>
-              </select>
-            </label>
-            <label>NT Strength
-              <select name="estimator_nt_strength" id="estimatorNtStrengthSelect">
-                <option value="weak"{% if estimator_nt_strength == "weak" %} selected{% endif %}>Weak NT</option>
-                <option value="strong"{% if estimator_nt_strength == "strong" %} selected{% endif %}>Strong NT</option>
-              </select>
-            </label>
+          <div class="u21-gate">
+            <div class="u21-gate-row">
+              <label>Analyzer Password
+                <input id="u21AnalyzerPassword" type="password" autocomplete="off" />
+              </label>
+              <button type="button" id="unlockU21AnalyzerBtn" class="ghost">Unlock</button>
+            </div>
+            <div class="hint u21-unlock-status" id="u21UnlockStatus">Enter the analyzer password to unlock these fields.</div>
           </div>
-          <div class="hint" id="estimatorOptionsStatus">Use the button after entering BBAPI credentials.</div>
+          <div id="u21LockedFields" class="u21-locked-fields locked" aria-hidden="true">
+            <label>BB Site Password
+              <input name="bb_site_password" type="password" autocomplete="current-password" value="{{ bb_site_password }}" disabled />
+            </label>
+            <button type="button" id="loadEstimatorOptionsBtn" class="ghost" disabled>Load Teams And Seasons</button>
+            <div class="auto-grid">
+              <label>Country U21 Team
+                <select name="estimator_country_id" id="estimatorCountrySelect" data-selected="{{ estimator_country_id }}" disabled>
+                  <option value="">Select a team</option>
+                </select>
+              </label>
+              <label>Current Season
+                <select name="estimator_season" id="estimatorSeasonSelect" data-selected="{{ estimator_season }}" disabled>
+                  <option value="">Current season</option>
+                </select>
+              </label>
+              <label>NT Strength
+                <select name="estimator_nt_strength" id="estimatorNtStrengthSelect" disabled>
+                  <option value="weak"{% if estimator_nt_strength == "weak" %} selected{% endif %}>Weak NT</option>
+                  <option value="strong"{% if estimator_nt_strength == "strong" %} selected{% endif %}>Strong NT</option>
+                </select>
+              </label>
+            </div>
+            <div class="hint" id="estimatorOptionsStatus">Use the button after entering BBAPI credentials.</div>
+          </div>
         </section>
 
         <button type="submit">Generate Report</button>
@@ -414,6 +455,10 @@ FORM_HTML = """<!doctype html>
     const estimatorCountrySelect = document.getElementById("estimatorCountrySelect");
     const estimatorSeasonSelect = document.getElementById("estimatorSeasonSelect");
     const estimatorOptionsStatus = document.getElementById("estimatorOptionsStatus");
+    const u21AnalyzerPassword = document.getElementById("u21AnalyzerPassword");
+    const unlockU21AnalyzerBtn = document.getElementById("unlockU21AnalyzerBtn");
+    const u21UnlockStatus = document.getElementById("u21UnlockStatus");
+    const u21LockedFields = document.getElementById("u21LockedFields");
     const localNationalOptions = {{ national_options | tojson }};
 
     function applyMode(mode) {
@@ -437,6 +482,51 @@ FORM_HTML = """<!doctype html>
 
     modeButtons.forEach(btn => {
       btn.addEventListener("click", () => applyMode(btn.dataset.mode));
+    });
+
+    function setU21Locked(locked) {
+      u21LockedFields?.classList.toggle("locked", locked);
+      u21LockedFields?.setAttribute("aria-hidden", locked ? "true" : "false");
+      u21LockedFields?.querySelectorAll("input, select, button").forEach(control => {
+        control.disabled = locked;
+      });
+    }
+
+    async function unlockU21Analyzer() {
+      const password = u21AnalyzerPassword.value;
+      if (!password) {
+        u21UnlockStatus.textContent = "Enter the analyzer password first.";
+        return;
+      }
+      u21UnlockStatus.textContent = "Checking password...";
+      unlockU21AnalyzerBtn.disabled = true;
+      try {
+        const response = await fetch("/u21-analyzer-unlock", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password }),
+        });
+        const payload = await response.json();
+        if (!response.ok || !payload.ok) {
+          throw new Error(payload.error || "Could not unlock analyzer.");
+        }
+        setU21Locked(false);
+        u21AnalyzerPassword.value = "";
+        u21UnlockStatus.textContent = "Analyzer fields unlocked.";
+      } catch (err) {
+        setU21Locked(true);
+        u21UnlockStatus.textContent = err.message;
+      } finally {
+        unlockU21AnalyzerBtn.disabled = false;
+      }
+    }
+
+    unlockU21AnalyzerBtn?.addEventListener("click", unlockU21Analyzer);
+    u21AnalyzerPassword?.addEventListener("keydown", (ev) => {
+      if (ev.key === "Enter") {
+        ev.preventDefault();
+        unlockU21Analyzer();
+      }
     });
 
     function applyMultiSource(source) {
@@ -527,6 +617,7 @@ FORM_HTML = """<!doctype html>
     updateRemoveButtons();
     loadOptionsIntoForm(localNationalOptions, "Loaded from local file. Use the button to refresh.");
     applyMultiSource({{ multi_source | tojson }});
+    setU21Locked(true);
     applyMode({{ mode | tojson }});
 
   </script>
@@ -8291,6 +8382,16 @@ def national_options() -> tuple[Any, int] | Any:
         return jsonify(load_national_options(username, password))
     except Exception as exc:
         return jsonify({"error": str(exc)}), 400
+
+
+@app.post("/u21-analyzer-unlock")
+def u21_analyzer_unlock() -> tuple[Any, int] | Any:
+    payload = request.get_json(silent=True) or {}
+    submitted_password = str(payload.get("password", ""))
+    expected_password = os.environ.get("U21_ANALYZER_PASSWORD", "")
+    if expected_password and hmac.compare_digest(submitted_password, expected_password):
+        return jsonify({"ok": True})
+    return jsonify({"error": "Analyzer password is incorrect or not configured."}), 400
 
 
 def form_error_response(
