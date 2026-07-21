@@ -22,9 +22,11 @@ from bb_site import BBSiteClient
 from coachparrot_model import SKILLS
 from game import Game
 from main import get_xml_text, parse_xml
+from minutes_analyzer import minutes_bp
 from u21_training import PlayerMetadata, estimate_player, target_seasons_for_player
 
 app = Flask(__name__)
+app.register_blueprint(minutes_bp)
 
 LOCAL_NATIONAL_OPTIONS_PATH = Path(__file__).with_name("national_options.json")
 DEFAULT_CURRENT_SEASON = 72
@@ -270,6 +272,12 @@ FORM_HTML = """<!doctype html>
       {% if error %}
       <div class="err">{{ error }}</div>
       {% endif %}
+      <div class="small" style="margin-bottom:12px">
+        Minutes analyzers:
+        <a href="/u21-minutes">U21 Minutes</a>
+        ·
+        <a href="/nt-minutes">NT Minutes</a>
+      </div>
       <form method="post" action="/report">
         <input type="hidden" name="mode" id="modeInput" value="{{ mode }}" />
         <label>Username

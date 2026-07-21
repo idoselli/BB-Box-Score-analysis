@@ -57,6 +57,33 @@ class GameLogEntry:
     game_type: str
 
 
+@dataclass(frozen=True)
+class SitePlayerInfo:
+    player_id: int
+    first_name: str = ""
+    last_name: str = ""
+    age: int | None = None
+    height: int | None = None
+    dmi: int | None = None
+    salary: int | None = None
+    best_position: str | None = None
+    game_shape: int | None = None
+    potential: int | None = None
+
+
+@dataclass(frozen=True)
+class GameLogResult:
+    games: list[GameLogEntry]
+    injury_days: str = ""
+    site_player_info: SitePlayerInfo | None = None
+
+
+NATIONAL_TEAM_LEVELS = {
+    "u21": {"roster_path": "jnt", "label": "U21 National Team"},
+    "nt": {"roster_path": "nt", "label": "National Team"},
+}
+
+
 def _hidden_field(html: str, name: str) -> str:
     patterns = [
         rf'name=["\']{re.escape(name)}["\'][^>]*value=["\']([^"\']*)["\']',
@@ -138,6 +165,114 @@ def parse_game_log_html(html: str) -> list[GameLogEntry]:
     return games
 
 
+def parse_injury_days_from_html(html: str) -> str:
+    head = re.search(r"Injury!", html, re.I)
+    if not head:
+        return ""
+    slice_html = html[head.start() : head.start() + 900]
+    plain = (
+        re.sub(r"<[^>]+>", " ", slice_html)
+        .replace("&nbsp;", " ")
+        .replace("\xa0", " ")
+    )
+    plain = re.sub(r"\s+", " ", plain).strip()
+    range_match = re.search(r"(\d+)\s*[-–]\s*(\d+)\s*days?", plain, re.I)
+    if range_match:
+        return f"{range_match.group(1)}-{range_match.group(2)}"
+    single = re.search(r"(\d+)\s*days?", plain, re.I)
+    if single:
+        return single.group(1)
+    return "1"
+
+
+def parse_available_seasons_from_html(html: str) -> list[int]:
+    select = re.search(
+        r"<select[^>]*(?:id|name)=['\"][^'\"]*ddlSeasons[^'\"]*['\"][^>]*>([\s\S]*?)</select>",
+        html,
+        re.I,
+    )
+    source = select.group(1) if select else html
+    seasons: set[int] = set()
+    for match in re.finditer(r"<option[^>]*value=['\"](\d+)['\"]", source, re.I):
+        season = int(match.group(1))
+        if season > 0:
+            seasons.add(season)
+    return sorted(seasons)
+
+
+def parse_player_info_from_html(html: str, player_id: int) -> SitePlayerInfo | None:
+    position_map = {
+        "Point Guard": "PG",
+        "Shooting Guard": "SG",
+        "Small Forward": "SF",
+        "Power Forward": "PF",
+        "Center": "C",
+    }
+    best_position: str | None = None
+    age: int | None = None
+    height: int | None = None
+
+    hdn = re.search(r'cphContent_hdnText[^>]*value="([^"]+)"', html, re.I) or re.search(
+        r'value="([^"]+)"[^>]*cphContent_hdnText', html, re.I
+    )
+    if hdn:
+        text = (
+            unescape(hdn.group(1))
+            .replace("&#39;", "'")
+            .replace("&quot;", '"')
+            .replace("&nbsp;", " ")
+        )
+        pos_match = re.search(
+            r"(Point Guard|Shooting Guard|Small Forward|Power Forward|Center)",
+            text,
+            re.I,
+        )
+        if pos_match:
+            best_position = position_map.get(pos_match.group(1), pos_match.group(1))
+        age_match = re.search(r"aged\s+(\d+)", text, re.I)
+        if age_match:
+            age = int(age_match.group(1))
+        ht_match = re.search(r"(\d+)'(\d+)\"", text)
+        if ht_match:
+            height = int(ht_match.group(1)) * 12 + int(ht_match.group(2))
+
+    dmi_match = re.search(r"DMI:\s*[\r\n\s]+(\d+)", html)
+    dmi = int(dmi_match.group(1)) if dmi_match else None
+
+    salary_block = re.search(r"Weekly salary:\s*\$([^<]{1,40})<br", html, re.I)
+    salary = None
+    if salary_block:
+        digits = re.sub(r"[^\d]", "", salary_block.group(1))
+        salary = int(digits) if digits else None
+
+    gs_match = re.search(r'cphContent_playerForm_linkDen[^>]+title="(\d+)"', html, re.I)
+    game_shape = int(gs_match.group(1)) if gs_match else None
+
+    pot_match = re.search(r'cphContent_potential_linkDen[^>]+title="(\d+)"', html, re.I)
+    potential = int(pot_match.group(1)) if pot_match else None
+
+    h1 = re.search(r"<h1[^>]*>([^<]+)</h1>", html, re.I)
+    full_name = unescape(h1.group(1)).replace("\xa0", " ").strip() if h1 else ""
+    parts = full_name.split()
+    first_name = " ".join(parts[:-1]) if parts else ""
+    last_name = parts[-1] if parts else ""
+
+    if not full_name and best_position is None and age is None:
+        return None
+    return SitePlayerInfo(
+        player_id=player_id,
+        first_name=first_name,
+        last_name=last_name,
+        age=age,
+        height=height,
+        dmi=dmi,
+        salary=salary,
+        best_position=best_position,
+        game_shape=game_shape,
+        potential=potential,
+    )
+
+
 class BBSiteClient:
     def __init__(self, username: str, password: str):
         self.username = username
@@ -174,14 +309,27 @@ class BBSiteClient:
             raise ValueError("BB site login failed. Check username/password.")
 
     def fetch_u21_roster(self, country_id: str | int) -> tuple[str, list[RosterPlayer]]:
-        url = f"{BB_BASE}/country/{country_id}/jnt/players.aspx"
+        return self.fetch_national_roster(country_id, "u21")
+
+    def fetch_national_roster(
+        self, country_id: str | int, level: str = "u21"
+    ) -> tuple[str, list[RosterPlayer]]:
+        level_key = (level or "u21").strip().lower()
+        if level_key not in NATIONAL_TEAM_LEVELS:
+            raise ValueError("level must be either u21 or nt")
+        level_config = NATIONAL_TEAM_LEVELS[level_key]
+        url = f"{BB_BASE}/country/{country_id}/{level_config['roster_path']}/players.aspx"
         response = self.session.get(url, timeout=30)
         response.raise_for_status()
         html = response.text
         self._ensure_not_login_wall(html, "roster page")
 
         h1 = re.search(r"<h1[^>]*>([^<]+)</h1>", html, re.I)
-        team_name = unescape(h1.group(1)).replace("\xa0", " ").strip() if h1 else f"Country {country_id} U21"
+        team_name = (
+            unescape(h1.group(1)).replace("\xa0", " ").strip()
+            if h1
+            else f"Country {country_id} {level_config['label']}"
+        )
 
         seen: set[int] = set()
         players: list[RosterPlayer] = []
@@ -199,15 +347,25 @@ class BBSiteClient:
         return team_name, players
 
     def fetch_player_game_log(self, player_id: int, season: int) -> list[GameLogEntry]:
+        return self.fetch_player_game_log_detailed(player_id, season).games
+
+    def fetch_player_game_log_detailed(self, player_id: int, season: int) -> GameLogResult:
         url = f"{BB_BASE}/player/{player_id}/overview.aspx"
         response = self.session.get(url, timeout=30)
         response.raise_for_status()
         html = response.text
         self._ensure_not_login_wall(html, f"player {player_id} overview")
 
+        injury_days = parse_injury_days_from_html(html)
+        site_player_info = parse_player_info_from_html(html, player_id)
+
         selected = _selected_season_from_html(html)
         if selected == season:
-            return parse_game_log_html(html)
+            return GameLogResult(
+                games=parse_game_log_html(html),
+                injury_days=injury_days,
+                site_player_info=site_player_info,
+            )
 
         payload: dict[str, Any] = {
             "__EVENTTARGET": "ctl00$cphContent$ddlSeasons",
@@ -224,7 +382,30 @@ class BBSiteClient:
         returned_season = _selected_season_from_html(post.text)
         if returned_season is not None and returned_season != season:
             raise ValueError(f"BB returned season {returned_season} instead of requested season {season}.")
-        return parse_game_log_html(post.text)
+        return GameLogResult(
+            games=parse_game_log_html(post.text),
+            injury_days=injury_days,
+            site_player_info=site_player_info,
+        )
+
+    def fetch_player_available_seasons(self, player_id: int) -> list[int]:
+        url = f"{BB_BASE}/player/{player_id}/overview.aspx"
+        response = self.session.get(url, timeout=30)
+        response.raise_for_status()
+        html = response.text
+        self._ensure_not_login_wall(html, f"player {player_id} overview")
+        return parse_available_seasons_from_html(html)
+
+    def fetch_player_injury(self, player_id: int) -> str:
+        try:
+            url = f"{BB_BASE}/player/{player_id}/overview.aspx"
+            response = self.session.get(url, timeout=30)
+            response.raise_for_status()
+            html = response.text
+            self._ensure_not_login_wall(html, f"player {player_id} overview")
+            return parse_injury_days_from_html(html)
+        except Exception:
+            return ""
 
     @staticmethod
     def _ensure_not_login_wall(html: str, context: str) -> None:
