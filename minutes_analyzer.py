@@ -173,6 +173,7 @@ ANALYZER_HTML = r"""
       <a href="/">Box Score Tool</a>
       <a href="/u21-minutes">U21 Minutes</a>
       <a href="/nt-minutes">NT Minutes</a>
+      <a href="/player-minutes">Player Analyzer</a>
     </div>
     <h1>{{ title }}</h1>
     <p class="lead">{{ subtitle }}</p>
@@ -537,7 +538,7 @@ ANALYZER_HTML = r"""
       const posMap = (agg.minutesBySeasonPosition || {})[String(season)] || {};
       const positions = sortPositions(Object.keys(posMap));
       const weeks = Object.keys(weekMap).map(Number).sort((a, b) => a - b);
-      const age = (LEVEL === "nt" && currentAge != null)
+      const age = ((LEVEL === "nt" || LEVEL === "player") && currentAge != null)
         ? currentAge - (currentSeason - season)
         : null;
       const maxPos = Math.max(...Object.values(posMap), 0);
@@ -643,6 +644,13 @@ def _parse_level(value: Any) -> str:
     return level
 
 
+def _parse_player_level(value: Any) -> str:
+    level = str(value or "player").strip().lower()
+    if level in ("u21", "nt", "player"):
+        return level
+    raise ValueError("level must be u21, nt, or player")
+
+
 def _credentials_from_payload(payload: dict[str, Any]) -> tuple[str, str, str]:
     username = str(payload.get("username") or os.environ.get("BBAPI_LOGIN") or "").strip()
     bbapi_code = str(payload.get("bbapi_code") or os.environ.get("BBAPI_CODE") or "").strip()
@@ -698,6 +706,336 @@ def nt_minutes_page() -> str:
         level_label=NATIONAL_TEAM_LEVELS["nt"]["label"],
         countries=_load_countries(),
     )
+
+
+PLAYER_ANALYZER_HTML = r"""
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Player Minutes Analyzer</title>
+  <style>
+    :root {
+      --bg: #f4f1ea;
+      --card: #fffdf8;
+      --ink: #1f1a17;
+      --muted: #6b635c;
+      --line: #d9d0c4;
+      --accent: #1f6f5b;
+      --accent-soft: #d7efe7;
+      --danger: #fde8e8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, #efe4d4, transparent 40%),
+        linear-gradient(180deg, #f7f3ec, #efe8dc);
+      min-height: 100vh;
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px 64px; }
+    .topnav { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; font-size: 14px; }
+    .topnav a { color: var(--accent); text-decoration: none; font-weight: 600; }
+    h1 { margin: 0 0 8px; font-size: 28px; }
+    .lead { color: var(--muted); margin: 0 0 20px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 30px rgba(40, 28, 12, 0.05);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+    label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+    input, button {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font: inherit;
+      background: white;
+    }
+    button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button:disabled { opacity: 0.55; cursor: wait; }
+    .hint, .status { color: var(--muted); font-size: 13px; margin-top: 8px; }
+    .err { background: var(--danger); border: 1px solid #f3b4b4; padding: 10px 12px; border-radius: 10px; margin-top: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th, td { border: 1px solid var(--line); padding: 8px; vertical-align: middle; }
+    th { background: #f3ece2; }
+    .minute-hi { background: #dcfce7; font-weight: 700; }
+    .minute-mid { background: #fef9c3; font-weight: 700; }
+    .minute-lo { background: #ffedd5; font-weight: 700; }
+    .injury {
+      display: inline-block;
+      margin-left: 6px;
+      background: #fee2e2;
+      color: #b91c1c;
+      border-radius: 6px;
+      padding: 2px 6px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .player-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: start; }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 8px; }
+    .meta-row div { min-width: 70px; }
+    .meta-row span { display: block; color: var(--muted); font-size: 11px; }
+    .season-block { border-top: 1px solid var(--line); margin-top: 18px; padding-top: 14px; }
+    .bars { display: grid; gap: 8px; }
+    .bar-row { display: grid; grid-template-columns: 32px 1fr 56px; gap: 8px; align-items: center; }
+    .bar-track { background: #eee7dc; border-radius: 999px; height: 8px; overflow: hidden; }
+    .bar-fill { height: 100%; background: var(--accent); }
+    .week-chart { display: flex; align-items: end; gap: 6px; min-height: 160px; overflow-x: auto; padding-bottom: 4px; }
+    .week-col { width: 34px; flex: 0 0 34px; display: flex; flex-direction: column; justify-content: end; align-items: center; }
+    .week-stack { width: 100%; display: flex; flex-direction: column-reverse; border-radius: 6px 6px 0 0; overflow: hidden; min-height: 2px; }
+    .week-seg { width: 100%; }
+    .week-label { margin-top: 4px; font-size: 10px; color: var(--muted); }
+    a.bb { color: var(--accent); font-weight: 700; text-decoration: none; }
+    .table-wrap { overflow-x: auto; }
+    .actions { display: flex; gap: 10px; align-items: end; }
+    .actions button { width: auto; min-width: 140px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topnav">
+      <a href="/">Box Score Tool</a>
+      <a href="/u21-minutes">U21 Minutes</a>
+      <a href="/nt-minutes">NT Minutes</a>
+      <a href="/player-minutes">Player Analyzer</a>
+    </div>
+    <h1>Player Minutes Analyzer</h1>
+    <p class="lead">Enter a BuzzerBeater player ID to load career weekly minutes by position.</p>
+
+    <div class="card">
+      <div class="grid">
+        <label>BB Username
+          <input id="username" autocomplete="username" />
+        </label>
+        <label>BBAPI Code
+          <input id="bbapiCode" type="password" autocomplete="current-password" />
+        </label>
+        <label>BB Site Password
+          <input id="sitePassword" type="password" autocomplete="current-password" />
+        </label>
+      </div>
+      <div class="hint">Site password scrapes game logs. BBAPI code fills player bio when available.</div>
+    </div>
+
+    <div class="card">
+      <div class="actions">
+        <label style="flex:1">Player ID
+          <input id="playerId" inputmode="numeric" placeholder="e.g. 54721516" />
+        </label>
+        <button id="analyzeBtn" type="button">Analyze</button>
+      </div>
+      <div id="status" class="status">Enter a player ID and click Analyze.</div>
+      <div id="error" class="err" hidden></div>
+    </div>
+
+    <div id="playerCard" class="card" hidden></div>
+  </div>
+
+  <script>
+    const POSITION_ORDER = ["PG", "SG", "SF", "PF", "C"];
+    const POS_COLORS = { PG: "#ef4444", SG: "#f97316", SF: "#eab308", PF: "#22c55e", C: "#3b82f6" };
+    const els = {
+      username: document.getElementById("username"),
+      bbapiCode: document.getElementById("bbapiCode"),
+      sitePassword: document.getElementById("sitePassword"),
+      playerId: document.getElementById("playerId"),
+      analyzeBtn: document.getElementById("analyzeBtn"),
+      status: document.getElementById("status"),
+      error: document.getElementById("error"),
+      playerCard: document.getElementById("playerCard"),
+    };
+
+    function sortPositions(list) {
+      return [...list].sort((a, b) => {
+        const ai = POSITION_ORDER.indexOf(a);
+        const bi = POSITION_ORDER.indexOf(b);
+        return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+      });
+    }
+    function minuteClass(mins) {
+      if (mins >= 42) return "minute-hi";
+      if (mins >= 24) return "minute-mid";
+      if (mins >= 1) return "minute-lo";
+      return "";
+    }
+    function requireCreds() {
+      const username = els.username.value.trim();
+      const site_password = els.sitePassword.value;
+      if (!username || !site_password) throw new Error("Enter BB username and BB site password first.");
+      return {
+        username,
+        bbapi_code: els.bbapiCode.value,
+        site_password,
+        level: "player",
+      };
+    }
+
+    async function analyze() {
+      els.error.hidden = true;
+      els.playerCard.hidden = true;
+      const playerId = Number(String(els.playerId.value || "").trim());
+      if (!Number.isInteger(playerId) || playerId < 1) {
+        els.error.hidden = false;
+        els.error.textContent = "Enter a valid numeric player ID.";
+        return;
+      }
+      els.analyzeBtn.disabled = true;
+      els.status.textContent = `Fetching career minutes for player ${playerId}… this can take a while.`;
+      try {
+        const res = await fetch("/api/minutes/player", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...requireCreds(), player_id: playerId }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+        const info = data.playerInfo || {};
+        const name = [info.firstName, info.lastName].filter(Boolean).join(" ") || `Player ${playerId}`;
+        els.status.textContent = `Loaded ${ (data.seasons || []).length } seasons for ${name}.`;
+        renderPlayer(data, name);
+      } catch (err) {
+        els.error.hidden = false;
+        els.error.textContent = err.message;
+        els.status.textContent = "";
+      } finally {
+        els.analyzeBtn.disabled = false;
+      }
+    }
+
+    function renderPlayer(data, name) {
+      const info = data.playerInfo || {};
+      const seasons = [...(data.seasons || [])].sort((a, b) => b.season - a.season);
+      const agg = data.aggregations || {};
+      const currentSeason = data.currentSeason;
+      els.playerCard.hidden = false;
+      els.playerCard.innerHTML = `
+        <div class="player-head">
+          <div>
+            <h2 style="margin:0">${name}</h2>
+            ${info.injuryDaysRemaining ? `<span class="injury">Injured — ${info.injuryDaysRemaining} days</span>` : ""}
+            <div class="meta-row">
+              ${info.age != null ? `<div><span>Age</span><strong>${info.age}</strong></div>` : ""}
+              ${info.bestPosition ? `<div><span>Position</span><strong>${info.bestPosition}</strong></div>` : ""}
+              ${info.gameShape != null ? `<div><span>GS</span><strong>${info.gameShape}</strong></div>` : ""}
+              ${info.dmi != null ? `<div><span>DMI</span><strong>${Number(info.dmi).toLocaleString()}</strong></div>` : ""}
+              ${info.salary != null ? `<div><span>Salary</span><strong>$${Number(info.salary).toLocaleString()}</strong></div>` : ""}
+            </div>
+          </div>
+          <a class="bb" href="https://buzzerbeater.com/player/${data.playerId}/overview.aspx" target="_blank" rel="noopener noreferrer">View on BB ↗</a>
+        </div>
+        ${seasons.length ? seasons.map(s => renderSeason(s, agg, info.age, currentSeason)).join("") : `<p class="hint">No game history found for this player.</p>`}
+      `;
+    }
+
+    function renderSeason(seasonObj, agg, currentAge, currentSeason) {
+      const season = seasonObj.season;
+      const games = seasonObj.games || [];
+      const counting = games.filter(g => !["BBM", "National Team", "Private"].includes(g.gameType));
+      const weekMap = (agg.minutesBySeasonWeekPosition || {})[String(season)] || {};
+      const posMap = (agg.minutesBySeasonPosition || {})[String(season)] || {};
+      const positions = sortPositions(Object.keys(posMap));
+      const weeks = Object.keys(weekMap).map(Number).sort((a, b) => a - b);
+      const age = currentAge != null ? currentAge - (currentSeason - season) : null;
+      const maxPos = Math.max(...Object.values(posMap), 0);
+      return `<div class="season-block">
+        <h3 style="margin:0 0 10px">
+          Season ${season}
+          <span style="font-weight:500;color:var(--muted);font-size:14px">
+            ${counting.length} counting games / ${games.length} total${age != null ? ` · Age: ${age}` : ""}
+          </span>
+        </h3>
+        <div class="grid" style="margin-bottom:14px">
+          <div>
+            <div class="hint" style="margin-bottom:8px">Minutes per Week</div>
+            ${renderWeekChart(weekMap, positions)}
+          </div>
+          <div>
+            <div class="hint" style="margin-bottom:8px">Minutes by Position</div>
+            <div class="bars">
+              ${positions.map(pos => {
+                const mins = posMap[pos] || 0;
+                const pct = maxPos ? Math.round((mins / maxPos) * 100) : 0;
+                return `<div class="bar-row"><strong>${pos}</strong><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${POS_COLORS[pos] || "#a855f7"}"></div></div><span>${mins} min</span></div>`;
+              }).join("") || `<div class="hint">No counting games</div>`}
+            </div>
+          </div>
+        </div>
+        ${weeks.length ? `<div class="table-wrap"><table>
+          <thead>
+            <tr>
+              <th>Pos</th>
+              ${weeks.map(w => `<th>${w === 0 ? "W0*" : "W"+w}</th>`).join("")}
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${positions.map(pos => {
+              const rowTotal = weeks.reduce((s, w) => s + ((weekMap[w] || {})[pos] || 0), 0);
+              return `<tr>
+                <td><strong>${pos}</strong></td>
+                ${weeks.map(w => {
+                  const mins = (weekMap[w] || {})[pos] || 0;
+                  return `<td class="${minuteClass(mins)}">${mins > 0 ? mins : "—"}</td>`;
+                }).join("")}
+                <td><strong>${rowTotal}</strong></td>
+              </tr>`;
+            }).join("")}
+          </tbody>
+        </table></div>` : `<div class="hint">No counting games this season</div>`}
+      </div>`;
+    }
+
+    function renderWeekChart(weekMap, positions) {
+      const hasW0 = Object.prototype.hasOwnProperty.call(weekMap, "0") || Object.prototype.hasOwnProperty.call(weekMap, 0);
+      const weeks = [...(hasW0 ? [0] : []), ...Array.from({ length: 14 }, (_, i) => i + 1)];
+      const totals = weeks.map(w => positions.reduce((s, p) => s + ((weekMap[w] || weekMap[String(w)] || {})[p] || 0), 0));
+      const maxTotal = Math.max(...totals, 1);
+      return `<div class="week-chart">
+        ${weeks.map((w, i) => {
+          const total = totals[i];
+          const segs = positions.map(pos => ({ pos, mins: (weekMap[w] || weekMap[String(w)] || {})[pos] || 0 })).filter(s => s.mins > 0);
+          const h = total ? Math.max(Math.round((total / maxTotal) * 140), 4) : 0;
+          return `<div class="week-col">
+            <div class="week-stack" style="height:${h}px">
+              ${segs.map(s => `<div class="week-seg" title="${s.pos}: ${s.mins}" style="height:${Math.max(Math.round((s.mins / maxTotal) * 140), 2)}px;background:${POS_COLORS[s.pos] || "#a855f7"}"></div>`).join("")}
+            </div>
+            <div class="week-label">${w === 0 ? "W0*" : "W"+w}</div>
+          </div>`;
+        }).join("")}
+      </div>`;
+    }
+
+    els.analyzeBtn.addEventListener("click", analyze);
+    els.playerId.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") analyze();
+    });
+  </script>
+</body>
+</html>
+"""
+
+
+@minutes_bp.get("/player-minutes")
+def player_minutes_page() -> str:
+    return render_template_string(PLAYER_ANALYZER_HTML)
 
 
 @minutes_bp.post("/api/minutes/roster")
@@ -812,7 +1150,7 @@ def api_overview() -> tuple[Any, int] | Any:
 def api_player() -> tuple[Any, int] | Any:
     payload = request.get_json(silent=True) or {}
     try:
-        level = _parse_level(payload.get("level", "u21"))
+        level = _parse_player_level(payload.get("level", "u21"))
         username, bbapi_code, site_password = _credentials_from_payload(payload)
         player_id = int(payload.get("player_id"))
         if player_id < 1:
@@ -826,7 +1164,7 @@ def api_player() -> tuple[Any, int] | Any:
 
         client = _site_client(username, site_password)
         if seasons is None:
-            if level == "nt":
+            if level in ("nt", "player"):
                 seasons = client.fetch_player_available_seasons(player_id)
                 if not seasons:
                     seasons = _default_u21_seasons(DEFAULT_CURRENT_SEASON)
