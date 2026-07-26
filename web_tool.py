@@ -277,6 +277,8 @@ FORM_HTML = """<!doctype html>
         <a href="/u21-minutes">U21 Minutes</a>
         ·
         <a href="/nt-minutes">NT Minutes</a>
+        ·
+        <a href="/player-minutes">Player Analyzer</a>
       </div>
       <form method="post" action="/report">
         <input type="hidden" name="mode" id="modeInput" value="{{ mode }}" />
