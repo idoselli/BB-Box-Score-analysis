@@ -46,6 +46,7 @@ class U21TrackerTests(unittest.TestCase):
                                 {
                                     "playerId": 100,
                                     "name": "A Player",
+                                    "position": "SG",
                                     "dmi": 100000,
                                     "gameShape": 7,
                                     "salary": 10000,
@@ -72,6 +73,7 @@ class U21TrackerTests(unittest.TestCase):
                                 {
                                     "playerId": 100,
                                     "name": "A Player",
+                                    "position": "PG",
                                     "dmi": 125000,
                                     "gameShape": 8,
                                     "salary": 12000,
@@ -79,6 +81,7 @@ class U21TrackerTests(unittest.TestCase):
                                 {
                                     "playerId": 200,
                                     "name": "B Player",
+                                    "position": "C",
                                     "dmi": 90000,
                                     "gameShape": 6,
                                     "salary": 9000,
@@ -101,7 +104,9 @@ class U21TrackerTests(unittest.TestCase):
         self.assertEqual(series["country"]["name"], "Israel")
         self.assertEqual(series["weeks"], [1, 2])
         self.assertEqual([player["playerId"] for player in series["players"]], [100, 200])
+        self.assertEqual(series["players"][0]["position"], "PG")
         self.assertEqual([point["dmi"] for point in series["players"][0]["points"]], [100000, 125000])
+        self.assertEqual([point["position"] for point in series["players"][0]["points"]], ["SG", "PG"])
 
     def test_api_returns_meta_and_country_series(self):
         client = web_tool.app.test_client()
@@ -164,6 +169,7 @@ class U21TrackerTests(unittest.TestCase):
                             {
                                 "playerId": 100,
                                 "name": "A Player",
+                                "position": "SG",
                                 "dmi": 100000,
                                 "gameShape": 7,
                                 "salary": 10000,
@@ -184,6 +190,11 @@ class U21TrackerTests(unittest.TestCase):
             self.assertEqual(seeded["countries"][0]["players"][0]["gameShape"], 5)
         finally:
             scrape_u21_tracker.TRACKER_ROOT = old_root
+
+    def test_normalize_position(self):
+        self.assertEqual(scrape_u21_tracker.normalize_position("Point Guard"), "PG")
+        self.assertEqual(scrape_u21_tracker.normalize_position("sf"), "SF")
+        self.assertIsNone(scrape_u21_tracker.normalize_position(""))
 
     def test_tracker_season_rolls_to_73_on_august_7(self):
         before_rollover = datetime(2026, 8, 6, 12, 0, tzinfo=timezone.utc)

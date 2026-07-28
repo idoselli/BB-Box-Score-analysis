@@ -22,6 +22,19 @@ TRACKER_ROOT = ROOT / "data" / "u21-tracker"
 STANDINGS_URL = "https://buzzerbeater.com/world/standings.aspx?teamid=1015"
 TRACKER_SEASON_73_START = datetime(2026, 8, 7, tzinfo=timezone.utc)
 TRACKER_SEASON_DURATION_DAYS = 98
+POSITION_ALIASES = {
+    "pg": "PG",
+    "point guard": "PG",
+    "sg": "SG",
+    "shooting guard": "SG",
+    "sf": "SF",
+    "small forward": "SF",
+    "pf": "PF",
+    "power forward": "PF",
+    "c": "C",
+    "center": "C",
+    "centre": "C",
+}
 
 
 def load_dotenv(path: Path = ROOT / ".env") -> None:
@@ -40,6 +53,16 @@ def load_dotenv(path: Path = ROOT / ".env") -> None:
 
 def plain_text(html: str) -> str:
     return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html).replace("&nbsp;", " ")).strip()
+
+
+def normalize_position(value: Any) -> str | None:
+    cleaned = str(value or "").strip().casefold()
+    if not cleaned:
+        return None
+    if cleaned in POSITION_ALIASES:
+        return POSITION_ALIASES[cleaned]
+    upper = cleaned.upper()
+    return upper if upper in {"PG", "SG", "SF", "PF", "C"} else None
 
 
 def parse_round_robin_pools(html: str) -> list[dict[str, Any]]:
@@ -191,6 +214,7 @@ def scrape_country(
                 {
                     "playerId": int(info.get("player_id") or roster_player.player_id),
                     "name": api_name or roster_player.name,
+                    "position": normalize_position(info.get("best_position")),
                     "dmi": info.get("dmi"),
                     "gameShape": info.get("game_shape"),
                     "salary": info.get("salary"),
@@ -201,6 +225,7 @@ def scrape_country(
                 {
                     "playerId": roster_player.player_id,
                     "name": roster_player.name,
+                    "position": None,
                     "dmi": None,
                     "gameShape": None,
                     "salary": None,

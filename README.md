@@ -33,7 +33,7 @@ Set `U21_ANALYZER_PASSWORD` in the runtime environment to unlock the U21 squad a
 - `/u21-minutes` — U21 national-team weekly/season minutes overview + player career history
 - `/nt-minutes` — senior NT version of the same tool
 - `/player-minutes` — enter a player ID and load full career weekly minutes
-- `/u21-tracker` — U21 Round Robin DMI/game-shape tracker, backed by JSON snapshots from `guygir/bb_fantasy`
+- `/u21-tracker` — U21 Round Robin DMI/game-shape tracker with position-colored player lines, backed by JSON snapshots
 
 Optional env vars:
 - `BB_PASSWORD` — BB site password fallback when the form field is empty

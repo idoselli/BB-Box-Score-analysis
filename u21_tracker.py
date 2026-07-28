@@ -162,7 +162,7 @@ TRACKER_HTML = r"""<!doctype html>
           <div class="chart-card">
             <svg id="chart" viewBox="0 0 760 420" role="img" aria-label="U21 tracker DMI chart"></svg>
             <div id="legend" class="legend"></div>
-            <div class="status" style="margin-top:8px">X = season week. Y = DMI. Number above each point = game shape. Dashed lines = compare team.</div>
+            <div class="status" style="margin-top:8px">X = season week. Y = DMI. Color = player position. Number above each point = game shape. Dashed lines = compare team.</div>
           </div>
           <div id="tables" class="tables"></div>
         </div>
@@ -172,11 +172,14 @@ TRACKER_HTML = r"""<!doctype html>
 
   <script>
     const SEASON = {{ current_season }};
-    const COLORS = [
-      "#2563eb", "#dc2626", "#16a34a", "#d97706", "#7c3aed", "#0891b2",
-      "#db2777", "#4d7c0f", "#ea580c", "#0f766e", "#9333ea", "#b45309",
-      "#0369a1", "#be123c", "#15803d", "#6d28d9", "#c2410c", "#155e75"
-    ];
+    const POSITION_COLORS = {
+      PG: "#2563eb",
+      SG: "#dc2626",
+      SF: "#16a34a",
+      PF: "#d97706",
+      C: "#7c3aed",
+      UNK: "#64748b",
+    };
     const DMI_STEP = 50000;
     const DEFAULT_VISIBLE_PER_TEAM = 3;
 
@@ -207,13 +210,24 @@ TRACKER_HTML = r"""<!doctype html>
       hideAll: document.getElementById("hideAllBtn"),
     };
 
-    function colorFor(index) {
-      return COLORS[index % COLORS.length];
-    }
-
     function latestPoint(player) {
       if (!player.points?.length) return null;
       return [...player.points].sort((a, b) => b.week - a.week)[0];
+    }
+
+    function normalizedPosition(player) {
+      const latest = latestPoint(player);
+      const value = String(player.position || latest?.position || "").toUpperCase();
+      return ["PG", "SG", "SF", "PF", "C"].includes(value) ? value : "UNK";
+    }
+
+    function positionLabel(player) {
+      const position = normalizedPosition(player);
+      return position === "UNK" ? "?" : position;
+    }
+
+    function colorFor(player) {
+      return POSITION_COLORS[normalizedPosition(player)] || POSITION_COLORS.UNK;
     }
 
     function shortPlayerName(name) {
@@ -302,13 +316,12 @@ TRACKER_HTML = r"""<!doctype html>
       state.compareData = await loadJson(`/api/u21-tracker?season=${SEASON}&countryId=${state.compareCountryId}`);
     }
 
-    function decoratePlayers(data, teamKey, offset) {
+    function decoratePlayers(data, teamKey) {
       const countryName = data?.country?.name || (teamKey === "primary" ? "Team A" : "Team B");
-      return (data?.players || []).map((player, index) => ({
+      return (data?.players || []).map((player) => ({
         ...player,
         teamKey,
         teamName: countryName,
-        colorIndex: index + offset,
       }));
     }
 
@@ -321,7 +334,7 @@ TRACKER_HTML = r"""<!doctype html>
 
     function resetVisiblePlayers() {
       const hidden = new Set();
-      for (const players of [decoratePlayers(state.primaryData, "primary", 0), decoratePlayers(state.compareData, "compare", 18)]) {
+      for (const players of [decoratePlayers(state.primaryData, "primary"), decoratePlayers(state.compareData, "compare")]) {
         const keep = topIdsByDmi(players, DEFAULT_VISIBLE_PER_TEAM);
         for (const player of players) {
           if (!keep.has(player.playerId)) hidden.add(player.playerId);
@@ -332,8 +345,8 @@ TRACKER_HTML = r"""<!doctype html>
 
     function allPlayers() {
       return [
-        ...decoratePlayers(state.primaryData, "primary", 0),
-        ...decoratePlayers(state.compareData, "compare", 18),
+        ...decoratePlayers(state.primaryData, "primary"),
+        ...decoratePlayers(state.compareData, "compare"),
       ];
     }
 
@@ -388,7 +401,7 @@ TRACKER_HTML = r"""<!doctype html>
       svg += `<text x="16" y="${pad.top + innerH / 2}" transform="rotate(-90 16 ${pad.top + innerH / 2})" text-anchor="middle" font-size="12" fill="#4b5563">DMI</text>`;
 
       for (const player of visible) {
-        const color = colorFor(player.colorIndex || 0);
+        const color = colorFor(player);
         const pts = (player.points || []).filter((point) => point.dmi != null);
         if (!pts.length) continue;
         const path = pts.map((point, index) => `${index === 0 ? "M" : "L"} ${xPos(point.week)} ${yPos(point.dmi)}`).join(" ");
@@ -405,9 +418,9 @@ TRACKER_HTML = r"""<!doctype html>
       }
       els.chart.innerHTML = svg;
       els.legend.innerHTML = visible.map((player) => `
-        <span class="chip" style="color:${colorFor(player.colorIndex || 0)}">
-          <span class="dot" style="background:${colorFor(player.colorIndex || 0)}"></span>
-          ${shortPlayerName(player.name)}
+        <span class="chip" style="color:${colorFor(player)}">
+          <span class="dot" style="background:${colorFor(player)}"></span>
+          ${positionLabel(player)} - ${shortPlayerName(player.name)}
         </span>
       `).join("");
     }
@@ -415,11 +428,19 @@ TRACKER_HTML = r"""<!doctype html>
     function sortablePlayers(players) {
       const rows = players.map((player) => {
         const latest = latestPoint(player);
-        return { player, name: player.name, gameShape: latest?.gameShape ?? null, dmi: latest?.dmi ?? null, salary: latest?.salary ?? null };
+        return {
+          player,
+          name: player.name,
+          position: normalizedPosition(player),
+          gameShape: latest?.gameShape ?? null,
+          dmi: latest?.dmi ?? null,
+          salary: latest?.salary ?? null,
+        };
       });
       rows.sort((a, b) => {
         let result = 0;
         if (state.sort.key === "name") result = a.name.localeCompare(b.name);
+        else if (state.sort.key === "position") result = a.position.localeCompare(b.position);
         else result = (a[state.sort.key] ?? -Infinity) - (b[state.sort.key] ?? -Infinity);
         if (result === 0) result = a.player.playerId - b.player.playerId;
         return state.sort.dir === "asc" ? result : -result;
@@ -441,6 +462,7 @@ TRACKER_HTML = r"""<!doctype html>
             <thead>
               <tr>
                 <th><button type="button" data-sort="name">Player${sortMarker("name")}</button></th>
+                <th><button type="button" data-sort="position">Pos${sortMarker("position")}</button></th>
                 <th><button type="button" data-sort="gameShape">GS${sortMarker("gameShape")}</button></th>
                 <th><button type="button" data-sort="dmi">DMI${sortMarker("dmi")}</button></th>
                 <th><button type="button" data-sort="salary">Salary${sortMarker("salary")}</button></th>
@@ -449,7 +471,8 @@ TRACKER_HTML = r"""<!doctype html>
             <tbody>
               ${rows.map(({ player, gameShape, dmi, salary }) => `
                 <tr class="player-row ${state.hiddenPlayers.has(player.playerId) ? "hidden-player" : ""}" data-player-id="${player.playerId}">
-                  <td><span class="dot" style="background:${colorFor(player.colorIndex || 0)}"></span> ${player.name}</td>
+                  <td><span class="dot" style="background:${colorFor(player)}"></span> ${player.name}</td>
+                  <td>${positionLabel(player)}</td>
                   <td>${gameShape ?? "-"}</td>
                   <td>${dmi == null ? "-" : Number(dmi).toLocaleString()}</td>
                   <td>${formatMoney(salary)}</td>
@@ -472,8 +495,8 @@ TRACKER_HTML = r"""<!doctype html>
       els.tables.classList.toggle("compare-active", Boolean(compared));
       renderCompareOptions();
       renderChart(players, allWeeks());
-      els.tables.innerHTML = renderTable(selected?.name || "Primary team", decoratePlayers(state.primaryData, "primary", 0))
-        + (compared ? renderTable(compared.name, decoratePlayers(state.compareData, "compare", 18)) : "");
+      els.tables.innerHTML = renderTable(selected?.name || "Primary team", decoratePlayers(state.primaryData, "primary"))
+        + (compared ? renderTable(compared.name, decoratePlayers(state.compareData, "compare")) : "");
     }
 
     els.search.addEventListener("input", renderCountries);
@@ -507,7 +530,7 @@ TRACKER_HTML = r"""<!doctype html>
         if (state.sort.key === key) state.sort.dir = state.sort.dir === "asc" ? "desc" : "asc";
         else {
           state.sort.key = key;
-          state.sort.dir = key === "name" ? "asc" : "desc";
+          state.sort.dir = ["name", "position"].includes(key) ? "asc" : "desc";
         }
         renderTracker();
       } else if (row) {
@@ -641,13 +664,21 @@ def load_country_series(season: int, country_id: int) -> dict[str, Any]:
                 continue
             series = by_player.setdefault(
                 player_id,
-                {"playerId": player_id, "name": player.get("name", f"Player {player_id}"), "points": []},
+                {
+                    "playerId": player_id,
+                    "name": player.get("name", f"Player {player_id}"),
+                    "position": player.get("position"),
+                    "points": [],
+                },
             )
             if player.get("name"):
                 series["name"] = player["name"]
+            if player.get("position"):
+                series["position"] = player["position"]
             series["points"].append(
                 {
                     "week": week,
+                    "position": player.get("position"),
                     "dmi": player.get("dmi"),
                     "gameShape": player.get("gameShape"),
                     "salary": player.get("salary"),
