@@ -1,0 +1,72 @@
+name: U21 Tracker Weekly Scrape
+
+on:
+  schedule:
+    # Friday 13:30 Israel summer time (10:30 UTC).
+    - cron: "30 10 * * 5"
+  workflow_dispatch:
+    inputs:
+      seed_week0:
+        description: "Also write synthetic week 0 from the current scrape"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+      week:
+        description: "Optional season week override"
+        required: false
+        type: string
+      countries:
+        description: "Optional comma-separated country IDs for a limited scrape"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Scrape U21 tracker snapshot
+        env:
+          BBAPI_LOGIN: ${{ secrets.BBAPI_LOGIN }}
+          BBAPI_CODE: ${{ secrets.BBAPI_CODE }}
+          BB_PASSWORD: ${{ secrets.BB_PASSWORD }}
+          CURRENT_SEASON: ${{ vars.CURRENT_SEASON || '72' }}
+          INPUT_SEED_WEEK0: ${{ github.event.inputs.seed_week0 }}
+          INPUT_WEEK: ${{ github.event.inputs.week }}
+          INPUT_COUNTRIES: ${{ github.event.inputs.countries }}
+        run: |
+          EXTRA=()
+          if [ "$INPUT_SEED_WEEK0" = "true" ]; then
+            EXTRA+=(--seed-week0)
+          fi
+          if [ -n "$INPUT_WEEK" ]; then
+            EXTRA+=("--week=$INPUT_WEEK")
+          fi
+          if [ -n "$INPUT_COUNTRIES" ]; then
+            EXTRA+=("--countries=$INPUT_COUNTRIES")
+          fi
+          python scrape_u21_tracker.py "${EXTRA[@]}"
+
+      - name: Commit tracker JSON
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/u21-tracker/
+          git diff --staged --quiet || (git commit -m "chore: update U21 tracker weekly snapshot" && git push)

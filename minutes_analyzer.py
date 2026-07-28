@@ -174,6 +174,7 @@ ANALYZER_HTML = r"""
       <a href="/u21-minutes">U21 Minutes</a>
       <a href="/nt-minutes">NT Minutes</a>
       <a href="/player-minutes">Player Analyzer</a>
+      <a href="/u21-tracker">U21 Tracker</a>
     </div>
     <h1>{{ title }}</h1>
     <p class="lead">{{ subtitle }}</p>
@@ -816,6 +817,7 @@ PLAYER_ANALYZER_HTML = r"""
       <a href="/u21-minutes">U21 Minutes</a>
       <a href="/nt-minutes">NT Minutes</a>
       <a href="/player-minutes">Player Analyzer</a>
+      <a href="/u21-tracker">U21 Tracker</a>
     </div>
     <h1>Player Minutes Analyzer</h1>
     <p class="lead">Enter a BuzzerBeater player ID to load career weekly minutes by position.</p>

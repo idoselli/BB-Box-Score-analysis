@@ -5,3 +5,5 @@ matches/
 .env
 .env.local
 *.pyc
+reports/
+*.log
