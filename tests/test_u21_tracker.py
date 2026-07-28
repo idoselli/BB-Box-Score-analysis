@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 import json
 import tempfile
 import unittest
@@ -183,6 +184,14 @@ class U21TrackerTests(unittest.TestCase):
             self.assertEqual(seeded["countries"][0]["players"][0]["gameShape"], 5)
         finally:
             scrape_u21_tracker.TRACKER_ROOT = old_root
+
+    def test_tracker_season_rolls_to_73_on_august_7(self):
+        before_rollover = datetime(2026, 8, 6, 12, 0, tzinfo=timezone.utc)
+        first_s73_scrape = datetime(2026, 8, 7, 10, 30, tzinfo=timezone.utc)
+
+        self.assertEqual(scrape_u21_tracker.current_tracker_season(before_rollover), 72)
+        self.assertEqual(scrape_u21_tracker.current_tracker_season(first_s73_scrape), 73)
+        self.assertEqual(scrape_u21_tracker.current_tracker_week(73, first_s73_scrape), 1)
 
 
 if __name__ == "__main__":

@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import argparse
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import json
 import os
 from pathlib import Path
@@ -20,6 +20,8 @@ from minutes_agg import current_week_for_season
 ROOT = Path(__file__).resolve().parent
 TRACKER_ROOT = ROOT / "data" / "u21-tracker"
 STANDINGS_URL = "https://buzzerbeater.com/world/standings.aspx?teamid=1015"
+TRACKER_SEASON_73_START = datetime(2026, 8, 7, tzinfo=timezone.utc)
+TRACKER_SEASON_DURATION_DAYS = 98
 
 
 def load_dotenv(path: Path = ROOT / ".env") -> None:
@@ -82,6 +84,28 @@ def fetch_round_robin_countries() -> list[dict[str, Any]]:
     if not countries:
         raise ValueError("No U21 Round Robin pool countries were parsed from the standings page.")
     return countries
+
+
+def tracker_season_start(season: int) -> datetime:
+    return TRACKER_SEASON_73_START + timedelta(
+        days=(season - 73) * TRACKER_SEASON_DURATION_DAYS
+    )
+
+
+def current_tracker_season(now: datetime | None = None) -> int:
+    now = now or datetime.now(timezone.utc)
+    if now < TRACKER_SEASON_73_START:
+        return 72
+    days_since_s73 = (now - TRACKER_SEASON_73_START).days
+    return 73 + days_since_s73 // TRACKER_SEASON_DURATION_DAYS
+
+
+def current_tracker_week(season: int, now: datetime | None = None) -> int | None:
+    now = now or datetime.now(timezone.utc)
+    diff_days = (now - tracker_season_start(season)).days
+    if diff_days < 0 or diff_days >= TRACKER_SEASON_DURATION_DAYS:
+        return None
+    return diff_days // 7 + 1
 
 
 def tracker_dir(season: int) -> Path:
@@ -228,8 +252,12 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     load_dotenv()
     args = parse_args()
-    season = args.season or int(env_value("CURRENT_SEASON", "72"))
-    week = args.week if args.week is not None else current_week_for_season(season)
+    season = args.season or (
+        int(env_value("CURRENT_SEASON")) if env_value("CURRENT_SEASON") else current_tracker_season()
+    )
+    week = args.week if args.week is not None else current_tracker_week(season)
+    if week is None:
+        week = current_week_for_season(season)
     if week is None:
         raise ValueError(f"Could not determine current week for season {season}.")
 

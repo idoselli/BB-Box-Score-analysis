@@ -50,7 +50,9 @@ Configure these repository secrets in GitHub before enabling it:
 - `BB_PASSWORD`
 
 Optional repository variable:
-- `CURRENT_SEASON` - defaults to `72`
+- `CURRENT_SEASON` - overrides automatic season detection when set
+
+The scraper automatically rolls the scheduled run to season 73 on August 7, 2026, then advances in 98-day season blocks.
 
 The workflow commits only `data/u21-tracker/` JSON files. Credentials are read from GitHub Actions secrets and are not written into the repository.
 
