@@ -217,7 +217,7 @@ TRACKER_HTML = r"""<!doctype html>
 
     function normalizedPosition(player) {
       const latest = latestPoint(player);
-      const value = String(player.position || latest?.position || "").toUpperCase();
+      const value = String(latest?.position || player.position || "").toUpperCase();
       return ["PG", "SG", "SF", "PF", "C"].includes(value) ? value : "UNK";
     }
 
@@ -673,8 +673,6 @@ def load_country_series(season: int, country_id: int) -> dict[str, Any]:
             )
             if player.get("name"):
                 series["name"] = player["name"]
-            if player.get("position"):
-                series["position"] = player["position"]
             series["points"].append(
                 {
                     "week": week,
@@ -689,6 +687,7 @@ def load_country_series(season: int, country_id: int) -> dict[str, Any]:
     players = []
     for player in by_player.values():
         player["points"] = sorted(player["points"], key=lambda point: point["week"])
+        player["position"] = player["points"][-1].get("position") if player["points"] else None
         players.append(player)
     players.sort(key=lambda player: str(player["name"]).casefold())
 

@@ -120,6 +120,8 @@ class U21TrackerTests(unittest.TestCase):
         body = country_response.get_json()
         self.assertEqual(body["country"]["pool"], "Pool H")
         self.assertEqual(len(body["players"]), 2)
+        self.assertEqual(body["players"][0]["position"], "PG")
+        self.assertEqual([point["position"] for point in body["players"][0]["points"]], ["SG", "PG"])
 
     def test_parse_round_robin_pools(self):
         html = """
