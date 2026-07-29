@@ -66,7 +66,7 @@ class U21ModeFlaskTests(unittest.TestCase):
             "matchid": "123",
             "home": {"name": "Home Five", "points": 91, "is_winner": True},
             "away": {"name": "Away Five", "points": 88, "is_winner": False},
-            "events_count": 240,
+            "source_detail": "Read directly from pbp.aspx team score fields.",
         }
 
         with patch.object(web_tool, "load_pbp_result", return_value=result) as pbp_loader:
@@ -86,6 +86,47 @@ class U21ModeFlaskTests(unittest.TestCase):
         self.assertIn(b"Source: BBAPI pbp.aspx", response.data)
         self.assertIn(b"Home Five", response.data)
         self.assertIn(b"91 : 88", response.data)
+
+    def test_pbp_result_can_read_structured_scores(self):
+        payload = """
+        <bbapi version="1">
+          <match id="123">
+            <awayTeam id="2">
+              <teamName>Away Five</teamName>
+              <score>88</score>
+            </awayTeam>
+            <homeTeam id="1">
+              <teamName>Home Five</teamName>
+              <score>91</score>
+            </homeTeam>
+            <events />
+          </match>
+        </bbapi>
+        """
+
+        result = web_tool.extract_pbp_result_from_xml("123", payload)
+
+        self.assertIsNotNone(result)
+        self.assertEqual(result["home"]["name"], "Home Five")
+        self.assertEqual(result["home"]["points"], 91)
+        self.assertEqual(result["away"]["name"], "Away Five")
+        self.assertEqual(result["away"]["points"], 88)
+
+    def test_pbp_payload_unwraps_nested_report_string_container(self):
+        payload = """
+        <bbapi version="1">
+          <match>
+            <HomeTeam><ID>1</ID><Name>Home</Name></HomeTeam>
+            <AwayTeam><ID>2</ID><Name>Away</Name></AwayTeam>
+            <ReportString>abc</ReportString>
+          </match>
+        </bbapi>
+        """
+
+        unwrapped = web_tool.pbp_payload_xml(payload)
+
+        self.assertIn("<ReportString>abc</ReportString>", unwrapped)
+        self.assertNotIn("<bbapi", unwrapped)
 
     def test_u21_unlock_requires_configured_password(self):
         client = web_tool.app.test_client()

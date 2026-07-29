@@ -752,7 +752,7 @@ PBP_RESULT_HTML = """<!doctype html>
           <div class="winner">{{ "Winner" if result.away.is_winner else "" }}</div>
         </div>
       </div>
-      <div class="small">Calculated from {{ result.events_count }} normalized play-by-play events.</div>
+      <div class="small">{{ result.source_detail }}</div>
       <form class="actions" method="get" action="/">
         <button type="submit">Back</button>
       </form>
@@ -6988,6 +6988,144 @@ def bbapi_error_message(xml_text: str) -> str:
     return (error.attrib.get("message") or error.text or "Unknown BBAPI error").strip()
 
 
+def xml_local_name(element: xml.Element) -> str:
+    return str(element.tag).rsplit("}", 1)[-1]
+
+
+def xml_child(element: xml.Element | None, *names: str) -> xml.Element | None:
+    if element is None:
+        return None
+    wanted = {name.casefold() for name in names}
+    for child in element:
+        if xml_local_name(child).casefold() in wanted:
+            return child
+    return None
+
+
+def xml_descendant(element: xml.Element, *names: str) -> xml.Element | None:
+    wanted = {name.casefold() for name in names}
+    for child in element.iter():
+        if child is element:
+            continue
+        if xml_local_name(child).casefold() in wanted:
+            return child
+    return None
+
+
+def clean_score(value: Any) -> int | None:
+    if value is None:
+        return None
+    text = str(value).strip().replace(",", "")
+    if not text:
+        return None
+    try:
+        return int(text)
+    except ValueError:
+        return None
+
+
+def score_from_element(element: xml.Element | None) -> int | None:
+    if element is None:
+        return None
+    for attr in ("score", "points", "pts"):
+        if (score := clean_score(element.attrib.get(attr))) is not None:
+            return score
+    score_node = xml_child(element, "score", "points", "pts")
+    if score_node is None:
+        return None
+    if (score := clean_score(score_node.text)) is not None:
+        return score
+    if (score := clean_score(score_node.attrib.get("total"))) is not None:
+        return score
+    partials = str(score_node.attrib.get("partials", "")).strip()
+    if partials:
+        parts = [clean_score(part) for part in partials.split(",")]
+        if all(part is not None for part in parts):
+            return sum(part for part in parts if part is not None)
+    return None
+
+
+def team_name_from_element(element: xml.Element | None, fallback: str) -> str:
+    if element is None:
+        return fallback
+    node = xml_child(element, "teamName", "name", "Name")
+    return (node.text or "").strip() if node is not None and node.text else element.attrib.get("name", fallback)
+
+
+def team_id_from_element(element: xml.Element | None) -> str:
+    if element is None:
+        return ""
+    node = xml_child(element, "id", "ID")
+    return element.attrib.get("id") or ((node.text or "").strip() if node is not None and node.text else "")
+
+
+def score_pair_from_attributes(root: xml.Element) -> tuple[int, int] | None:
+    home_keys = ("homeScore", "home_score", "homepoints", "homePoints", "home")
+    away_keys = ("awayScore", "away_score", "awaypoints", "awayPoints", "away")
+    for element in reversed(list(root.iter())):
+        attrs = {key.casefold(): value for key, value in element.attrib.items()}
+        home_score = next((clean_score(attrs.get(key.casefold())) for key in home_keys if attrs.get(key.casefold()) is not None), None)
+        away_score = next((clean_score(attrs.get(key.casefold())) for key in away_keys if attrs.get(key.casefold()) is not None), None)
+        if home_score is not None and away_score is not None:
+            return home_score, away_score
+    return None
+
+
+def build_pbp_result(
+    matchid: str,
+    home_id: str,
+    home_name: str,
+    home_points: int,
+    away_id: str,
+    away_name: str,
+    away_points: int,
+    source_detail: str,
+) -> dict[str, Any]:
+    return {
+        "matchid": str(matchid),
+        "home": {
+            "id": home_id,
+            "name": home_name,
+            "points": home_points,
+            "is_winner": home_points > away_points,
+        },
+        "away": {
+            "id": away_id,
+            "name": away_name,
+            "points": away_points,
+            "is_winner": away_points > home_points,
+        },
+        "source_detail": source_detail,
+    }
+
+
+def extract_pbp_result_from_xml(matchid: str, xml_text: str) -> dict[str, Any] | None:
+    root = xml.fromstring(xml_text)
+    home = xml_descendant(root, "homeTeam", "HomeTeam")
+    away = xml_descendant(root, "awayTeam", "AwayTeam")
+    home_score = score_from_element(home)
+    away_score = score_from_element(away)
+
+    if home_score is None or away_score is None:
+        attr_scores = score_pair_from_attributes(root)
+        if attr_scores is not None:
+            home_score, away_score = attr_scores
+
+    if home_score is None or away_score is None:
+        return None
+
+    return build_pbp_result(
+        matchid,
+        team_id_from_element(home),
+        team_name_from_element(home, "Home"),
+        home_score,
+        team_id_from_element(away),
+        team_name_from_element(away, "Away"),
+        away_score,
+        "Read directly from pbp.aspx team score fields.",
+    )
+
+
 def pbp_payload_xml(xml_text: str) -> str:
     root = xml.fromstring(xml_text)
     if root.tag == "BBData":
@@ -6995,6 +7133,13 @@ def pbp_payload_xml(xml_text: str) -> str:
     bbdata = root.find(".//BBData")
     if bbdata is not None:
         return xml.tostring(bbdata, encoding="unicode")
+    if root.find("./ReportString") is not None:
+        return xml_text
+    for element in root.iter():
+        if element is root:
+            continue
+        if element.find("./ReportString") is not None:
+            return xml.tostring(element, encoding="unicode")
     return xml_text
 
 
@@ -7006,6 +7151,9 @@ def load_pbp_result(matchid: str, username: str, password: str) -> dict[str, Any
     pbp_xml = api.get_xml_pbp(matchid=int(matchid))
     if error := bbapi_error_message(pbp_xml):
         raise ValueError(f"BBAPI pbp.aspx returned {error}.")
+
+    if result := extract_pbp_result_from_xml(matchid, pbp_xml):
+        return result
 
     with contextlib.redirect_stdout(io.StringIO()):
         events, home_team, away_team = parse_xml(pbp_payload_xml(pbp_xml))
@@ -7021,24 +7169,16 @@ def load_pbp_result(matchid: str, username: str, password: str) -> dict[str, Any
         game = Game(matchid, events, home_team, away_team, args, [])
         game.play()
 
-    home_points = game.teams[0].points()
-    away_points = game.teams[1].points()
-    return {
-        "matchid": str(matchid),
-        "home": {
-            "id": game.teams[0].id,
-            "name": game.teams[0].name,
-            "points": home_points,
-            "is_winner": home_points > away_points,
-        },
-        "away": {
-            "id": game.teams[1].id,
-            "name": game.teams[1].name,
-            "points": away_points,
-            "is_winner": away_points > home_points,
-        },
-        "events_count": len(game.baseevents),
-    }
+    return build_pbp_result(
+        matchid,
+        str(game.teams[0].id),
+        game.teams[0].name,
+        game.teams[0].points(),
+        str(game.teams[1].id),
+        game.teams[1].name,
+        game.teams[1].points(),
+        f"Calculated from {len(game.baseevents)} normalized play-by-play events.",
+    )
 
 
 def normalize_team_key(name: str) -> str:
