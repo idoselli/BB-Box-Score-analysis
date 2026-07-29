@@ -54,10 +54,38 @@ class U21ModeFlaskTests(unittest.TestCase):
         response = client.get("/")
 
         self.assertEqual(response.status_code, 200)
+        self.assertIn(b"PBP Result", response.data)
         self.assertIn(b"U21 squad analysis", response.data)
         self.assertIn(b"Beta", response.data)
         self.assertIn(b"Analyzer Password", response.data)
         self.assertIn(b'id="u21LockedFields" class="u21-locked-fields locked"', response.data)
+
+    def test_pbp_result_mode_uses_pbp_result_loader(self):
+        client = web_tool.app.test_client()
+        result = {
+            "matchid": "123",
+            "home": {"name": "Home Five", "points": 91, "is_winner": True},
+            "away": {"name": "Away Five", "points": 88, "is_winner": False},
+            "events_count": 240,
+        }
+
+        with patch.object(web_tool, "load_pbp_result", return_value=result) as pbp_loader:
+            with patch.object(web_tool, "generate_report", side_effect=AssertionError("wrong path")):
+                response = client.post(
+                    "/report",
+                    data={
+                        "mode": "pbp_result",
+                        "username": "u",
+                        "password": "code",
+                        "matchid": "123",
+                    },
+                )
+
+        self.assertEqual(response.status_code, 200)
+        pbp_loader.assert_called_once_with("123", "u", "code")
+        self.assertIn(b"Source: BBAPI pbp.aspx", response.data)
+        self.assertIn(b"Home Five", response.data)
+        self.assertIn(b"91 : 88", response.data)
 
     def test_u21_unlock_requires_configured_password(self):
         client = web_tool.app.test_client()

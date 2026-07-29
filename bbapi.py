@@ -96,6 +96,10 @@ class BBApi:
 
         return text
 
+    def get_xml_pbp(self, matchid) -> str:
+        p = {"matchid": matchid}
+        return self.network.get("http://bbapi.buzzerbeater.com/pbp.aspx", p)
+
     def get_xml_standings(self, leagueid: int, season: int) -> str:
         path = CACHE_DIR / f"standings_{leagueid}_{season}.xml"
 

@@ -294,6 +294,7 @@ FORM_HTML = """<!doctype html>
         </label>
         <div class="mode-switch">
           <button type="button" class="mode-btn" data-mode="single">Single Match</button>
+          <button type="button" class="mode-btn" data-mode="pbp_result">PBP Result</button>
           <button type="button" class="mode-btn" data-mode="multi">Multi Match Team Aggregate</button>
           <button type="button" class="mode-btn" data-mode="animation">Animation<span class="beta-label">Beta</span></button>
           <button type="button" class="mode-btn" data-mode="u21_training">U21 squad analysis<span class="beta-label">Beta</span></button>
@@ -477,13 +478,15 @@ FORM_HTML = """<!doctype html>
 
     function applyMode(mode) {
       modeInput.value = mode;
-      singlePanel.classList.toggle("active", mode === "single" || mode === "animation");
+      singlePanel.classList.toggle("active", mode === "single" || mode === "animation" || mode === "pbp_result");
       multiPanel.classList.toggle("active", mode === "multi");
       u21TrainingPanel.classList.toggle("active", mode === "u21_training");
       modeButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.mode === mode));
       singleModeHint.textContent = mode === "animation"
         ? "Generate a live animated game view for one match."
-        : "Generate a full report for one match.";
+        : mode === "pbp_result"
+          ? "Fetch pbp.aspx and show only the final score."
+          : "Generate a full report for one match.";
     }
 
     function updateRemoveButtons() {
@@ -635,6 +638,126 @@ FORM_HTML = """<!doctype html>
     applyMode({{ mode | tojson }});
 
   </script>
+</body>
+</html>
+"""
+
+
+PBP_RESULT_HTML = """<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PBP Result {{ result.matchid }}</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --panel: #fff;
+      --line: #d9e1ea;
+      --ink: #1f2933;
+      --muted: #607285;
+      --accent: #0d47a1;
+      --shadow: 0 8px 26px rgba(16, 24, 40, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+    .wrap {
+      max-width: 760px;
+      margin: 48px auto;
+      padding: 0 18px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+    .small {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+    h1 {
+      margin: 0 0 18px;
+      font-size: 28px;
+    }
+    .scoreboard {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 16px;
+      align-items: center;
+      margin: 18px 0;
+      padding: 18px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .team.away { text-align: right; }
+    .name {
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .score {
+      min-width: 130px;
+      text-align: center;
+      font-size: 44px;
+      font-weight: 900;
+      color: var(--accent);
+    }
+    .winner {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .actions {
+      margin-top: 18px;
+    }
+    button {
+      background: var(--accent);
+      color: #fff;
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    @media (max-width: 640px) {
+      .scoreboard {
+        grid-template-columns: 1fr;
+        text-align: left;
+      }
+      .team.away { text-align: left; }
+      .score { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <div class="small">Match {{ result.matchid }} | Source: BBAPI pbp.aspx</div>
+      <h1>Final Result</h1>
+      <div class="scoreboard">
+        <div class="team home">
+          <div class="name">{{ result.home.name }}</div>
+          <div class="winner">{{ "Winner" if result.home.is_winner else "" }}</div>
+        </div>
+        <div class="score">{{ result.home.points }} : {{ result.away.points }}</div>
+        <div class="team away">
+          <div class="name">{{ result.away.name }}</div>
+          <div class="winner">{{ "Winner" if result.away.is_winner else "" }}</div>
+        </div>
+      </div>
+      <div class="small">Calculated from {{ result.events_count }} normalized play-by-play events.</div>
+      <form class="actions" method="get" action="/">
+        <button type="submit">Back</button>
+      </form>
+    </section>
+  </main>
 </body>
 </html>
 """
@@ -6854,6 +6977,70 @@ def serialize_game(game: Game) -> dict[str, Any]:
     return {"teamHome": teams[0], "teamAway": teams[1], "events": events}
 
 
+def bbapi_error_message(xml_text: str) -> str:
+    try:
+        root = xml.fromstring(xml_text)
+    except xml.ParseError:
+        return ""
+    error = root.find(".//error")
+    if error is None:
+        return ""
+    return (error.attrib.get("message") or error.text or "Unknown BBAPI error").strip()
+
+
+def pbp_payload_xml(xml_text: str) -> str:
+    root = xml.fromstring(xml_text)
+    if root.tag == "BBData":
+        return xml_text
+    bbdata = root.find(".//BBData")
+    if bbdata is not None:
+        return xml.tostring(bbdata, encoding="unicode")
+    return xml_text
+
+
+def load_pbp_result(matchid: str, username: str, password: str) -> dict[str, Any]:
+    api = BBApi(username, password)
+    if not getattr(api, "logged_in", False):
+        raise ValueError("BBAPI login failed. Check username/password.")
+
+    pbp_xml = api.get_xml_pbp(matchid=int(matchid))
+    if error := bbapi_error_message(pbp_xml):
+        raise ValueError(f"BBAPI pbp.aspx returned {error}.")
+
+    with contextlib.redirect_stdout(io.StringIO()):
+        events, home_team, away_team = parse_xml(pbp_payload_xml(pbp_xml))
+        args = Namespace(
+            matchid=matchid,
+            username=username,
+            password=password,
+            print_events=False,
+            print_stats=False,
+            save_charts=False,
+            verify=False,
+        )
+        game = Game(matchid, events, home_team, away_team, args, [])
+        game.play()
+
+    home_points = game.teams[0].points()
+    away_points = game.teams[1].points()
+    return {
+        "matchid": str(matchid),
+        "home": {
+            "id": game.teams[0].id,
+            "name": game.teams[0].name,
+            "points": home_points,
+            "is_winner": home_points > away_points,
+        },
+        "away": {
+            "id": game.teams[1].id,
+            "name": game.teams[1].name,
+            "points": away_points,
+            "is_winner": away_points > home_points,
+        },
+        "events_count": len(game.baseevents),
+    }
+
+
 def normalize_team_key(name: str) -> str:
     return " ".join(name.split()).casefold()
 
@@ -8623,6 +8810,13 @@ def report() -> tuple[str, int] | str:
 
     if not matchid.isdigit():
         return form_error("Match ID must be numeric.", 400)
+
+    if mode == "pbp_result":
+        try:
+            result = load_pbp_result(matchid, username, password)
+        except Exception as exc:
+            return form_error(f"Failed to load PBP result: {exc}", 400, keep_password=False)
+        return render_template_string(PBP_RESULT_HTML, result=result)
 
     try:
         report_json = generate_report(matchid, username, password)
