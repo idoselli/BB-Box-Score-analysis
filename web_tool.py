@@ -722,6 +722,20 @@ PBP_RESULT_HTML = """<!doctype html>
       gap: 16px;
       margin-top: 18px;
     }
+    .period-table {
+      margin-top: 18px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .period-table h2 {
+      margin: 0;
+      padding: 11px 12px;
+      font-size: 15px;
+      border-bottom: 1px solid var(--line);
+      background: #f8fbff;
+    }
     .player-table {
       min-width: 0;
       border: 1px solid var(--line);
@@ -799,6 +813,29 @@ PBP_RESULT_HTML = """<!doctype html>
         </div>
       </div>
       <div class="small">{{ result.source_detail }}</div>
+      {% if result.period_scores %}
+      <section class="period-table">
+        <h2>Score By Period</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Period</th>
+              <th>{{ result.home.name }}</th>
+              <th>{{ result.away.name }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in result.period_scores %}
+            <tr>
+              <td>{{ row.label }}</td>
+              <td>{{ row.home }}</td>
+              <td>{{ row.away }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+      {% endif %}
       <section class="player-section">
         {% for team in [result.home, result.away] %}
         <div class="player-table">
@@ -7101,6 +7138,25 @@ def clean_score(value: Any) -> int | None:
         return None
 
 
+def score_node_partials(element: xml.Element | None) -> list[int]:
+    if element is None:
+        return []
+    partials = str(element.attrib.get("partials", "")).strip()
+    if not partials:
+        return []
+    parts = [clean_score(part) for part in partials.split(",")]
+    if any(part is None for part in parts):
+        return []
+    return [int(part) for part in parts if part is not None]
+
+
+def score_partials_from_element(element: xml.Element | None) -> list[int]:
+    if element is None:
+        return []
+    score_node = xml_child(element, "score", "points", "pts")
+    return score_node_partials(score_node)
+
+
 def score_from_element(element: xml.Element | None) -> int | None:
     if element is None:
         return None
@@ -7114,11 +7170,9 @@ def score_from_element(element: xml.Element | None) -> int | None:
         return score
     if (score := clean_score(score_node.attrib.get("total"))) is not None:
         return score
-    partials = str(score_node.attrib.get("partials", "")).strip()
+    partials = score_node_partials(score_node)
     if partials:
-        parts = [clean_score(part) for part in partials.split(",")]
-        if all(part is not None for part in parts):
-            return sum(part for part in parts if part is not None)
+        return sum(partials)
     return None
 
 
@@ -7159,6 +7213,7 @@ def build_pbp_result(
     source_detail: str,
     home_players: list[dict[str, Any]] | None = None,
     away_players: list[dict[str, Any]] | None = None,
+    period_scores: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     return {
         "matchid": str(matchid),
@@ -7177,7 +7232,40 @@ def build_pbp_result(
             "players": away_players or [],
         },
         "source_detail": source_detail,
+        "period_scores": period_scores or [],
     }
+
+
+def period_label(index: int) -> str:
+    if index <= 4:
+        return f"End Q{index}"
+    return f"End OT{index - 4}"
+
+
+def cumulative_period_scores(home_partials: list[int], away_partials: list[int]) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    home_total = 0
+    away_total = 0
+    for index, (home_points, away_points) in enumerate(zip(home_partials, away_partials), start=1):
+        home_total += home_points
+        away_total += away_points
+        rows.append(
+            {
+                "label": period_label(index),
+                "home": home_total,
+                "away": away_total,
+            }
+        )
+    return rows
+
+
+def game_period_scores(game: Game) -> list[dict[str, Any]]:
+    home_partials = [int(stat.team_stats().get("pts", 0) or 0) for stat in game.teams[0].stats.qtr]
+    away_partials = [int(stat.team_stats().get("pts", 0) or 0) for stat in game.teams[1].stats.qtr]
+    while home_partials and away_partials and home_partials[-1] == 0 and away_partials[-1] == 0:
+        home_partials.pop()
+        away_partials.pop()
+    return cumulative_period_scores(home_partials, away_partials)
 
 
 def player_stat_rows(team: Any) -> list[dict[str, Any]]:
@@ -7212,6 +7300,10 @@ def extract_pbp_result_from_xml(matchid: str, xml_text: str) -> dict[str, Any] |
     away = xml_descendant(root, "awayTeam", "AwayTeam")
     home_score = score_from_element(home)
     away_score = score_from_element(away)
+    period_scores = cumulative_period_scores(
+        score_partials_from_element(home),
+        score_partials_from_element(away),
+    )
 
     if home_score is None or away_score is None:
         attr_scores = score_pair_from_attributes(root)
@@ -7230,6 +7322,7 @@ def extract_pbp_result_from_xml(matchid: str, xml_text: str) -> dict[str, Any] |
         team_name_from_element(away, "Away"),
         away_score,
         "Read directly from pbp.aspx team score fields.",
+        period_scores=period_scores,
     )
 
 
@@ -7300,6 +7393,9 @@ def load_pbp_result(matchid: str, username: str, password: str) -> dict[str, Any
         if structured_result is not None
         else f"Calculated from {len(game.baseevents)} normalized play-by-play events."
     )
+    period_scores = structured_result["period_scores"] if structured_result is not None else []
+    if not period_scores:
+        period_scores = game_period_scores(game)
 
     return build_pbp_result(
         matchid,
@@ -7312,6 +7408,7 @@ def load_pbp_result(matchid: str, username: str, password: str) -> dict[str, Any
         source_detail,
         player_stat_rows(game.teams[0]),
         player_stat_rows(game.teams[1]),
+        period_scores,
     )
 
 

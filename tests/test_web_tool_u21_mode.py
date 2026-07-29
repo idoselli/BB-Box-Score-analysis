@@ -77,6 +77,10 @@ class U21ModeFlaskTests(unittest.TestCase):
                 "is_winner": False,
                 "players": [{"name": "Away Big", "pts": 18, "ast": 2, "reb": 11}],
             },
+            "period_scores": [
+                {"label": "End Q1", "home": 22, "away": 20},
+                {"label": "End Q2", "home": 45, "away": 42},
+            ],
             "source_detail": "Read directly from pbp.aspx team score fields.",
         }
 
@@ -102,6 +106,8 @@ class U21ModeFlaskTests(unittest.TestCase):
         self.assertIn(b"PTS", response.data)
         self.assertIn(b"AST", response.data)
         self.assertIn(b"REB", response.data)
+        self.assertIn(b"Score By Period", response.data)
+        self.assertIn(b"End Q1", response.data)
 
     def test_pbp_result_can_read_structured_scores(self):
         payload = """
@@ -109,11 +115,11 @@ class U21ModeFlaskTests(unittest.TestCase):
           <match id="123">
             <awayTeam id="2">
               <teamName>Away Five</teamName>
-              <score>88</score>
+              <score partials="20,22,25,21">88</score>
             </awayTeam>
             <homeTeam id="1">
               <teamName>Home Five</teamName>
-              <score>91</score>
+              <score partials="22,23,24,22">91</score>
             </homeTeam>
             <events />
           </match>
@@ -128,6 +134,20 @@ class U21ModeFlaskTests(unittest.TestCase):
         self.assertEqual(result["home"]["players"], [])
         self.assertEqual(result["away"]["name"], "Away Five")
         self.assertEqual(result["away"]["points"], 88)
+        self.assertEqual(
+            result["period_scores"],
+            [
+                {"label": "End Q1", "home": 22, "away": 20},
+                {"label": "End Q2", "home": 45, "away": 42},
+                {"label": "End Q3", "home": 69, "away": 67},
+                {"label": "End Q4", "home": 91, "away": 88},
+            ],
+        )
+
+    def test_cumulative_period_scores_labels_overtime(self):
+        rows = web_tool.cumulative_period_scores([10, 10, 10, 10, 7], [9, 11, 8, 12, 5])
+
+        self.assertEqual(rows[-1], {"label": "End OT1", "home": 47, "away": 45})
 
     def test_pbp_payload_unwraps_nested_report_string_container(self):
         payload = """
