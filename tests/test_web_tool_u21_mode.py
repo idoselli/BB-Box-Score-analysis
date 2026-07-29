@@ -1,4 +1,5 @@
 import unittest
+from types import SimpleNamespace
 from unittest.mock import patch
 
 import web_tool
@@ -64,8 +65,18 @@ class U21ModeFlaskTests(unittest.TestCase):
         client = web_tool.app.test_client()
         result = {
             "matchid": "123",
-            "home": {"name": "Home Five", "points": 91, "is_winner": True},
-            "away": {"name": "Away Five", "points": 88, "is_winner": False},
+            "home": {
+                "name": "Home Five",
+                "points": 91,
+                "is_winner": True,
+                "players": [{"name": "Home Guard", "pts": 24, "ast": 7, "reb": 4}],
+            },
+            "away": {
+                "name": "Away Five",
+                "points": 88,
+                "is_winner": False,
+                "players": [{"name": "Away Big", "pts": 18, "ast": 2, "reb": 11}],
+            },
             "source_detail": "Read directly from pbp.aspx team score fields.",
         }
 
@@ -86,6 +97,11 @@ class U21ModeFlaskTests(unittest.TestCase):
         self.assertIn(b"Source: BBAPI pbp.aspx", response.data)
         self.assertIn(b"Home Five", response.data)
         self.assertIn(b"91 : 88", response.data)
+        self.assertIn(b"Home Guard", response.data)
+        self.assertIn(b"Away Big", response.data)
+        self.assertIn(b"PTS", response.data)
+        self.assertIn(b"AST", response.data)
+        self.assertIn(b"REB", response.data)
 
     def test_pbp_result_can_read_structured_scores(self):
         payload = """
@@ -109,6 +125,7 @@ class U21ModeFlaskTests(unittest.TestCase):
         self.assertIsNotNone(result)
         self.assertEqual(result["home"]["name"], "Home Five")
         self.assertEqual(result["home"]["points"], 91)
+        self.assertEqual(result["home"]["players"], [])
         self.assertEqual(result["away"]["name"], "Away Five")
         self.assertEqual(result["away"]["points"], 88)
 
@@ -127,6 +144,30 @@ class U21ModeFlaskTests(unittest.TestCase):
 
         self.assertIn("<ReportString>abc</ReportString>", unwrapped)
         self.assertNotIn("<bbapi", unwrapped)
+
+    def test_player_stat_rows_uses_points_assists_and_total_rebounds(self):
+        class FakeFullStats:
+            def __init__(self, stats):
+                self.stats = stats
+
+            def player_stats(self):
+                return self.stats
+
+        player = SimpleNamespace(
+            id=7,
+            name="Boxscore Hero",
+            stats=SimpleNamespace(full=FakeFullStats({"pts": 20, "ast": 5, "tr": 9, "mins": 34})),
+        )
+        unused = SimpleNamespace(
+            id=8,
+            name="Bench Zero",
+            stats=SimpleNamespace(full=FakeFullStats({"pts": 0, "ast": 0, "tr": 0, "mins": 0})),
+        )
+        team = SimpleNamespace(players=[player, unused])
+
+        rows = web_tool.player_stat_rows(team)
+
+        self.assertEqual(rows, [{"id": 7, "name": "Boxscore Hero", "pts": 20, "ast": 5, "reb": 9, "mins": 34}])
 
     def test_u21_unlock_requires_configured_password(self):
         client = web_tool.app.test_client()

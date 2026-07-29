@@ -716,6 +716,51 @@ PBP_RESULT_HTML = """<!doctype html>
     .actions {
       margin-top: 18px;
     }
+    .player-section {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .player-table {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .player-table h2 {
+      margin: 0;
+      padding: 11px 12px;
+      font-size: 15px;
+      border-bottom: 1px solid var(--line);
+      background: #f8fbff;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th,
+    td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--line);
+      text-align: right;
+      white-space: nowrap;
+    }
+    th:first-child,
+    td:first-child {
+      text-align: left;
+      white-space: normal;
+    }
+    tbody tr:last-child td {
+      border-bottom: 0;
+    }
+    .empty {
+      padding: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
     button {
       background: var(--accent);
       color: #fff;
@@ -733,6 +778,7 @@ PBP_RESULT_HTML = """<!doctype html>
       }
       .team.away { text-align: left; }
       .score { text-align: left; }
+      .player-section { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -753,6 +799,37 @@ PBP_RESULT_HTML = """<!doctype html>
         </div>
       </div>
       <div class="small">{{ result.source_detail }}</div>
+      <section class="player-section">
+        {% for team in [result.home, result.away] %}
+        <div class="player-table">
+          <h2>{{ team.name }}</h2>
+          {% if team.players %}
+          <table>
+            <thead>
+              <tr>
+                <th>Player</th>
+                <th>PTS</th>
+                <th>AST</th>
+                <th>REB</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for player in team.players %}
+              <tr>
+                <td>{{ player.name }}</td>
+                <td>{{ player.pts }}</td>
+                <td>{{ player.ast }}</td>
+                <td>{{ player.reb }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <div class="empty">Player totals were not available from this PBP response.</div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </section>
       <form class="actions" method="get" action="/">
         <button type="submit">Back</button>
       </form>
@@ -7080,6 +7157,8 @@ def build_pbp_result(
     away_name: str,
     away_points: int,
     source_detail: str,
+    home_players: list[dict[str, Any]] | None = None,
+    away_players: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     return {
         "matchid": str(matchid),
@@ -7088,15 +7167,43 @@ def build_pbp_result(
             "name": home_name,
             "points": home_points,
             "is_winner": home_points > away_points,
+            "players": home_players or [],
         },
         "away": {
             "id": away_id,
             "name": away_name,
             "points": away_points,
             "is_winner": away_points > home_points,
+            "players": away_players or [],
         },
         "source_detail": source_detail,
     }
+
+
+def player_stat_rows(team: Any) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for player in team.players:
+        name = str(getattr(player, "name", "") or "").strip()
+        if not name or name == "Lucky Fan":
+            continue
+        stats = player.stats.full.player_stats()
+        pts = int(stats.get("pts", 0) or 0)
+        ast = int(stats.get("ast", 0) or 0)
+        reb = int(stats.get("tr", 0) or 0)
+        mins = int(stats.get("mins", 0) or 0)
+        if mins <= 0 and pts == 0 and ast == 0 and reb == 0:
+            continue
+        rows.append(
+            {
+                "id": getattr(player, "id", 0),
+                "name": name,
+                "pts": pts,
+                "ast": ast,
+                "reb": reb,
+                "mins": mins,
+            }
+        )
+    return sorted(rows, key=lambda row: (-row["pts"], -row["reb"], -row["ast"], row["name"]))
 
 
 def extract_pbp_result_from_xml(matchid: str, xml_text: str) -> dict[str, Any] | None:
@@ -7152,32 +7259,59 @@ def load_pbp_result(matchid: str, username: str, password: str) -> dict[str, Any
     if error := bbapi_error_message(pbp_xml):
         raise ValueError(f"BBAPI pbp.aspx returned {error}.")
 
-    if result := extract_pbp_result_from_xml(matchid, pbp_xml):
-        return result
+    structured_result = extract_pbp_result_from_xml(matchid, pbp_xml)
 
-    with contextlib.redirect_stdout(io.StringIO()):
-        events, home_team, away_team = parse_xml(pbp_payload_xml(pbp_xml))
-        args = Namespace(
-            matchid=matchid,
-            username=username,
-            password=password,
-            print_events=False,
-            print_stats=False,
-            save_charts=False,
-            verify=False,
+    game = None
+    parse_error = ""
+    try:
+        with contextlib.redirect_stdout(io.StringIO()):
+            events, home_team, away_team = parse_xml(pbp_payload_xml(pbp_xml))
+            args = Namespace(
+                matchid=matchid,
+                username=username,
+                password=password,
+                print_events=False,
+                print_stats=False,
+                save_charts=False,
+                verify=False,
+            )
+            game = Game(matchid, events, home_team, away_team, args, [])
+            game.play()
+    except Exception as exc:
+        parse_error = str(exc)
+
+    if structured_result is not None and game is None:
+        structured_result["source_detail"] = (
+            f'{structured_result["source_detail"]} Player totals were not available: {parse_error}.'
         )
-        game = Game(matchid, events, home_team, away_team, args, [])
-        game.play()
+        return structured_result
+
+    if game is None:
+        raise ValueError(parse_error or "PBP response did not include readable score or event data.")
+
+    home_points = structured_result["home"]["points"] if structured_result is not None else game.teams[0].points()
+    away_points = structured_result["away"]["points"] if structured_result is not None else game.teams[1].points()
+    home_id = structured_result["home"]["id"] if structured_result is not None else str(game.teams[0].id)
+    away_id = structured_result["away"]["id"] if structured_result is not None else str(game.teams[1].id)
+    home_name = structured_result["home"]["name"] if structured_result is not None else game.teams[0].name
+    away_name = structured_result["away"]["name"] if structured_result is not None else game.teams[1].name
+    source_detail = (
+        "Read final score directly from pbp.aspx and calculated player totals from normalized play-by-play events."
+        if structured_result is not None
+        else f"Calculated from {len(game.baseevents)} normalized play-by-play events."
+    )
 
     return build_pbp_result(
         matchid,
-        str(game.teams[0].id),
-        game.teams[0].name,
-        game.teams[0].points(),
-        str(game.teams[1].id),
-        game.teams[1].name,
-        game.teams[1].points(),
-        f"Calculated from {len(game.baseevents)} normalized play-by-play events.",
+        home_id,
+        home_name,
+        home_points,
+        away_id,
+        away_name,
+        away_points,
+        source_detail,
+        player_stat_rows(game.teams[0]),
+        player_stat_rows(game.teams[1]),
     )
 
 
