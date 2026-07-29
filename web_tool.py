@@ -7259,6 +7259,29 @@ def cumulative_period_scores(home_partials: list[int], away_partials: list[int])
     return rows
 
 
+def event_period_scores_from_xml(root: xml.Element) -> list[dict[str, Any]]:
+    by_quarter: dict[int, tuple[int, int]] = {}
+    for event in root.iter():
+        if xml_local_name(event).casefold() != "event":
+            continue
+        try:
+            quarter = int(str(event.attrib.get("quarter", "")).strip())
+        except ValueError:
+            continue
+        score = xml_child(event, "score")
+        if score is None:
+            continue
+        away_score = clean_score(score.attrib.get("away"))
+        home_score = clean_score(score.attrib.get("home"))
+        if home_score is None or away_score is None:
+            continue
+        by_quarter[quarter] = (home_score, away_score)
+    return [
+        {"label": period_label(quarter), "home": home, "away": away}
+        for quarter, (home, away) in sorted(by_quarter.items())
+    ]
+
+
 def game_period_scores(game: Game) -> list[dict[str, Any]]:
     home_partials = [int(stat.team_stats().get("pts", 0) or 0) for stat in game.teams[0].stats.qtr]
     away_partials = [int(stat.team_stats().get("pts", 0) or 0) for stat in game.teams[1].stats.qtr]
@@ -7304,6 +7327,8 @@ def extract_pbp_result_from_xml(matchid: str, xml_text: str) -> dict[str, Any] |
         score_partials_from_element(home),
         score_partials_from_element(away),
     )
+    if not period_scores:
+        period_scores = event_period_scores_from_xml(root)
 
     if home_score is None or away_score is None:
         attr_scores = score_pair_from_attributes(root)

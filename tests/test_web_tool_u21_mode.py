@@ -149,6 +149,44 @@ class U21ModeFlaskTests(unittest.TestCase):
 
         self.assertEqual(rows[-1], {"label": "End OT1", "home": 47, "away": 45})
 
+    def test_pbp_result_reads_period_scores_from_event_stream(self):
+        payload = """
+        <bbapi version="1">
+          <match id="123">
+            <awayTeam id="2"><teamName>Away Five</teamName></awayTeam>
+            <homeTeam id="1"><teamName>Home Five</teamName></homeTeam>
+            <events>
+              <event seq="1" quarter="1" clock="0:00">
+                <score away="11" home="23" />
+                <text>End of period.</text>
+              </event>
+              <event seq="2" quarter="2" clock="0:00">
+                <score away="28" home="43" />
+                <text>End of period.</text>
+              </event>
+              <event seq="3" quarter="4" clock="0:00">
+                <score away="57" home="81" />
+                <text>~~GAME OVER~~</text>
+              </event>
+            </events>
+          </match>
+        </bbapi>
+        """
+
+        result = web_tool.extract_pbp_result_from_xml("123", payload)
+
+        self.assertIsNotNone(result)
+        self.assertEqual(result["home"]["points"], 81)
+        self.assertEqual(result["away"]["points"], 57)
+        self.assertEqual(
+            result["period_scores"],
+            [
+                {"label": "End Q1", "home": 23, "away": 11},
+                {"label": "End Q2", "home": 43, "away": 28},
+                {"label": "End Q4", "home": 81, "away": 57},
+            ],
+        )
+
     def test_pbp_payload_unwraps_nested_report_string_container(self):
         payload = """
         <bbapi version="1">
