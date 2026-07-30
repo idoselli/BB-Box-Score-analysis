@@ -101,6 +101,37 @@ FORM_HTML = """<!doctype html>
       margin: 0 0 10px;
       font-size: 28px;
     }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .brand-panel {
+      display: grid;
+      place-items: center;
+      margin: -8px -8px 18px;
+      padding: 18px 16px;
+      border: 1px solid #183d71;
+      border-radius: 12px;
+      background:
+        radial-gradient(circle at 50% 26%, rgba(59, 143, 255, 0.18), transparent 32%),
+        linear-gradient(145deg, #020814 0%, #071326 54%, #020713 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+    .brand-logo {
+      display: block;
+      width: min(100%, 420px);
+      height: auto;
+      border-radius: 10px;
+      object-fit: contain;
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.28);
+    }
     p {
       margin: 0 0 18px;
       color: var(--muted);
@@ -269,7 +300,10 @@ FORM_HTML = """<!doctype html>
 <body>
   <main class="wrap">
     <section class="card">
-      <h1>Box Score Analysis</h1>
+      <div class="brand-panel">
+        <img class="brand-logo" src="/static/nika-logo.png" alt="NIKA box score tool logo" />
+      </div>
+      <h1 class="sr-only">Box Score Analysis</h1>
       <p>Enter your BBAPI credentials and a match ID to generate a full report.</p>
       {% if error %}
       <div class="err">{{ error }}</div>

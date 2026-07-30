@@ -55,6 +55,8 @@ class U21ModeFlaskTests(unittest.TestCase):
         response = client.get("/")
 
         self.assertEqual(response.status_code, 200)
+        self.assertIn(b"/static/nika-logo.png", response.data)
+        self.assertIn(b"NIKA box score tool logo", response.data)
         self.assertIn(b"PBP Result", response.data)
         self.assertIn(b"U21 squad analysis", response.data)
         self.assertIn(b"Beta", response.data)
