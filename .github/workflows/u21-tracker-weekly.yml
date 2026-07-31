@@ -81,6 +81,11 @@ jobs:
           fi
 
           git commit -m "chore: update U21 tracker weekly snapshot"
+          if git push origin "HEAD:$GITHUB_REF_NAME"; then
+            exit 0
+          fi
+
+          echo "Initial push failed; refreshing from remote and retrying."
           for attempt in 1 2 3; do
             git pull --rebase origin "$GITHUB_REF_NAME"
             if git push origin "HEAD:$GITHUB_REF_NAME"; then
