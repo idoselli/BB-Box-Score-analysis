@@ -5,7 +5,7 @@ from __future__ import annotations
 from argparse import Namespace
 import base64
 import contextlib
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 import hmac
 import io
 import json
@@ -32,10 +32,19 @@ app.register_blueprint(u21_tracker_bp)
 
 LOCAL_NATIONAL_OPTIONS_PATH = Path(__file__).with_name("national_options.json")
 DEFAULT_CURRENT_SEASON = 72
+ISRAEL_TIMEZONE = timezone(timedelta(hours=3), "Asia/Jerusalem")
+PBP_VIDEO_GATE_START = datetime(2026, 7, 31, 20, 42, tzinfo=ISRAEL_TIMEZONE)
 VERCEL_ANALYTICS_HTML = """<script>
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
 </script>
 <script defer src="/_vercel/insights/script.js"></script>"""
+
+
+def pbp_video_gate_enabled(now: datetime | None = None) -> bool:
+    current = now or datetime.now(PBP_VIDEO_GATE_START.tzinfo)
+    if current.tzinfo is None:
+        current = current.replace(tzinfo=PBP_VIDEO_GATE_START.tzinfo)
+    return current >= PBP_VIDEO_GATE_START
 
 
 @app.after_request
@@ -881,6 +890,7 @@ PBP_RESULT_HTML = """<!doctype html>
   <main class="wrap">
     <section class="card">
       <div class="small">Match {{ result.matchid }} | Source: BBAPI pbp.aspx</div>
+      {% if show_video_gate %}
       <section class="gate" id="pbpGate">
         <h1>One Last Check</h1>
         <div class="video-frame">
@@ -896,8 +906,9 @@ PBP_RESULT_HTML = """<!doctype html>
           <button type="button" id="confirmPbpResultBtn" hidden disabled>Click to watch video and see results</button>
         </div>
       </section>
+      {% endif %}
 
-      <section class="result-content" id="pbpResultContent" hidden>
+      <section class="result-content" id="pbpResultContent"{% if show_video_gate %} hidden{% endif %}>
         <h1>Final Result</h1>
         <div class="scoreboard">
           <div class="team home">
@@ -971,6 +982,7 @@ PBP_RESULT_HTML = """<!doctype html>
       </form>
     </section>
   </main>
+  {% if show_video_gate %}
   <script>
     const gate = document.getElementById("pbpGate");
     const resultContent = document.getElementById("pbpResultContent");
@@ -986,6 +998,7 @@ PBP_RESULT_HTML = """<!doctype html>
       resultContent.hidden = false;
     });
   </script>
+  {% endif %}
 </body>
 </html>
 """
@@ -9326,7 +9339,7 @@ def report() -> tuple[str, int] | str:
             result = load_pbp_result(matchid, username, password)
         except Exception as exc:
             return form_error(f"Failed to load PBP result: {exc}", 400, keep_password=False)
-        return render_template_string(PBP_RESULT_HTML, result=result)
+        return render_template_string(PBP_RESULT_HTML, result=result, show_video_gate=pbp_video_gate_enabled())
 
     try:
         report_json = generate_report(matchid, username, password)

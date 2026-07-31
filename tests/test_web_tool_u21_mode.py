@@ -1,4 +1,5 @@
 import unittest
+from datetime import datetime
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -88,15 +89,16 @@ class U21ModeFlaskTests(unittest.TestCase):
 
         with patch.object(web_tool, "load_pbp_result", return_value=result) as pbp_loader:
             with patch.object(web_tool, "generate_report", side_effect=AssertionError("wrong path")):
-                response = client.post(
-                    "/report",
-                    data={
-                        "mode": "pbp_result",
-                        "username": "u",
-                        "password": "code",
-                        "matchid": "123",
-                    },
-                )
+                with patch.object(web_tool, "pbp_video_gate_enabled", return_value=True):
+                    response = client.post(
+                        "/report",
+                        data={
+                            "mode": "pbp_result",
+                            "username": "u",
+                            "password": "code",
+                            "matchid": "123",
+                        },
+                    )
 
         self.assertEqual(response.status_code, 200)
         pbp_loader.assert_called_once_with("123", "u", "code")
@@ -118,6 +120,60 @@ class U21ModeFlaskTests(unittest.TestCase):
         self.assertIn(b"REB", response.data)
         self.assertIn(b"Score By Period", response.data)
         self.assertIn(b"End Q1", response.data)
+
+    def test_pbp_result_mode_skips_video_gate_before_cutoff(self):
+        client = web_tool.app.test_client()
+        result = {
+            "matchid": "123",
+            "home": {
+                "name": "Home Five",
+                "points": 91,
+                "is_winner": True,
+                "players": [{"name": "Home Guard", "pts": 24, "ast": 7, "reb": 4}],
+            },
+            "away": {
+                "name": "Away Five",
+                "points": 88,
+                "is_winner": False,
+                "players": [{"name": "Away Big", "pts": 18, "ast": 2, "reb": 11}],
+            },
+            "period_scores": [{"label": "End Q1", "home": 22, "away": 20}],
+            "source_detail": "Read directly from pbp.aspx team score fields.",
+        }
+
+        with patch.object(web_tool, "load_pbp_result", return_value=result) as pbp_loader:
+            with patch.object(web_tool, "generate_report", side_effect=AssertionError("wrong path")):
+                with patch.object(web_tool, "pbp_video_gate_enabled", return_value=False):
+                    response = client.post(
+                        "/report",
+                        data={
+                            "mode": "pbp_result",
+                            "username": "u",
+                            "password": "code",
+                            "matchid": "123",
+                        },
+                    )
+
+        self.assertEqual(response.status_code, 200)
+        pbp_loader.assert_called_once_with("123", "u", "code")
+        self.assertNotIn(b"youtube-nocookie", response.data)
+        self.assertNotIn(b"Click to watch video and see results", response.data)
+        self.assertNotIn(b'id="pbpResultContent" hidden', response.data)
+        self.assertNotIn(b"window.setTimeout", response.data)
+        self.assertIn(b'id="pbpResultContent"', response.data)
+        self.assertIn(b"91 : 88", response.data)
+        self.assertIn(b"End Q1", response.data)
+        self.assertIn(b"Home Guard", response.data)
+
+    def test_pbp_video_gate_cutoff_uses_israel_time(self):
+        israel_time = web_tool.ISRAEL_TIMEZONE
+
+        self.assertFalse(
+            web_tool.pbp_video_gate_enabled(datetime(2026, 7, 31, 20, 41, 59, tzinfo=israel_time))
+        )
+        self.assertTrue(
+            web_tool.pbp_video_gate_enabled(datetime(2026, 7, 31, 20, 42, 0, tzinfo=israel_time))
+        )
 
     def test_pbp_result_can_read_structured_scores(self):
         payload = """
