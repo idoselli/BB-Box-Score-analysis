@@ -750,6 +750,53 @@ PBP_RESULT_HTML = """<!doctype html>
     .actions {
       margin-top: 18px;
     }
+    .gate {
+      display: grid;
+      gap: 14px;
+      margin-top: 12px;
+    }
+    .video-frame {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #000;
+    }
+    .video-frame iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    .confirm-row {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+    }
+    .fallback-link {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--accent);
+      border-radius: 10px;
+      padding: 10px 13px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      background: #fff;
+    }
+    .confirm-row button[hidden] {
+      display: none;
+    }
+    .result-content[hidden],
+    .gate[hidden] {
+      display: none;
+    }
     .player-section {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -834,78 +881,111 @@ PBP_RESULT_HTML = """<!doctype html>
   <main class="wrap">
     <section class="card">
       <div class="small">Match {{ result.matchid }} | Source: BBAPI pbp.aspx</div>
-      <h1>Final Result</h1>
-      <div class="scoreboard">
-        <div class="team home">
-          <div class="name">{{ result.home.name }}</div>
-          <div class="winner">{{ "Winner" if result.home.is_winner else "" }}</div>
+      <section class="gate" id="pbpGate">
+        <h1>One Last Check</h1>
+        <div class="video-frame">
+          <iframe
+            src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1&mute=0&playsinline=1&rel=0"
+            title="PBP confirmation video"
+            allow="autoplay; encrypted-media; picture-in-picture"
+            allowfullscreen></iframe>
         </div>
-        <div class="score">{{ result.home.points }} : {{ result.away.points }}</div>
-        <div class="team away">
-          <div class="name">{{ result.away.name }}</div>
-          <div class="winner">{{ "Winner" if result.away.is_winner else "" }}</div>
+        <div class="small">The game result is ready. If the embedded video is unavailable, open it directly and come back when the button appears.</div>
+        <a class="fallback-link" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer">Open video on YouTube</a>
+        <div class="confirm-row">
+          <button type="button" id="confirmPbpResultBtn" hidden disabled>Click to watch video and see results</button>
         </div>
-      </div>
-      <div class="small">{{ result.source_detail }}</div>
-      {% if result.period_scores %}
-      <section class="period-table">
-        <h2>Score By Period</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Period</th>
-              <th>{{ result.home.name }}</th>
-              <th>{{ result.away.name }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for row in result.period_scores %}
-            <tr>
-              <td>{{ row.label }}</td>
-              <td>{{ row.home }}</td>
-              <td>{{ row.away }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
       </section>
-      {% endif %}
-      <section class="player-section">
-        {% for team in [result.home, result.away] %}
-        <div class="player-table">
-          <h2>{{ team.name }}</h2>
-          {% if team.players %}
+
+      <section class="result-content" id="pbpResultContent" hidden>
+        <h1>Final Result</h1>
+        <div class="scoreboard">
+          <div class="team home">
+            <div class="name">{{ result.home.name }}</div>
+            <div class="winner">{{ "Winner" if result.home.is_winner else "" }}</div>
+          </div>
+          <div class="score">{{ result.home.points }} : {{ result.away.points }}</div>
+          <div class="team away">
+            <div class="name">{{ result.away.name }}</div>
+            <div class="winner">{{ "Winner" if result.away.is_winner else "" }}</div>
+          </div>
+        </div>
+        <div class="small">{{ result.source_detail }}</div>
+        {% if result.period_scores %}
+        <section class="period-table">
+          <h2>Score By Period</h2>
           <table>
             <thead>
               <tr>
-                <th>Player</th>
-                <th>PTS</th>
-                <th>AST</th>
-                <th>REB</th>
+                <th>Period</th>
+                <th>{{ result.home.name }}</th>
+                <th>{{ result.away.name }}</th>
               </tr>
             </thead>
             <tbody>
-              {% for player in team.players %}
+              {% for row in result.period_scores %}
               <tr>
-                <td>{{ player.name }}</td>
-                <td>{{ player.pts }}</td>
-                <td>{{ player.ast }}</td>
-                <td>{{ player.reb }}</td>
+                <td>{{ row.label }}</td>
+                <td>{{ row.home }}</td>
+                <td>{{ row.away }}</td>
               </tr>
               {% endfor %}
             </tbody>
           </table>
-          {% else %}
-          <div class="empty">Player totals were not available from this PBP response.</div>
-          {% endif %}
-        </div>
-        {% endfor %}
+        </section>
+        {% endif %}
+        <section class="player-section">
+          {% for team in [result.home, result.away] %}
+          <div class="player-table">
+            <h2>{{ team.name }}</h2>
+            {% if team.players %}
+            <table>
+              <thead>
+                <tr>
+                  <th>Player</th>
+                  <th>PTS</th>
+                  <th>AST</th>
+                  <th>REB</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for player in team.players %}
+                <tr>
+                  <td>{{ player.name }}</td>
+                  <td>{{ player.pts }}</td>
+                  <td>{{ player.ast }}</td>
+                  <td>{{ player.reb }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            {% else %}
+            <div class="empty">Player totals were not available from this PBP response.</div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </section>
       </section>
       <form class="actions" method="get" action="/">
         <button type="submit">Back</button>
       </form>
     </section>
   </main>
+  <script>
+    const gate = document.getElementById("pbpGate");
+    const resultContent = document.getElementById("pbpResultContent");
+    const confirmButton = document.getElementById("confirmPbpResultBtn");
+
+    window.setTimeout(() => {
+      confirmButton.hidden = false;
+      confirmButton.disabled = false;
+    }, 10000);
+
+    confirmButton.addEventListener("click", () => {
+      gate.hidden = true;
+      resultContent.hidden = false;
+    });
+  </script>
 </body>
 </html>
 """
