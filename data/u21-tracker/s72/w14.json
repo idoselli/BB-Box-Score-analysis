@@ -1,7 +1,7 @@
 {
   "season": 72,
   "week": 14,
-  "scrapedAt": "2026-07-31T11:19:02.777110Z",
+  "scrapedAt": "2026-07-31T12:25:38.804734Z",
   "source": "https://buzzerbeater.com/world/standings.aspx?teamid=1015",
   "countries": [
     {
@@ -3697,14 +3697,6 @@
           "salary": 24388
         },
         {
-          "playerId": 54795953,
-          "name": "Attila Trieb",
-          "position": "SF",
-          "dmi": 743700,
-          "gameShape": 9,
-          "salary": 23189
-        },
-        {
           "playerId": 54795413,
           "name": "Norbert Csorba",
           "position": "C",
@@ -3767,6 +3759,14 @@
           "dmi": 1403900,
           "gameShape": 8,
           "salary": 94059
+        },
+        {
+          "playerId": 54795953,
+          "name": "Attila Trieb",
+          "position": "SF",
+          "dmi": 225900,
+          "gameShape": 6,
+          "salary": 23189
         },
         {
           "playerId": 54795988,
@@ -5803,84 +5803,132 @@
       "pool": "Pool E",
       "players": [
         {
-          "playerId": 55711713,
-          "name": "Gaber Kordiš",
+          "playerId": 55158715,
+          "name": "Milan Peterec",
           "position": "PG",
-          "dmi": 25200,
-          "gameShape": 7,
-          "salary": 2820
+          "dmi": 386300,
+          "gameShape": 9,
+          "salary": 12346
         },
         {
-          "playerId": 55135423,
-          "name": "Oskar Pezdirc",
-          "position": "PF",
-          "dmi": 14300,
-          "gameShape": 8,
-          "salary": 2035
-        },
-        {
-          "playerId": 55713033,
-          "name": "Adam Perc",
-          "position": "PF",
-          "dmi": 19500,
-          "gameShape": 7,
-          "salary": 4010
-        },
-        {
-          "playerId": 55713935,
-          "name": "Bernard Lovrek",
+          "playerId": 55689060,
+          "name": "Dore Lovreković",
           "position": "C",
-          "dmi": 11000,
-          "gameShape": 7,
-          "salary": 3034
-        },
-        {
-          "playerId": 55714167,
-          "name": "Žane Kastelic",
-          "position": "SF",
-          "dmi": 15300,
-          "gameShape": 7,
-          "salary": 2745
-        },
-        {
-          "playerId": 55714653,
-          "name": "Zlatimir Mežič",
-          "position": "SF",
-          "dmi": 15000,
-          "gameShape": 7,
-          "salary": 2090
-        },
-        {
-          "playerId": 55714661,
-          "name": "Oton Pevec",
-          "position": "SF",
-          "dmi": 40200,
+          "dmi": 236100,
           "gameShape": 8,
-          "salary": 2971
+          "salary": 9477
         },
         {
-          "playerId": 55715299,
-          "name": "Anej Lampič",
-          "position": "PG",
-          "dmi": 6100,
-          "gameShape": 3,
-          "salary": 3536
+          "playerId": 55135479,
+          "name": "Demis Tahiri",
+          "position": "SF",
+          "dmi": 460300,
+          "gameShape": 9,
+          "salary": 13859
         },
         {
-          "playerId": 55757026,
-          "name": "Jani Korenc",
-          "position": "PG",
-          "dmi": 12200,
-          "gameShape": 6,
-          "salary": 2991
+          "playerId": 55135557,
+          "name": "Čarli Jurković",
+          "position": "C",
+          "dmi": 356000,
+          "gameShape": 9,
+          "salary": 9577
         },
         {
-          "playerId": 56009286,
-          "name": "Leon Seljanar",
+          "playerId": 55439831,
+          "name": "Drejc Kožel",
           "position": "PF",
-          "dmi": 5600,
-          "gameShape": 3,
-          "salary": 2582
+          "dmi": 153800,
+          "gameShape": 8,
+          "salary": 10405
+        },
+        {
+          "playerId": 55135438,
+          "name": "Kevin Turkoš",
+          "position": "PG",
+          "dmi": 352400,
+          "gameShape": 8,
+          "salary": 14716
+        },
+        {
+          "playerId": 55135459,
+          "name": "Nejc Baltič",
+          "position": "PG",
+          "dmi": 243900,
+          "gameShape": 8,
+          "salary": 11509
+        },
+        {
+          "playerId": 55135461,
+          "name": "Samir Lipušček",
+          "position": "C",
+          "dmi": 2071800,
+          "gameShape": 9,
+          "salary": 50039
+        },
+        {
+          "playerId": 55135543,
+          "name": "Erik Verbič",
+          "position": "SF",
+          "dmi": 50800,
+          "gameShape": 6,
+          "salary": 9948
+        },
+        {
+          "playerId": 55135621,
+          "name": "Dare Ogrinec",
+          "position": "C",
+          "dmi": 1088100,
+          "gameShape": 8,
+          "salary": 31714
+        },
+        {
+          "playerId": 55135792,
+          "name": "Anton Šuštar",
+          "position": "PG",
+          "dmi": 226200,
+          "gameShape": 8,
+          "salary": 18859
+        },
+        {
+          "playerId": 55439689,
+          "name": "Leonard Verhovčak",
+          "position": "PG",
+          "dmi": 237200,
+          "gameShape": 8,
+          "salary": 13284
+        },
+        {
+          "playerId": 55439841,
+          "name": "Timo Lep",
+          "position": "PG",
+          "dmi": 131200,
+          "gameShape": 7,
+          "salary": 17006
+        },
+        {
+          "playerId": 55439881,
+          "name": "Lovro Bric",
+          "position": "C",
+          "dmi": 317300,
+          "gameShape": 9,
+          "salary": 13070
+        },
+        {
+          "playerId": 55439925,
+          "name": "Darjan Aljančič",
+          "position": "C",
+          "dmi": 230000,
+          "gameShape": 8,
+          "salary": 10239
+        },
+        {
+          "playerId": 55688943,
+          "name": "Tezej Tomaš",
+          "position": "C",
+          "dmi": 280100,
+          "gameShape": 9,
+          "salary": 7648
         },
         {
           "playerId": 54102520,
