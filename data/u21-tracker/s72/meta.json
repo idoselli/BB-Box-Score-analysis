@@ -2,7 +2,8 @@
   "season": 72,
   "weeks": [
     0,
-    13
+    13,
+    14
   ],
   "countries": [
     {
@@ -106,11 +107,6 @@
       "pool": "Pool F"
     },
     {
-      "countryId": 78,
-      "name": "Ísland",
-      "pool": "Pool C"
-    },
-    {
       "countryId": 15,
       "name": "Israel",
       "pool": "Pool H"
@@ -164,11 +160,6 @@
       "countryId": 26,
       "name": "Norge",
       "pool": "Pool E"
-    },
-    {
-      "countryId": 27,
-      "name": "Österreich",
-      "pool": "Pool A"
     },
     {
       "countryId": 58,
@@ -244,7 +235,17 @@
       "countryId": 33,
       "name": "Ukraina",
       "pool": "Pool A"
+    },
+    {
+      "countryId": 78,
+      "name": "Ísland",
+      "pool": "Pool C"
+    },
+    {
+      "countryId": 27,
+      "name": "Österreich",
+      "pool": "Pool A"
     }
   ],
-  "updatedAt": "2026-07-28T18:36:16.990Z"
+  "updatedAt": "2026-07-31T11:19:02.777110Z"
 }
