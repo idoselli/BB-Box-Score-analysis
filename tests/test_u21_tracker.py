@@ -3,6 +3,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 import u21_tracker
 import scrape_u21_tracker
@@ -205,6 +206,48 @@ class U21TrackerTests(unittest.TestCase):
         self.assertEqual(scrape_u21_tracker.current_tracker_season(before_rollover), 72)
         self.assertEqual(scrape_u21_tracker.current_tracker_season(first_s73_scrape), 73)
         self.assertEqual(scrape_u21_tracker.current_tracker_week(73, first_s73_scrape), 1)
+
+    def test_tracker_countries_use_live_round_robin_when_available(self):
+        with patch.object(
+            scrape_u21_tracker,
+            "fetch_round_robin_countries",
+            return_value=[{"countryId": 15, "name": "Israel", "pool": "Pool H"}],
+        ):
+            countries, source = scrape_u21_tracker.tracker_countries_for_season(73)
+
+        self.assertEqual(source, "round-robin-standings")
+        self.assertEqual(countries, [{"countryId": 15, "name": "Israel", "pool": "Pool H"}])
+
+    def test_tracker_countries_fallback_to_previous_season_plus_extra_countries(self):
+        old_root = scrape_u21_tracker.TRACKER_ROOT
+        scrape_u21_tracker.TRACKER_ROOT = Path(self.tempdir.name) / "scrape"
+        season_dir = scrape_u21_tracker.TRACKER_ROOT / "s72"
+        season_dir.mkdir(parents=True)
+        (season_dir / "meta.json").write_text(
+            json.dumps(
+                {
+                    "season": 72,
+                    "countries": [
+                        {"countryId": 15, "name": "Israel", "pool": "Pool H"},
+                        {"countryId": 20, "name": "Lietuva", "pool": "Pool H"},
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
+        try:
+            with patch.object(scrape_u21_tracker, "fetch_round_robin_countries", return_value=[]):
+                countries, source = scrape_u21_tracker.tracker_countries_for_season(73)
+        finally:
+            scrape_u21_tracker.TRACKER_ROOT = old_root
+
+        by_id = {country["countryId"]: country for country in countries}
+        self.assertEqual(source, "previous-season-fallback-s72")
+        self.assertEqual(by_id[15]["name"], "Israel")
+        self.assertEqual(by_id[1001], {"countryId": 1001, "name": "USA", "pool": "Fallback"})
+        self.assertEqual(by_id[1005], {"countryId": 1005, "name": "China", "pool": "Fallback"})
+        self.assertEqual(by_id[1045], {"countryId": 1045, "name": "Hong Kong", "pool": "Fallback"})
+        self.assertEqual(by_id[1070], {"countryId": 1070, "name": "Taiwan", "pool": "Fallback"})
 
 
 if __name__ == "__main__":

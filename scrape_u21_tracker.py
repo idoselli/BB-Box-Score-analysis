@@ -22,6 +22,12 @@ TRACKER_ROOT = ROOT / "data" / "u21-tracker"
 STANDINGS_URL = "https://buzzerbeater.com/world/standings.aspx?teamid=1015"
 TRACKER_SEASON_73_START = datetime(2026, 8, 7, tzinfo=timezone.utc)
 TRACKER_SEASON_DURATION_DAYS = 98
+FALLBACK_TRACKER_COUNTRIES = [
+    {"countryId": 1001, "name": "USA", "pool": "Fallback"},
+    {"countryId": 1005, "name": "China", "pool": "Fallback"},
+    {"countryId": 1045, "name": "Hong Kong", "pool": "Fallback"},
+    {"countryId": 1070, "name": "Taiwan", "pool": "Fallback"},
+]
 POSITION_ALIASES = {
     "pg": "PG",
     "point guard": "PG",
@@ -103,10 +109,44 @@ def fetch_round_robin_countries() -> list[dict[str, Any]]:
         timeout=30,
     )
     response.raise_for_status()
-    countries = parse_round_robin_pools(response.text)
-    if not countries:
-        raise ValueError("No U21 Round Robin pool countries were parsed from the standings page.")
-    return countries
+    return parse_round_robin_pools(response.text)
+
+
+def merge_country_lists(*country_lists: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    by_id: dict[int, dict[str, Any]] = {}
+    for countries in country_lists:
+        for country in countries:
+            try:
+                country_id = int(country["countryId"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            name = str(country.get("name") or "").strip()
+            pool = str(country.get("pool") or "Fallback").strip() or "Fallback"
+            if not name:
+                continue
+            by_id[country_id] = {"countryId": country_id, "name": name, "pool": pool}
+    return sorted(by_id.values(), key=lambda item: str(item["name"]).casefold())
+
+
+def load_previous_season_countries(season: int) -> list[dict[str, Any]]:
+    meta_path = tracker_dir(season - 1) / "meta.json"
+    try:
+        meta = json.loads(meta_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
+        return []
+    countries = meta.get("countries")
+    return countries if isinstance(countries, list) else []
+
+
+def fallback_tracker_countries(season: int) -> list[dict[str, Any]]:
+    return merge_country_lists(load_previous_season_countries(season), FALLBACK_TRACKER_COUNTRIES)
+
+
+def tracker_countries_for_season(season: int) -> tuple[list[dict[str, Any]], str]:
+    countries = fetch_round_robin_countries()
+    if countries:
+        return countries, "round-robin-standings"
+    return fallback_tracker_countries(season), f"previous-season-fallback-s{season - 1}"
 
 
 def tracker_season_start(season: int) -> datetime:
@@ -239,6 +279,7 @@ def build_snapshot(
     season: int,
     week: int,
     countries: list[dict[str, Any]],
+    country_source: str,
     username: str,
     bbapi_code: str,
     site_password: str,
@@ -260,6 +301,7 @@ def build_snapshot(
         "week": week,
         "scrapedAt": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "source": STANDINGS_URL,
+        "countrySource": country_source,
         "countries": sorted(country_results, key=lambda item: str(item["name"]).casefold()),
     }
 
@@ -292,7 +334,7 @@ def main() -> None:
     if not username or not bbapi_code or not site_password:
         raise ValueError("BBAPI_LOGIN, BBAPI_CODE, and BB_PASSWORD are required.")
 
-    countries = fetch_round_robin_countries()
+    countries, country_source = tracker_countries_for_season(season)
     if args.countries:
         allowed = {int(value.strip()) for value in args.countries.split(",") if value.strip().isdigit()}
         countries = [country for country in countries if int(country["countryId"]) in allowed]
@@ -301,11 +343,12 @@ def main() -> None:
     if not countries:
         raise ValueError("No countries selected for scraping.")
 
-    print(f"Season {season}, week {week}, countries {len(countries)}", flush=True)
+    print(f"Season {season}, week {week}, countries {len(countries)} ({country_source})", flush=True)
     payload = build_snapshot(
         season=season,
         week=week,
         countries=countries,
+        country_source=country_source,
         username=username,
         bbapi_code=bbapi_code,
         site_password=site_password,

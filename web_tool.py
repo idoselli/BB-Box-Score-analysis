@@ -5,7 +5,7 @@ from __future__ import annotations
 from argparse import Namespace
 import base64
 import contextlib
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 import hmac
 import io
 import json
@@ -32,19 +32,10 @@ app.register_blueprint(u21_tracker_bp)
 
 LOCAL_NATIONAL_OPTIONS_PATH = Path(__file__).with_name("national_options.json")
 DEFAULT_CURRENT_SEASON = 72
-ISRAEL_TIMEZONE = timezone(timedelta(hours=3), "Asia/Jerusalem")
-PBP_VIDEO_GATE_START = datetime(2026, 7, 31, 20, 42, tzinfo=ISRAEL_TIMEZONE)
 VERCEL_ANALYTICS_HTML = """<script>
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
 </script>
 <script defer src="/_vercel/insights/script.js"></script>"""
-
-
-def pbp_video_gate_enabled(now: datetime | None = None) -> bool:
-    current = now or datetime.now(PBP_VIDEO_GATE_START.tzinfo)
-    if current.tzinfo is None:
-        current = current.replace(tzinfo=PBP_VIDEO_GATE_START.tzinfo)
-    return current >= PBP_VIDEO_GATE_START
 
 
 @app.after_request
@@ -759,53 +750,6 @@ PBP_RESULT_HTML = """<!doctype html>
     .actions {
       margin-top: 18px;
     }
-    .gate {
-      display: grid;
-      gap: 14px;
-      margin-top: 12px;
-    }
-    .video-frame {
-      position: relative;
-      overflow: hidden;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: #000;
-    }
-    .video-frame iframe {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-    .confirm-row {
-      min-height: 46px;
-      display: flex;
-      align-items: center;
-    }
-    .fallback-link {
-      display: inline-flex;
-      width: fit-content;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--accent);
-      border-radius: 10px;
-      padding: 10px 13px;
-      color: var(--accent);
-      font-size: 13px;
-      font-weight: 700;
-      text-decoration: none;
-      background: #fff;
-    }
-    .confirm-row button[hidden] {
-      display: none;
-    }
-    .result-content[hidden],
-    .gate[hidden] {
-      display: none;
-    }
     .player-section {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -890,25 +834,7 @@ PBP_RESULT_HTML = """<!doctype html>
   <main class="wrap">
     <section class="card">
       <div class="small">Match {{ result.matchid }} | Source: BBAPI pbp.aspx</div>
-      {% if show_video_gate %}
-      <section class="gate" id="pbpGate">
-        <h1>One Last Check</h1>
-        <div class="video-frame">
-          <iframe
-            src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1&mute=0&playsinline=1&rel=0"
-            title="PBP confirmation video"
-            allow="autoplay; encrypted-media; picture-in-picture"
-            allowfullscreen></iframe>
-        </div>
-        <div class="small">The game result is ready. If the embedded video is unavailable, open it directly and come back when the button appears.</div>
-        <a class="fallback-link" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer">Open video on YouTube</a>
-        <div class="confirm-row">
-          <button type="button" id="confirmPbpResultBtn" hidden disabled>Click to watch video and see results</button>
-        </div>
-      </section>
-      {% endif %}
-
-      <section class="result-content" id="pbpResultContent"{% if show_video_gate %} hidden{% endif %}>
+      <section class="result-content" id="pbpResultContent">
         <h1>Final Result</h1>
         <div class="scoreboard">
           <div class="team home">
@@ -982,23 +908,6 @@ PBP_RESULT_HTML = """<!doctype html>
       </form>
     </section>
   </main>
-  {% if show_video_gate %}
-  <script>
-    const gate = document.getElementById("pbpGate");
-    const resultContent = document.getElementById("pbpResultContent");
-    const confirmButton = document.getElementById("confirmPbpResultBtn");
-
-    window.setTimeout(() => {
-      confirmButton.hidden = false;
-      confirmButton.disabled = false;
-    }, 10000);
-
-    confirmButton.addEventListener("click", () => {
-      gate.hidden = true;
-      resultContent.hidden = false;
-    });
-  </script>
-  {% endif %}
 </body>
 </html>
 """
@@ -9339,7 +9248,7 @@ def report() -> tuple[str, int] | str:
             result = load_pbp_result(matchid, username, password)
         except Exception as exc:
             return form_error(f"Failed to load PBP result: {exc}", 400, keep_password=False)
-        return render_template_string(PBP_RESULT_HTML, result=result, show_video_gate=pbp_video_gate_enabled())
+        return render_template_string(PBP_RESULT_HTML, result=result)
 
     try:
         report_json = generate_report(matchid, username, password)
