@@ -194,6 +194,80 @@ class U21TrackerTests(unittest.TestCase):
         finally:
             scrape_u21_tracker.TRACKER_ROOT = old_root
 
+    def test_write_week_snapshot_adds_new_players_without_overwriting_same_week(self):
+        old_root = scrape_u21_tracker.TRACKER_ROOT
+        scrape_u21_tracker.TRACKER_ROOT = Path(self.tempdir.name) / "scrape-merge"
+        try:
+            initial_payload = {
+                "season": 73,
+                "week": 1,
+                "scrapedAt": "2026-08-07T10:30:00Z",
+                "source": "fixture",
+                "countries": [
+                    {
+                        "countryId": 15,
+                        "name": "Israel",
+                        "pool": "Pool H",
+                        "players": [
+                            {
+                                "playerId": 100,
+                                "name": "A Player",
+                                "position": "SG",
+                                "dmi": 100000,
+                                "gameShape": 7,
+                                "salary": 10000,
+                            }
+                        ],
+                    }
+                ],
+            }
+            refresh_payload = {
+                "season": 73,
+                "week": 1,
+                "scrapedAt": "2026-08-09T10:30:00Z",
+                "source": "fixture",
+                "countries": [
+                    {
+                        "countryId": 15,
+                        "name": "Israel",
+                        "pool": "Pool H",
+                        "players": [
+                            {
+                                "playerId": 100,
+                                "name": "A Player",
+                                "position": "PG",
+                                "dmi": 125000,
+                                "gameShape": 8,
+                                "salary": 12000,
+                            },
+                            {
+                                "playerId": 200,
+                                "name": "B Player",
+                                "position": "C",
+                                "dmi": 90000,
+                                "gameShape": 6,
+                                "salary": 9000,
+                            },
+                        ],
+                    }
+                ],
+            }
+
+            week_path = scrape_u21_tracker.write_week_snapshot(73, 1, initial_payload)
+            scrape_u21_tracker.write_week_snapshot(73, 1, refresh_payload)
+            merged = json.loads(week_path.read_text(encoding="utf-8"))
+
+            players = merged["countries"][0]["players"]
+            self.assertEqual(merged["scrapedAt"], "2026-08-09T10:30:00Z")
+            self.assertEqual(merged["firstScrapedAt"], "2026-08-07T10:30:00Z")
+            self.assertEqual(merged["mergePolicy"], "same-week-add-new-players")
+            self.assertEqual([player["playerId"] for player in players], [100, 200])
+            self.assertEqual(players[0]["dmi"], 100000)
+            self.assertEqual(players[0]["position"], "SG")
+            self.assertEqual(players[1]["name"], "B Player")
+        finally:
+            scrape_u21_tracker.TRACKER_ROOT = old_root
+
     def test_normalize_position(self):
         self.assertEqual(scrape_u21_tracker.normalize_position("Point Guard"), "PG")
         self.assertEqual(scrape_u21_tracker.normalize_position("sf"), "SF")

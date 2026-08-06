@@ -175,10 +175,70 @@ def tracker_dir(season: int) -> Path:
     return TRACKER_ROOT / f"s{season}"
 
 
+def merge_same_week_payload(existing: dict[str, Any], incoming: dict[str, Any]) -> dict[str, Any]:
+    merged = json.loads(json.dumps(incoming))
+    merged["firstScrapedAt"] = existing.get("firstScrapedAt") or existing.get("scrapedAt") or incoming.get("scrapedAt")
+    merged["mergePolicy"] = "same-week-add-new-players"
+
+    countries_by_id: dict[int, dict[str, Any]] = {}
+    for country in existing.get("countries", []):
+        try:
+            country_id = int(country["countryId"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        countries_by_id[country_id] = json.loads(json.dumps(country))
+
+    for country in incoming.get("countries", []):
+        try:
+            country_id = int(country["countryId"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if country_id not in countries_by_id:
+            countries_by_id[country_id] = json.loads(json.dumps(country))
+            continue
+
+        previous_country = countries_by_id[country_id]
+        previous_players = previous_country.get("players", [])
+        if not isinstance(previous_players, list):
+            previous_players = []
+
+        seen_player_ids: set[int] = set()
+        merged_players: list[dict[str, Any]] = []
+        for player in previous_players:
+            try:
+                player_id = int(player["playerId"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            seen_player_ids.add(player_id)
+            merged_players.append(json.loads(json.dumps(player)))
+
+        for player in country.get("players", []):
+            try:
+                player_id = int(player["playerId"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            if player_id not in seen_player_ids:
+                seen_player_ids.add(player_id)
+                merged_players.append(json.loads(json.dumps(player)))
+
+        combined_country = json.loads(json.dumps(country))
+        combined_country["players"] = merged_players
+        countries_by_id[country_id] = combined_country
+
+    merged["countries"] = sorted(countries_by_id.values(), key=lambda item: str(item["name"]).casefold())
+    return merged
+
+
 def write_week_snapshot(season: int, week: int, payload: dict[str, Any]) -> Path:
     directory = tracker_dir(season)
     directory.mkdir(parents=True, exist_ok=True)
     week_path = directory / f"w{week}.json"
+    if week_path.exists():
+        try:
+            previous_payload = json.loads(week_path.read_text(encoding="utf-8"))
+            payload = merge_same_week_payload(previous_payload, payload)
+        except (OSError, ValueError, TypeError):
+            pass
     week_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     weeks = sorted(
