@@ -31,7 +31,7 @@ app.register_blueprint(minutes_bp)
 app.register_blueprint(u21_tracker_bp)
 
 LOCAL_NATIONAL_OPTIONS_PATH = Path(__file__).with_name("national_options.json")
-DEFAULT_CURRENT_SEASON = 72
+DEFAULT_CURRENT_SEASON = int(os.environ.get("CURRENT_SEASON", "73"))
 VERCEL_ANALYTICS_HTML = """<script>
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
 </script>

@@ -105,7 +105,9 @@
     { "id": "92", "name": "Việt Nam" }
   ],
   "seasons": [
-    { "id": "71", "label": "Season 71", "current": true },
+    { "id": "73", "label": "Season 73", "current": true },
+    { "id": "72", "label": "Season 72", "current": false },
+    { "id": "71", "label": "Season 71", "current": false },
     { "id": "70", "label": "Season 70", "current": false },
     { "id": "69", "label": "Season 69", "current": false },
     { "id": "68", "label": "Season 68", "current": false },
@@ -113,7 +115,6 @@
     { "id": "66", "label": "Season 66", "current": false },
     { "id": "65", "label": "Season 65", "current": false },
     { "id": "64", "label": "Season 64", "current": false },
-    { "id": "63", "label": "Season 63", "current": false },
-    { "id": "62", "label": "Season 62", "current": false }
+    { "id": "63", "label": "Season 63", "current": false }
   ]
 }

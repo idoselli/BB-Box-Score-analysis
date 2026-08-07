@@ -261,7 +261,7 @@ class U21ModeFlaskTests(unittest.TestCase):
     def test_local_menu_defaults_to_current_season(self):
         seasons = web_tool.load_local_national_options()["seasons"]
 
-        self.assertEqual(seasons[0]["id"], "72")
+        self.assertEqual(seasons[0]["id"], "73")
         self.assertTrue(seasons[0]["current"])
 
     def test_missing_u21_inputs_return_clear_errors(self):

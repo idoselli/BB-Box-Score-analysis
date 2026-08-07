@@ -19,7 +19,7 @@ from u21_training import age_for_season, get_game_week, is_counting_game
 minutes_bp = Blueprint("minutes_analyzer", __name__)
 
 LOCAL_NATIONAL_OPTIONS_PATH = Path(__file__).with_name("national_options.json")
-DEFAULT_CURRENT_SEASON = int(os.environ.get("CURRENT_SEASON", "72"))
+DEFAULT_CURRENT_SEASON = int(os.environ.get("CURRENT_SEASON", "73"))
 U21_MINUTES_MIN_SEASON = int(os.environ.get("U21_MINUTES_MIN_SEASON", "60"))
 POSITION_ORDER = ["PG", "SG", "SF", "PF", "C"]
 

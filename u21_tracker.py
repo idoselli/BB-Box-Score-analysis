@@ -11,7 +11,7 @@ from flask import Blueprint, jsonify, render_template_string, request
 
 u21_tracker_bp = Blueprint("u21_tracker", __name__)
 
-DEFAULT_CURRENT_SEASON = int(os.environ.get("CURRENT_SEASON", "72"))
+DEFAULT_CURRENT_SEASON = int(os.environ.get("CURRENT_SEASON", "73"))
 DEFAULT_TRACKER_REPO = os.environ.get("U21_TRACKER_GITHUB_REPO", "guygir/bb_fantasy")
 DEFAULT_TRACKER_BRANCH = os.environ.get("U21_TRACKER_GITHUB_BRANCH", "main")
 LOCAL_TRACKER_ROOT = Path(__file__).with_name("data") / "u21-tracker"
@@ -85,6 +85,7 @@ TRACKER_HTML = r"""<!doctype html>
       font-weight: 700;
     }
     .compare { min-width: 220px; }
+    .season { min-width: 130px; }
     .status { color: var(--muted); font-size: 13px; }
     .err { border: 1px solid #f3c7c7; background: #fff1f1; color: var(--danger); border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; }
     .chart-card { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: #fcfbf8; padding: 10px; }
@@ -150,6 +151,13 @@ TRACKER_HTML = r"""<!doctype html>
               <div id="chartSub" class="status"></div>
             </div>
             <div class="control-row">
+              <label class="season">Season
+                <select id="seasonSelect">
+                  {% for season in available_seasons %}
+                  <option value="{{ season }}" {% if season == current_season %}selected{% endif %}>Season {{ season }}</option>
+                  {% endfor %}
+                </select>
+              </label>
               <label class="compare">Compare with
                 <select id="compareSelect">
                   <option value="">None</option>
@@ -206,6 +214,7 @@ TRACKER_HTML = r"""<!doctype html>
       chart: document.getElementById("chart"),
       legend: document.getElementById("legend"),
       tables: document.getElementById("tables"),
+      season: document.getElementById("seasonSelect"),
       showAll: document.getElementById("showAllBtn"),
       hideAll: document.getElementById("hideAllBtn"),
     };
@@ -500,6 +509,11 @@ TRACKER_HTML = r"""<!doctype html>
     }
 
     els.search.addEventListener("input", renderCountries);
+    els.season.addEventListener("change", () => {
+      const url = new URL(window.location.href);
+      url.searchParams.set("season", els.season.value);
+      window.location.assign(url.toString());
+    });
     els.list.addEventListener("click", (ev) => {
       const btn = ev.target.closest("[data-country-id]");
       if (btn) selectCountry(btn.dataset.countryId);
@@ -618,6 +632,18 @@ def list_local_weeks(season: int) -> list[int]:
     return sorted(weeks)
 
 
+def available_tracker_seasons() -> list[int]:
+    seasons = {DEFAULT_CURRENT_SEASON}
+    if LOCAL_TRACKER_ROOT.exists():
+        for directory in LOCAL_TRACKER_ROOT.iterdir():
+            if directory.is_dir() and directory.name.startswith("s"):
+                try:
+                    seasons.add(int(directory.name[1:]))
+                except ValueError:
+                    continue
+    return sorted(seasons, reverse=True)
+
+
 def load_country_series(season: int, country_id: int) -> dict[str, Any]:
     meta = load_tracker_meta(season)
     weeks = sorted(int(week) for week in (meta or {}).get("weeks", []) if str(week).isdigit())
@@ -711,7 +737,19 @@ def _parse_positive_int(value: str | None, label: str) -> int:
 
 @u21_tracker_bp.get("/u21-tracker")
 def u21_tracker_page() -> str:
-    return render_template_string(TRACKER_HTML, current_season=DEFAULT_CURRENT_SEASON)
+    try:
+        selected_season = _parse_positive_int(request.args.get("season") or str(DEFAULT_CURRENT_SEASON), "season")
+    except ValueError:
+        selected_season = DEFAULT_CURRENT_SEASON
+    seasons = available_tracker_seasons()
+    if selected_season not in seasons:
+        seasons.append(selected_season)
+        seasons.sort(reverse=True)
+    return render_template_string(
+        TRACKER_HTML,
+        current_season=selected_season,
+        available_seasons=seasons,
+    )
 
 
 @u21_tracker_bp.get("/api/u21-tracker")

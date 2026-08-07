@@ -38,7 +38,7 @@ Set `U21_ANALYZER_PASSWORD` in the runtime environment to unlock the U21 squad a
 Optional env vars:
 - `BB_PASSWORD` — BB site password fallback when the form field is empty
 - `BBAPI_LOGIN` / `BBAPI_CODE` — BBAPI credential fallbacks
-- `CURRENT_SEASON` — defaults to `72`
+- `CURRENT_SEASON` — defaults to `73`
 - `U21_MINUTES_MIN_SEASON` — U21 career history floor (defaults to `60`; NT uses the player's BB season dropdown)
 
 ### U21 tracker weekly scrape

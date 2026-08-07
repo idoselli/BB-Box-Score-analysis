@@ -124,6 +124,21 @@ class U21TrackerTests(unittest.TestCase):
         self.assertEqual(body["players"][0]["position"], "PG")
         self.assertEqual([point["position"] for point in body["players"][0]["points"]], ["SG", "PG"])
 
+    def test_tracker_page_defaults_to_season_73_and_allows_history(self):
+        season_72_dir = u21_tracker.LOCAL_TRACKER_ROOT / "s72"
+        season_72_dir.mkdir()
+        client = web_tool.app.test_client()
+
+        default_response = client.get("/u21-tracker")
+        historical_response = client.get("/u21-tracker?season=72")
+
+        self.assertEqual(default_response.status_code, 200)
+        self.assertIn(b"const SEASON = 73", default_response.data)
+        self.assertIn(b'<option value="73" selected>Season 73</option>', default_response.data)
+        self.assertIn(b'<option value="72" >Season 72</option>', default_response.data)
+        self.assertIn(b"const SEASON = 72", historical_response.data)
+        self.assertIn(b'<option value="72" selected>Season 72</option>', historical_response.data)
+
     def test_parse_round_robin_pools(self):
         html = """
         <h2>Round Robin Pools</h2>
