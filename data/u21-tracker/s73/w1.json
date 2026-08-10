@@ -1,7 +1,7 @@
 {
   "season": 73,
   "week": 1,
-  "scrapedAt": "2026-08-10T12:09:27.400309Z",
+  "scrapedAt": "2026-08-10T19:21:46.662985Z",
   "source": "https://buzzerbeater.com/world/standings.aspx?teamid=1015",
   "countrySource": "previous-season-fallback-s72",
   "countries": [
@@ -161,6 +161,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -296,6 +304,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -455,6 +471,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -622,6 +646,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -773,6 +805,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -924,6 +964,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -1051,6 +1099,54 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 55159804,
+          "name": "Pavel Loveček",
+          "position": "C",
+          "dmi": 115700,
+          "gameShape": 7,
+          "salary": 26930
+        },
+        {
+          "playerId": 55084138,
+          "name": "Jaroslav Dorotík",
+          "position": "C",
+          "dmi": 88900,
+          "gameShape": 7,
+          "salary": 18270
+        },
+        {
+          "playerId": 55161846,
+          "name": "Igor Křen",
+          "position": "C",
+          "dmi": 118200,
+          "gameShape": 7,
+          "salary": 22040
+        },
+        {
+          "playerId": 55388646,
+          "name": "Milan Mlejnek",
+          "position": "PF",
+          "dmi": 153800,
+          "gameShape": 7,
+          "salary": 27199
+        },
+        {
+          "playerId": 55463695,
+          "name": "Vítězslav Pukaj",
+          "position": "PF",
+          "dmi": 92200,
+          "gameShape": 7,
+          "salary": 17634
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -1144,6 +1240,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -1303,6 +1407,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -1462,6 +1574,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -1597,6 +1717,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -1756,6 +1884,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -1899,6 +2035,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -2162,6 +2306,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -2281,6 +2433,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -2304,6 +2464,110 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54988835,
+          "name": "Édouard Vienne",
+          "position": "C",
+          "dmi": 356500,
+          "gameShape": 7,
+          "salary": 72075
+        },
+        {
+          "playerId": 54989511,
+          "name": "Mar Samb",
+          "position": "PG",
+          "dmi": 139600,
+          "gameShape": 7,
+          "salary": 26958
+        },
+        {
+          "playerId": 54990238,
+          "name": "Benoît Quétier",
+          "position": "PG",
+          "dmi": 147100,
+          "gameShape": 7,
+          "salary": 25935
+        },
+        {
+          "playerId": 54988230,
+          "name": "Pierre Beauquis",
+          "position": "C",
+          "dmi": 456800,
+          "gameShape": 7,
+          "salary": 76493
+        },
+        {
+          "playerId": 54988312,
+          "name": "Jérémie Potier",
+          "position": "PG",
+          "dmi": 125300,
+          "gameShape": 7,
+          "salary": 22378
+        },
+        {
+          "playerId": 54988824,
+          "name": "David Chevallier",
+          "position": "SG",
+          "dmi": 97500,
+          "gameShape": 7,
+          "salary": 21710
+        },
+        {
+          "playerId": 54989057,
+          "name": "Younes Ben Amara",
+          "position": "SG",
+          "dmi": 180000,
+          "gameShape": 7,
+          "salary": 29769
+        },
+        {
+          "playerId": 54989914,
+          "name": "David Véron",
+          "position": "C",
+          "dmi": 277000,
+          "gameShape": 7,
+          "salary": 52789
+        },
+        {
+          "playerId": 55158754,
+          "name": "Robin Lenoël",
+          "position": "PG",
+          "dmi": 161100,
+          "gameShape": 7,
+          "salary": 30150
+        },
+        {
+          "playerId": 55293712,
+          "name": "Bruno Borget",
+          "position": "PF",
+          "dmi": 244100,
+          "gameShape": 7,
+          "salary": 47136
+        },
+        {
+          "playerId": 55294406,
+          "name": "Fabrice Galante",
+          "position": "C",
+          "dmi": 157000,
+          "gameShape": 7,
+          "salary": 32709
+        },
+        {
+          "playerId": 55295114,
+          "name": "Kaddour El Karni",
+          "position": "PG",
+          "dmi": 195900,
+          "gameShape": 7,
+          "salary": 34917
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -2471,6 +2735,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -2694,6 +2966,22 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 55865678,
+          "name": "Nikos Tsantoulis",
+          "position": "SF",
+          "dmi": 42200,
+          "gameShape": 7,
+          "salary": 10230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -2875,6 +3163,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -3042,6 +3338,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -3201,6 +3505,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -3336,6 +3648,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -3479,6 +3799,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -3638,6 +3966,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -3805,6 +4141,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -3972,6 +4316,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -4091,6 +4443,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -4250,6 +4610,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -4393,6 +4761,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -4552,6 +4928,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -4639,6 +5023,62 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 55712667,
+          "name": "Leif Ludvig Gustavsen",
+          "position": "PG",
+          "dmi": 54800,
+          "gameShape": 6,
+          "salary": 11904
+        },
+        {
+          "playerId": 55069528,
+          "name": "Andreas Arnesen",
+          "position": "SG",
+          "dmi": 67800,
+          "gameShape": 7,
+          "salary": 15324
+        },
+        {
+          "playerId": 55712974,
+          "name": "Gøran Sæther",
+          "position": "C",
+          "dmi": 33400,
+          "gameShape": 7,
+          "salary": 7586
+        },
+        {
+          "playerId": 55069454,
+          "name": "Hans Wisth",
+          "position": "PG",
+          "dmi": 64600,
+          "gameShape": 7,
+          "salary": 13549
+        },
+        {
+          "playerId": 55715249,
+          "name": "Idar Buseth",
+          "position": "C",
+          "dmi": 48900,
+          "gameShape": 5,
+          "salary": 13648
+        },
+        {
+          "playerId": 55373760,
+          "name": "Per Mathisen",
+          "position": "C",
+          "dmi": 45200,
+          "gameShape": 7,
+          "salary": 10957
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -4814,6 +5254,22 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 55421654,
+          "name": "Kazimierz Paździor",
+          "position": "PF",
+          "dmi": 71000,
+          "gameShape": 7,
+          "salary": 16424
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -4957,6 +5413,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -5124,6 +5588,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -5315,6 +5787,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -5450,6 +5930,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -5569,6 +6057,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -5736,6 +6232,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -5903,6 +6407,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -6046,6 +6558,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -6197,6 +6717,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -6372,6 +6900,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -6523,6 +7059,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -6698,6 +7242,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -6871,6 +7423,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -7014,6 +7574,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -7163,6 +7731,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     },
@@ -7298,6 +7874,14 @@
           "dmi": 111300,
           "gameShape": 7,
           "salary": 25230
+        },
+        {
+          "playerId": 54721949,
+          "name": "Yechezkel Amrani",
+          "position": "C",
+          "dmi": 1085900,
+          "gameShape": 7,
+          "salary": 164951
         }
       ]
     }
