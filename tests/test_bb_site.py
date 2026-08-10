@@ -1,9 +1,20 @@
 import unittest
 
-from bb_site import BBSiteClient, parse_game_log_html, parse_position_cell
+from bb_site import BBSiteClient, parse_game_log_html, parse_national_roster_players, parse_position_cell
 
 
 class GameLogParserTests(unittest.TestCase):
+    def test_national_roster_parser_excludes_bookmarks_and_active_bids(self):
+        html = """
+        <a id="cphContent_Repeater1_HyperLink1_0" href="../../../player/100/overview.aspx">Roster Player</a>
+        <a id="bbBookmarks_Player_0" href="/player/200/overview.aspx">Bookmarked Player</a>
+        <a id="bbActiveBids_hlName" href="/player/300/overview.aspx">Auction Player</a>
+        """
+
+        players = parse_national_roster_players(html)
+
+        self.assertEqual([(player.player_id, player.name) for player in players], [(100, "Roster Player")])
+
     def test_parse_game_log_row_with_rating_column(self):
         html = """
         <table>

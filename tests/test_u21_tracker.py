@@ -304,8 +304,40 @@ class U21TrackerTests(unittest.TestCase):
         ):
             countries, source = scrape_u21_tracker.tracker_countries_for_season(73)
 
-        self.assertEqual(source, "round-robin-standings")
-        self.assertEqual(countries, [{"countryId": 15, "name": "Israel", "pool": "Pool H"}])
+        self.assertEqual(source, "round-robin-standings-plus-extra-countries")
+        by_id = {country["countryId"]: country for country in countries}
+        self.assertEqual(by_id[15], {"countryId": 15, "name": "Israel", "pool": "Pool H"})
+        self.assertEqual(by_id[1001], {"countryId": 1001, "name": "USA", "pool": "Fallback"})
+
+    def test_fallback_tracker_ids_map_to_roster_country_ids(self):
+        self.assertEqual(scrape_u21_tracker.roster_country_id(1001), 1)
+        self.assertEqual(scrape_u21_tracker.roster_country_id(1005), 5)
+        self.assertEqual(scrape_u21_tracker.roster_country_id(1045), 45)
+        self.assertEqual(scrape_u21_tracker.roster_country_id(1070), 70)
+        self.assertEqual(scrape_u21_tracker.roster_country_id(15), 15)
+
+    def test_same_week_merge_removes_cross_country_bookmark_players(self):
+        bookmark = {"playerId": 999, "name": "Bookmark Player"}
+        existing = {
+            "scrapedAt": "2026-08-07T10:30:00Z",
+            "countries": [
+                {"countryId": 15, "name": "Israel", "pool": "Pool H", "players": [bookmark]},
+                {"countryId": 20, "name": "Lietuva", "pool": "Pool H", "players": [bookmark]},
+            ],
+        }
+        incoming = {
+            "scrapedAt": "2026-08-10T10:30:00Z",
+            "countries": [
+                {"countryId": 15, "name": "Israel", "pool": "Pool H", "players": [bookmark]},
+                {"countryId": 20, "name": "Lietuva", "pool": "Pool H", "players": []},
+            ],
+        }
+
+        merged = scrape_u21_tracker.merge_same_week_payload(existing, incoming)
+        by_id = {country["countryId"]: country for country in merged["countries"]}
+
+        self.assertEqual([player["playerId"] for player in by_id[15]["players"]], [999])
+        self.assertEqual(by_id[20]["players"], [])
 
     def test_tracker_countries_fallback_to_previous_season_plus_extra_countries(self):
         old_root = scrape_u21_tracker.TRACKER_ROOT

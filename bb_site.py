@@ -49,6 +49,25 @@ class RosterPlayer:
     name: str
 
 
+def parse_national_roster_players(html: str) -> list[RosterPlayer]:
+    link_re = re.compile(
+        r'<a\b(?=[^>]*\bid=["\']cphContent_Repeater1_HyperLink1_\d+["\'])'
+        r'(?=[^>]*\bhref=["\'][^"\']*/player/(\d+)/overview\.aspx["\'])'
+        r'[^>]*>([^<]+)</a>',
+        re.I,
+    )
+    seen: set[int] = set()
+    players: list[RosterPlayer] = []
+    for match in link_re.finditer(html):
+        player_id = int(match.group(1))
+        name = unescape(match.group(2)).replace("\xa0", " ").strip()
+        if not name or player_id in seen:
+            continue
+        seen.add(player_id)
+        players.append(RosterPlayer(player_id=player_id, name=name))
+    return players
+
+
 @dataclass(frozen=True)
 class GameLogEntry:
     date: str
@@ -331,20 +350,7 @@ class BBSiteClient:
             else f"Country {country_id} {level_config['label']}"
         )
 
-        seen: set[int] = set()
-        players: list[RosterPlayer] = []
-        for match in re.finditer(
-            r'href=["\'][^"\']*/player/(\d+)/overview\.aspx["\'][^>]*>([^<]+)</a>',
-            html,
-            re.I,
-        ):
-            player_id = int(match.group(1))
-            name = unescape(match.group(2)).replace("\xa0", " ").strip()
-            if not name or "season average" in name.casefold() or player_id in seen:
-                continue
-            seen.add(player_id)
-            players.append(RosterPlayer(player_id=player_id, name=name))
-        return team_name, players
+        return team_name, parse_national_roster_players(html)
 
     def fetch_player_game_log(self, player_id: int, season: int) -> list[GameLogEntry]:
         return self.fetch_player_game_log_detailed(player_id, season).games

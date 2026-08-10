@@ -28,6 +28,7 @@ FALLBACK_TRACKER_COUNTRIES = [
     {"countryId": 1045, "name": "Hong Kong", "pool": "Fallback"},
     {"countryId": 1070, "name": "Taiwan", "pool": "Fallback"},
 ]
+FALLBACK_ROSTER_COUNTRY_IDS = {1001: 1, 1005: 5, 1045: 45, 1070: 70}
 POSITION_ALIASES = {
     "pg": "PG",
     "point guard": "PG",
@@ -145,7 +146,7 @@ def fallback_tracker_countries(season: int) -> list[dict[str, Any]]:
 def tracker_countries_for_season(season: int) -> tuple[list[dict[str, Any]], str]:
     countries = fetch_round_robin_countries()
     if countries:
-        return countries, "round-robin-standings"
+        return merge_country_lists(countries, FALLBACK_TRACKER_COUNTRIES), "round-robin-standings-plus-extra-countries"
     return fallback_tracker_countries(season), f"previous-season-fallback-s{season - 1}"
 
 
@@ -173,6 +174,52 @@ def current_tracker_week(season: int, now: datetime | None = None) -> int | None
 
 def tracker_dir(season: int) -> Path:
     return TRACKER_ROOT / f"s{season}"
+
+
+def roster_country_id(tracker_country_id: Any) -> int:
+    country_id = int(tracker_country_id)
+    return FALLBACK_ROSTER_COUNTRY_IDS.get(country_id, country_id)
+
+
+def remove_cross_country_players(
+    countries: list[dict[str, Any]],
+    incoming_countries: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    incoming_owners: dict[int, set[int]] = {}
+    final_owners: dict[int, set[int]] = {}
+
+    for source, owners in [(incoming_countries, incoming_owners), (countries, final_owners)]:
+        for country in source:
+            try:
+                country_id = int(country["countryId"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            for player in country.get("players", []):
+                try:
+                    player_id = int(player["playerId"])
+                except (KeyError, TypeError, ValueError):
+                    continue
+                owners.setdefault(player_id, set()).add(country_id)
+
+    duplicate_ids = {player_id for player_id, owners in final_owners.items() if len(owners) > 1}
+    preferred_owner = {
+        player_id: next(iter(owners))
+        for player_id, owners in incoming_owners.items()
+        if player_id in duplicate_ids and len(owners) == 1
+    }
+
+    for country in countries:
+        try:
+            country_id = int(country["countryId"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        country["players"] = [
+            player
+            for player in country.get("players", [])
+            if int(player.get("playerId", 0)) not in duplicate_ids
+            or preferred_owner.get(int(player.get("playerId", 0))) == country_id
+        ]
+    return countries
 
 
 def merge_same_week_payload(existing: dict[str, Any], incoming: dict[str, Any]) -> dict[str, Any]:
@@ -225,7 +272,8 @@ def merge_same_week_payload(existing: dict[str, Any], incoming: dict[str, Any]) 
         combined_country["players"] = merged_players
         countries_by_id[country_id] = combined_country
 
-    merged["countries"] = sorted(countries_by_id.values(), key=lambda item: str(item["name"]).casefold())
+    merged_countries = sorted(countries_by_id.values(), key=lambda item: str(item["name"]).casefold())
+    merged["countries"] = remove_cross_country_players(merged_countries, incoming.get("countries", []))
     return merged
 
 
@@ -299,7 +347,7 @@ def scrape_country(
     api: BBApi,
 ) -> dict[str, Any]:
     try:
-        _, roster = site.fetch_u21_roster(country["countryId"])
+        _, roster = site.fetch_u21_roster(roster_country_id(country["countryId"]))
     except Exception as exc:
         return {**country, "players": [], "error": str(exc)}
 
@@ -388,9 +436,9 @@ def main() -> None:
     if week is None:
         raise ValueError(f"Could not determine current week for season {season}.")
 
-    username = env_value("BBAPI_LOGIN") or env_value("BB_LOGIN")
-    bbapi_code = env_value("BBAPI_CODE")
-    site_password = env_value("BB_PASSWORD")
+    username = env_value("BBAPI_LOGIN") or env_value("BB_LOGIN") or env_value("BBAPI_USERNAME")
+    bbapi_code = env_value("BBAPI_CODE") or env_value("BBAPI_SECURITY_CODE")
+    site_password = env_value("BB_PASSWORD") or env_value("BB_SITE_PASSWORD")
     if not username or not bbapi_code or not site_password:
         raise ValueError("BBAPI_LOGIN, BBAPI_CODE, and BB_PASSWORD are required.")
 

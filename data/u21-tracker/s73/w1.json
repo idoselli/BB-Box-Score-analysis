@@ -1,7 +1,7 @@
 {
   "season": 73,
   "week": 1,
-  "scrapedAt": "2026-08-10T19:21:46.662985Z",
+  "scrapedAt": "2026-08-10T19:59:06.562878Z",
   "source": "https://buzzerbeater.com/world/standings.aspx?teamid=1015",
   "countrySource": "previous-season-fallback-s72",
   "countries": [
@@ -145,30 +145,6 @@
           "dmi": 30500,
           "gameShape": 7,
           "salary": 7451
-        },
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -282,36 +258,12 @@
           "salary": 8027
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 55463508,
           "name": "Yurdman Atakişiyev",
           "position": "SF",
           "dmi": 56100,
           "gameShape": 6,
           "salary": 13277
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -455,30 +407,6 @@
           "dmi": 107700,
           "gameShape": 7,
           "salary": 20495
-        },
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -608,14 +536,6 @@
           "salary": 5336
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 55325688,
           "name": "Bjorn Rausin",
           "position": "PG",
@@ -638,22 +558,6 @@
           "dmi": 101300,
           "gameShape": 7,
           "salary": 19568
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -789,30 +693,6 @@
           "dmi": 98400,
           "gameShape": 7,
           "salary": 19297
-        },
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -836,14 +716,6 @@
           "dmi": 45900,
           "gameShape": 7,
           "salary": 10403
-        },
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
         },
         {
           "playerId": 55160918,
@@ -956,22 +828,6 @@
           "dmi": 69900,
           "gameShape": 7,
           "salary": 14389
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -1085,22 +941,6 @@
           "salary": 25496
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
           "playerId": 55159804,
           "name": "Pavel Loveček",
           "position": "C",
@@ -1139,14 +979,6 @@
           "dmi": 92200,
           "gameShape": 7,
           "salary": 17634
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -1154,7 +986,144 @@
       "countryId": 1005,
       "name": "China",
       "pool": "Fallback",
-      "players": []
+      "players": [
+        {
+          "playerId": 54930089,
+          "name": "Mo Zuyang",
+          "position": "SF",
+          "dmi": 63600,
+          "gameShape": 7,
+          "salary": 15524
+        },
+        {
+          "playerId": 54930100,
+          "name": "Hou Junxing",
+          "position": "SG",
+          "dmi": 126000,
+          "gameShape": 7,
+          "salary": 22898
+        },
+        {
+          "playerId": 54929799,
+          "name": "Mo Wendong",
+          "position": "SF",
+          "dmi": 83200,
+          "gameShape": 7,
+          "salary": 18801
+        },
+        {
+          "playerId": 54929847,
+          "name": "Xie Ruimin",
+          "position": "C",
+          "dmi": 346000,
+          "gameShape": 7,
+          "salary": 57624
+        },
+        {
+          "playerId": 55235196,
+          "name": "Luo Xiaoliang",
+          "position": "C",
+          "dmi": 91300,
+          "gameShape": 7,
+          "salary": 20438
+        },
+        {
+          "playerId": 54929908,
+          "name": "Zhang Erlei",
+          "position": "C",
+          "dmi": 250400,
+          "gameShape": 7,
+          "salary": 45087
+        },
+        {
+          "playerId": 54930242,
+          "name": "He Hanping",
+          "position": "SF",
+          "dmi": 76800,
+          "gameShape": 7,
+          "salary": 17377
+        },
+        {
+          "playerId": 54930439,
+          "name": "Tao Nanxiong",
+          "position": "PG",
+          "dmi": 113800,
+          "gameShape": 7,
+          "salary": 21078
+        },
+        {
+          "playerId": 54930497,
+          "name": "Li Zhining",
+          "position": "SF",
+          "dmi": 104500,
+          "gameShape": 7,
+          "salary": 22609
+        },
+        {
+          "playerId": 55463717,
+          "name": "Zhuang Chuyi",
+          "position": "SF",
+          "dmi": 79600,
+          "gameShape": 7,
+          "salary": 17220
+        },
+        {
+          "playerId": 55235789,
+          "name": "Song Yingjiang",
+          "position": "C",
+          "dmi": 90400,
+          "gameShape": 7,
+          "salary": 18502
+        },
+        {
+          "playerId": 54929725,
+          "name": "Kwang-Rae Kim",
+          "position": "C",
+          "dmi": 104900,
+          "gameShape": 7,
+          "salary": 23549
+        },
+        {
+          "playerId": 54929750,
+          "name": "Lin Erwen",
+          "position": "C",
+          "dmi": 217600,
+          "gameShape": 7,
+          "salary": 44951
+        },
+        {
+          "playerId": 54929849,
+          "name": "Ye Tiancai",
+          "position": "SG",
+          "dmi": 163500,
+          "gameShape": 7,
+          "salary": 30241
+        },
+        {
+          "playerId": 54929982,
+          "name": "Shen Yunda",
+          "position": "C",
+          "dmi": 187700,
+          "gameShape": 7,
+          "salary": 45206
+        },
+        {
+          "playerId": 55234347,
+          "name": "Xue Kunqian",
+          "position": "C",
+          "dmi": 125500,
+          "gameShape": 7,
+          "salary": 27235
+        },
+        {
+          "playerId": 55235118,
+          "name": "Wu Yufeng",
+          "position": "C",
+          "dmi": 106500,
+          "gameShape": 7,
+          "salary": 24722
+        }
+      ]
     },
     {
       "countryId": 76,
@@ -1224,30 +1193,6 @@
           "dmi": 53300,
           "gameShape": 7,
           "salary": 11522
-        },
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -1377,14 +1322,6 @@
           "salary": 3695
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 55464900,
           "name": "Gareth Duncan",
           "position": "PF",
@@ -1399,22 +1336,6 @@
           "dmi": 62700,
           "gameShape": 7,
           "salary": 13504
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -1558,30 +1479,6 @@
           "dmi": 32800,
           "gameShape": 7,
           "salary": 7758
-        },
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -1701,30 +1598,6 @@
           "dmi": 29600,
           "gameShape": 7,
           "salary": 6369
-        },
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -1868,30 +1741,6 @@
           "dmi": 92200,
           "gameShape": 7,
           "salary": 20261
-        },
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -2013,36 +1862,12 @@
           "salary": 5327
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 55393631,
           "name": "Mihkel Raudmets",
           "position": "PG",
           "dmi": 96500,
           "gameShape": 7,
           "salary": 21435
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -2154,14 +1979,6 @@
           "dmi": 10900,
           "gameShape": 7,
           "salary": 2613
-        },
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
         },
         {
           "playerId": 55329838,
@@ -2298,22 +2115,6 @@
           "dmi": 80300,
           "gameShape": 7,
           "salary": 16699
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -2322,14 +2123,6 @@
       "name": "España",
       "pool": "Pool G",
       "players": [
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
         {
           "playerId": 54950929,
           "name": "Juan Luis Álvarez de Miranda",
@@ -2425,22 +2218,6 @@
           "dmi": 116500,
           "gameShape": 7,
           "salary": 22470
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -2449,22 +2226,6 @@
       "name": "France",
       "pool": "Pool G",
       "players": [
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
         {
           "playerId": 54988835,
           "name": "Édouard Vienne",
@@ -2560,14 +2321,6 @@
           "dmi": 195900,
           "gameShape": 7,
           "salary": 34917
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -2719,30 +2472,6 @@
           "dmi": 76800,
           "gameShape": 7,
           "salary": 15735
-        },
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -2888,14 +2617,6 @@
           "salary": 2742
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 55004780,
           "name": "Apollon Leras",
           "position": "C",
@@ -2960,28 +2681,12 @@
           "salary": 20406
         },
         {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
           "playerId": 55865678,
           "name": "Nikos Tsantoulis",
           "position": "SF",
           "dmi": 42200,
           "gameShape": 7,
           "salary": 10230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -2989,7 +2694,112 @@
       "countryId": 1045,
       "name": "Hong Kong",
       "pool": "Fallback",
-      "players": []
+      "players": [
+        {
+          "playerId": 55095551,
+          "name": "Lung Hoi Ching",
+          "position": "SF",
+          "dmi": 223700,
+          "gameShape": 7,
+          "salary": 38324
+        },
+        {
+          "playerId": 55095685,
+          "name": "Chin Hok Loi",
+          "position": "C",
+          "dmi": 504700,
+          "gameShape": 7,
+          "salary": 76145
+        },
+        {
+          "playerId": 55158664,
+          "name": "Saimun Chun",
+          "position": "SG",
+          "dmi": 183100,
+          "gameShape": 7,
+          "salary": 31654
+        },
+        {
+          "playerId": 55095738,
+          "name": "Li Kong Chun",
+          "position": "C",
+          "dmi": 318700,
+          "gameShape": 7,
+          "salary": 53864
+        },
+        {
+          "playerId": 55095256,
+          "name": "Kwok Shing Wun",
+          "position": "C",
+          "dmi": 386300,
+          "gameShape": 7,
+          "salary": 73717
+        },
+        {
+          "playerId": 55095347,
+          "name": "Lam Sing Wun",
+          "position": "C",
+          "dmi": 178100,
+          "gameShape": 7,
+          "salary": 35576
+        },
+        {
+          "playerId": 55095420,
+          "name": "Wu Kangning",
+          "position": "SF",
+          "dmi": 191500,
+          "gameShape": 7,
+          "salary": 32244
+        },
+        {
+          "playerId": 55095491,
+          "name": "Ngai Foo Lim",
+          "position": "C",
+          "dmi": 310000,
+          "gameShape": 7,
+          "salary": 50717
+        },
+        {
+          "playerId": 55095534,
+          "name": "Wong Kong Pei",
+          "position": "PG",
+          "dmi": 109600,
+          "gameShape": 7,
+          "salary": 23204
+        },
+        {
+          "playerId": 55095610,
+          "name": "Ned Ingles",
+          "position": "SG",
+          "dmi": 105900,
+          "gameShape": 7,
+          "salary": 20390
+        },
+        {
+          "playerId": 55095625,
+          "name": "Un Lai Wan",
+          "position": "SG",
+          "dmi": 77300,
+          "gameShape": 7,
+          "salary": 15882
+        },
+        {
+          "playerId": 55095640,
+          "name": "Fok Luka",
+          "position": "PG",
+          "dmi": 127000,
+          "gameShape": 7,
+          "salary": 23677
+        },
+        {
+          "playerId": 55399967,
+          "name": "Lo Kim Tam",
+          "position": "SF",
+          "dmi": 87900,
+          "gameShape": 7,
+          "salary": 20087
+        }
+      ]
     },
     {
       "countryId": 24,
@@ -3133,14 +2943,6 @@
           "salary": 11491
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 55716087,
           "name": "Moša Pantić",
           "position": "C",
@@ -3155,22 +2957,6 @@
           "dmi": 62100,
           "gameShape": 7,
           "salary": 12546
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -3322,30 +3108,6 @@
           "dmi": 61800,
           "gameShape": 7,
           "salary": 11836
-        },
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -3483,36 +3245,12 @@
           "salary": 34766
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 55334059,
           "name": "Meidad Yesha'ayahu",
           "position": "SG",
           "dmi": 148500,
           "gameShape": 7,
           "salary": 28869
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -3594,14 +3332,6 @@
           "salary": 45304
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 54975300,
           "name": "William Piscaglia",
           "position": "SF",
@@ -3640,22 +3370,6 @@
           "dmi": 237600,
           "gameShape": 7,
           "salary": 46391
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -3783,30 +3497,6 @@
           "dmi": 269200,
           "gameShape": 7,
           "salary": 47305
-        },
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -3896,14 +3586,6 @@
           "salary": 23166
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 55046850,
           "name": "Mariusz Harazim",
           "position": "C",
@@ -3958,22 +3640,6 @@
           "dmi": 129200,
           "gameShape": 7,
           "salary": 23526
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -4119,36 +3785,12 @@
           "salary": 6538
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 55463217,
           "name": "Mikael Marcoux",
           "position": "SF",
           "dmi": 39600,
           "gameShape": 7,
           "salary": 8336
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -4300,30 +3942,6 @@
           "dmi": 172700,
           "gameShape": 7,
           "salary": 32867
-        },
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -4427,30 +4045,6 @@
           "dmi": 55200,
           "gameShape": 7,
           "salary": 13292
-        },
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -4594,30 +4188,6 @@
           "dmi": 48400,
           "gameShape": 7,
           "salary": 11056
-        },
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -4657,14 +4227,6 @@
           "dmi": 142900,
           "gameShape": 7,
           "salary": 32951
-        },
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
         },
         {
           "playerId": 55463282,
@@ -4753,22 +4315,6 @@
           "dmi": 60300,
           "gameShape": 7,
           "salary": 12560
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -4784,14 +4330,6 @@
           "dmi": 44500,
           "gameShape": 7,
           "salary": 9290
-        },
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
         },
         {
           "playerId": 55033625,
@@ -4920,22 +4458,6 @@
           "dmi": 252800,
           "gameShape": 7,
           "salary": 45036
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -5009,22 +4531,6 @@
           "salary": 16300
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
           "playerId": 55712667,
           "name": "Leif Ludvig Gustavsen",
           "position": "PG",
@@ -5071,14 +4577,6 @@
           "dmi": 45200,
           "gameShape": 7,
           "salary": 10957
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -5232,14 +4730,6 @@
           "salary": 24818
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 55115112,
           "name": "Józef Perka",
           "position": "PG",
@@ -5248,28 +4738,12 @@
           "salary": 21449
         },
         {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
           "playerId": 55421654,
           "name": "Kazimierz Paździor",
           "position": "PF",
           "dmi": 71000,
           "gameShape": 7,
           "salary": 16424
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -5383,14 +4857,6 @@
           "salary": 72669
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 55343770,
           "name": "Jacinto Ávila",
           "position": "PG",
@@ -5405,22 +4871,6 @@
           "dmi": 89600,
           "gameShape": 7,
           "salary": 18827
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -5558,14 +5008,6 @@
           "salary": 31047
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 55711557,
           "name": "Octavian Cruceru",
           "position": "SG",
@@ -5580,22 +5022,6 @@
           "dmi": 50700,
           "gameShape": 7,
           "salary": 10659
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -5749,14 +5175,6 @@
           "salary": 15995
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 55045867,
           "name": "Veniamin Shabaev",
           "position": "SF",
@@ -5779,22 +5197,6 @@
           "dmi": 148000,
           "gameShape": 7,
           "salary": 29320
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -5908,36 +5310,12 @@
           "salary": 41572
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 55464035,
           "name": "Temur Chanturia",
           "position": "PG",
           "dmi": 76100,
           "gameShape": 7,
           "salary": 14593
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -6035,36 +5413,12 @@
           "salary": 23696
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 55375989,
           "name": "Andreas Merrits",
           "position": "PG",
           "dmi": 100700,
           "gameShape": 7,
           "salary": 19677
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -6210,36 +5564,12 @@
           "salary": 9499
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 55468103,
           "name": "David McMortimer",
           "position": "C",
           "dmi": 36100,
           "gameShape": 5,
           "salary": 9068
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -6353,14 +5683,6 @@
           "salary": 10067
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 55715503,
           "name": "Drin Beka",
           "position": "PF",
@@ -6399,22 +5721,6 @@
           "dmi": 36200,
           "gameShape": 7,
           "salary": 8165
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -6542,30 +5848,6 @@
           "dmi": 83400,
           "gameShape": 7,
           "salary": 17974
-        },
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -6701,30 +5983,6 @@
           "dmi": 269200,
           "gameShape": 7,
           "salary": 42962
-        },
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -6814,14 +6072,6 @@
           "salary": 3338
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 55073194,
           "name": "Pavle Tankosić",
           "position": "PG",
@@ -6892,22 +6142,6 @@
           "dmi": 186900,
           "gameShape": 7,
           "salary": 32790
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -6916,14 +6150,6 @@
       "name": "Suomi",
       "pool": "Pool E",
       "players": [
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
         {
           "playerId": 55140634,
           "name": "Matti Bergström",
@@ -7051,22 +6277,6 @@
           "dmi": 169100,
           "gameShape": 7,
           "salary": 30368
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -7220,36 +6430,12 @@
           "salary": 18689
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 54970758,
           "name": "Viktor Karlsson",
           "position": "C",
           "dmi": 64600,
           "gameShape": 7,
           "salary": 13952
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -7257,7 +6443,136 @@
       "countryId": 1070,
       "name": "Taiwan",
       "pool": "Fallback",
-      "players": []
+      "players": [
+        {
+          "playerId": 55144837,
+          "name": "Chan Yong chul",
+          "position": "PG",
+          "dmi": 232900,
+          "gameShape": 7,
+          "salary": 40241
+        },
+        {
+          "playerId": 55144777,
+          "name": "Liang Shaiming",
+          "position": "PG",
+          "dmi": 120200,
+          "gameShape": 7,
+          "salary": 21921
+        },
+        {
+          "playerId": 55144755,
+          "name": "Wong Sheng Nan",
+          "position": "PG",
+          "dmi": 56800,
+          "gameShape": 7,
+          "salary": 13323
+        },
+        {
+          "playerId": 55449367,
+          "name": "Wang Thiam Loy",
+          "position": "PG",
+          "dmi": 91500,
+          "gameShape": 7,
+          "salary": 18156
+        },
+        {
+          "playerId": 55145198,
+          "name": "Sun Kheong",
+          "position": "C",
+          "dmi": 175600,
+          "gameShape": 5,
+          "salary": 35647
+        },
+        {
+          "playerId": 55449113,
+          "name": "Liang Jang Lu",
+          "position": "PG",
+          "dmi": 83300,
+          "gameShape": 7,
+          "salary": 16505
+        },
+        {
+          "playerId": 55449202,
+          "name": "Han Yok Lee",
+          "position": "PG",
+          "dmi": 44700,
+          "gameShape": 7,
+          "salary": 10164
+        },
+        {
+          "playerId": 55144951,
+          "name": "Ma Lui Dan",
+          "position": "SF",
+          "dmi": 59300,
+          "gameShape": 7,
+          "salary": 12082
+        },
+        {
+          "playerId": 55144965,
+          "name": "Luo Wing Kuen",
+          "position": "C",
+          "dmi": 212400,
+          "gameShape": 7,
+          "salary": 39085
+        },
+        {
+          "playerId": 55145043,
+          "name": "Lim Than Long",
+          "position": "PF",
+          "dmi": 98300,
+          "gameShape": 7,
+          "salary": 19136
+        },
+        {
+          "playerId": 55145045,
+          "name": "Mo Gyong si",
+          "position": "PG",
+          "dmi": 136700,
+          "gameShape": 7,
+          "salary": 28292
+        },
+        {
+          "playerId": 55145093,
+          "name": "Huang Cheung",
+          "position": "C",
+          "dmi": 100000,
+          "gameShape": 7,
+          "salary": 23191
+        },
+        {
+          "playerId": 55449200,
+          "name": "Ouyang Tu An",
+          "position": "C",
+          "dmi": 126700,
+          "gameShape": 7,
+          "salary": 24915
+        },
+        {
+          "playerId": 55449219,
+          "name": "Huang Tat Ho",
+          "position": "C",
+          "dmi": 135600,
+          "gameShape": 7,
+          "salary": 26481
+        },
+        {
+          "playerId": 55461617,
+          "name": "Law Ting Lun",
+          "position": "PF",
+          "dmi": 92500,
+          "gameShape": 5,
+          "salary": 19323
+        },
+        {
+          "playerId": 55464576,
+          "name": "Ban Jya Syin",
+          "position": "C",
+          "dmi": 132200,
+          "gameShape": 7,
+          "salary": 22981
+        }
+      ]
     },
     {
       "countryId": 6,
@@ -7401,36 +6716,12 @@
           "salary": 14795
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 54946522,
           "name": "Osman Kardes",
           "position": "PG",
           "dmi": 86800,
           "gameShape": 7,
           "salary": 17383
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -7558,30 +6849,6 @@
           "dmi": 69000,
           "gameShape": 7,
           "salary": 14355
-        },
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -7589,7 +6856,96 @@
       "countryId": 1001,
       "name": "USA",
       "pool": "Fallback",
-      "players": []
+      "players": [
+        {
+          "playerId": 54902750,
+          "name": "Joshua Rouse",
+          "position": "PG",
+          "dmi": 204700,
+          "gameShape": 7,
+          "salary": 34978
+        },
+        {
+          "playerId": 54903083,
+          "name": "Walt Sorenson",
+          "position": "C",
+          "dmi": 588600,
+          "gameShape": 7,
+          "salary": 99917
+        },
+        {
+          "playerId": 54901145,
+          "name": "Harry Mathews",
+          "position": "PG",
+          "dmi": 185000,
+          "gameShape": 7,
+          "salary": 37113
+        },
+        {
+          "playerId": 54903294,
+          "name": "Jarom Bess",
+          "position": "C",
+          "dmi": 512500,
+          "gameShape": 7,
+          "salary": 90859
+        },
+        {
+          "playerId": 54902890,
+          "name": "Freddy Cockrell",
+          "position": "C",
+          "dmi": 360500,
+          "gameShape": 7,
+          "salary": 70932
+        },
+        {
+          "playerId": 54902633,
+          "name": "Laverne Mercado",
+          "position": "C",
+          "dmi": 304200,
+          "gameShape": 7,
+          "salary": 58945
+        },
+        {
+          "playerId": 54900604,
+          "name": "Erik Beauchamp",
+          "position": "SG",
+          "dmi": 251000,
+          "gameShape": 7,
+          "salary": 44086
+        },
+        {
+          "playerId": 54900612,
+          "name": "Thomas Brown",
+          "position": "SG",
+          "dmi": 182700,
+          "gameShape": 7,
+          "salary": 32510
+        },
+        {
+          "playerId": 54902535,
+          "name": "Morris Cheney",
+          "position": "SG",
+          "dmi": 206200,
+          "gameShape": 7,
+          "salary": 35402
+        },
+        {
+          "playerId": 54902672,
+          "name": "Charles Dowell",
+          "position": "PG",
+          "dmi": 239900,
+          "gameShape": 7,
+          "salary": 43098
+        },
+        {
+          "playerId": 54902924,
+          "name": "Weston Wilson",
+          "position": "PG",
+          "dmi": 225300,
+          "gameShape": 7,
+          "salary": 38406
+        }
+      ]
     },
     {
       "countryId": 78,
@@ -7685,14 +7041,6 @@
           "salary": 22123
         },
         {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
           "playerId": 55468308,
           "name": "Flóki Geirfinnsson",
           "position": "PG",
@@ -7723,22 +7071,6 @@
           "dmi": 75300,
           "gameShape": 7,
           "salary": 15612
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     },
@@ -7858,30 +7190,6 @@
           "dmi": 65300,
           "gameShape": 7,
           "salary": 12446
-        },
-        {
-          "playerId": 55987961,
-          "name": "Martsin Hurski",
-          "position": "PF",
-          "dmi": 13500,
-          "gameShape": 7,
-          "salary": 3025
-        },
-        {
-          "playerId": 55029790,
-          "name": "Niran Schum",
-          "position": "C",
-          "dmi": 111300,
-          "gameShape": 7,
-          "salary": 25230
-        },
-        {
-          "playerId": 54721949,
-          "name": "Yechezkel Amrani",
-          "position": "C",
-          "dmi": 1085900,
-          "gameShape": 7,
-          "salary": 164951
         }
       ]
     }
