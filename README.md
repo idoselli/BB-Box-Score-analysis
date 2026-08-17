@@ -40,6 +40,8 @@ Optional env vars:
 - `BBAPI_LOGIN` / `BBAPI_CODE` — BBAPI credential fallbacks
 - `CURRENT_SEASON` — defaults to `73`
 - `U21_MINUTES_MIN_SEASON` — U21 career history floor (defaults to `60`; NT uses the player's BB season dropdown)
+- `ISRAEL_U21_GAME_START_TIME` — default Israel U21 game start shown in PBP Result standings mode (defaults to `20:30` and remains editable in the form)
+- `ISRAEL_U21_LIVE_LINK_LEAD_MINUTES` — how many minutes before game time the standings page is expected to expose live-match links (defaults to `15`)
 
 ### U21 tracker weekly scrape
 The GitHub Action `.github/workflows/u21-tracker-weekly.yml` refreshes `data/u21-tracker/` every Friday at 10:30 UTC.

@@ -5,7 +5,7 @@ from __future__ import annotations
 from argparse import Namespace
 import base64
 import contextlib
-from datetime import datetime
+from datetime import datetime, timedelta
 import hmac
 import io
 import json
@@ -14,11 +14,16 @@ from pathlib import Path
 import re
 from typing import Any
 import xml.etree.ElementTree as xml
+from zoneinfo import ZoneInfo
 
 from flask import Flask, jsonify, render_template_string, request
 
 from bbapi import BBApi
-from bb_site import BBSiteClient
+from bb_site import (
+    ISRAEL_U21_STANDINGS_URL,
+    BBSiteClient,
+    fetch_israel_u21_standings_games,
+)
 from coachparrot_model import SKILLS
 from game import Game
 from main import get_xml_text, parse_xml
@@ -32,6 +37,16 @@ app.register_blueprint(u21_tracker_bp)
 
 LOCAL_NATIONAL_OPTIONS_PATH = Path(__file__).with_name("national_options.json")
 DEFAULT_CURRENT_SEASON = int(os.environ.get("CURRENT_SEASON", "73"))
+DEFAULT_ISRAEL_U21_GAME_START_TIME = os.environ.get(
+    "ISRAEL_U21_GAME_START_TIME", "20:30"
+)
+try:
+    ISRAEL_U21_LIVE_LINK_LEAD_MINUTES = max(
+        0, int(os.environ.get("ISRAEL_U21_LIVE_LINK_LEAD_MINUTES", "15"))
+    )
+except ValueError:
+    ISRAEL_U21_LIVE_LINK_LEAD_MINUTES = 15
+ISRAEL_TIMEZONE = ZoneInfo("Asia/Jerusalem")
 VERCEL_ANALYTICS_HTML = """<script>
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
 </script>
@@ -236,6 +251,30 @@ FORM_HTML = """<!doctype html>
     .source-panel.active {
       display: grid;
     }
+    .pbp-source-controls,
+    .pbp-pools {
+      display: grid;
+      gap: 10px;
+    }
+    .pbp-source-controls {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdff;
+    }
+    .pbp-pool {
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+    .pbp-games {
+      display: grid;
+      gap: 7px;
+      padding-left: 22px;
+    }
     .match-row {
       display: grid;
       grid-template-columns: 1fr auto;
@@ -336,9 +375,32 @@ FORM_HTML = """<!doctype html>
 
         <section id="singlePanel" class="mode-panel">
           <div class="small" id="singleModeHint">Generate a full report for one match.</div>
-          <label>Match ID
-            <input name="matchid" value="{{ matchid }}" />
-          </label>
+          <div id="singleMatchPanel">
+            <label>Match ID
+              <input name="matchid" value="{{ matchid }}" />
+            </label>
+          </div>
+          <div id="pbpSourceControls" class="pbp-source-controls" hidden>
+            <input type="hidden" name="pbp_source" id="pbpSourceInput" value="{{ pbp_source }}" />
+            <label class="choice-row">
+              <input type="radio" name="pbp_source_choice" value="manual" />
+              Manual match ID
+            </label>
+            <label class="choice-row">
+              <input type="radio" name="pbp_source_choice" value="israel_u21_standings" />
+              Israel U21 standings
+            </label>
+            <div id="pbpStandingsPanel" class="source-panel">
+              <div class="auto-grid">
+                <label>Israel Game Start Time
+                  <input type="time" name="pbp_game_start_time" id="pbpGameStartTime" value="{{ pbp_game_start_time }}" />
+                </label>
+                <button type="button" id="loadPbpStandingsBtn" class="ghost">Load Standings Games</button>
+              </div>
+              <div class="hint" id="pbpStandingsStatus">Live-match links normally appear 15 minutes before game time.</div>
+              <div id="pbpPools" class="pbp-pools"></div>
+            </div>
+          </div>
         </section>
 
         <section id="multiPanel" class="mode-panel">
@@ -508,6 +570,16 @@ FORM_HTML = """<!doctype html>
     const unlockU21AnalyzerBtn = document.getElementById("unlockU21AnalyzerBtn");
     const u21UnlockStatus = document.getElementById("u21UnlockStatus");
     const u21LockedFields = document.getElementById("u21LockedFields");
+    const singleMatchPanel = document.getElementById("singleMatchPanel");
+    const pbpSourceControls = document.getElementById("pbpSourceControls");
+    const pbpSourceInput = document.getElementById("pbpSourceInput");
+    const pbpSourceChoices = [...document.querySelectorAll("input[name='pbp_source_choice']")];
+    const pbpStandingsPanel = document.getElementById("pbpStandingsPanel");
+    const pbpGameStartTime = document.getElementById("pbpGameStartTime");
+    const loadPbpStandingsBtn = document.getElementById("loadPbpStandingsBtn");
+    const pbpStandingsStatus = document.getElementById("pbpStandingsStatus");
+    const pbpPools = document.getElementById("pbpPools");
+    const restoredPbpMatchIds = new Set({{ pbp_matchids | tojson }});
     const localNationalOptions = {{ national_options | tojson }};
 
     function applyMode(mode) {
@@ -519,8 +591,97 @@ FORM_HTML = """<!doctype html>
       singleModeHint.textContent = mode === "animation"
         ? "Generate a live animated game view for one match."
         : mode === "pbp_result"
-          ? "Fetch pbp.aspx and show only the final score."
+          ? "Load one match manually or choose games from the Israel U21 standings."
           : "Generate a full report for one match.";
+      pbpSourceControls.hidden = mode !== "pbp_result";
+      applyPbpSource(pbpSourceInput.value);
+    }
+
+    function applyPbpSource(source) {
+      const normalized = source === "israel_u21_standings" ? source : "manual";
+      pbpSourceInput.value = normalized;
+      pbpSourceChoices.forEach(choice => {
+        choice.checked = choice.value === normalized;
+      });
+      const standingsActive = modeInput.value === "pbp_result" && normalized === "israel_u21_standings";
+      pbpStandingsPanel.classList.toggle("active", standingsActive);
+      singleMatchPanel.hidden = modeInput.value === "pbp_result" && standingsActive;
+    }
+
+    function syncPoolCheckbox(poolElement) {
+      const poolCheckbox = poolElement.querySelector(".pbp-pool-choice");
+      const gameCheckboxes = [...poolElement.querySelectorAll("input[name='pbp_matchids']")];
+      const checkedCount = gameCheckboxes.filter(input => input.checked).length;
+      poolCheckbox.checked = gameCheckboxes.length > 0 && checkedCount === gameCheckboxes.length;
+      poolCheckbox.indeterminate = checkedCount > 0 && checkedCount < gameCheckboxes.length;
+    }
+
+    function renderPbpPools(pools) {
+      pbpPools.textContent = "";
+      pools.forEach(pool => {
+        const poolElement = document.createElement("section");
+        poolElement.className = "pbp-pool";
+
+        const poolLabel = document.createElement("label");
+        poolLabel.className = "choice-row";
+        const poolCheckbox = document.createElement("input");
+        poolCheckbox.type = "checkbox";
+        poolCheckbox.className = "pbp-pool-choice";
+        poolCheckbox.checked = true;
+        const poolText = document.createElement("span");
+        poolText.textContent = `${pool.label} (${(pool.games || []).length} games)`;
+        poolLabel.append(poolCheckbox, poolText);
+        poolElement.appendChild(poolLabel);
+
+        const gamesElement = document.createElement("div");
+        gamesElement.className = "pbp-games";
+        (pool.games || []).forEach(game => {
+          const gameLabel = document.createElement("label");
+          gameLabel.className = "choice-row";
+          const gameCheckbox = document.createElement("input");
+          gameCheckbox.type = "checkbox";
+          gameCheckbox.name = "pbp_matchids";
+          gameCheckbox.value = game.matchid;
+          gameCheckbox.checked = restoredPbpMatchIds.size === 0 || restoredPbpMatchIds.has(String(game.matchid));
+          gameCheckbox.addEventListener("change", () => syncPoolCheckbox(poolElement));
+          const gameText = document.createElement("span");
+          gameText.textContent = `${game.label} (Match ${game.matchid})`;
+          gameLabel.append(gameCheckbox, gameText);
+          gamesElement.appendChild(gameLabel);
+        });
+        poolElement.appendChild(gamesElement);
+        poolCheckbox.addEventListener("change", () => {
+          gamesElement.querySelectorAll("input[name='pbp_matchids']").forEach(input => {
+            input.checked = poolCheckbox.checked;
+          });
+          poolCheckbox.indeterminate = false;
+        });
+        syncPoolCheckbox(poolElement);
+        pbpPools.appendChild(poolElement);
+      });
+    }
+
+    async function loadPbpStandingsGames() {
+      const gameStartTime = pbpGameStartTime.value;
+      pbpStandingsStatus.textContent = "Loading Israel U21 standings games...";
+      pbpPools.textContent = "";
+      loadPbpStandingsBtn.disabled = true;
+      try {
+        const query = new URLSearchParams({ game_start_time: gameStartTime });
+        const response = await fetch(`/pbp-standings-games?${query}`);
+        const payload = await response.json();
+        if (!response.ok) {
+          throw new Error(payload.error || "Could not load standings games.");
+        }
+        renderPbpPools(payload.pools || []);
+        pbpStandingsStatus.textContent = payload.message;
+        loadPbpStandingsBtn.textContent = payload.game_count ? "Reload Standings Games" : "Retry Loading Games";
+      } catch (err) {
+        pbpStandingsStatus.textContent = err.message;
+        loadPbpStandingsBtn.textContent = "Retry Loading Games";
+      } finally {
+        loadPbpStandingsBtn.disabled = false;
+      }
     }
 
     function updateRemoveButtons() {
@@ -534,6 +695,11 @@ FORM_HTML = """<!doctype html>
     modeButtons.forEach(btn => {
       btn.addEventListener("click", () => applyMode(btn.dataset.mode));
     });
+
+    pbpSourceChoices.forEach(choice => {
+      choice.addEventListener("change", () => applyPbpSource(choice.value));
+    });
+    loadPbpStandingsBtn?.addEventListener("click", loadPbpStandingsGames);
 
     function setU21Locked(locked) {
       u21LockedFields?.classList.toggle("locked", locked);
@@ -670,6 +836,9 @@ FORM_HTML = """<!doctype html>
     applyMultiSource({{ multi_source | tojson }});
     setU21Locked(true);
     applyMode({{ mode | tojson }});
+    if (modeInput.value === "pbp_result" && pbpSourceInput.value === "israel_u21_standings") {
+      loadPbpStandingsGames();
+    }
 
   </script>
 </body>
@@ -682,7 +851,7 @@ PBP_RESULT_HTML = """<!doctype html>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PBP Result {{ result.matchid }}</title>
+  <title>{{ "PBP Results" if results|length != 1 else "PBP Result " ~ results[0].matchid }}</title>
   <style>
     :root {
       --bg: #f6f8fb;
@@ -712,6 +881,7 @@ PBP_RESULT_HTML = """<!doctype html>
       box-shadow: var(--shadow);
       padding: 22px;
     }
+    .card + .card { margin-top: 18px; }
     .small {
       color: var(--muted);
       font-size: 13px;
@@ -809,6 +979,11 @@ PBP_RESULT_HTML = """<!doctype html>
       color: var(--muted);
       font-size: 13px;
     }
+    .error-list {
+      margin: 0;
+      padding-left: 20px;
+      color: #b42318;
+    }
     button {
       background: var(--accent);
       color: #fff;
@@ -832,9 +1007,10 @@ PBP_RESULT_HTML = """<!doctype html>
 </head>
 <body>
   <main class="wrap">
+    {% for result in results %}
     <section class="card">
       <div class="small">Match {{ result.matchid }} | Source: BBAPI pbp.aspx</div>
-      <section class="result-content" id="pbpResultContent">
+      <section class="result-content" id="pbpResultContent{% if not loop.first %}-{{ result.matchid }}{% endif %}">
         <h1>Final Result</h1>
         <div class="scoreboard">
           <div class="team home">
@@ -903,10 +1079,21 @@ PBP_RESULT_HTML = """<!doctype html>
           {% endfor %}
         </section>
       </section>
-      <form class="actions" method="get" action="/">
-        <button type="submit">Back</button>
-      </form>
     </section>
+    {% endfor %}
+    {% if errors %}
+    <section class="card">
+      <h1>Games That Could Not Be Loaded</h1>
+      <ul class="error-list">
+        {% for error in errors %}
+        <li>Match {{ error.matchid }}: {{ error.message }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+    <form class="actions" method="get" action="/">
+      <button type="submit">Back</button>
+    </form>
   </main>
 </body>
 </html>
@@ -7404,11 +7591,12 @@ def pbp_payload_xml(xml_text: str) -> str:
     return xml_text
 
 
-def load_pbp_result(matchid: str, username: str, password: str) -> dict[str, Any]:
-    api = BBApi(username, password)
-    if not getattr(api, "logged_in", False):
-        raise ValueError("BBAPI login failed. Check username/password.")
-
+def load_pbp_result_with_api(
+    matchid: str,
+    api: BBApi,
+    username: str,
+    password: str,
+) -> dict[str, Any]:
     pbp_xml = api.get_xml_pbp(matchid=int(matchid))
     if error := bbapi_error_message(pbp_xml):
         raise ValueError(f"BBAPI pbp.aspx returned {error}.")
@@ -7471,6 +7659,30 @@ def load_pbp_result(matchid: str, username: str, password: str) -> dict[str, Any
         player_stat_rows(game.teams[1]),
         period_scores,
     )
+
+
+def load_pbp_result(matchid: str, username: str, password: str) -> dict[str, Any]:
+    api = BBApi(username, password)
+    if not getattr(api, "logged_in", False):
+        raise ValueError("BBAPI login failed. Check username/password.")
+    return load_pbp_result_with_api(matchid, api, username, password)
+
+
+def load_pbp_results(
+    matchids: list[str], username: str, password: str
+) -> tuple[list[dict[str, Any]], list[dict[str, str]]]:
+    api = BBApi(username, password)
+    if not getattr(api, "logged_in", False):
+        raise ValueError("BBAPI login failed. Check username/password.")
+
+    results: list[dict[str, Any]] = []
+    errors: list[dict[str, str]] = []
+    for matchid in matchids:
+        try:
+            results.append(load_pbp_result_with_api(matchid, api, username, password))
+        except Exception as exc:
+            errors.append({"matchid": matchid, "message": str(exc)})
+    return results, errors
 
 
 def normalize_team_key(name: str) -> str:
@@ -7748,6 +7960,9 @@ def empty_form_context(
     password: str = "",
     matchid: str = "138595249",
     mode: str = "multi",
+    pbp_source: str = "manual",
+    pbp_matchids: list[str] | None = None,
+    pbp_game_start_time: str = DEFAULT_ISRAEL_U21_GAME_START_TIME,
     multi_matchids: list[str] | None = None,
     multi_source: str = "national",
     national_country_id: str = "",
@@ -7772,6 +7987,9 @@ def empty_form_context(
         "password": password,
         "matchid": matchid,
         "mode": mode,
+        "pbp_source": pbp_source if pbp_source == "israel_u21_standings" else "manual",
+        "pbp_matchids": list(pbp_matchids or []),
+        "pbp_game_start_time": pbp_game_start_time,
         "multi_matchids": vals,
         "multi_source": multi_source,
         "national_country_id": national_country_id,
@@ -8999,9 +9217,84 @@ def get_court_image_data_url() -> str:
     return f"data:image/png;base64,{data}"
 
 
+def normalize_israel_game_start_time(value: str) -> str:
+    cleaned = value.strip()
+    if not re.fullmatch(r"\d{2}:\d{2}", cleaned):
+        raise ValueError("Game start time must use HH:MM format.")
+    try:
+        parsed = datetime.strptime(cleaned, "%H:%M")
+    except ValueError as exc:
+        raise ValueError("Game start time must be a valid 24-hour time.") from exc
+    return parsed.strftime("%H:%M")
+
+
+def pbp_standings_discovery_payload(
+    pools: list[dict[str, Any]],
+    game_start_time: str,
+    *,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    normalized_start = normalize_israel_game_start_time(game_start_time)
+    parsed_start = datetime.strptime(normalized_start, "%H:%M")
+    live_link_time = (parsed_start - timedelta(minutes=ISRAEL_U21_LIVE_LINK_LEAD_MINUTES)).strftime(
+        "%H:%M"
+    )
+    game_count = sum(len(pool.get("games", [])) for pool in pools)
+    if game_count:
+        message = (
+            f"Loaded {game_count} game{'s' if game_count != 1 else ''}. "
+            "All pools and games are selected by default."
+        )
+    else:
+        israel_now = now.astimezone(ISRAEL_TIMEZONE) if now else datetime.now(ISRAEL_TIMEZONE)
+        current_minutes = israel_now.hour * 60 + israel_now.minute
+        link_hour, link_minute = (int(part) for part in live_link_time.split(":"))
+        link_minutes = link_hour * 60 + link_minute
+        if current_minutes < link_minutes:
+            message = (
+                "No live-match links are available yet. On game days they are expected from "
+                f"{live_link_time} Israel time for a {normalized_start} start."
+            )
+        else:
+            message = (
+                "No live-match links are currently exposed on the standings page. "
+                f"On game days they are normally available from {live_link_time} Israel time."
+            )
+
+    return {
+        "source_url": ISRAEL_U21_STANDINGS_URL,
+        "pools": pools,
+        "game_count": game_count,
+        "availability": {
+            "timezone": "Asia/Jerusalem",
+            "game_start_time": normalized_start,
+            "live_link_time": live_link_time,
+            "lead_minutes": ISRAEL_U21_LIVE_LINK_LEAD_MINUTES,
+        },
+        "message": message,
+    }
+
+
 @app.get("/")
 def form() -> str:
     return render_template_string(FORM_HTML, **empty_form_context())
+
+
+@app.get("/pbp-standings-games")
+def pbp_standings_games() -> tuple[Any, int] | Any:
+    game_start_time = request.args.get(
+        "game_start_time", DEFAULT_ISRAEL_U21_GAME_START_TIME
+    )
+    try:
+        normalized_start = normalize_israel_game_start_time(game_start_time)
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+
+    try:
+        pools = fetch_israel_u21_standings_games()
+    except Exception as exc:
+        return jsonify({"error": f"Could not load Israel U21 standings: {exc}"}), 502
+    return jsonify(pbp_standings_discovery_payload(pools, normalized_start))
 
 
 @app.post("/national-options")
@@ -9035,6 +9328,9 @@ def form_error_response(
     password: str,
     matchid: str,
     mode: str,
+    pbp_source: str,
+    pbp_matchids: list[str],
+    pbp_game_start_time: str,
     multi_matchids: list[str],
     multi_source: str,
     national_country_id: str,
@@ -9059,6 +9355,9 @@ def form_error_response(
                 password=password,
                 matchid=matchid,
                 mode=mode,
+                pbp_source=pbp_source,
+                pbp_matchids=pbp_matchids,
+                pbp_game_start_time=pbp_game_start_time,
                 multi_matchids=multi_matchids,
                 multi_source=multi_source,
                 national_country_id=national_country_id,
@@ -9085,6 +9384,13 @@ def report() -> tuple[str, int] | str:
     password = request.form.get("password", "").strip()
     mode = request.form.get("mode", "single").strip() or "single"
     matchid = request.form.get("matchid", "").strip()
+    pbp_source = request.form.get("pbp_source", "manual").strip() or "manual"
+    if pbp_source not in {"manual", "israel_u21_standings"}:
+        pbp_source = "manual"
+    pbp_matchids = parse_multi_matchids(request.form.getlist("pbp_matchids"))
+    pbp_game_start_time = request.form.get(
+        "pbp_game_start_time", DEFAULT_ISRAEL_U21_GAME_START_TIME
+    ).strip()
     multi_matchids = parse_multi_matchids(request.form.getlist("matchids"))
     selected_team_key = request.form.get("selected_team_key", "").strip() or None
     multi_source = request.form.get("multi_source", "manual").strip() or "manual"
@@ -9112,6 +9418,9 @@ def report() -> tuple[str, int] | str:
             password=password if keep_password else "",
             matchid=matchid,
             mode=mode,
+            pbp_source=pbp_source,
+            pbp_matchids=pbp_matchids,
+            pbp_game_start_time=pbp_game_start_time,
             multi_matchids=multi_matchids,
             multi_source=multi_source,
             national_country_id=national_country_id,
@@ -9237,6 +9546,26 @@ def report() -> tuple[str, int] | str:
             password=password,
         )
 
+    if mode == "pbp_result" and pbp_source == "israel_u21_standings":
+        try:
+            pbp_game_start_time = normalize_israel_game_start_time(pbp_game_start_time)
+        except ValueError as exc:
+            return form_error(str(exc), 400)
+        if not pbp_matchids:
+            return form_error(
+                "Choose at least one game from the Israel U21 standings before generating results.",
+                400,
+            )
+        if any(not selected_matchid.isdigit() for selected_matchid in pbp_matchids):
+            return form_error("Every selected PBP match ID must be numeric.", 400)
+        try:
+            results, errors = load_pbp_results(pbp_matchids, username, password)
+        except Exception as exc:
+            return form_error(
+                f"Failed to load selected PBP results: {exc}", 400, keep_password=False
+            )
+        return render_template_string(PBP_RESULT_HTML, results=results, errors=errors)
+
     if not matchid:
         return form_error("Match ID is required.", 400)
 
@@ -9248,7 +9577,7 @@ def report() -> tuple[str, int] | str:
             result = load_pbp_result(matchid, username, password)
         except Exception as exc:
             return form_error(f"Failed to load PBP result: {exc}", 400, keep_password=False)
-        return render_template_string(PBP_RESULT_HTML, result=result)
+        return render_template_string(PBP_RESULT_HTML, results=[result], errors=[])
 
     try:
         report_json = generate_report(matchid, username, password)

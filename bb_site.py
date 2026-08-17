@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from html import unescape
+from html.parser import HTMLParser
 import re
 from typing import Any
 from urllib.parse import urljoin
@@ -10,10 +11,137 @@ import requests
 
 
 BB_BASE = "https://buzzerbeater.com"
+ISRAEL_U21_STANDINGS_URL = "https://www.buzzerbeater.com/world/standings.aspx?teamid=1015"
 BB_UA = (
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
     "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
 )
+
+
+_RECENT_MATCH_LABEL_ID_RE = re.compile(
+    r"rptrPools_NTRR_(\d+)_rptrRecentMatches_\d+_rm_(\d+)_lblMatchString_\d+$",
+    re.I,
+)
+_LIVE_MATCH_LINK_ID_RE = re.compile(
+    r"rptrPools_NTRR_(\d+)_rptrRecentMatches_\d+_rm_(\d+)_hlLiveMatch_\d+$",
+    re.I,
+)
+_REPORT_MATCH_HREF_RE = re.compile(r"^/match/(\d+)/reportmatch\.aspx(?:[?#].*)?$", re.I)
+
+
+class _U21StandingsParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.current_pool_label = ""
+        self._bold_depth = 0
+        self._bold_parts: list[str] = []
+        self._match_label_key: tuple[int, int] | None = None
+        self._match_label_depth = 0
+        self._match_label_parts: list[str] = []
+        self.pool_labels: dict[int, str] = {}
+        self.pool_order: list[int] = []
+        self.match_labels: dict[tuple[int, int], str] = {}
+        self.live_links: list[tuple[int, int, str]] = []
+
+    def _remember_pool(self, pool_index: int) -> None:
+        if pool_index not in self.pool_order:
+            self.pool_order.append(pool_index)
+        if self.current_pool_label and pool_index not in self.pool_labels:
+            self.pool_labels[pool_index] = self.current_pool_label
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        attrs_by_name = {name.casefold(): value or "" for name, value in attrs}
+
+        if tag.casefold() == "b":
+            self._bold_depth += 1
+            if self._bold_depth == 1:
+                self._bold_parts = []
+
+        element_id = attrs_by_name.get("id", "")
+        label_match = _RECENT_MATCH_LABEL_ID_RE.search(element_id)
+        if label_match:
+            pool_index = int(label_match.group(1))
+            match_index = int(label_match.group(2))
+            self._remember_pool(pool_index)
+            self._match_label_key = (pool_index, match_index)
+            self._match_label_depth = 1
+            self._match_label_parts = []
+        elif self._match_label_key is not None:
+            self._match_label_depth += 1
+
+        link_match = _LIVE_MATCH_LINK_ID_RE.search(element_id)
+        href_match = _REPORT_MATCH_HREF_RE.match(attrs_by_name.get("href", ""))
+        if link_match and href_match:
+            pool_index = int(link_match.group(1))
+            match_index = int(link_match.group(2))
+            self._remember_pool(pool_index)
+            self.live_links.append((pool_index, match_index, href_match.group(1)))
+
+    def handle_endtag(self, tag: str) -> None:
+        if self._match_label_key is not None:
+            self._match_label_depth -= 1
+            if self._match_label_depth == 0:
+                label = " ".join(" ".join(self._match_label_parts).split())
+                if label:
+                    self.match_labels[self._match_label_key] = label
+                self._match_label_key = None
+                self._match_label_parts = []
+
+        if tag.casefold() == "b" and self._bold_depth:
+            self._bold_depth -= 1
+            if self._bold_depth == 0:
+                label = " ".join(" ".join(self._bold_parts).split())
+                if re.search(r"\bPool\s+[A-Z0-9]+\b", label, re.I):
+                    self.current_pool_label = label
+                self._bold_parts = []
+
+    def handle_data(self, data: str) -> None:
+        if self._bold_depth:
+            self._bold_parts.append(data)
+        if self._match_label_key is not None:
+            self._match_label_parts.append(data)
+
+
+def parse_israel_u21_standings_games(html: str) -> list[dict[str, Any]]:
+    parser = _U21StandingsParser()
+    parser.feed(html)
+    parser.close()
+
+    games_by_pool: dict[int, list[dict[str, str]]] = {
+        pool_index: [] for pool_index in parser.pool_order
+    }
+    seen_match_ids: set[str] = set()
+    for pool_index, match_index, match_id in parser.live_links:
+        if match_id in seen_match_ids:
+            continue
+        seen_match_ids.add(match_id)
+        games_by_pool.setdefault(pool_index, []).append(
+            {
+                "matchid": match_id,
+                "label": parser.match_labels.get(
+                    (pool_index, match_index), f"Match {match_id}"
+                ),
+            }
+        )
+
+    return [
+        {
+            "id": str(pool_index),
+            "label": parser.pool_labels.get(pool_index, f"Pool {pool_index + 1}"),
+            "games": games_by_pool.get(pool_index, []),
+        }
+        for pool_index in parser.pool_order
+    ]
+
+
+def fetch_israel_u21_standings_games() -> list[dict[str, Any]]:
+    response = requests.get(
+        ISRAEL_U21_STANDINGS_URL,
+        headers={"User-Agent": BB_UA, "Accept": "text/html,*/*;q=0.9"},
+        timeout=30,
+    )
+    response.raise_for_status()
+    return parse_israel_u21_standings_games(response.text)
 
 POSITION_LABELS = {
     "pg": "PG",

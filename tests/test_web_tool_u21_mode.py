@@ -1,4 +1,5 @@
 import unittest
+from datetime import datetime, timezone
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -58,6 +59,10 @@ class U21ModeFlaskTests(unittest.TestCase):
         self.assertIn(b"/static/nika-logo.png", response.data)
         self.assertIn(b"NIKA box score tool logo", response.data)
         self.assertIn(b"PBP Result", response.data)
+        self.assertIn(b"Manual match ID", response.data)
+        self.assertIn(b"Israel U21 standings", response.data)
+        self.assertIn(b'name="pbp_game_start_time"', response.data)
+        self.assertIn(b'value="20:30"', response.data)
         self.assertIn(b"U21 squad analysis", response.data)
         self.assertIn(b"Beta", response.data)
         self.assertIn(b"Analyzer Password", response.data)
@@ -115,6 +120,149 @@ class U21ModeFlaskTests(unittest.TestCase):
         self.assertIn(b"REB", response.data)
         self.assertIn(b"Score By Period", response.data)
         self.assertIn(b"End Q1", response.data)
+
+    def test_pbp_standings_discovery_endpoint_returns_grouped_games(self):
+        pools = [
+            {
+                "id": "0",
+                "label": "World Cup - Pool A",
+                "games": [{"matchid": "86260", "label": "France U21 vs. Italia U21"}],
+            }
+        ]
+        client = web_tool.app.test_client()
+
+        with patch.object(web_tool, "fetch_israel_u21_standings_games", return_value=pools):
+            response = client.get("/pbp-standings-games?game_start_time=20:30")
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.get_json()
+        self.assertEqual(payload["pools"], pools)
+        self.assertEqual(payload["game_count"], 1)
+        self.assertEqual(payload["availability"]["live_link_time"], "20:15")
+        self.assertEqual(payload["availability"]["timezone"], "Asia/Jerusalem")
+
+    def test_pbp_standings_discovery_messages_before_and_after_link_time(self):
+        before = web_tool.pbp_standings_discovery_payload(
+            [], "20:30", now=datetime(2026, 8, 17, 17, 0, tzinfo=timezone.utc)
+        )
+        after = web_tool.pbp_standings_discovery_payload(
+            [], "20:30", now=datetime(2026, 8, 17, 18, 0, tzinfo=timezone.utc)
+        )
+
+        self.assertIn("available yet", before["message"])
+        self.assertIn("20:15", before["message"])
+        self.assertIn("currently exposed", after["message"])
+
+    def test_pbp_standings_discovery_validates_time_and_reports_upstream_failure(self):
+        client = web_tool.app.test_client()
+
+        invalid = client.get("/pbp-standings-games?game_start_time=25:00")
+        with patch.object(
+            web_tool,
+            "fetch_israel_u21_standings_games",
+            side_effect=RuntimeError("standings unavailable"),
+        ):
+            failed = client.get("/pbp-standings-games?game_start_time=20:30")
+
+        self.assertEqual(invalid.status_code, 400)
+        self.assertIn("valid 24-hour time", invalid.get_json()["error"])
+        self.assertEqual(failed.status_code, 502)
+        self.assertIn("standings unavailable", failed.get_json()["error"])
+
+    def test_batch_pbp_loader_authenticates_once_and_isolates_failures(self):
+        api_instances = []
+
+        class BatchApi:
+            def __init__(self, username, password):
+                self.logged_in = True
+                api_instances.append(self)
+
+        def load_one(matchid, api, username, password):
+            self.assertIs(api, api_instances[0])
+            if matchid == "2":
+                raise ValueError("PBP not ready")
+            return {"matchid": matchid}
+
+        with patch.object(web_tool, "BBApi", BatchApi):
+            with patch.object(web_tool, "load_pbp_result_with_api", side_effect=load_one):
+                results, errors = web_tool.load_pbp_results(["1", "2", "3"], "u", "p")
+
+        self.assertEqual(len(api_instances), 1)
+        self.assertEqual(results, [{"matchid": "1"}, {"matchid": "3"}])
+        self.assertEqual(errors, [{"matchid": "2", "message": "PBP not ready"}])
+
+    def test_pbp_standings_route_loads_only_selected_games_and_renders_partial_errors(self):
+        result = {
+            "matchid": "86260",
+            "home": {"name": "France U21", "points": 90, "is_winner": True, "players": []},
+            "away": {"name": "Italia U21", "points": 80, "is_winner": False, "players": []},
+            "period_scores": [],
+            "source_detail": "Snapshot",
+        }
+        client = web_tool.app.test_client()
+
+        with patch.object(
+            web_tool,
+            "load_pbp_results",
+            return_value=([result], [{"matchid": "86261", "message": "PBP not ready"}]),
+        ) as loader:
+            response = client.post(
+                "/report",
+                data={
+                    "mode": "pbp_result",
+                    "pbp_source": "israel_u21_standings",
+                    "username": "u",
+                    "password": "code",
+                    "pbp_game_start_time": "20:30",
+                    "pbp_matchids": ["86260", "86261"],
+                },
+            )
+
+        self.assertEqual(response.status_code, 200)
+        loader.assert_called_once_with(["86260", "86261"], "u", "code")
+        self.assertIn(b"France U21", response.data)
+        self.assertIn(b"Games That Could Not Be Loaded", response.data)
+        self.assertIn(b"PBP not ready", response.data)
+
+    def test_pbp_standings_route_rejects_empty_selection_and_retains_source(self):
+        response = web_tool.app.test_client().post(
+            "/report",
+            data={
+                "mode": "pbp_result",
+                "pbp_source": "israel_u21_standings",
+                "username": "u",
+                "password": "code",
+                "pbp_game_start_time": "21:00",
+            },
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn(b"Choose at least one game", response.data)
+        self.assertIn(b'value="israel_u21_standings"', response.data)
+        self.assertIn(b'value="21:00"', response.data)
+
+    def test_pbp_standings_route_renders_all_game_failures(self):
+        with patch.object(
+            web_tool,
+            "load_pbp_results",
+            return_value=([], [{"matchid": "86260", "message": "PBP not ready"}]),
+        ):
+            response = web_tool.app.test_client().post(
+                "/report",
+                data={
+                    "mode": "pbp_result",
+                    "pbp_source": "israel_u21_standings",
+                    "username": "u",
+                    "password": "code",
+                    "pbp_game_start_time": "20:30",
+                    "pbp_matchids": ["86260"],
+                },
+            )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Games That Could Not Be Loaded", response.data)
+        self.assertIn(b"PBP not ready", response.data)
+        self.assertNotIn(b"Final Result", response.data)
 
     def test_pbp_result_can_read_structured_scores(self):
         payload = """
