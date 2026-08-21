@@ -1,7 +1,7 @@
 {
   "season": 73,
   "week": 3,
-  "scrapedAt": "2026-08-21T10:53:31.180991Z",
+  "scrapedAt": "2026-08-21T10:55:55.566668Z",
   "source": "https://buzzerbeater.com/world/standings.aspx?teamid=1015",
   "countrySource": "previous-season-fallback-s72",
   "countries": [
@@ -6464,5 +6464,7 @@
         }
       ]
     }
-  ]
+  ],
+  "firstScrapedAt": "2026-08-21T10:53:31.180991Z",
+  "mergePolicy": "same-week-add-new-players"
 }
