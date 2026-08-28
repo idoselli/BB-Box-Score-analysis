@@ -1,7 +1,7 @@
 {
   "season": 73,
   "week": 4,
-  "scrapedAt": "2026-08-28T12:46:14.912424Z",
+  "scrapedAt": "2026-08-28T21:13:04.210294Z",
   "source": "https://buzzerbeater.com/world/standings.aspx?teamid=1015",
   "countrySource": "previous-season-fallback-s72",
   "countries": [
@@ -6100,6 +6100,22 @@
           "dmi": 386200,
           "gameShape": 9,
           "salary": 20230
+        },
+        {
+          "playerId": 54970654,
+          "name": "Björn Beckman",
+          "position": "PG",
+          "dmi": 545600,
+          "gameShape": 9,
+          "salary": 27453
+        },
+        {
+          "playerId": 55570553,
+          "name": "Yiannis Aggelakakis",
+          "position": "PF",
+          "dmi": 168100,
+          "gameShape": 9,
+          "salary": 9704
         }
       ]
     },
@@ -6338,6 +6354,22 @@
           "dmi": 131100,
           "gameShape": 7,
           "salary": 24770
+        },
+        {
+          "playerId": 55250908,
+          "name": "Cansever Savtunç",
+          "position": "C",
+          "dmi": 398900,
+          "gameShape": 8,
+          "salary": 33422
+        },
+        {
+          "playerId": 54946658,
+          "name": "Amir Olçun",
+          "position": "C",
+          "dmi": 536600,
+          "gameShape": 8,
+          "salary": 40953
         }
       ]
     },
@@ -6449,6 +6481,14 @@
           "dmi": 340800,
           "gameShape": 9,
           "salary": 17201
+        },
+        {
+          "playerId": 55077787,
+          "name": "Yuliy Kotov",
+          "position": "SF",
+          "dmi": 200600,
+          "gameShape": 8,
+          "salary": 20144
         }
       ]
     },
@@ -6801,5 +6841,7 @@
         }
       ]
     }
-  ]
+  ],
+  "firstScrapedAt": "2026-08-28T12:46:14.912424Z",
+  "mergePolicy": "same-week-add-new-players"
 }
