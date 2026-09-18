@@ -12,14 +12,18 @@ from typing import Any
 
 import requests
 
-from bb_site import BB_BASE, BB_UA, BBSiteClient
+from bb_site import (
+    BB_BASE,
+    BB_UA,
+    BBSiteClient,
+    ISRAEL_U21_STANDINGS_URL as STANDINGS_URL,
+)
 from bbapi import BBApi
 from minutes_agg import current_week_for_season
 
 
 ROOT = Path(__file__).resolve().parent
 TRACKER_ROOT = ROOT / "data" / "u21-tracker"
-STANDINGS_URL = "https://buzzerbeater.com/world/standings.aspx?teamid=1015"
 TRACKER_SEASON_73_START = datetime(2026, 8, 7, tzinfo=timezone.utc)
 TRACKER_SEASON_DURATION_DAYS = 98
 FALLBACK_TRACKER_COUNTRIES = [

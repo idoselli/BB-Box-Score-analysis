@@ -3,3 +3,4 @@ requests
 tabulate
 Pillow
 gunicorn
+tzdata
