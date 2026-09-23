@@ -1,9 +1,53 @@
 import unittest
 
-from bb_site import BBSiteClient, parse_game_log_html, parse_national_roster_players, parse_position_cell
+from bb_site import (
+    BBSiteClient,
+    parse_game_log_html,
+    parse_israel_u21_standings_games,
+    parse_national_roster_players,
+    parse_position_cell,
+)
 
 
 class GameLogParserTests(unittest.TestCase):
+    def test_parse_israel_u21_standings_games_groups_and_deduplicates(self):
+        html = """
+        <b>World Cup - Pool A</b>
+        <span id="cphContent_rptrPools_NTRR_0_rptrRecentMatches_0_rm_0_lblMatchString_0">
+          <a href="/country/15/jnt/overview.aspx">Israel U21</a> vs.
+          <a href="/country/12/jnt/overview.aspx">Hellas U21</a>
+        </span>
+        <a id="cphContent_rptrPools_NTRR_0_rptrRecentMatches_0_rm_0_hlLiveMatch_0"
+           href="/match/86288/reportmatch.aspx">ראה שידור חי</a>
+        <span id="cphContent_rptrPools_NTRR_0_rptrRecentMatches_0_rm_1_lblMatchString_1">France U21 vs. Italia U21</span>
+        <a id="cphContent_rptrPools_NTRR_0_rptrRecentMatches_0_rm_1_hlLiveMatch_1"
+           href="/match/86260/reportmatch.aspx">View Live!</a>
+        <a id="cphContent_rptrPools_NTRR_0_rptrRecentMatches_0_rm_2_hlLiveMatch_2"
+           href="/match/86260/reportmatch.aspx">Duplicate</a>
+        <b>World Cup - Pool B</b>
+        <span id="cphContent_rptrPools_NTRR_1_rptrRecentMatches_1_rm_0_lblMatchString_0">Srbija U21 vs. China U21</span>
+        <a id="cphContent_rptrPools_NTRR_1_rptrRecentMatches_1_rm_0_hlLiveMatch_0"
+           href="/match/not-a-number/reportmatch.aspx">Malformed</a>
+        <a id="unrelated_hlLiveMatch_0" href="/match/999/reportmatch.aspx">Unrelated</a>
+        """
+
+        pools = parse_israel_u21_standings_games(html)
+
+        self.assertEqual(
+            pools,
+            [
+                {
+                    "id": "0",
+                    "label": "World Cup - Pool A",
+                    "games": [
+                        {"matchid": "86288", "label": "Israel U21 vs. Hellas U21"},
+                        {"matchid": "86260", "label": "France U21 vs. Italia U21"},
+                    ],
+                },
+                {"id": "1", "label": "World Cup - Pool B", "games": []},
+            ],
+        )
+
     def test_national_roster_parser_excludes_bookmarks_and_active_bids(self):
         html = """
         <a id="cphContent_Repeater1_HyperLink1_0" href="../../../player/100/overview.aspx">Roster Player</a>

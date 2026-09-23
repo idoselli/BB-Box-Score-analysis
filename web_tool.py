@@ -4,8 +4,9 @@ from __future__ import annotations
 
 from argparse import Namespace
 import base64
+import csv
 import contextlib
-from datetime import datetime
+from datetime import datetime, timedelta
 import hmac
 import io
 import json
@@ -14,11 +15,17 @@ from pathlib import Path
 import re
 from typing import Any
 import xml.etree.ElementTree as xml
+import zipfile
+from zoneinfo import ZoneInfo
 
-from flask import Flask, jsonify, render_template_string, request
+from flask import Flask, jsonify, render_template_string, request, send_file
 
 from bbapi import BBApi
-from bb_site import BBSiteClient
+from bb_site import (
+    ISRAEL_U21_STANDINGS_URL,
+    BBSiteClient,
+    fetch_israel_u21_standings_games,
+)
 from coachparrot_model import SKILLS
 from game import Game
 from main import get_xml_text, parse_xml
@@ -32,10 +39,21 @@ app.register_blueprint(u21_tracker_bp)
 
 LOCAL_NATIONAL_OPTIONS_PATH = Path(__file__).with_name("national_options.json")
 DEFAULT_CURRENT_SEASON = int(os.environ.get("CURRENT_SEASON", "73"))
+DEFAULT_ISRAEL_U21_GAME_START_TIME = os.environ.get(
+    "ISRAEL_U21_GAME_START_TIME", "20:30"
+)
+try:
+    ISRAEL_U21_LIVE_LINK_LEAD_MINUTES = max(
+        0, int(os.environ.get("ISRAEL_U21_LIVE_LINK_LEAD_MINUTES", "15"))
+    )
+except ValueError:
+    ISRAEL_U21_LIVE_LINK_LEAD_MINUTES = 15
+ISRAEL_TIMEZONE = ZoneInfo("Asia/Jerusalem")
 VERCEL_ANALYTICS_HTML = """<script>
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
 </script>
 <script defer src="/_vercel/insights/script.js"></script>"""
+MAX_MULTI_EXPORT_BYTES = 25 * 1024 * 1024
 
 
 @app.after_request
@@ -236,6 +254,30 @@ FORM_HTML = """<!doctype html>
     .source-panel.active {
       display: grid;
     }
+    .pbp-source-controls,
+    .pbp-pools {
+      display: grid;
+      gap: 10px;
+    }
+    .pbp-source-controls {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdff;
+    }
+    .pbp-pool {
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+    .pbp-games {
+      display: grid;
+      gap: 7px;
+      padding-left: 22px;
+    }
     .match-row {
       display: grid;
       grid-template-columns: 1fr auto;
@@ -336,9 +378,32 @@ FORM_HTML = """<!doctype html>
 
         <section id="singlePanel" class="mode-panel">
           <div class="small" id="singleModeHint">Generate a full report for one match.</div>
-          <label>Match ID
-            <input name="matchid" value="{{ matchid }}" />
-          </label>
+          <div id="singleMatchPanel">
+            <label>Match ID
+              <input name="matchid" value="{{ matchid }}" />
+            </label>
+          </div>
+          <div id="pbpSourceControls" class="pbp-source-controls" hidden>
+            <input type="hidden" name="pbp_source" id="pbpSourceInput" value="{{ pbp_source }}" />
+            <label class="choice-row">
+              <input type="radio" name="pbp_source_choice" value="manual" />
+              Manual match ID
+            </label>
+            <label class="choice-row">
+              <input type="radio" name="pbp_source_choice" value="israel_u21_standings" />
+              Israel U21 standings
+            </label>
+            <div id="pbpStandingsPanel" class="source-panel">
+              <div class="auto-grid">
+                <label>Israel Game Start Time
+                  <input type="time" name="pbp_game_start_time" id="pbpGameStartTime" value="{{ pbp_game_start_time }}" />
+                </label>
+                <button type="button" id="loadPbpStandingsBtn" class="ghost">Load Standings Games</button>
+              </div>
+              <div class="hint" id="pbpStandingsStatus">Live-match links normally appear 15 minutes before game time.</div>
+              <div id="pbpPools" class="pbp-pools"></div>
+            </div>
+          </div>
         </section>
 
         <section id="multiPanel" class="mode-panel">
@@ -508,6 +573,16 @@ FORM_HTML = """<!doctype html>
     const unlockU21AnalyzerBtn = document.getElementById("unlockU21AnalyzerBtn");
     const u21UnlockStatus = document.getElementById("u21UnlockStatus");
     const u21LockedFields = document.getElementById("u21LockedFields");
+    const singleMatchPanel = document.getElementById("singleMatchPanel");
+    const pbpSourceControls = document.getElementById("pbpSourceControls");
+    const pbpSourceInput = document.getElementById("pbpSourceInput");
+    const pbpSourceChoices = [...document.querySelectorAll("input[name='pbp_source_choice']")];
+    const pbpStandingsPanel = document.getElementById("pbpStandingsPanel");
+    const pbpGameStartTime = document.getElementById("pbpGameStartTime");
+    const loadPbpStandingsBtn = document.getElementById("loadPbpStandingsBtn");
+    const pbpStandingsStatus = document.getElementById("pbpStandingsStatus");
+    const pbpPools = document.getElementById("pbpPools");
+    const restoredPbpMatchIds = new Set({{ pbp_matchids | tojson }});
     const localNationalOptions = {{ national_options | tojson }};
 
     function applyMode(mode) {
@@ -519,8 +594,97 @@ FORM_HTML = """<!doctype html>
       singleModeHint.textContent = mode === "animation"
         ? "Generate a live animated game view for one match."
         : mode === "pbp_result"
-          ? "Fetch pbp.aspx and show only the final score."
+          ? "Load one match manually or choose games from the Israel U21 standings."
           : "Generate a full report for one match.";
+      pbpSourceControls.hidden = mode !== "pbp_result";
+      applyPbpSource(pbpSourceInput.value);
+    }
+
+    function applyPbpSource(source) {
+      const normalized = source === "israel_u21_standings" ? source : "manual";
+      pbpSourceInput.value = normalized;
+      pbpSourceChoices.forEach(choice => {
+        choice.checked = choice.value === normalized;
+      });
+      const standingsActive = modeInput.value === "pbp_result" && normalized === "israel_u21_standings";
+      pbpStandingsPanel.classList.toggle("active", standingsActive);
+      singleMatchPanel.hidden = modeInput.value === "pbp_result" && standingsActive;
+    }
+
+    function syncPoolCheckbox(poolElement) {
+      const poolCheckbox = poolElement.querySelector(".pbp-pool-choice");
+      const gameCheckboxes = [...poolElement.querySelectorAll("input[name='pbp_matchids']")];
+      const checkedCount = gameCheckboxes.filter(input => input.checked).length;
+      poolCheckbox.checked = gameCheckboxes.length > 0 && checkedCount === gameCheckboxes.length;
+      poolCheckbox.indeterminate = checkedCount > 0 && checkedCount < gameCheckboxes.length;
+    }
+
+    function renderPbpPools(pools) {
+      pbpPools.textContent = "";
+      pools.forEach(pool => {
+        const poolElement = document.createElement("section");
+        poolElement.className = "pbp-pool";
+
+        const poolLabel = document.createElement("label");
+        poolLabel.className = "choice-row";
+        const poolCheckbox = document.createElement("input");
+        poolCheckbox.type = "checkbox";
+        poolCheckbox.className = "pbp-pool-choice";
+        poolCheckbox.checked = true;
+        const poolText = document.createElement("span");
+        poolText.textContent = `${pool.label} (${(pool.games || []).length} games)`;
+        poolLabel.append(poolCheckbox, poolText);
+        poolElement.appendChild(poolLabel);
+
+        const gamesElement = document.createElement("div");
+        gamesElement.className = "pbp-games";
+        (pool.games || []).forEach(game => {
+          const gameLabel = document.createElement("label");
+          gameLabel.className = "choice-row";
+          const gameCheckbox = document.createElement("input");
+          gameCheckbox.type = "checkbox";
+          gameCheckbox.name = "pbp_matchids";
+          gameCheckbox.value = game.matchid;
+          gameCheckbox.checked = restoredPbpMatchIds.size === 0 || restoredPbpMatchIds.has(String(game.matchid));
+          gameCheckbox.addEventListener("change", () => syncPoolCheckbox(poolElement));
+          const gameText = document.createElement("span");
+          gameText.textContent = `${game.label} (Match ${game.matchid})`;
+          gameLabel.append(gameCheckbox, gameText);
+          gamesElement.appendChild(gameLabel);
+        });
+        poolElement.appendChild(gamesElement);
+        poolCheckbox.addEventListener("change", () => {
+          gamesElement.querySelectorAll("input[name='pbp_matchids']").forEach(input => {
+            input.checked = poolCheckbox.checked;
+          });
+          poolCheckbox.indeterminate = false;
+        });
+        syncPoolCheckbox(poolElement);
+        pbpPools.appendChild(poolElement);
+      });
+    }
+
+    async function loadPbpStandingsGames() {
+      const gameStartTime = pbpGameStartTime.value;
+      pbpStandingsStatus.textContent = "Loading Israel U21 standings games...";
+      pbpPools.textContent = "";
+      loadPbpStandingsBtn.disabled = true;
+      try {
+        const query = new URLSearchParams({ game_start_time: gameStartTime });
+        const response = await fetch(`/pbp-standings-games?${query}`);
+        const payload = await response.json();
+        if (!response.ok) {
+          throw new Error(payload.error || "Could not load standings games.");
+        }
+        renderPbpPools(payload.pools || []);
+        pbpStandingsStatus.textContent = payload.message;
+        loadPbpStandingsBtn.textContent = payload.game_count ? "Reload Standings Games" : "Retry Loading Games";
+      } catch (err) {
+        pbpStandingsStatus.textContent = err.message;
+        loadPbpStandingsBtn.textContent = "Retry Loading Games";
+      } finally {
+        loadPbpStandingsBtn.disabled = false;
+      }
     }
 
     function updateRemoveButtons() {
@@ -534,6 +698,11 @@ FORM_HTML = """<!doctype html>
     modeButtons.forEach(btn => {
       btn.addEventListener("click", () => applyMode(btn.dataset.mode));
     });
+
+    pbpSourceChoices.forEach(choice => {
+      choice.addEventListener("change", () => applyPbpSource(choice.value));
+    });
+    loadPbpStandingsBtn?.addEventListener("click", loadPbpStandingsGames);
 
     function setU21Locked(locked) {
       u21LockedFields?.classList.toggle("locked", locked);
@@ -670,6 +839,9 @@ FORM_HTML = """<!doctype html>
     applyMultiSource({{ multi_source | tojson }});
     setU21Locked(true);
     applyMode({{ mode | tojson }});
+    if (modeInput.value === "pbp_result" && pbpSourceInput.value === "israel_u21_standings") {
+      loadPbpStandingsGames();
+    }
 
   </script>
 </body>
@@ -682,7 +854,7 @@ PBP_RESULT_HTML = """<!doctype html>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PBP Result {{ result.matchid }}</title>
+  <title>{{ "PBP Results" if results|length != 1 else "PBP Result " ~ results[0].matchid }}</title>
   <style>
     :root {
       --bg: #f6f8fb;
@@ -712,6 +884,7 @@ PBP_RESULT_HTML = """<!doctype html>
       box-shadow: var(--shadow);
       padding: 22px;
     }
+    .card + .card { margin-top: 18px; }
     .small {
       color: var(--muted);
       font-size: 13px;
@@ -809,6 +982,11 @@ PBP_RESULT_HTML = """<!doctype html>
       color: var(--muted);
       font-size: 13px;
     }
+    .error-list {
+      margin: 0;
+      padding-left: 20px;
+      color: #b42318;
+    }
     button {
       background: var(--accent);
       color: #fff;
@@ -832,9 +1010,10 @@ PBP_RESULT_HTML = """<!doctype html>
 </head>
 <body>
   <main class="wrap">
+    {% for result in results %}
     <section class="card">
       <div class="small">Match {{ result.matchid }} | Source: BBAPI pbp.aspx</div>
-      <section class="result-content" id="pbpResultContent">
+      <section class="result-content" id="pbpResultContent{% if not loop.first %}-{{ result.matchid }}{% endif %}">
         <h1>Final Result</h1>
         <div class="scoreboard">
           <div class="team home">
@@ -903,10 +1082,21 @@ PBP_RESULT_HTML = """<!doctype html>
           {% endfor %}
         </section>
       </section>
-      <form class="actions" method="get" action="/">
-        <button type="submit">Back</button>
-      </form>
     </section>
+    {% endfor %}
+    {% if errors %}
+    <section class="card">
+      <h1>Games That Could Not Be Loaded</h1>
+      <ul class="error-list">
+        {% for error in errors %}
+        <li>Match {{ error.matchid }}: {{ error.message }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+    <form class="actions" method="get" action="/">
+      <button type="submit">Back</button>
+    </form>
   </main>
 </body>
 </html>
@@ -1445,6 +1635,33 @@ MULTI_REPORT_HTML = """<!doctype html>
       font-size: 13px;
       font-weight: 600;
     }
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .export-btn {
+      appearance: none;
+      border: 1px solid #b8c7dc;
+      border-radius: 8px;
+      padding: 7px 10px;
+      color: var(--accent);
+      background: #fff;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .export-btn:hover { background: #f1f6ff; }
+    .export-btn:disabled { cursor: wait; opacity: 0.58; }
+    .export-status {
+      min-width: 88px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .export-status.error { color: #991b1b; }
     .hero, .card {
       background: var(--panel);
       border: 1px solid var(--line);
@@ -2110,6 +2327,10 @@ MULTI_REPORT_HTML = """<!doctype html>
     <div class="topbar">
       <div class="small">Multi-match aggregate | BBAPI user: {{ username }}</div>
       <div class="topbar-actions">
+        <button type="button" class="export-btn" data-export-format="json">Export JSON</button>
+        <button type="button" class="export-btn" data-export-format="csv_zip">Export CSV Package</button>
+        <button type="button" class="export-btn" data-export-format="csv_combined">Export Combined CSV</button>
+        <span id="exportStatus" class="export-status" role="status" aria-live="polite"></span>
         <a href="/">Run another report</a>
       </div>
     </div>
@@ -2340,6 +2561,53 @@ MULTI_REPORT_HTML = """<!doctype html>
 
     <script>
       const data = {{ report_json | tojson }};
+
+      async function exportMultiReport(format) {
+        const buttons = [...document.querySelectorAll("[data-export-format]")];
+        const status = document.getElementById("exportStatus");
+        buttons.forEach(button => { button.disabled = true; });
+        status.classList.remove("error");
+        status.textContent = "Preparing export...";
+
+        try {
+          const response = await fetch("/export-multi", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ format, report: data })
+          });
+          if (!response.ok) {
+            const payload = await response.json().catch(() => ({}));
+            throw new Error(payload.error || `Export failed (HTTP ${response.status}).`);
+          }
+
+          const disposition = response.headers.get("Content-Disposition") || "";
+          const filenameMatch = disposition.match(/filename="?([^";]+)"?/i);
+          const fallbackNames = {
+            json: "multi-match-report.json",
+            csv_zip: "multi-match-csv.zip",
+            csv_combined: "multi-match-all-data.csv"
+          };
+          const blob = await response.blob();
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = filenameMatch ? filenameMatch[1] : fallbackNames[format];
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          URL.revokeObjectURL(url);
+          status.textContent = "Download ready.";
+        } catch (error) {
+          status.classList.add("error");
+          status.textContent = error.message || "Export failed.";
+        } finally {
+          buttons.forEach(button => { button.disabled = false; });
+        }
+      }
+
+      document.querySelectorAll("[data-export-format]").forEach(button => {
+        button.addEventListener("click", () => exportMultiReport(button.dataset.exportFormat));
+      });
 
 
       const shotTypeLabel = {
@@ -7404,11 +7672,12 @@ def pbp_payload_xml(xml_text: str) -> str:
     return xml_text
 
 
-def load_pbp_result(matchid: str, username: str, password: str) -> dict[str, Any]:
-    api = BBApi(username, password)
-    if not getattr(api, "logged_in", False):
-        raise ValueError("BBAPI login failed. Check username/password.")
-
+def load_pbp_result_with_api(
+    matchid: str,
+    api: BBApi,
+    username: str,
+    password: str,
+) -> dict[str, Any]:
     pbp_xml = api.get_xml_pbp(matchid=int(matchid))
     if error := bbapi_error_message(pbp_xml):
         raise ValueError(f"BBAPI pbp.aspx returned {error}.")
@@ -7471,6 +7740,30 @@ def load_pbp_result(matchid: str, username: str, password: str) -> dict[str, Any
         player_stat_rows(game.teams[1]),
         period_scores,
     )
+
+
+def load_pbp_result(matchid: str, username: str, password: str) -> dict[str, Any]:
+    api = BBApi(username, password)
+    if not getattr(api, "logged_in", False):
+        raise ValueError("BBAPI login failed. Check username/password.")
+    return load_pbp_result_with_api(matchid, api, username, password)
+
+
+def load_pbp_results(
+    matchids: list[str], username: str, password: str
+) -> tuple[list[dict[str, Any]], list[dict[str, str]]]:
+    api = BBApi(username, password)
+    if not getattr(api, "logged_in", False):
+        raise ValueError("BBAPI login failed. Check username/password.")
+
+    results: list[dict[str, Any]] = []
+    errors: list[dict[str, str]] = []
+    for matchid in matchids:
+        try:
+            results.append(load_pbp_result_with_api(matchid, api, username, password))
+        except Exception as exc:
+            errors.append({"matchid": matchid, "message": str(exc)})
+    return results, errors
 
 
 def normalize_team_key(name: str) -> str:
@@ -7748,6 +8041,9 @@ def empty_form_context(
     password: str = "",
     matchid: str = "138595249",
     mode: str = "multi",
+    pbp_source: str = "manual",
+    pbp_matchids: list[str] | None = None,
+    pbp_game_start_time: str = DEFAULT_ISRAEL_U21_GAME_START_TIME,
     multi_matchids: list[str] | None = None,
     multi_source: str = "national",
     national_country_id: str = "",
@@ -7772,6 +8068,9 @@ def empty_form_context(
         "password": password,
         "matchid": matchid,
         "mode": mode,
+        "pbp_source": pbp_source if pbp_source == "israel_u21_standings" else "manual",
+        "pbp_matchids": list(pbp_matchids or []),
+        "pbp_game_start_time": pbp_game_start_time,
         "multi_matchids": vals,
         "multi_source": multi_source,
         "national_country_id": national_country_id,
@@ -8991,6 +9290,293 @@ def aggregate_multi_match_report(
     )
 
 
+def csv_safe_value(value: Any) -> str | int | float:
+    if value is None:
+        return ""
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, (dict, list)):
+        value = json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+    if isinstance(value, str) and value[:1] in {"=", "+", "-", "@", "\t", "\r"}:
+        return f"'{value}"
+    return value
+
+
+def flatten_csv_value(value: Any, prefix: str = "", target: dict[str, Any] | None = None) -> dict[str, Any]:
+    out = target if target is not None else {}
+    if isinstance(value, dict):
+        if not value and prefix:
+            out[prefix] = "{}"
+        for key, child in value.items():
+            child_prefix = f"{prefix}.{key}" if prefix else str(key)
+            flatten_csv_value(child, child_prefix, out)
+    elif isinstance(value, list):
+        out[prefix or "value"] = json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+    else:
+        out[prefix or "value"] = value
+    return out
+
+
+def csv_bytes(rows: list[dict[str, Any]], default_headers: list[str] | None = None) -> bytes:
+    headers = list(default_headers or [])
+    for row in rows:
+        for key in row:
+            if key not in headers:
+                headers.append(key)
+    if not headers:
+        headers = ["record_index"]
+
+    output = io.StringIO(newline="")
+    writer = csv.DictWriter(output, fieldnames=headers, extrasaction="ignore", lineterminator="\n")
+    writer.writeheader()
+    for row in rows:
+        writer.writerow({key: csv_safe_value(row.get(key)) for key in headers})
+    return ("\ufeff" + output.getvalue()).encode("utf-8")
+
+
+def indexed_csv_rows(values: Any) -> list[dict[str, Any]]:
+    if not isinstance(values, list):
+        return []
+    rows = []
+    for index, value in enumerate(values):
+        flattened = flatten_csv_value(value) if isinstance(value, (dict, list)) else {"value": value}
+        rows.append({"record_index": index, **flattened})
+    return rows
+
+
+def tactic_minute_csv_rows(groups: Any) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    if not isinstance(groups, list):
+        return rows
+    for group_index, group in enumerate(groups):
+        if not isinstance(group, dict):
+            continue
+        positions = group.get("positions") if isinstance(group.get("positions"), list) else []
+        for position_index, position in enumerate(positions):
+            if not isinstance(position, dict):
+                continue
+            players = position.get("players") if isinstance(position.get("players"), list) else []
+            if not players:
+                players = [{}]
+            for player_index, player in enumerate(players):
+                player = player if isinstance(player, dict) else {"value": player}
+                rows.append(
+                    {
+                        "group_index": group_index,
+                        "group_key": group.get("key", ""),
+                        "group_label": group.get("label", ""),
+                        "position_index": position_index,
+                        "position_key": position.get("key", ""),
+                        "position_label": position.get("label", ""),
+                        "player_index": player_index if player else "",
+                        **flatten_csv_value(player),
+                    }
+                )
+    return rows
+
+
+def multi_report_csv_files(report: dict[str, Any]) -> dict[str, bytes]:
+    excluded = {
+        "warnings",
+        "matches",
+        "player_summary",
+        "matchup",
+        "defense",
+        "return_state",
+        "tactic_minutes",
+        "offense",
+        "defended_shots",
+        "nba_dashboard",
+    }
+    metadata: dict[str, Any] = {}
+    for key, value in report.items():
+        if key not in excluded:
+            flatten_csv_value(value, key, metadata)
+
+    return_state = report.get("return_state")
+    if isinstance(return_state, dict):
+        flatten_csv_value(return_state, "source", metadata)
+    offense = report.get("offense") if isinstance(report.get("offense"), dict) else {}
+    defended = report.get("defended_shots") if isinstance(report.get("defended_shots"), dict) else {}
+    metadata["offense.shot_types"] = offense.get("shot_types", [])
+    metadata["defended_shots.players"] = defended.get("players", [])
+    metadata["defended_shots.shot_types"] = defended.get("shot_types", [])
+    metadata["defended_shots.results"] = defended.get("results", [])
+    nba = report.get("nba_dashboard") if isinstance(report.get("nba_dashboard"), dict) else {}
+
+    return {
+        "report_metadata.csv": csv_bytes([metadata]),
+        "warnings.csv": csv_bytes(
+            [{"record_index": index, "warning": warning} for index, warning in enumerate(report.get("warnings", []))],
+            ["record_index", "warning"],
+        ),
+        "matches.csv": csv_bytes(indexed_csv_rows(report.get("matches")), ["record_index"]),
+        "player_summary.csv": csv_bytes(indexed_csv_rows(report.get("player_summary")), ["record_index"]),
+        "matchup.csv": csv_bytes(indexed_csv_rows(report.get("matchup")), ["record_index"]),
+        "defense.csv": csv_bytes(indexed_csv_rows(report.get("defense")), ["record_index"]),
+        "offense_players.csv": csv_bytes(indexed_csv_rows(offense.get("players")), ["record_index"]),
+        "defended_shots.csv": csv_bytes(indexed_csv_rows(defended.get("events")), ["record_index"]),
+        "tactic_minutes.csv": csv_bytes(
+            tactic_minute_csv_rows(report.get("tactic_minutes")),
+            [
+                "group_index",
+                "group_key",
+                "group_label",
+                "position_index",
+                "position_key",
+                "position_label",
+                "player_index",
+            ],
+        ),
+        "nba_players.csv": csv_bytes(indexed_csv_rows(nba.get("players")), ["record_index"]),
+        "nba_team_rows.csv": csv_bytes(indexed_csv_rows(nba.get("team_rows")), ["record_index"]),
+    }
+
+
+def combined_csv_rows(report: dict[str, Any]) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+
+    def append_leaf(
+        section: str,
+        value: Any,
+        path: list[str],
+        indices: list[int],
+        record_label: str,
+    ) -> None:
+        if isinstance(value, dict):
+            next_label = record_label
+            for label_key in ("name", "matchid", "label", "key"):
+                candidate = value.get(label_key)
+                if candidate not in (None, "") and not isinstance(candidate, (dict, list)):
+                    next_label = str(candidate)
+                    break
+            if not value:
+                rows.append(
+                    {
+                        "section": section,
+                        "record_index": ".".join(map(str, indices)) or "0",
+                        "record_label": next_label,
+                        "field": ".".join(path) or "value",
+                        "value": "{}",
+                    }
+                )
+            for key, child in value.items():
+                append_leaf(section, child, [*path, str(key)], indices, next_label)
+            return
+        if isinstance(value, list):
+            if not value:
+                rows.append(
+                    {
+                        "section": section,
+                        "record_index": ".".join(map(str, indices)) or "0",
+                        "record_label": record_label,
+                        "field": ".".join(path) or "value",
+                        "value": "[]",
+                    }
+                )
+            for index, child in enumerate(value):
+                append_leaf(section, child, path, [*indices, index], record_label)
+            return
+
+        if value is None:
+            rendered = "null"
+        elif isinstance(value, bool):
+            rendered = "true" if value else "false"
+        else:
+            rendered = value
+        rows.append(
+            {
+                "section": section,
+                "record_index": ".".join(map(str, indices)) or "0",
+                "record_label": record_label,
+                "field": ".".join(path) or "value",
+                "value": rendered,
+            }
+        )
+
+    for section, value in report.items():
+        append_leaf(str(section), value, [], [], "")
+    return rows
+
+
+def export_filename_stem(report: dict[str, Any]) -> str:
+    team_name = str(report.get("team_name") or "team")
+    slug = re.sub(r"[^A-Za-z0-9._-]+", "-", team_name).strip("-._").lower() or "team"
+    return f"multi-match-{slug[:60]}-{datetime.now().strftime('%Y%m%d')}"
+
+
+def is_valid_multi_export_report(report: Any) -> bool:
+    if not isinstance(report, dict) or not isinstance(report.get("team_name"), str):
+        return False
+    if not report["team_name"].strip():
+        return False
+    list_fields = (
+        "warnings",
+        "matches",
+        "input_matchids",
+        "tactic_minutes",
+        "player_summary",
+        "matchup",
+        "defense",
+    )
+    dict_fields = ("return_state", "offense", "defended_shots", "nba_dashboard")
+    return all(isinstance(report.get(key), list) for key in list_fields) and all(
+        isinstance(report.get(key), dict) for key in dict_fields
+    )
+
+
+@app.post("/export-multi")
+def export_multi_report():
+    if request.content_length is not None and request.content_length > MAX_MULTI_EXPORT_BYTES:
+        return jsonify({"error": "Export payload is too large."}), 413
+
+    payload = request.get_json(silent=True)
+    if not isinstance(payload, dict):
+        return jsonify({"error": "A JSON export request is required."}), 400
+    export_format = payload.get("format")
+    if export_format not in {"json", "csv_zip", "csv_combined"}:
+        return jsonify({"error": "Export format must be json, csv_zip, or csv_combined."}), 400
+    report = payload.get("report")
+    if not is_valid_multi_export_report(report):
+        return jsonify({"error": "A valid multi-match report is required."}), 400
+
+    stem = export_filename_stem(report)
+    if export_format == "json":
+        content = (json.dumps(report, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+        return send_file(
+            io.BytesIO(content),
+            mimetype="application/json",
+            as_attachment=True,
+            download_name=f"{stem}.json",
+            max_age=0,
+        )
+    if export_format == "csv_combined":
+        content = csv_bytes(
+            combined_csv_rows(report),
+            ["section", "record_index", "record_label", "field", "value"],
+        )
+        return send_file(
+            io.BytesIO(content),
+            mimetype="text/csv; charset=utf-8",
+            as_attachment=True,
+            download_name=f"{stem}-all-data.csv",
+            max_age=0,
+        )
+
+    archive = io.BytesIO()
+    with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED) as output_zip:
+        for filename, content in multi_report_csv_files(report).items():
+            output_zip.writestr(filename, content)
+    archive.seek(0)
+    return send_file(
+        archive,
+        mimetype="application/zip",
+        as_attachment=True,
+        download_name=f"{stem}-csv.zip",
+        max_age=0,
+    )
+
+
 def get_court_image_data_url() -> str:
     court_path = Path(__file__).with_name("court.png")
     if not court_path.exists():
@@ -8999,9 +9585,84 @@ def get_court_image_data_url() -> str:
     return f"data:image/png;base64,{data}"
 
 
+def normalize_israel_game_start_time(value: str) -> str:
+    cleaned = value.strip()
+    if not re.fullmatch(r"\d{2}:\d{2}", cleaned):
+        raise ValueError("Game start time must use HH:MM format.")
+    try:
+        parsed = datetime.strptime(cleaned, "%H:%M")
+    except ValueError as exc:
+        raise ValueError("Game start time must be a valid 24-hour time.") from exc
+    return parsed.strftime("%H:%M")
+
+
+def pbp_standings_discovery_payload(
+    pools: list[dict[str, Any]],
+    game_start_time: str,
+    *,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    normalized_start = normalize_israel_game_start_time(game_start_time)
+    parsed_start = datetime.strptime(normalized_start, "%H:%M")
+    live_link_time = (parsed_start - timedelta(minutes=ISRAEL_U21_LIVE_LINK_LEAD_MINUTES)).strftime(
+        "%H:%M"
+    )
+    game_count = sum(len(pool.get("games", [])) for pool in pools)
+    if game_count:
+        message = (
+            f"Loaded {game_count} game{'s' if game_count != 1 else ''}. "
+            "All pools and games are selected by default."
+        )
+    else:
+        israel_now = now.astimezone(ISRAEL_TIMEZONE) if now else datetime.now(ISRAEL_TIMEZONE)
+        current_minutes = israel_now.hour * 60 + israel_now.minute
+        link_hour, link_minute = (int(part) for part in live_link_time.split(":"))
+        link_minutes = link_hour * 60 + link_minute
+        if current_minutes < link_minutes:
+            message = (
+                "No live-match links are available yet. On game days they are expected from "
+                f"{live_link_time} Israel time for a {normalized_start} start."
+            )
+        else:
+            message = (
+                "No live-match links are currently exposed on the standings page. "
+                f"On game days they are normally available from {live_link_time} Israel time."
+            )
+
+    return {
+        "source_url": ISRAEL_U21_STANDINGS_URL,
+        "pools": pools,
+        "game_count": game_count,
+        "availability": {
+            "timezone": "Asia/Jerusalem",
+            "game_start_time": normalized_start,
+            "live_link_time": live_link_time,
+            "lead_minutes": ISRAEL_U21_LIVE_LINK_LEAD_MINUTES,
+        },
+        "message": message,
+    }
+
+
 @app.get("/")
 def form() -> str:
     return render_template_string(FORM_HTML, **empty_form_context())
+
+
+@app.get("/pbp-standings-games")
+def pbp_standings_games() -> tuple[Any, int] | Any:
+    game_start_time = request.args.get(
+        "game_start_time", DEFAULT_ISRAEL_U21_GAME_START_TIME
+    )
+    try:
+        normalized_start = normalize_israel_game_start_time(game_start_time)
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+
+    try:
+        pools = fetch_israel_u21_standings_games()
+    except Exception as exc:
+        return jsonify({"error": f"Could not load Israel U21 standings: {exc}"}), 502
+    return jsonify(pbp_standings_discovery_payload(pools, normalized_start))
 
 
 @app.post("/national-options")
@@ -9035,6 +9696,9 @@ def form_error_response(
     password: str,
     matchid: str,
     mode: str,
+    pbp_source: str,
+    pbp_matchids: list[str],
+    pbp_game_start_time: str,
     multi_matchids: list[str],
     multi_source: str,
     national_country_id: str,
@@ -9059,6 +9723,9 @@ def form_error_response(
                 password=password,
                 matchid=matchid,
                 mode=mode,
+                pbp_source=pbp_source,
+                pbp_matchids=pbp_matchids,
+                pbp_game_start_time=pbp_game_start_time,
                 multi_matchids=multi_matchids,
                 multi_source=multi_source,
                 national_country_id=national_country_id,
@@ -9085,6 +9752,13 @@ def report() -> tuple[str, int] | str:
     password = request.form.get("password", "").strip()
     mode = request.form.get("mode", "single").strip() or "single"
     matchid = request.form.get("matchid", "").strip()
+    pbp_source = request.form.get("pbp_source", "manual").strip() or "manual"
+    if pbp_source not in {"manual", "israel_u21_standings"}:
+        pbp_source = "manual"
+    pbp_matchids = parse_multi_matchids(request.form.getlist("pbp_matchids"))
+    pbp_game_start_time = request.form.get(
+        "pbp_game_start_time", DEFAULT_ISRAEL_U21_GAME_START_TIME
+    ).strip()
     multi_matchids = parse_multi_matchids(request.form.getlist("matchids"))
     selected_team_key = request.form.get("selected_team_key", "").strip() or None
     multi_source = request.form.get("multi_source", "manual").strip() or "manual"
@@ -9112,6 +9786,9 @@ def report() -> tuple[str, int] | str:
             password=password if keep_password else "",
             matchid=matchid,
             mode=mode,
+            pbp_source=pbp_source,
+            pbp_matchids=pbp_matchids,
+            pbp_game_start_time=pbp_game_start_time,
             multi_matchids=multi_matchids,
             multi_source=multi_source,
             national_country_id=national_country_id,
@@ -9237,6 +9914,26 @@ def report() -> tuple[str, int] | str:
             password=password,
         )
 
+    if mode == "pbp_result" and pbp_source == "israel_u21_standings":
+        try:
+            pbp_game_start_time = normalize_israel_game_start_time(pbp_game_start_time)
+        except ValueError as exc:
+            return form_error(str(exc), 400)
+        if not pbp_matchids:
+            return form_error(
+                "Choose at least one game from the Israel U21 standings before generating results.",
+                400,
+            )
+        if any(not selected_matchid.isdigit() for selected_matchid in pbp_matchids):
+            return form_error("Every selected PBP match ID must be numeric.", 400)
+        try:
+            results, errors = load_pbp_results(pbp_matchids, username, password)
+        except Exception as exc:
+            return form_error(
+                f"Failed to load selected PBP results: {exc}", 400, keep_password=False
+            )
+        return render_template_string(PBP_RESULT_HTML, results=results, errors=errors)
+
     if not matchid:
         return form_error("Match ID is required.", 400)
 
@@ -9248,7 +9945,7 @@ def report() -> tuple[str, int] | str:
             result = load_pbp_result(matchid, username, password)
         except Exception as exc:
             return form_error(f"Failed to load PBP result: {exc}", 400, keep_password=False)
-        return render_template_string(PBP_RESULT_HTML, result=result)
+        return render_template_string(PBP_RESULT_HTML, results=[result], errors=[])
 
     try:
         report_json = generate_report(matchid, username, password)
