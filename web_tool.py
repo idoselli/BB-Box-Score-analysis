@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from argparse import Namespace
 import base64
+import csv
 import contextlib
 from datetime import datetime, timedelta
 import hmac
@@ -14,9 +15,10 @@ from pathlib import Path
 import re
 from typing import Any
 import xml.etree.ElementTree as xml
+import zipfile
 from zoneinfo import ZoneInfo
 
-from flask import Flask, jsonify, render_template_string, request
+from flask import Flask, jsonify, render_template_string, request, send_file
 
 from bbapi import BBApi
 from bb_site import (
@@ -51,6 +53,7 @@ VERCEL_ANALYTICS_HTML = """<script>
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
 </script>
 <script defer src="/_vercel/insights/script.js"></script>"""
+MAX_MULTI_EXPORT_BYTES = 25 * 1024 * 1024
 
 
 @app.after_request
@@ -1632,6 +1635,33 @@ MULTI_REPORT_HTML = """<!doctype html>
       font-size: 13px;
       font-weight: 600;
     }
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .export-btn {
+      appearance: none;
+      border: 1px solid #b8c7dc;
+      border-radius: 8px;
+      padding: 7px 10px;
+      color: var(--accent);
+      background: #fff;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .export-btn:hover { background: #f1f6ff; }
+    .export-btn:disabled { cursor: wait; opacity: 0.58; }
+    .export-status {
+      min-width: 88px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .export-status.error { color: #991b1b; }
     .hero, .card {
       background: var(--panel);
       border: 1px solid var(--line);
@@ -2297,6 +2327,10 @@ MULTI_REPORT_HTML = """<!doctype html>
     <div class="topbar">
       <div class="small">Multi-match aggregate | BBAPI user: {{ username }}</div>
       <div class="topbar-actions">
+        <button type="button" class="export-btn" data-export-format="json">Export JSON</button>
+        <button type="button" class="export-btn" data-export-format="csv_zip">Export CSV Package</button>
+        <button type="button" class="export-btn" data-export-format="csv_combined">Export Combined CSV</button>
+        <span id="exportStatus" class="export-status" role="status" aria-live="polite"></span>
         <a href="/">Run another report</a>
       </div>
     </div>
@@ -2527,6 +2561,53 @@ MULTI_REPORT_HTML = """<!doctype html>
 
     <script>
       const data = {{ report_json | tojson }};
+
+      async function exportMultiReport(format) {
+        const buttons = [...document.querySelectorAll("[data-export-format]")];
+        const status = document.getElementById("exportStatus");
+        buttons.forEach(button => { button.disabled = true; });
+        status.classList.remove("error");
+        status.textContent = "Preparing export...";
+
+        try {
+          const response = await fetch("/export-multi", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ format, report: data })
+          });
+          if (!response.ok) {
+            const payload = await response.json().catch(() => ({}));
+            throw new Error(payload.error || `Export failed (HTTP ${response.status}).`);
+          }
+
+          const disposition = response.headers.get("Content-Disposition") || "";
+          const filenameMatch = disposition.match(/filename="?([^";]+)"?/i);
+          const fallbackNames = {
+            json: "multi-match-report.json",
+            csv_zip: "multi-match-csv.zip",
+            csv_combined: "multi-match-all-data.csv"
+          };
+          const blob = await response.blob();
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = filenameMatch ? filenameMatch[1] : fallbackNames[format];
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          URL.revokeObjectURL(url);
+          status.textContent = "Download ready.";
+        } catch (error) {
+          status.classList.add("error");
+          status.textContent = error.message || "Export failed.";
+        } finally {
+          buttons.forEach(button => { button.disabled = false; });
+        }
+      }
+
+      document.querySelectorAll("[data-export-format]").forEach(button => {
+        button.addEventListener("click", () => exportMultiReport(button.dataset.exportFormat));
+      });
 
 
       const shotTypeLabel = {
@@ -9206,6 +9287,293 @@ def aggregate_multi_match_report(
                 "team_rows": nba_team_rows,
             },
         },
+    )
+
+
+def csv_safe_value(value: Any) -> str | int | float:
+    if value is None:
+        return ""
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, (dict, list)):
+        value = json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+    if isinstance(value, str) and value[:1] in {"=", "+", "-", "@", "\t", "\r"}:
+        return f"'{value}"
+    return value
+
+
+def flatten_csv_value(value: Any, prefix: str = "", target: dict[str, Any] | None = None) -> dict[str, Any]:
+    out = target if target is not None else {}
+    if isinstance(value, dict):
+        if not value and prefix:
+            out[prefix] = "{}"
+        for key, child in value.items():
+            child_prefix = f"{prefix}.{key}" if prefix else str(key)
+            flatten_csv_value(child, child_prefix, out)
+    elif isinstance(value, list):
+        out[prefix or "value"] = json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+    else:
+        out[prefix or "value"] = value
+    return out
+
+
+def csv_bytes(rows: list[dict[str, Any]], default_headers: list[str] | None = None) -> bytes:
+    headers = list(default_headers or [])
+    for row in rows:
+        for key in row:
+            if key not in headers:
+                headers.append(key)
+    if not headers:
+        headers = ["record_index"]
+
+    output = io.StringIO(newline="")
+    writer = csv.DictWriter(output, fieldnames=headers, extrasaction="ignore", lineterminator="\n")
+    writer.writeheader()
+    for row in rows:
+        writer.writerow({key: csv_safe_value(row.get(key)) for key in headers})
+    return ("\ufeff" + output.getvalue()).encode("utf-8")
+
+
+def indexed_csv_rows(values: Any) -> list[dict[str, Any]]:
+    if not isinstance(values, list):
+        return []
+    rows = []
+    for index, value in enumerate(values):
+        flattened = flatten_csv_value(value) if isinstance(value, (dict, list)) else {"value": value}
+        rows.append({"record_index": index, **flattened})
+    return rows
+
+
+def tactic_minute_csv_rows(groups: Any) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    if not isinstance(groups, list):
+        return rows
+    for group_index, group in enumerate(groups):
+        if not isinstance(group, dict):
+            continue
+        positions = group.get("positions") if isinstance(group.get("positions"), list) else []
+        for position_index, position in enumerate(positions):
+            if not isinstance(position, dict):
+                continue
+            players = position.get("players") if isinstance(position.get("players"), list) else []
+            if not players:
+                players = [{}]
+            for player_index, player in enumerate(players):
+                player = player if isinstance(player, dict) else {"value": player}
+                rows.append(
+                    {
+                        "group_index": group_index,
+                        "group_key": group.get("key", ""),
+                        "group_label": group.get("label", ""),
+                        "position_index": position_index,
+                        "position_key": position.get("key", ""),
+                        "position_label": position.get("label", ""),
+                        "player_index": player_index if player else "",
+                        **flatten_csv_value(player),
+                    }
+                )
+    return rows
+
+
+def multi_report_csv_files(report: dict[str, Any]) -> dict[str, bytes]:
+    excluded = {
+        "warnings",
+        "matches",
+        "player_summary",
+        "matchup",
+        "defense",
+        "return_state",
+        "tactic_minutes",
+        "offense",
+        "defended_shots",
+        "nba_dashboard",
+    }
+    metadata: dict[str, Any] = {}
+    for key, value in report.items():
+        if key not in excluded:
+            flatten_csv_value(value, key, metadata)
+
+    return_state = report.get("return_state")
+    if isinstance(return_state, dict):
+        flatten_csv_value(return_state, "source", metadata)
+    offense = report.get("offense") if isinstance(report.get("offense"), dict) else {}
+    defended = report.get("defended_shots") if isinstance(report.get("defended_shots"), dict) else {}
+    metadata["offense.shot_types"] = offense.get("shot_types", [])
+    metadata["defended_shots.players"] = defended.get("players", [])
+    metadata["defended_shots.shot_types"] = defended.get("shot_types", [])
+    metadata["defended_shots.results"] = defended.get("results", [])
+    nba = report.get("nba_dashboard") if isinstance(report.get("nba_dashboard"), dict) else {}
+
+    return {
+        "report_metadata.csv": csv_bytes([metadata]),
+        "warnings.csv": csv_bytes(
+            [{"record_index": index, "warning": warning} for index, warning in enumerate(report.get("warnings", []))],
+            ["record_index", "warning"],
+        ),
+        "matches.csv": csv_bytes(indexed_csv_rows(report.get("matches")), ["record_index"]),
+        "player_summary.csv": csv_bytes(indexed_csv_rows(report.get("player_summary")), ["record_index"]),
+        "matchup.csv": csv_bytes(indexed_csv_rows(report.get("matchup")), ["record_index"]),
+        "defense.csv": csv_bytes(indexed_csv_rows(report.get("defense")), ["record_index"]),
+        "offense_players.csv": csv_bytes(indexed_csv_rows(offense.get("players")), ["record_index"]),
+        "defended_shots.csv": csv_bytes(indexed_csv_rows(defended.get("events")), ["record_index"]),
+        "tactic_minutes.csv": csv_bytes(
+            tactic_minute_csv_rows(report.get("tactic_minutes")),
+            [
+                "group_index",
+                "group_key",
+                "group_label",
+                "position_index",
+                "position_key",
+                "position_label",
+                "player_index",
+            ],
+        ),
+        "nba_players.csv": csv_bytes(indexed_csv_rows(nba.get("players")), ["record_index"]),
+        "nba_team_rows.csv": csv_bytes(indexed_csv_rows(nba.get("team_rows")), ["record_index"]),
+    }
+
+
+def combined_csv_rows(report: dict[str, Any]) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+
+    def append_leaf(
+        section: str,
+        value: Any,
+        path: list[str],
+        indices: list[int],
+        record_label: str,
+    ) -> None:
+        if isinstance(value, dict):
+            next_label = record_label
+            for label_key in ("name", "matchid", "label", "key"):
+                candidate = value.get(label_key)
+                if candidate not in (None, "") and not isinstance(candidate, (dict, list)):
+                    next_label = str(candidate)
+                    break
+            if not value:
+                rows.append(
+                    {
+                        "section": section,
+                        "record_index": ".".join(map(str, indices)) or "0",
+                        "record_label": next_label,
+                        "field": ".".join(path) or "value",
+                        "value": "{}",
+                    }
+                )
+            for key, child in value.items():
+                append_leaf(section, child, [*path, str(key)], indices, next_label)
+            return
+        if isinstance(value, list):
+            if not value:
+                rows.append(
+                    {
+                        "section": section,
+                        "record_index": ".".join(map(str, indices)) or "0",
+                        "record_label": record_label,
+                        "field": ".".join(path) or "value",
+                        "value": "[]",
+                    }
+                )
+            for index, child in enumerate(value):
+                append_leaf(section, child, path, [*indices, index], record_label)
+            return
+
+        if value is None:
+            rendered = "null"
+        elif isinstance(value, bool):
+            rendered = "true" if value else "false"
+        else:
+            rendered = value
+        rows.append(
+            {
+                "section": section,
+                "record_index": ".".join(map(str, indices)) or "0",
+                "record_label": record_label,
+                "field": ".".join(path) or "value",
+                "value": rendered,
+            }
+        )
+
+    for section, value in report.items():
+        append_leaf(str(section), value, [], [], "")
+    return rows
+
+
+def export_filename_stem(report: dict[str, Any]) -> str:
+    team_name = str(report.get("team_name") or "team")
+    slug = re.sub(r"[^A-Za-z0-9._-]+", "-", team_name).strip("-._").lower() or "team"
+    return f"multi-match-{slug[:60]}-{datetime.now().strftime('%Y%m%d')}"
+
+
+def is_valid_multi_export_report(report: Any) -> bool:
+    if not isinstance(report, dict) or not isinstance(report.get("team_name"), str):
+        return False
+    if not report["team_name"].strip():
+        return False
+    list_fields = (
+        "warnings",
+        "matches",
+        "input_matchids",
+        "tactic_minutes",
+        "player_summary",
+        "matchup",
+        "defense",
+    )
+    dict_fields = ("return_state", "offense", "defended_shots", "nba_dashboard")
+    return all(isinstance(report.get(key), list) for key in list_fields) and all(
+        isinstance(report.get(key), dict) for key in dict_fields
+    )
+
+
+@app.post("/export-multi")
+def export_multi_report():
+    if request.content_length is not None and request.content_length > MAX_MULTI_EXPORT_BYTES:
+        return jsonify({"error": "Export payload is too large."}), 413
+
+    payload = request.get_json(silent=True)
+    if not isinstance(payload, dict):
+        return jsonify({"error": "A JSON export request is required."}), 400
+    export_format = payload.get("format")
+    if export_format not in {"json", "csv_zip", "csv_combined"}:
+        return jsonify({"error": "Export format must be json, csv_zip, or csv_combined."}), 400
+    report = payload.get("report")
+    if not is_valid_multi_export_report(report):
+        return jsonify({"error": "A valid multi-match report is required."}), 400
+
+    stem = export_filename_stem(report)
+    if export_format == "json":
+        content = (json.dumps(report, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+        return send_file(
+            io.BytesIO(content),
+            mimetype="application/json",
+            as_attachment=True,
+            download_name=f"{stem}.json",
+            max_age=0,
+        )
+    if export_format == "csv_combined":
+        content = csv_bytes(
+            combined_csv_rows(report),
+            ["section", "record_index", "record_label", "field", "value"],
+        )
+        return send_file(
+            io.BytesIO(content),
+            mimetype="text/csv; charset=utf-8",
+            as_attachment=True,
+            download_name=f"{stem}-all-data.csv",
+            max_age=0,
+        )
+
+    archive = io.BytesIO()
+    with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED) as output_zip:
+        for filename, content in multi_report_csv_files(report).items():
+            output_zip.writestr(filename, content)
+    archive.seek(0)
+    return send_file(
+        archive,
+        mimetype="application/zip",
+        as_attachment=True,
+        download_name=f"{stem}-csv.zip",
+        max_age=0,
     )
 
 
