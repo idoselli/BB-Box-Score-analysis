@@ -299,6 +299,10 @@ FORM_HTML = """<!doctype html>
       min-height: 16px;
     }
   </style>
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
   <main class="wrap">
@@ -968,6 +972,10 @@ TEAM_CHOICE_HTML = """<!doctype html>
       font-weight: 600;
     }
   </style>
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
   <main class="wrap">
@@ -1204,6 +1212,10 @@ U21_TRAINING_REPORT_HTML = """<!doctype html>
       .skills { grid-template-columns: repeat(2, minmax(112px, 1fr)); min-width: 230px; }
     }
   </style>
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
   <main class="wrap">
@@ -2134,6 +2146,10 @@ MULTI_REPORT_HTML = """<!doctype html>
       .modal-body dl { grid-template-columns: 1fr; }
     }
   </style>
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
   <main class="wrap">
@@ -4369,6 +4385,10 @@ REPORT_HTML = """<!doctype html>
       .court-chart { width: 100%; max-width: 368px; }
     }
   </style>
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
   <main class="wrap">
@@ -6238,6 +6258,10 @@ ANIMATION_REPORT_HTML = """<!doctype html>
       .jump-fields button { grid-column: 1 / -1; }
     }
   </style>
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
   <main class="wrap">
