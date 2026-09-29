@@ -1,0 +1,4 @@
+{% extends 'beta/base.html' %}
+{% block title %}Archived player · Beta{% endblock %}
+{% block content %}<section class="card"><h1>{{ player.name }}</h1>{% if demo %}<div class="warning">Demo record: this player and all values are simulated.</div>{% endif %}<div class="warning">Last known skills from {{ player.observedAt }}. This is a historical snapshot, not a current scouting report.</div>
+<p>Position {{ player.position }} · salary {{ player.salary }} · DMI {{ player.dmi }} · auction {{ player.auctionId }}</p><div class="grid">{% for key,value in player.lastKnownSkills.items() %}<div>{{ key }}: <strong>{{ value.level if value.level is defined else value }}</strong></div>{% endfor %}</div></section>{% endblock %}

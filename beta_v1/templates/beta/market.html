@@ -1,0 +1,12 @@
+{% extends 'beta/base.html' %}
+{% block title %}Market scout · Beta{% endblock %}
+{% block content %}
+<section class="card"><h1>Market scout</h1><p>Live listings are ordered by salary. The API reveals a listed player’s skills only from an open auction and within your reveal limits.</p>
+{% if not connected %}<div class="warning">{{ connection_message }} <a href="{{ url_for('beta_v1.home') }}#token-signin">Sign in</a></div>{% endif %}
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+<form method="post" class="row"><label>Minimum salary<input name="min_salary" type="number" min="0" value="{{ request.form.get('min_salary','') }}"></label><button>Search current listings</button></form></section>
+{% if listings %}<section class="card"><h2>Current listings</h2><div class="scroll"><table><thead><tr><th>Player</th><th>Age</th><th>Position</th><th>Salary</th><th>DMI</th><th>Price</th><th>Ends</th></tr></thead><tbody>{% for row in listings %}<tr><td><a href="{{ url_for('beta_v1.market_auction',player_id=row.player.id) }}">{{ row.player.firstName }} {{ row.player.lastName }}</a></td><td>{{ row.player.age }}</td><td>{{ row.player.bestPosition }}</td><td>{{ row.player.salary }}</td><td>{{ row.player.dmi }}</td><td>{{ row.currentPrice }}</td><td>{{ row.endsAt }}</td></tr>{% endfor %}</tbody></table></div></section>{% endif %}
+<section class="card"><h2>Last-known archive · {{ archive_count }} players</h2><p class="muted">The collector searches at most the top 150 salary-ranked listings per run and checks every 72 hours when enabled. Shorter auctions can be missed. Observed skills are historical snapshots and may no longer represent the player’s current level.</p>
+{% if archive_demo %}<div class="warning">Demo archive: every player, auction, salary, and skill value below is fabricated. The scheduled collector is paused.</div>{% endif %}
+{% if archive %}<div class="scroll"><table><thead><tr><th>Player</th><th>Position</th><th>Salary when seen</th><th>Observed</th><th>Auction deadline</th></tr></thead><tbody>{% for p in archive %}<tr><td><a href="{{ url_for('beta_v1.market_archive_player',player_id=p.playerId) }}">{{ p.name }}</a></td><td>{{ p.position }}</td><td>{{ p.salary }}</td><td>{{ p.observedAt[:10] }}</td><td>{{ p.skillsVisibleUntil or '—' }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<p>No beta market file has been published yet.</p>{% endif %}</section>
+{% endblock %}

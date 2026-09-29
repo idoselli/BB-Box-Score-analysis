@@ -1,0 +1,40 @@
+name: Beta v1 Market Archive
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: beta-v1-data-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  archive:
+    if: vars.BB_V1_EXCEPTION_APPROVED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: python -m pip install -r requirements.txt
+      - name: Collect salary-ranked current auctions
+        env:
+          BB_V1_PERSONAL_TOKEN: ${{ secrets.BB_V1_PERSONAL_TOKEN }}
+          BB_V1_EXCEPTION_APPROVED: ${{ vars.BB_V1_EXCEPTION_APPROVED }}
+        run: python -m beta_v1.collector market
+      - name: Commit beta market file only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f data/v1/market/players.json
+          if git diff --staged --quiet; then exit 0; fi
+          git commit -m "chore: update beta market archive"
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push origin "HEAD:$GITHUB_REF_NAME"

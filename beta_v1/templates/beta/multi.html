@@ -1,0 +1,38 @@
+{% extends 'beta/base.html' %}
+{% block title %}Multi match · Beta{% endblock %}
+{% block content %}
+<section class="card"><h1>Multi match team aggregate</h1><p>Use new-world UUIDs. Enter match IDs, or a club/team ID to load its completed schedule. Leave the team ID blank to detect the most frequent team.</p>
+{% if not connected %}<div class="warning">{{ connection_message }} <a href="{{ url_for('beta_v1.home') }}#token-signin">Sign in</a></div>{% endif %}
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+<form method="post" class="stack"><label>Match UUIDs, separated by commas or spaces<textarea name="match_ids" placeholder="New-world match UUIDs">{{ fields.match_ids }}</textarea></label>
+<div class="row"><label>Selected team UUID (optional)<input name="team_id" value="{{ fields.team_id }}"></label></div>
+<details><summary>Load from a club or national schedule instead</summary><div class="stack" style="padding:.8rem 0">
+<div class="row"><label>Club/team UUID<input name="schedule_team_id" value="{{ fields.schedule_team_id }}"></label><label>Season number<input name="season" type="number" min="1" value="{{ fields.season }}"></label><label>Latest completed games<input name="count" type="number" min="1" max="30" value="{{ fields.count or '10' }}"></label></div>
+<div class="row"><label>Tracked national squad<select name="national_country_id"><option value="">None</option>{% for item in national_choices %}<option value="{{ item.countryId }}"{% if item.countryId == fields.national_country_id %} selected{% endif %}>{{ item.name }}</option>{% endfor %}</select></label><label>Other country code<input name="national_other_code" maxlength="8" value="{{ fields.national_other_code }}" placeholder="e.g. IL"></label><label>National level<select name="national_kind"><option value="JuniorNationalTeam"{% if fields.national_kind != 'SeniorNationalTeam' %} selected{% endif %}>U21</option><option value="SeniorNationalTeam"{% if fields.national_kind == 'SeniorNationalTeam' %} selected{% endif %}>Senior</option></select></label></div>
+<p class="muted">A selected country takes priority over the club/team UUID. A typed country code takes priority over the dropdown. The v1 national schedule endpoint has been verified with a live U21 team.</p></div></details>
+<button type="submit">Build beta report</button></form></section>
+{% if report %}<section class="card"><h2>{{ report.teamName }}</h2><p>{{ report.usedMatches }} games · {{ report.wins }} wins · {{ report.losses }} losses</p>
+{% for warning in report.warnings %}<div class="warning">{{ warning }}</div>{% endfor %}
+<div class="row"><button type="button" id="download-json" class="secondary">Download JSON</button><button type="button" id="download-players" class="secondary">Download players CSV</button><button type="button" id="download-matches" class="secondary">Download matches CSV</button></div>
+{% if report.skipped %}<details><summary>{{ report.skipped|length }} skipped match(es)</summary><ul>{% for item in report.skipped %}<li><code>{{ item.matchId }}</code> — {{ item.reason }}</li>{% endfor %}</ul></details>{% endif %}
+</section>
+{% if report.strategyCounts or report.ratingDistributions %}<section class="card"><h2>Strategies and ratings across matches</h2><div class="grid">
+{% for key, counts in report.strategyCounts.items() %}<div><h3>{{ key|replace('Strategy',' strategy')|title }}</h3><ul>{% for value, count in counts.items() %}<li>{{ value }}: {{ count }} game{{ '' if count == 1 else 's' }}</li>{% endfor %}</ul></div>{% endfor %}
+{% for key, counts in report.ratingDistributions.items() %}<div><h3>{{ key|replace('Scoring',' scoring')|replace('Defense',' defense')|replace('Flow',' flow')|title }}</h3><ul>{% for value, count in counts.items() %}<li>{{ value }}: {{ count }} game{{ '' if count == 1 else 's' }}</li>{% endfor %}</ul></div>{% endfor %}
+</div></section>{% endif %}
+<section class="card"><h2>Matches</h2><div class="scroll"><table><thead><tr><th>Date</th><th>Opponent</th><th>Side</th><th>Score</th><th>Result</th><th>Offense</th><th>Defense</th><th>Ratings</th></tr></thead><tbody>
+{% for row in report.matches %}<tr><td>{{ row.scheduledAt[:10] }}</td><td>{{ row.opponent }}</td><td>{{ 'Home' if row.home else 'Away' }}</td><td>{{ row.score }}</td><td>{{ row.result }}</td><td>{{ row.ratings.offenseStrategy or '—' }}</td><td>{{ row.ratings.defensiveStrategy or '—' }}</td><td><details><summary>View</summary>{% for key,value in row.ratings.items() %}<div>{{ key }}: {{ value }}</div>{% endfor %}</details></td></tr>{% endfor %}
+</tbody></table></div></section>
+<section class="card"><h2>Player totals</h2><div class="scroll"><table><thead><tr><th>Player</th><th>GP</th><th>Min</th><th>PTS</th><th>FG</th><th>3PT</th><th>FT</th><th>REB</th><th>OREB</th><th>AST</th><th>TO</th><th>STL</th><th>BLK</th><th>PF</th><th>+/-</th><th>Stars</th></tr></thead><tbody>
+{% for p in report.players %}<tr><td>{{ p.name }}<br><small class="muted">{{ p.positions|join(', ') }}</small></td><td>{{ p.games }}</td><td>{{ p.minutes }}</td><td>{{ p.points }}</td><td>{{ p.fieldGoals }}/{{ p.fieldGoalsAttempts }}</td><td>{{ p.threePointFieldGoals }}/{{ p.threePointFieldGoalsAttempts }}</td><td>{{ p.freeThrows }}/{{ p.freeThrowsAttempts }}</td><td>{{ p.rebounds }}</td><td>{{ p.offensiveRebounds }}</td><td>{{ p.assists }}</td><td>{{ p.turnovers }}</td><td>{{ p.steals }}</td><td>{{ p.blocks }}</td><td>{{ p.fouls }}</td><td>{{ p.plusMinus }}</td><td>{{ p.averageStarRating if p.averageStarRating is not none else '—' }}</td></tr>{% endfor %}
+</tbody></table></div></section>
+<script>
+const report={{ report|tojson }};
+function download(name,content,type){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+function safe(v){if(v==null)return '';let s=typeof v==='object'?JSON.stringify(v):String(v);if(/^[=+\-@\t\r]/.test(s))s="'"+s;return '"'+s.replaceAll('"','""')+'"'}
+function csv(rows,columns){return [columns.map(safe).join(','),...rows.map(row=>columns.map(key=>safe(row[key])).join(','))].join('\r\n')+'\r\n'}
+document.getElementById('download-json').onclick=()=>download('beta-multi-report.json',JSON.stringify(report,null,2),'application/json');
+document.getElementById('download-players').onclick=()=>download('beta-players.csv',csv(report.players,['playerId','name','games','positions','minutes','points','fieldGoals','fieldGoalsAttempts','threePointFieldGoals','threePointFieldGoalsAttempts','freeThrows','freeThrowsAttempts','rebounds','offensiveRebounds','assists','turnovers','steals','blocks','fouls','plusMinus','averageStarRating']),'text/csv');
+document.getElementById('download-matches').onclick=()=>download('beta-matches.csv',csv(report.matches,['matchId','scheduledAt','opponent','home','score','result','periodScores','totals','ratings','opponentRatings']),'text/csv');
+</script>{% endif %}
+{% endblock %}

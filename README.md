@@ -1,5 +1,23 @@
 # BB box score analysis
 
+### new-world beta section
+
+The new BuzzerBeater API integration lives under `/beta/`. The original pages, reports, and weekly U21 job remain on their existing routes and data files. The current home page has one Beta link.
+
+Beta pages: `/beta/u21-tracker`, `/beta/multi-match`, `/beta/national-training`, and `/beta/market`. New-world IDs and snapshots are separate from legacy IDs and `data/u21-tracker/`.
+
+To enable sign-in for other managers, register a confidential application in the new game's **Settings → API & third-party apps**, configure its exact callback URL, and set `BB_V1_CLIENT_ID`, `BB_V1_CLIENT_SECRET`, `BB_V1_REDIRECT_URI`, `BB_V1_REDIS_URL`, and `BB_V1_TOKEN_ENCRYPTION_KEY` on the server. Generate the Fernet key with `python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"`. OAuth access and rotating refresh tokens stay encrypted in Redis; the browser cookie contains only an opaque session ID. Application review is required before other managers can use it.
+
+Managers may instead paste their own personal API token into the form at `/beta/`. The server validates it with `/me` and stores it in encrypted Redis for 24 hours; the browser receives only an opaque session cookie. A local preview may use `BB_V1_ALLOW_INMEMORY_TOKEN_LOGIN=true` without Redis, in which case token sessions disappear when Flask restarts. Do not enable the in-memory option on a public site.
+
+The public beta tracker and market archive show clearly labeled, fabricated demo data from `data/v1/demo/` until real-data publication is authorized. Regenerate the demo files with `python -m beta_v1.demo`. Their player IDs, names, values, and auction records are synthetic. The demo DMI for week 1 is 10% lower than week 2 to illustrate an individual trend, and the UI labels it as illustrative.
+
+The new-world collectors use a separate personal token in `BB_V1_PERSONAL_TOKEN`. The two beta GitHub Actions are manual-only, and the local beta archive automation is paused. If real-data publication is later authorized, add the token as a GitHub secret and set repository variable `BB_V1_EXCEPTION_APPROVED=true` only after verifying the written exceptions for collection and public publication. Set the same variable on the site to serve real beta snapshots and market archives. The market collector enforces a 72-hour interval when invoked and may miss shorter auctions. Do not put tokens in tracked files.
+
+For local-only collection, keep `BB_V1_PERSONAL_TOKEN` and `BB_V1_EXCEPTION_APPROVED=true` in the ignored `.env` file and run `./run-beta-collector.ps1 u21` or `./run-beta-collector.ps1 market`. Generated snapshots and the market archive are ignored by Git until public publication is explicitly enabled. Local collection does not configure GitHub Actions.
+
+The v1 API does not expose play-by-play, so the beta multi-match report is a box-score report and explicitly labels unavailable event-based analysis. The original detailed report remains available at `/`.
+
 ### contact Ido to run it
 * credit to Radek for bulding BB Insider, which this tool was built upon.
 

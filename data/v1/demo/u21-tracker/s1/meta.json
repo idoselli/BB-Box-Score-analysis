@@ -1,0 +1,275 @@
+{
+  "world": "v1-demo",
+  "season": 1,
+  "weeks": [
+    1,
+    2
+  ],
+  "syntheticWeeks": [
+    1
+  ],
+  "demo": true,
+  "updatedAt": "Demo data",
+  "countries": [
+    {
+      "name": "Andorra",
+      "countryId": "DEMO-01",
+      "teamId": "f71d599d-1aa9-54da-881e-4a59a0784134"
+    },
+    {
+      "name": "Azərbaycan",
+      "countryId": "DEMO-02",
+      "teamId": "fbbb0c64-bc30-5b89-bd64-a7157589173d"
+    },
+    {
+      "name": "Belarus",
+      "countryId": "DEMO-03",
+      "teamId": "21400038-84f3-5763-bc33-d087d9e98ed6"
+    },
+    {
+      "name": "Belgium",
+      "countryId": "DEMO-04",
+      "teamId": "7413499a-77bc-5f8a-8f54-2bf453b0cb2e"
+    },
+    {
+      "name": "Bosna i Hercegovina",
+      "countryId": "DEMO-05",
+      "teamId": "f0bfb757-d2c3-5369-b5c4-86c5dfcee612"
+    },
+    {
+      "name": "Bulgaria",
+      "countryId": "DEMO-06",
+      "teamId": "5f86f9fb-aa30-5dd9-8e32-44af715e89d8"
+    },
+    {
+      "name": "Ceska Rep.",
+      "countryId": "DEMO-07",
+      "teamId": "5a928535-4465-5196-8dbd-d8d63c0894b5"
+    },
+    {
+      "name": "China",
+      "countryId": "DEMO-08",
+      "teamId": "ca3ee0cc-6bb1-55fc-9e87-074d9ff11faf"
+    },
+    {
+      "name": "Crna Gora",
+      "countryId": "DEMO-09",
+      "teamId": "c40b671d-a848-5055-b146-579f18f65fa9"
+    },
+    {
+      "name": "Cymru",
+      "countryId": "DEMO-10",
+      "teamId": "1dd50810-04bd-5a0f-b3d1-dbc056538e31"
+    },
+    {
+      "name": "Cyprus",
+      "countryId": "DEMO-11",
+      "teamId": "150571ab-a94d-5494-b43f-06d0b84b78e4"
+    },
+    {
+      "name": "Danmark",
+      "countryId": "DEMO-12",
+      "teamId": "f542982d-250f-52ef-8027-8997acae3486"
+    },
+    {
+      "name": "Deutschland",
+      "countryId": "DEMO-13",
+      "teamId": "648d777f-e964-5022-9b8f-8280a2ce1215"
+    },
+    {
+      "name": "Eesti",
+      "countryId": "DEMO-14",
+      "teamId": "4f7b367f-5f61-5d0f-a7bc-5caab753e2d7"
+    },
+    {
+      "name": "England",
+      "countryId": "DEMO-15",
+      "teamId": "2b6bb762-5b46-59a7-8103-3dcdfcb321a7"
+    },
+    {
+      "name": "España",
+      "countryId": "DEMO-16",
+      "teamId": "1b18f757-27b1-57d8-a144-b70b7d108152"
+    },
+    {
+      "name": "France",
+      "countryId": "DEMO-17",
+      "teamId": "348b7936-27ed-5108-a68c-72b2553adb42"
+    },
+    {
+      "name": "Hayastan",
+      "countryId": "DEMO-18",
+      "teamId": "80a58182-9bca-5e53-9919-aaedbec8bf77"
+    },
+    {
+      "name": "Hellas",
+      "countryId": "DEMO-19",
+      "teamId": "aea7d364-3e03-5750-baaf-dcfaec0147ae"
+    },
+    {
+      "name": "Hong Kong",
+      "countryId": "DEMO-20",
+      "teamId": "f594889a-f8e8-5d32-92ac-5290d1264458"
+    },
+    {
+      "name": "Hrvatska",
+      "countryId": "DEMO-21",
+      "teamId": "6f8b4ef0-b564-5598-8569-248794236ae7"
+    },
+    {
+      "name": "Ireland",
+      "countryId": "DEMO-22",
+      "teamId": "31b1fca9-5464-5a72-bb03-ea2233bbfa49"
+    },
+    {
+      "name": "Israel",
+      "countryId": "DEMO-23",
+      "teamId": "fb837404-341e-5263-9bbf-ef4d1a98993f"
+    },
+    {
+      "name": "Italia",
+      "countryId": "DEMO-24",
+      "teamId": "9ec25ba8-da06-501d-a195-73a9847af7e1"
+    },
+    {
+      "name": "Latvija",
+      "countryId": "DEMO-25",
+      "teamId": "84d710fc-f8ee-5ff9-8984-b69cde41432e"
+    },
+    {
+      "name": "Lietuva",
+      "countryId": "DEMO-26",
+      "teamId": "8e95e428-0a97-581c-830f-818bf3a9a771"
+    },
+    {
+      "name": "Luxembourg",
+      "countryId": "DEMO-27",
+      "teamId": "483c9820-eac3-576f-ba74-015d5c53f947"
+    },
+    {
+      "name": "Magyarország",
+      "countryId": "DEMO-28",
+      "teamId": "d4f27378-09d0-5f7d-a6a8-7d3e472a1027"
+    },
+    {
+      "name": "Makedonija",
+      "countryId": "DEMO-29",
+      "teamId": "b8b56f7b-0316-5669-80f3-2b4283953704"
+    },
+    {
+      "name": "Malta",
+      "countryId": "DEMO-30",
+      "teamId": "620d4636-7707-5e48-a787-0839c8ce427a"
+    },
+    {
+      "name": "Moldova",
+      "countryId": "DEMO-31",
+      "teamId": "9e925fb7-0ec3-5567-85da-658dccd15234"
+    },
+    {
+      "name": "Nederland",
+      "countryId": "DEMO-32",
+      "teamId": "6bf1eac3-abb7-5748-a8ae-df4cea6bea44"
+    },
+    {
+      "name": "Norge",
+      "countryId": "DEMO-33",
+      "teamId": "41f9eee7-281a-5f1c-847e-de007a4ba312"
+    },
+    {
+      "name": "Polska",
+      "countryId": "DEMO-34",
+      "teamId": "87920a0e-b1cd-53e6-a756-08099cf128a2"
+    },
+    {
+      "name": "Portugal",
+      "countryId": "DEMO-35",
+      "teamId": "fb5f2b12-2677-520d-a66a-ebdd02597b3a"
+    },
+    {
+      "name": "România",
+      "countryId": "DEMO-36",
+      "teamId": "519949b0-3f5c-55c2-a014-3b2a374a1994"
+    },
+    {
+      "name": "Rossiya",
+      "countryId": "DEMO-37",
+      "teamId": "2a55d742-e402-5d00-80c8-b893a303e01c"
+    },
+    {
+      "name": "Sakartvelo",
+      "countryId": "DEMO-38",
+      "teamId": "8dd5d972-bd60-548e-9688-063a01f3a5b1"
+    },
+    {
+      "name": "Schweiz",
+      "countryId": "DEMO-39",
+      "teamId": "d015611e-c902-5dc3-88cf-6d76bd9dda94"
+    },
+    {
+      "name": "Scotland",
+      "countryId": "DEMO-40",
+      "teamId": "e0535868-b30f-5714-b006-988a940808ee"
+    },
+    {
+      "name": "Shqipëria",
+      "countryId": "DEMO-41",
+      "teamId": "98432263-27a1-5ff9-b78c-b8928021e023"
+    },
+    {
+      "name": "Slovenija",
+      "countryId": "DEMO-42",
+      "teamId": "67f5c587-d877-512c-b28d-1c6e60d153c7"
+    },
+    {
+      "name": "Slovensko",
+      "countryId": "DEMO-43",
+      "teamId": "aca6a1c8-0b98-5e3d-9b19-55d607f89bcb"
+    },
+    {
+      "name": "Srbija",
+      "countryId": "DEMO-44",
+      "teamId": "df0bf671-9693-50dd-9dc9-14353857916f"
+    },
+    {
+      "name": "Suomi",
+      "countryId": "DEMO-45",
+      "teamId": "f9c1d477-b2fb-5fa5-86ab-d13d95b42d4e"
+    },
+    {
+      "name": "Sverige",
+      "countryId": "DEMO-46",
+      "teamId": "6d0d9e47-20d6-588b-b661-28b6784d3a32"
+    },
+    {
+      "name": "Taiwan",
+      "countryId": "DEMO-47",
+      "teamId": "127858da-7795-5606-857e-eae8e9811432"
+    },
+    {
+      "name": "Türkiye",
+      "countryId": "DEMO-48",
+      "teamId": "bfcee4ab-d4f4-5e5a-a732-33e37472eaac"
+    },
+    {
+      "name": "Ukraina",
+      "countryId": "DEMO-49",
+      "teamId": "6d18976e-8835-5e31-a123-9ba2b58da54c"
+    },
+    {
+      "name": "USA",
+      "countryId": "DEMO-50",
+      "teamId": "9025e2a3-e3f0-52ab-8e26-5719cabfcec2"
+    },
+    {
+      "name": "Ísland",
+      "countryId": "DEMO-51",
+      "teamId": "3d28d8e2-5c82-59bc-95a2-1ba33793bc5c"
+    },
+    {
+      "name": "Österreich",
+      "countryId": "DEMO-52",
+      "teamId": "214865b1-4303-5ff6-b8fc-ea673ffc3f27"
+    }
+  ]
+}

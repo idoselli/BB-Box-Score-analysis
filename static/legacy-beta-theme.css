@@ -1,0 +1,38 @@
+:root {
+  --bg: #eef2f6;
+  --panel: #fff;
+  --card: #fff;
+  --ink: #17212b;
+  --muted: #526576;
+  --line: #d9e1e8;
+  --accent: #14699b;
+  --accent-soft: #e8f2f8;
+  --shadow: 0 2px 8px #142b3b0d;
+}
+html { background: #eef2f6; }
+body { background: #eef2f6 !important; color: #17212b; font-family: Inter, "Segoe UI", Arial, sans-serif !important; }
+.legacy-site-header { background: #10283d; color: #fff; padding: 1rem max(1rem, calc((100vw - 1100px)/2)); }
+.legacy-site-inner { max-width: 1100px; margin: 0 auto; }
+.legacy-site-header strong { font-size: 1.15rem; }
+.legacy-site-header nav { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: .75rem; }
+.legacy-site-header nav a { color: #d6e8f5; text-decoration: none; font-size: .95rem; }
+.legacy-site-header nav a:hover { text-decoration: underline; }
+.wrap { max-width: 1100px; margin: 1.5rem auto; padding: 0 1rem 3rem; }
+.card, .hero { background: #fff; border: 1px solid #d9e1e8; border-radius: 12px; box-shadow: 0 2px 8px #142b3b0d; }
+.brand-panel { max-width: 340px; margin: 0 auto 1.25rem; }
+h1, h2, h3 { color: #17212b; }
+p, .lead, .hint, .status { color: #526576; line-height: 1.48; }
+input, select, textarea { border-color: #9daeba; border-radius: 7px; }
+button:not(.ghost):not(.danger-btn):not(.country-btn):not(.chip):not(.mode-btn):not(.tracker-player-link) { background: #14699b; color: #fff; border-radius: 7px; }
+button:not(.ghost):not(.danger-btn):not(.country-btn):not(.chip):not(.mode-btn):not(.tracker-player-link):hover { background: #0c547f; }
+.mode-btn.active, .country-btn.active { background: #14699b; color: #fff; border-color: #14699b; }
+.mode-btn:not(.active), .country-btn:not(.active) { background: #f0f5f8; }
+.topnav { background: #fff; border: 1px solid #d9e1e8; border-radius: 8px; padding: .7rem 1rem; }
+.topnav a, a.bb { color: #14699b; }
+th, .table-title, .period-table h2 { background: #f0f5f8; }
+.chart-card { background: #fbfdff; }
+@media (max-width: 680px) {
+  .legacy-site-header { padding: 1rem; }
+  .legacy-site-header nav { gap: .6rem 1rem; }
+  .wrap { padding: 0 .75rem 2rem; }
+}

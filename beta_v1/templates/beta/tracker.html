@@ -1,0 +1,78 @@
+{% extends 'beta/base.html' %}
+{% block title %}U21 tracker · Beta{% endblock %}
+{% block content %}
+<section class="card">
+  <h1>U21 tracker · new world</h1>
+  <p>Weekly roster figures for the selected junior national squad. Legacy history is available in the <a href="/u21-tracker">current tracker</a>.</p>
+  {% if meta and meta.demo %}<div class="warning">Demo data: every player, value, and team ID shown here is simulated. These are not BuzzerBeater observations.</div>{% endif %}
+  {% if not meta %}<div class="warning">No beta snapshot is available yet.</div>{% else %}
+  <form class="row" method="get">
+    <label>Season<select name="season" onchange="this.form.submit()">{% for item in seasons %}<option value="{{ item }}"{% if item == season %} selected{% endif %}>{{ item }}</option>{% endfor %}</select></label>
+    <label>Squad<select name="countryId" onchange="this.form.submit()">{% for item in meta.countries %}<option value="{{ item.countryId }}"{% if item.countryId == country_id %} selected{% endif %}>{{ item.name }}</option>{% endfor %}</select></label>
+  </form>
+  <p class="muted">Weeks {{ meta.weeks|join(', ') }} · {{ meta.updatedAt }}</p>
+  {% if meta.syntheticWeeks %}<div class="warning">Week {{ meta.syntheticWeeks|join(', ') }} DMI is illustrative: it was set to 90% of week 2. It is not a historical measurement. Other values for that week are unknown.</div>{% endif %}
+  {% endif %}
+</section>
+{% if data and data.players %}
+<section class="card">
+  <h2>{{ data.countryName }}</h2>
+  <div class="row">
+    <label>Metric<select id="metric"><option value="dmi">DMI</option><option value="gameShape">Game shape</option><option value="salary">Salary</option><option value="potential">Potential</option></select></label>
+    <label>Player<select id="player-filter"><option value="">All players</option>{% for player in data.players %}<option value="{{ player.playerId }}"{% if loop.first %} selected{% endif %}>{{ player.name }}</option>{% endfor %}</select></label>
+  </div>
+  <div id="chart" class="tracker-chart" aria-live="polite"></div>
+  <div id="chart-legend" class="tracker-legend"></div>
+  <p class="muted">Select a player to see an individual line. Dashed segments include illustrative DMI.</p>
+  <div class="scroll"><table><thead><tr><th>Player</th><th>Position</th><th>Latest DMI</th><th>Game shape</th><th>Salary</th><th>Potential</th><th>Weeks</th></tr></thead><tbody>
+  {% for player in data.players %}{% set latest = player.points[-1] %}<tr><td><button type="button" class="tracker-player-link" data-player-id="{{ player.playerId }}">{{ player.name }}</button></td><td>{{ player.position or '—' }}</td><td>{{ latest.dmi if latest.dmi is not none else '—' }}</td><td>{{ latest.gameShape if latest.gameShape is not none else '—' }}</td><td>{{ latest.salary if latest.salary is not none else '—' }}</td><td>{{ latest.potential if latest.potential is not none else '—' }}</td><td>{{ player.points|length }}</td></tr>{% endfor %}
+  </tbody></table></div>
+</section>
+<style>
+  .tracker-chart{overflow-x:auto;margin:1rem 0;border:1px solid #d9e1e8;border-radius:8px;background:#fbfdff}
+  .tracker-chart svg{display:block;min-width:660px;width:100%;height:300px}
+  .tracker-legend{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:.65rem}
+  .tracker-legend span{display:inline-flex;align-items:center;gap:.35rem;font-size:.85rem}
+  .tracker-legend i{width:12px;height:12px;border-radius:50%;display:inline-block}
+  .tracker-player-link{background:transparent;color:#14699b;padding:0;font-weight:600;text-decoration:underline}
+  .tracker-player-link:hover{background:transparent;color:#0c547f}
+</style>
+<script>
+const players={{ data.players|tojson }};
+const metric=document.getElementById('metric'),selector=document.getElementById('player-filter'),chart=document.getElementById('chart'),legend=document.getElementById('chart-legend');
+const ns='http://www.w3.org/2000/svg';
+function svg(tag,attrs,label){const node=document.createElementNS(ns,tag);for(const [key,value] of Object.entries(attrs))node.setAttribute(key,String(value));if(label!==undefined)node.textContent=String(label);return node}
+function color(index){return `hsl(${(index*137.508+198)%360} 65% 42%)`}
+function draw(){
+  const key=metric.value,selected=selector.value,shown=selected?players.filter(p=>p.playerId===selected):players;
+  const values=shown.flatMap(p=>p.points.filter(q=>q[key]!=null).map(q=>Number(q[key])).filter(Number.isFinite));
+  chart.replaceChildren();legend.replaceChildren();
+  if(!values.length){chart.textContent='No values for this metric.';return}
+  const width=930,height=300,pad=48,lo=Math.min(...values),hi=Math.max(...values),span=Math.max(hi-lo,1);
+  const weeks=shown.flatMap(p=>p.points.map(q=>q.week)),w0=Math.min(...weeks),w1=Math.max(...weeks),wx=Math.max(w1-w0,1);
+  const x=w=>pad+(w-w0)*(width-2*pad)/wx,y=v=>height-pad-(Number(v)-lo)*(height-2*pad)/span;
+  const canvas=svg('svg',{viewBox:`0 0 ${width} ${height}`,role:'img','aria-label':`${selected?shown[0].name:'All players'} ${metric.selectedOptions[0].text} by week`});
+  canvas.append(svg('line',{x1:pad,y1:height-pad,x2:width-pad,y2:height-pad,stroke:'#9daeba'}));
+  canvas.append(svg('text',{x:8,y:pad,'font-size':12,fill:'#526576'},hi.toLocaleString()));
+  canvas.append(svg('text',{x:8,y:height-pad,'font-size':12,fill:'#526576'},lo.toLocaleString()));
+  for(let week=w0;week<=w1;week++)canvas.append(svg('text',{x:x(week),y:height-13,'text-anchor':'middle','font-size':12,fill:'#526576'},`W${week}`));
+  for(const player of shown){
+    const valid=player.points.filter(q=>q[key]!=null&&Number.isFinite(Number(q[key]))).sort((a,b)=>a.week-b.week);
+    if(!valid.length)continue;
+    const shade=color(players.findIndex(p=>p.playerId===player.playerId));
+    for(let i=1;i<valid.length;i++){
+      if(valid[i].week-valid[i-1].week!==1)continue;
+      const line=svg('line',{x1:x(valid[i-1].week),y1:y(valid[i-1][key]),x2:x(valid[i].week),y2:y(valid[i][key]),stroke:shade,'stroke-width':selected?3:2,'stroke-dasharray':valid[i].syntheticDmi||valid[i-1].syntheticDmi?'6 4':''});
+      line.append(svg('title',{},`${player.name}: week ${valid[i-1].week} ${valid[i-1][key]}, week ${valid[i].week} ${valid[i][key]}`));canvas.append(line);
+    }
+    for(const point of valid){const dot=svg('circle',{cx:x(point.week),cy:y(point[key]),r:selected?5:3.5,fill:shade});dot.append(svg('title',{},`${player.name} · week ${point.week}: ${Number(point[key]).toLocaleString()}${point.syntheticDmi&&key==='dmi'?' (illustrative)':''}`));canvas.append(dot)}
+    const item=document.createElement('span'),dot=document.createElement('i');dot.style.background=shade;item.append(dot,document.createTextNode(player.name));legend.append(item);
+  }
+  chart.append(canvas);
+}
+metric.addEventListener('change',draw);selector.addEventListener('change',draw);
+document.querySelectorAll('[data-player-id]').forEach(button=>button.addEventListener('click',()=>{selector.value=button.dataset.playerId;draw();chart.scrollIntoView({behavior:'smooth',block:'center'})}));
+draw();
+</script>
+{% endif %}
+{% endblock %}

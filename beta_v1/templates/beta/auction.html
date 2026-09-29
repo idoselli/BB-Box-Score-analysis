@@ -1,0 +1,5 @@
+{% extends 'beta/base.html' %}
+{% block title %}Auction · Beta{% endblock %}
+{% block content %}<section class="card"><h1>Current auction</h1><p>Price {{ auction.currentPrice }} · ends {{ auction.endsAt }} · {{ 'Open' if auction.isOpen else 'Closed' }}</p>
+{% if auction.skills %}<h2>Visible skills</h2><p class="muted">Available until {{ auction.skillsVisibleUntil }}</p><div class="grid">{% for key,value in auction.skills.items() %}<div>{{ key }}: <strong>{{ value.level if value.level is defined else value }}</strong></div>{% endfor %}</div>{% else %}<div class="warning">Skills are not visible for this auction or the reveal limit has been reached.</div>{% endif %}
+<h2>Bids</h2><div class="scroll"><table><thead><tr><th>Team</th><th>Amount</th><th>Time</th></tr></thead><tbody>{% for bid in auction.bids %}<tr><td>{{ bid.team.name }}</td><td>{{ bid.amount }}</td><td>{{ bid.at }}</td></tr>{% endfor %}</tbody></table></div>{% if auction.hasMoreBids %}<p>More bids exist than this account can see.</p>{% endif %}</section>{% endblock %}

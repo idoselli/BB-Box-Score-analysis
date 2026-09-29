@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}BuzzerBeater Beta{% endblock %}</title>
+  <style>
+    :root{font-family:Inter,Segoe UI,Arial,sans-serif;color:#17212b;background:#eef2f6}
+    *{box-sizing:border-box}body{margin:0}header{background:#10283d;color:white;padding:1rem max(1rem,calc((100vw - 1100px)/2))}
+    header strong{font-size:1.15rem}nav{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.75rem}nav a{color:#d6e8f5;text-decoration:none}nav a:hover{text-decoration:underline}
+    main{max-width:1100px;margin:1.5rem auto;padding:0 1rem 3rem}.card{background:#fff;border:1px solid #d9e1e8;border-radius:12px;padding:1.25rem;margin-bottom:1rem;box-shadow:0 2px 8px #142b3b0d}
+    h1,h2,h3{margin:.1rem 0 .8rem}p{line-height:1.48}.muted{color:#526576}.warning{background:#fff1d5;border:1px solid #e6bd64;padding:.8rem 1rem;border-radius:8px;margin:1rem 0}.error{background:#ffe5e5;border:1px solid #dc8f8f;padding:.8rem 1rem;border-radius:8px;margin:1rem 0}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem}.stack{display:grid;gap:.75rem}.row{display:flex;gap:.7rem;flex-wrap:wrap;align-items:end}
+    label{display:grid;gap:.3rem;font-weight:600}input,select,textarea{font:inherit;border:1px solid #9daeba;border-radius:7px;padding:.55rem;min-width:0}textarea{width:100%;min-height:6rem}
+    button,.button{font:inherit;display:inline-block;padding:.58rem .85rem;border:0;border-radius:7px;background:#14699b;color:#fff;text-decoration:none;cursor:pointer}button:hover,.button:hover{background:#0c547f}.secondary{background:#e5edf2;color:#19394d}.secondary:hover{background:#cfdee7}
+    table{border-collapse:collapse;width:100%;font-size:.92rem}th,td{padding:.55rem;border-bottom:1px solid #e1e8ee;text-align:left;vertical-align:top}th{background:#f0f5f8}.scroll{overflow-x:auto}.badge{display:inline-block;padding:.2rem .45rem;background:#e8f2f8;border-radius:5px;font-size:.82rem}
+    code{overflow-wrap:anywhere}details{margin:.5rem 0}summary{cursor:pointer;font-weight:600}
+  </style>
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <header><strong>BuzzerBeater · New-world beta</strong><nav>
+    <a href="{{ url_for('beta_v1.home') }}">Beta home</a>
+    <a href="{{ url_for('beta_v1.tracker_page') }}">U21 tracker</a>
+    <a href="{{ url_for('beta_v1.multi_match_page') }}">Multi match</a>
+    <a href="{{ url_for('beta_v1.training_page') }}">National & training</a>
+    <a href="{{ url_for('beta_v1.market_page') }}">Market</a>
+    <a href="/">Current tool</a>
+  </nav></header>
+  <main>{% block content %}{% endblock %}</main>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{% extends 'beta/base.html' %}
+{% block title %}Beta · BuzzerBeater{% endblock %}
+{% block content %}
+<section class="card"><h1>Explore the new BuzzerBeater world</h1>
+<p>This section uses the new JSON API and new-world IDs. Your current box-score tool and its history remain at <a href="/">the original home page</a>.</p>
+<div class="warning">The public U21 and market archives currently show simulated demo records. Their scheduled collectors are paused. Live searches and reports use your own signed-in API access.</div>
+{% if connected %}<p class="badge">Signed in as {{ me.username }}</p>
+<form action="{{ url_for('beta_v1.oauth_logout') }}" method="post"><input type="hidden" name="csrf" value="{{ csrf|default('') }}"><button class="secondary">Disconnect beta account</button></form>
+{% else %}
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+{% if token_signin_available %}<form id="token-signin" action="{{ url_for('beta_v1.token_sign_in') }}" method="post" class="stack">
+<input type="hidden" name="login_csrf" value="{{ login_csrf }}">
+<label>Your new-world API token<input name="api_token" type="password" required autocomplete="off" spellcheck="false" placeholder="Paste your personal API token"></label>
+<p class="muted">The token is checked with BuzzerBeater and kept on the server. Your browser receives only a session cookie. Local preview sessions end after 24 hours or a server restart.</p>
+<div><button type="submit">Sign in with API token</button></div></form>
+{% else %}<div class="warning">Token sign-in requires encrypted server-side storage. Configure Redis and an encryption key on the server.</div>{% endif %}
+{% if configured %}<p>Or <a href="{{ url_for('beta_v1.oauth_start', feature='public') }}">sign in with BuzzerBeater OAuth</a>.</p>{% endif %}
+{% endif %}
+</section>
+<div class="grid">
+  <section class="card"><h2>U21 tracker</h2><p>Weekly DMI, game-shape, salary and potential trends for the selected 52 national squads.</p><a href="{{ url_for('beta_v1.tracker_page') }}">Open tracker →</a></section>
+  <section class="card"><h2>Multi match totals</h2><p>Aggregate completed matches using official box scores. Event-only analysis is unavailable in v1.</p><a href="{{ url_for('beta_v1.multi_match_page') }}">Open aggregate →</a></section>
+  <section class="card"><h2>National & training</h2><p>See your managed squads, training minutes, and recorded skill changes.</p><a href="{{ url_for('beta_v1.training_page') }}">Open training →</a></section>
+  <section class="card"><h2>Market scout</h2><p>Search current auctions by salary and inspect the beta market archive.</p><a href="{{ url_for('beta_v1.market_page') }}">Open market →</a></section>
+</div>
+<section class="card"><h2>API opportunities ahead</h2><p>The Economy scope can power cash-flow, payroll, salary-floor, arena, staff and facility planning. These are reserved for later beta pages.</p></section>
+{% endblock %}

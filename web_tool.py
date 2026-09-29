@@ -27,10 +27,12 @@ from main import get_xml_text, parse_xml
 from minutes_analyzer import minutes_bp
 from u21_tracker import u21_tracker_bp
 from u21_training import PlayerMetadata, estimate_player, target_seasons_for_player
+from beta_v1 import beta_bp
 
 app = Flask(__name__)
 app.register_blueprint(minutes_bp)
 app.register_blueprint(u21_tracker_bp)
+app.register_blueprint(beta_bp)
 
 LOCAL_NATIONAL_OPTIONS_PATH = Path(__file__).with_name("national_options.json")
 DEFAULT_CURRENT_SEASON = int(os.environ.get("CURRENT_SEASON", "73"))
@@ -49,7 +51,20 @@ def add_vercel_analytics(response):
         return response
 
     html = response.get_data(as_text=True)
+    if not request.path.startswith("/beta/") and "attachment" not in response.headers.get("Content-Disposition", "").lower():
+        theme_link = '<link rel="stylesheet" href="/static/legacy-beta-theme.css" />'
+        if re.search(r"</head\s*>", html, flags=re.IGNORECASE):
+            html = re.sub(r"</head\s*>", f"{theme_link}</head>", html, count=1, flags=re.IGNORECASE)
+        site_header = ('<header class="legacy-site-header"><div class="legacy-site-inner">'
+                       '<strong>BuzzerBeater · Current tool</strong><nav aria-label="Site navigation">'
+                       '<a href="/">Home</a><a href="/u21-tracker">U21 tracker</a>'
+                       '<a href="/u21-minutes">U21 minutes</a><a href="/nt-minutes">NT minutes</a>'
+                       '<a href="/player-minutes">Player analyzer</a><a href="/beta/">New-world beta</a>'
+                       '</nav></div></header>')
+        if re.search(r"<body(?:\s[^>]*)?>", html, flags=re.IGNORECASE):
+            html = re.sub(r"(<body(?:\s[^>]*)?>)", lambda match: match.group(1) + site_header, html, count=1, flags=re.IGNORECASE)
     if "/_vercel/insights/script.js" in html:
+        response.set_data(html)
         return response
 
     analytics_html = f"\n{VERCEL_ANALYTICS_HTML}\n"
@@ -320,6 +335,8 @@ FORM_HTML = """<!doctype html>
         <a href="/player-minutes">Player Analyzer</a>
         ·
         <a href="/u21-tracker">U21 Tracker</a>
+        ·
+        <a href="/beta/">Beta</a>
       </div>
       <form method="post" action="/report">
         <input type="hidden" name="mode" id="modeInput" value="{{ mode }}" />

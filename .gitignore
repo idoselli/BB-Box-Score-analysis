@@ -7,3 +7,7 @@ matches/
 *.pyc
 reports/
 *.log
+# Keep locally collected beta snapshots out of public Git until publication is enabled.
+data/v1/u21-tracker/s*/
+data/v1/u21-tracker/team-map.json
+data/v1/market/players.json

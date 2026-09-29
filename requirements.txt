@@ -3,3 +3,5 @@ requests
 tabulate
 Pillow
 gunicorn
+redis>=5,<7
+cryptography>=43

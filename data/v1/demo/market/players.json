@@ -1,0 +1,319 @@
+{
+  "world": "v1-demo",
+  "demo": true,
+  "players": {
+    "6e1215b1-3005-5dde-b988-88fef1c72b95": {
+      "playerId": "6e1215b1-3005-5dde-b988-88fef1c72b95",
+      "name": "Alex Silva",
+      "countryId": "DEMO",
+      "age": 20,
+      "position": "PointGuard",
+      "salary": 400000,
+      "dmi": 1100000,
+      "potential": 5,
+      "auctionId": "0082fedc-1dfd-5f8a-951f-81ba4bf26f3b",
+      "currentPrice": 600000,
+      "observedAt": "2026-09-29T12:00:00Z",
+      "skillsVisibleUntil": "2026-10-06T12:00:00Z",
+      "lastKnownSkills": {
+        "jumpShot": {
+          "level": 12,
+          "change": "Unchanged"
+        },
+        "outsideDefense": {
+          "level": 10,
+          "change": "Unchanged"
+        }
+      }
+    },
+    "56a3072e-8852-56df-92d3-b8ce0090471a": {
+      "playerId": "56a3072e-8852-56df-92d3-b8ce0090471a",
+      "name": "Ben Keller",
+      "countryId": "DEMO",
+      "age": 21,
+      "position": "ShootingGuard",
+      "salary": 379000,
+      "dmi": 1046000,
+      "potential": 6,
+      "auctionId": "a19d7ddf-6852-594f-97cc-53881d25c1dd",
+      "currentPrice": 575000,
+      "observedAt": "2026-09-29T12:00:00Z",
+      "skillsVisibleUntil": "2026-10-06T12:00:00Z",
+      "lastKnownSkills": {
+        "jumpShot": {
+          "level": 13,
+          "change": "Unchanged"
+        },
+        "outsideDefense": {
+          "level": 11,
+          "change": "Unchanged"
+        }
+      }
+    },
+    "819ef349-cfbe-51a9-87ea-5a6d0368027b": {
+      "playerId": "819ef349-cfbe-51a9-87ea-5a6d0368027b",
+      "name": "Chris Novak",
+      "countryId": "DEMO",
+      "age": 22,
+      "position": "SmallForward",
+      "salary": 358000,
+      "dmi": 992000,
+      "potential": 7,
+      "auctionId": "3ec720f2-60e9-5b10-a199-6e491066fd9b",
+      "currentPrice": 550000,
+      "observedAt": "2026-09-29T12:00:00Z",
+      "skillsVisibleUntil": "2026-10-06T12:00:00Z",
+      "lastKnownSkills": {
+        "jumpShot": {
+          "level": 14,
+          "change": "Unchanged"
+        },
+        "outsideDefense": {
+          "level": 12,
+          "change": "Unchanged"
+        }
+      }
+    },
+    "166950a5-f997-52da-a181-5882c45edd78": {
+      "playerId": "166950a5-f997-52da-a181-5882c45edd78",
+      "name": "Daniel Patel",
+      "countryId": "DEMO",
+      "age": 23,
+      "position": "PowerForward",
+      "salary": 337000,
+      "dmi": 938000,
+      "potential": 8,
+      "auctionId": "f88d0f04-3dbf-57be-914a-39591cc31e8c",
+      "currentPrice": 525000,
+      "observedAt": "2026-09-29T12:00:00Z",
+      "skillsVisibleUntil": "2026-10-06T12:00:00Z",
+      "lastKnownSkills": {
+        "jumpShot": {
+          "level": 15,
+          "change": "Unchanged"
+        },
+        "outsideDefense": {
+          "level": 13,
+          "change": "Unchanged"
+        }
+      }
+    },
+    "20332625-5eea-5449-8001-faee6e1e46ae": {
+      "playerId": "20332625-5eea-5449-8001-faee6e1e46ae",
+      "name": "Eli Brown",
+      "countryId": "DEMO",
+      "age": 24,
+      "position": "Center",
+      "salary": 316000,
+      "dmi": 884000,
+      "potential": 9,
+      "auctionId": "0df6423c-c5a6-5de5-a593-59161bc83464",
+      "currentPrice": 500000,
+      "observedAt": "2026-09-29T12:00:00Z",
+      "skillsVisibleUntil": "2026-10-06T12:00:00Z",
+      "lastKnownSkills": {
+        "jumpShot": {
+          "level": 16,
+          "change": "Unchanged"
+        },
+        "outsideDefense": {
+          "level": 14,
+          "change": "Unchanged"
+        }
+      }
+    },
+    "79f14990-60ac-5178-a5da-45c995296267": {
+      "playerId": "79f14990-60ac-5178-a5da-45c995296267",
+      "name": "Finn Rossi",
+      "countryId": "DEMO",
+      "age": 25,
+      "position": "PointGuard",
+      "salary": 295000,
+      "dmi": 830000,
+      "potential": 5,
+      "auctionId": "5eb28bdc-ab39-5956-b24a-6d891ae3ad91",
+      "currentPrice": 475000,
+      "observedAt": "2026-09-29T12:00:00Z",
+      "skillsVisibleUntil": "2026-10-06T12:00:00Z",
+      "lastKnownSkills": {
+        "jumpShot": {
+          "level": 17,
+          "change": "Unchanged"
+        },
+        "outsideDefense": {
+          "level": 15,
+          "change": "Unchanged"
+        }
+      }
+    },
+    "b1315066-b93a-508b-80fc-488915a7ad17": {
+      "playerId": "b1315066-b93a-508b-80fc-488915a7ad17",
+      "name": "Gabriel Lee",
+      "countryId": "DEMO",
+      "age": 26,
+      "position": "ShootingGuard",
+      "salary": 274000,
+      "dmi": 776000,
+      "potential": 6,
+      "auctionId": "a639852f-ab82-566c-9675-c8dad06f9897",
+      "currentPrice": 450000,
+      "observedAt": "2026-09-29T12:00:00Z",
+      "skillsVisibleUntil": "2026-10-06T12:00:00Z",
+      "lastKnownSkills": {
+        "jumpShot": {
+          "level": 12,
+          "change": "Unchanged"
+        },
+        "outsideDefense": {
+          "level": 16,
+          "change": "Unchanged"
+        }
+      }
+    },
+    "2db0ed18-3d0f-5825-b80f-bd2865483e47": {
+      "playerId": "2db0ed18-3d0f-5825-b80f-bd2865483e47",
+      "name": "Hugo Carter",
+      "countryId": "DEMO",
+      "age": 27,
+      "position": "SmallForward",
+      "salary": 253000,
+      "dmi": 722000,
+      "potential": 7,
+      "auctionId": "f9a43d9b-40d4-5e2d-95d2-f7b3b429426c",
+      "currentPrice": 425000,
+      "observedAt": "2026-09-29T12:00:00Z",
+      "skillsVisibleUntil": "2026-10-06T12:00:00Z",
+      "lastKnownSkills": {
+        "jumpShot": {
+          "level": 13,
+          "change": "Unchanged"
+        },
+        "outsideDefense": {
+          "level": 10,
+          "change": "Unchanged"
+        }
+      }
+    },
+    "05a27288-2be7-5521-bad4-0d62ebc99e13": {
+      "playerId": "05a27288-2be7-5521-bad4-0d62ebc99e13",
+      "name": "Ivan Meyer",
+      "countryId": "DEMO",
+      "age": 28,
+      "position": "PowerForward",
+      "salary": 232000,
+      "dmi": 668000,
+      "potential": 8,
+      "auctionId": "72436ae7-fe2e-5e8b-81b7-6423a67c3a91",
+      "currentPrice": 400000,
+      "observedAt": "2026-09-29T12:00:00Z",
+      "skillsVisibleUntil": "2026-10-06T12:00:00Z",
+      "lastKnownSkills": {
+        "jumpShot": {
+          "level": 14,
+          "change": "Unchanged"
+        },
+        "outsideDefense": {
+          "level": 11,
+          "change": "Unchanged"
+        }
+      }
+    },
+    "9a653653-edca-5844-8b50-503e0e35feeb": {
+      "playerId": "9a653653-edca-5844-8b50-503e0e35feeb",
+      "name": "Jonah Rivera",
+      "countryId": "DEMO",
+      "age": 29,
+      "position": "Center",
+      "salary": 211000,
+      "dmi": 614000,
+      "potential": 9,
+      "auctionId": "190efafe-63fa-5b3c-be61-507cc7e36511",
+      "currentPrice": 375000,
+      "observedAt": "2026-09-29T12:00:00Z",
+      "skillsVisibleUntil": "2026-10-06T12:00:00Z",
+      "lastKnownSkills": {
+        "jumpShot": {
+          "level": 15,
+          "change": "Unchanged"
+        },
+        "outsideDefense": {
+          "level": 12,
+          "change": "Unchanged"
+        }
+      }
+    },
+    "bf55e3ce-f2ab-5f4b-97bd-a5bb0630cfa5": {
+      "playerId": "bf55e3ce-f2ab-5f4b-97bd-a5bb0630cfa5",
+      "name": "Kai Morgan",
+      "countryId": "DEMO",
+      "age": 20,
+      "position": "PointGuard",
+      "salary": 190000,
+      "dmi": 560000,
+      "potential": 5,
+      "auctionId": "adf16562-bf9b-5e98-89b7-ff918d159a7a",
+      "currentPrice": 350000,
+      "observedAt": "2026-09-29T12:00:00Z",
+      "skillsVisibleUntil": "2026-10-06T12:00:00Z",
+      "lastKnownSkills": {
+        "jumpShot": {
+          "level": 16,
+          "change": "Unchanged"
+        },
+        "outsideDefense": {
+          "level": 13,
+          "change": "Unchanged"
+        }
+      }
+    },
+    "493b86d4-4106-5262-8ff4-278d34d482ca": {
+      "playerId": "493b86d4-4106-5262-8ff4-278d34d482ca",
+      "name": "Luca Chen",
+      "countryId": "DEMO",
+      "age": 21,
+      "position": "ShootingGuard",
+      "salary": 169000,
+      "dmi": 506000,
+      "potential": 6,
+      "auctionId": "3e90c2f8-bd53-5525-aae0-20c19e891767",
+      "currentPrice": 325000,
+      "observedAt": "2026-09-29T12:00:00Z",
+      "skillsVisibleUntil": "2026-10-06T12:00:00Z",
+      "lastKnownSkills": {
+        "jumpShot": {
+          "level": 17,
+          "change": "Unchanged"
+        },
+        "outsideDefense": {
+          "level": 14,
+          "change": "Unchanged"
+        }
+      }
+    },
+    "d3955e73-d476-511f-8d33-4b75f4a80f2e": {
+      "playerId": "d3955e73-d476-511f-8d33-4b75f4a80f2e",
+      "name": "Alex Silva",
+      "countryId": "DEMO",
+      "age": 22,
+      "position": "SmallForward",
+      "salary": 148000,
+      "dmi": 452000,
+      "potential": 7,
+      "auctionId": "61588b5a-d372-538c-818a-251015144d4d",
+      "currentPrice": 300000,
+      "observedAt": "2026-09-29T12:00:00Z",
+      "skillsVisibleUntil": "2026-10-06T12:00:00Z",
+      "lastKnownSkills": {
+        "jumpShot": {
+          "level": 12,
+          "change": "Unchanged"
+        },
+        "outsideDefense": {
+          "level": 15,
+          "change": "Unchanged"
+        }
+      }
+    }
+  },
+  "lastSuccess": null
+}

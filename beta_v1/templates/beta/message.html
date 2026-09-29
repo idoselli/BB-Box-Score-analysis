@@ -1,0 +1,5 @@
+{% extends 'beta/base.html' %}
+{% block title %}{{ title }} · Beta{% endblock %}
+{% block content %}<section class="card"><h1>{{ title }}</h1><p>{{ message }}</p>
+{% if feature %}<a class="button" href="{{ url_for('beta_v1.home') }}#token-signin">Sign in</a>{% endif %}
+</section>{% endblock %}

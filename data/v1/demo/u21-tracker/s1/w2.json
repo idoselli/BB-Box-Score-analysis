@@ -1,0 +1,6040 @@
+{
+  "world": "v1-demo",
+  "season": 1,
+  "week": 2,
+  "demo": true,
+  "countries": [
+    {
+      "name": "Andorra",
+      "countryId": "DEMO-01",
+      "teamId": "f71d599d-1aa9-54da-881e-4a59a0784134",
+      "teamName": "Andorra U21 (demo)",
+      "players": [
+        {
+          "playerId": "4c005e33-45a5-587f-9fd9-5ef7b5c17591",
+          "name": "Alex Rivera",
+          "position": "PointGuard",
+          "dmi": 65000,
+          "gameShape": 8,
+          "salary": 2750,
+          "potential": 6
+        },
+        {
+          "playerId": "22363fda-e534-5804-ba9e-17da08e6817f",
+          "name": "Ben Morgan",
+          "position": "ShootingGuard",
+          "dmi": 61500,
+          "gameShape": 7,
+          "salary": 3500,
+          "potential": 9
+        },
+        {
+          "playerId": "51aff127-0487-585c-bea7-7a7cfdbf5b2a",
+          "name": "Chris Chen",
+          "position": "SmallForward",
+          "dmi": 93000,
+          "gameShape": 6,
+          "salary": 9500,
+          "potential": 6
+        },
+        {
+          "playerId": "70592074-ac9b-52e9-9c73-ef8094258645",
+          "name": "Daniel Silva",
+          "position": "PowerForward",
+          "dmi": 16000,
+          "gameShape": 5,
+          "salary": 16500,
+          "potential": 9
+        },
+        {
+          "playerId": "f24726d1-becd-5bb3-901d-5596cb2cf24f",
+          "name": "Eli Keller",
+          "position": "Center",
+          "dmi": 36000,
+          "gameShape": 6,
+          "salary": 10250,
+          "potential": 4
+        },
+        {
+          "playerId": "5c6e6c8a-ef37-5a3a-8732-702a6360bbdd",
+          "name": "Finn Novak",
+          "position": "PointGuard",
+          "dmi": 39000,
+          "gameShape": 5,
+          "salary": 8500,
+          "potential": 8
+        },
+        {
+          "playerId": "d7715e38-e315-51f7-b1bb-18d60c5078e2",
+          "name": "Gabriel Patel",
+          "position": "ShootingGuard",
+          "dmi": 57000,
+          "gameShape": 7,
+          "salary": 20250,
+          "potential": 6
+        },
+        {
+          "playerId": "78c29e2e-6bd4-5f2c-b620-c26b51478186",
+          "name": "Hugo Brown",
+          "position": "SmallForward",
+          "dmi": 24500,
+          "gameShape": 8,
+          "salary": 20500,
+          "potential": 5
+        },
+        {
+          "playerId": "4d34ef39-152d-5250-b066-b99b815b8fb9",
+          "name": "Ivan Rossi",
+          "position": "PowerForward",
+          "dmi": 49500,
+          "gameShape": 5,
+          "salary": 11750,
+          "potential": 4
+        },
+        {
+          "playerId": "d414e545-35c4-5ac0-b011-87a4ab3cdbd2",
+          "name": "Jonah Lee",
+          "position": "Center",
+          "dmi": 64000,
+          "gameShape": 9,
+          "salary": 14000,
+          "potential": 6
+        },
+        {
+          "playerId": "e78dd04c-315c-5c43-81c7-ac6035b4e393",
+          "name": "Kai Carter",
+          "position": "PointGuard",
+          "dmi": 68000,
+          "gameShape": 5,
+          "salary": 8500,
+          "potential": 4
+        },
+        {
+          "playerId": "58a98daa-da64-56ea-85fd-7e81d721e1f6",
+          "name": "Luca Meyer",
+          "position": "ShootingGuard",
+          "dmi": 65500,
+          "gameShape": 7,
+          "salary": 13500,
+          "potential": 10
+        }
+      ]
+    },
+    {
+      "name": "Azərbaycan",
+      "countryId": "DEMO-02",
+      "teamId": "fbbb0c64-bc30-5b89-bd64-a7157589173d",
+      "teamName": "Azərbaycan U21 (demo)",
+      "players": [
+        {
+          "playerId": "452d6fca-6210-54c4-9a6d-a64baeb3fcbc",
+          "name": "Alex Morgan",
+          "position": "PointGuard",
+          "dmi": 15500,
+          "gameShape": 6,
+          "salary": 6500,
+          "potential": 9
+        },
+        {
+          "playerId": "96e14e9d-084d-5c8a-9b37-eb2fab7c763c",
+          "name": "Ben Chen",
+          "position": "ShootingGuard",
+          "dmi": 75000,
+          "gameShape": 9,
+          "salary": 12750,
+          "potential": 5
+        },
+        {
+          "playerId": "76b6b9ae-6ca7-5466-9c9d-b629a31988b5",
+          "name": "Chris Silva",
+          "position": "SmallForward",
+          "dmi": 38000,
+          "gameShape": 9,
+          "salary": 7250,
+          "potential": 4
+        },
+        {
+          "playerId": "5b231566-797a-5a88-8cfa-d57b2f493434",
+          "name": "Daniel Keller",
+          "position": "PowerForward",
+          "dmi": 51000,
+          "gameShape": 7,
+          "salary": 16250,
+          "potential": 4
+        },
+        {
+          "playerId": "51a3004a-d496-56c9-b76c-578a0e953f17",
+          "name": "Eli Novak",
+          "position": "Center",
+          "dmi": 86000,
+          "gameShape": 7,
+          "salary": 15000,
+          "potential": 8
+        },
+        {
+          "playerId": "80edfdd9-50f1-5a76-9f7c-4e5be1d44688",
+          "name": "Finn Patel",
+          "position": "PointGuard",
+          "dmi": 25500,
+          "gameShape": 8,
+          "salary": 15750,
+          "potential": 8
+        },
+        {
+          "playerId": "ecc2f5e8-a3ab-5606-b4b7-42941ea77679",
+          "name": "Gabriel Brown",
+          "position": "ShootingGuard",
+          "dmi": 63000,
+          "gameShape": 5,
+          "salary": 15750,
+          "potential": 6
+        },
+        {
+          "playerId": "b348490e-79c9-5894-ba62-c86c48f4965a",
+          "name": "Hugo Rossi",
+          "position": "SmallForward",
+          "dmi": 32000,
+          "gameShape": 8,
+          "salary": 19250,
+          "potential": 6
+        },
+        {
+          "playerId": "a0c9ec6e-76c9-52fc-8803-ead50c3e6567",
+          "name": "Ivan Lee",
+          "position": "PowerForward",
+          "dmi": 79000,
+          "gameShape": 7,
+          "salary": 9500,
+          "potential": 8
+        },
+        {
+          "playerId": "07c3c31c-52e0-51d0-9dde-b331595c485d",
+          "name": "Jonah Carter",
+          "position": "Center",
+          "dmi": 16500,
+          "gameShape": 6,
+          "salary": 4750,
+          "potential": 5
+        },
+        {
+          "playerId": "ed135323-9258-540f-a65b-f7a9ceb18b99",
+          "name": "Kai Meyer",
+          "position": "PointGuard",
+          "dmi": 74000,
+          "gameShape": 5,
+          "salary": 7000,
+          "potential": 5
+        },
+        {
+          "playerId": "3720bbf5-3bae-5a1e-b29e-e69389d1d958",
+          "name": "Luca Rivera",
+          "position": "ShootingGuard",
+          "dmi": 83500,
+          "gameShape": 6,
+          "salary": 18000,
+          "potential": 6
+        }
+      ]
+    },
+    {
+      "name": "Belarus",
+      "countryId": "DEMO-03",
+      "teamId": "21400038-84f3-5763-bc33-d087d9e98ed6",
+      "teamName": "Belarus U21 (demo)",
+      "players": [
+        {
+          "playerId": "386e76c6-5e03-5b3e-a46a-ef294659f799",
+          "name": "Alex Chen",
+          "position": "PointGuard",
+          "dmi": 82500,
+          "gameShape": 7,
+          "salary": 16750,
+          "potential": 10
+        },
+        {
+          "playerId": "73cc19da-916b-58ba-b2b5-09dbdd2f452c",
+          "name": "Ben Silva",
+          "position": "ShootingGuard",
+          "dmi": 70500,
+          "gameShape": 8,
+          "salary": 12250,
+          "potential": 10
+        },
+        {
+          "playerId": "38ca8a3f-8d5e-581e-a55a-b8f9e25c1fdb",
+          "name": "Chris Keller",
+          "position": "SmallForward",
+          "dmi": 42500,
+          "gameShape": 8,
+          "salary": 15000,
+          "potential": 4
+        },
+        {
+          "playerId": "8400aec9-d00c-539d-b812-ef9f99581f04",
+          "name": "Daniel Novak",
+          "position": "PowerForward",
+          "dmi": 55000,
+          "gameShape": 7,
+          "salary": 11000,
+          "potential": 8
+        },
+        {
+          "playerId": "8425af25-f3d2-5f77-a2d4-a419647596c6",
+          "name": "Eli Patel",
+          "position": "Center",
+          "dmi": 13500,
+          "gameShape": 8,
+          "salary": 17250,
+          "potential": 4
+        },
+        {
+          "playerId": "f9e6d543-8f5d-5290-bca6-c8c706363fc5",
+          "name": "Finn Brown",
+          "position": "PointGuard",
+          "dmi": 83500,
+          "gameShape": 9,
+          "salary": 5000,
+          "potential": 5
+        },
+        {
+          "playerId": "35f0d991-b854-51ba-a727-9fece73c6375",
+          "name": "Gabriel Rossi",
+          "position": "ShootingGuard",
+          "dmi": 53000,
+          "gameShape": 5,
+          "salary": 6000,
+          "potential": 4
+        },
+        {
+          "playerId": "1e0c4dc4-7b3d-53bc-991e-fa9e454902a6",
+          "name": "Hugo Lee",
+          "position": "SmallForward",
+          "dmi": 8500,
+          "gameShape": 9,
+          "salary": 3250,
+          "potential": 10
+        },
+        {
+          "playerId": "421faf44-9ae6-5aa1-8457-e08aaffc41a4",
+          "name": "Ivan Carter",
+          "position": "PowerForward",
+          "dmi": 53500,
+          "gameShape": 6,
+          "salary": 14750,
+          "potential": 10
+        },
+        {
+          "playerId": "bb63dff8-a4d7-57f5-9333-589e868d2bcd",
+          "name": "Jonah Meyer",
+          "position": "Center",
+          "dmi": 67000,
+          "gameShape": 9,
+          "salary": 7500,
+          "potential": 7
+        },
+        {
+          "playerId": "fd40719a-46a9-5588-8c88-635b7566b22a",
+          "name": "Kai Rivera",
+          "position": "PointGuard",
+          "dmi": 13500,
+          "gameShape": 8,
+          "salary": 9750,
+          "potential": 9
+        },
+        {
+          "playerId": "a137652c-690a-523d-b902-59749b21b36a",
+          "name": "Luca Morgan",
+          "position": "ShootingGuard",
+          "dmi": 55000,
+          "gameShape": 8,
+          "salary": 13500,
+          "potential": 6
+        }
+      ]
+    },
+    {
+      "name": "Belgium",
+      "countryId": "DEMO-04",
+      "teamId": "7413499a-77bc-5f8a-8f54-2bf453b0cb2e",
+      "teamName": "Belgium U21 (demo)",
+      "players": [
+        {
+          "playerId": "0404307d-c131-57e5-a09d-267e59f84b35",
+          "name": "Alex Silva",
+          "position": "PointGuard",
+          "dmi": 47000,
+          "gameShape": 6,
+          "salary": 17000,
+          "potential": 10
+        },
+        {
+          "playerId": "7eefcaeb-4a23-5e7d-a075-a6bfe31983a1",
+          "name": "Ben Keller",
+          "position": "ShootingGuard",
+          "dmi": 61500,
+          "gameShape": 8,
+          "salary": 12500,
+          "potential": 8
+        },
+        {
+          "playerId": "1fef3fe7-e104-57d4-a49f-a5cc7672b091",
+          "name": "Chris Novak",
+          "position": "SmallForward",
+          "dmi": 9500,
+          "gameShape": 9,
+          "salary": 14750,
+          "potential": 6
+        },
+        {
+          "playerId": "a818efeb-22c5-5f17-b28b-dabc6c4f7f47",
+          "name": "Daniel Patel",
+          "position": "PowerForward",
+          "dmi": 88500,
+          "gameShape": 6,
+          "salary": 2250,
+          "potential": 9
+        },
+        {
+          "playerId": "023e62b3-e182-5a58-8447-7e0276133e02",
+          "name": "Eli Brown",
+          "position": "Center",
+          "dmi": 87500,
+          "gameShape": 5,
+          "salary": 19750,
+          "potential": 6
+        },
+        {
+          "playerId": "af37c7a5-86fd-56ab-b537-88926e83a686",
+          "name": "Finn Rossi",
+          "position": "PointGuard",
+          "dmi": 36500,
+          "gameShape": 5,
+          "salary": 9750,
+          "potential": 5
+        },
+        {
+          "playerId": "ac9486e5-afd5-5288-9cf3-015bd83dae1f",
+          "name": "Gabriel Lee",
+          "position": "ShootingGuard",
+          "dmi": 76500,
+          "gameShape": 6,
+          "salary": 5000,
+          "potential": 6
+        },
+        {
+          "playerId": "26596b34-7511-5d8a-9736-e8dd9e1e7a49",
+          "name": "Hugo Carter",
+          "position": "SmallForward",
+          "dmi": 27500,
+          "gameShape": 8,
+          "salary": 20250,
+          "potential": 10
+        },
+        {
+          "playerId": "679b1547-eba6-53b7-9378-3897cb13c042",
+          "name": "Ivan Meyer",
+          "position": "PowerForward",
+          "dmi": 35500,
+          "gameShape": 6,
+          "salary": 20750,
+          "potential": 8
+        },
+        {
+          "playerId": "ecab5c58-e98e-540b-a349-3189b33dac23",
+          "name": "Jonah Rivera",
+          "position": "Center",
+          "dmi": 12500,
+          "gameShape": 9,
+          "salary": 21500,
+          "potential": 7
+        },
+        {
+          "playerId": "03da37b0-f6e6-563e-bdce-a7794bd7c0f5",
+          "name": "Kai Morgan",
+          "position": "PointGuard",
+          "dmi": 61500,
+          "gameShape": 7,
+          "salary": 9250,
+          "potential": 5
+        },
+        {
+          "playerId": "50e99f28-629a-567f-a480-436969f3e028",
+          "name": "Luca Chen",
+          "position": "ShootingGuard",
+          "dmi": 26000,
+          "gameShape": 8,
+          "salary": 2750,
+          "potential": 10
+        }
+      ]
+    },
+    {
+      "name": "Bosna i Hercegovina",
+      "countryId": "DEMO-05",
+      "teamId": "f0bfb757-d2c3-5369-b5c4-86c5dfcee612",
+      "teamName": "Bosna i Hercegovina U21 (demo)",
+      "players": [
+        {
+          "playerId": "89f3c186-0607-59e3-8d1e-dc98e1bbe760",
+          "name": "Alex Keller",
+          "position": "PointGuard",
+          "dmi": 9500,
+          "gameShape": 9,
+          "salary": 5750,
+          "potential": 6
+        },
+        {
+          "playerId": "9ca7cdce-4318-5078-8fff-5492c4cf6f72",
+          "name": "Ben Novak",
+          "position": "ShootingGuard",
+          "dmi": 82500,
+          "gameShape": 9,
+          "salary": 10500,
+          "potential": 6
+        },
+        {
+          "playerId": "70ab7fd5-59fe-52c6-b08f-ced113b38e5d",
+          "name": "Chris Patel",
+          "position": "SmallForward",
+          "dmi": 85500,
+          "gameShape": 8,
+          "salary": 10750,
+          "potential": 9
+        },
+        {
+          "playerId": "c51f456c-58dd-59f2-9dd8-9d547bc5f13a",
+          "name": "Daniel Brown",
+          "position": "PowerForward",
+          "dmi": 40000,
+          "gameShape": 8,
+          "salary": 11500,
+          "potential": 5
+        },
+        {
+          "playerId": "d39c9dc3-2c12-578f-ad26-d49a340ad6f9",
+          "name": "Eli Rossi",
+          "position": "Center",
+          "dmi": 27500,
+          "gameShape": 9,
+          "salary": 2250,
+          "potential": 9
+        },
+        {
+          "playerId": "66f3c7a7-72bd-5458-8bb6-6cd5b0360374",
+          "name": "Finn Lee",
+          "position": "PointGuard",
+          "dmi": 24500,
+          "gameShape": 9,
+          "salary": 14750,
+          "potential": 7
+        },
+        {
+          "playerId": "6523e55b-f917-5a6e-ac3e-cb008c9bfae4",
+          "name": "Gabriel Carter",
+          "position": "ShootingGuard",
+          "dmi": 14000,
+          "gameShape": 7,
+          "salary": 2000,
+          "potential": 7
+        },
+        {
+          "playerId": "ec991d28-febb-5d8c-86e5-314a33b429e5",
+          "name": "Hugo Meyer",
+          "position": "SmallForward",
+          "dmi": 71500,
+          "gameShape": 7,
+          "salary": 3250,
+          "potential": 6
+        },
+        {
+          "playerId": "46ff9498-e32a-5e8f-8704-006ffac81720",
+          "name": "Ivan Rivera",
+          "position": "PowerForward",
+          "dmi": 75000,
+          "gameShape": 5,
+          "salary": 12750,
+          "potential": 7
+        },
+        {
+          "playerId": "d01bb76d-6690-50a4-b035-034941b9f8bd",
+          "name": "Jonah Morgan",
+          "position": "Center",
+          "dmi": 36500,
+          "gameShape": 8,
+          "salary": 13750,
+          "potential": 10
+        },
+        {
+          "playerId": "b2d2d05d-06ef-5838-a42e-81714ae6c8c6",
+          "name": "Kai Chen",
+          "position": "PointGuard",
+          "dmi": 66000,
+          "gameShape": 9,
+          "salary": 2000,
+          "potential": 9
+        },
+        {
+          "playerId": "32b86b77-3dd6-53d2-b634-d1941a4eef85",
+          "name": "Luca Silva",
+          "position": "ShootingGuard",
+          "dmi": 15500,
+          "gameShape": 9,
+          "salary": 13250,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "name": "Bulgaria",
+      "countryId": "DEMO-06",
+      "teamId": "5f86f9fb-aa30-5dd9-8e32-44af715e89d8",
+      "teamName": "Bulgaria U21 (demo)",
+      "players": [
+        {
+          "playerId": "da4f836c-4632-5238-a23e-919123395a94",
+          "name": "Alex Novak",
+          "position": "PointGuard",
+          "dmi": 83000,
+          "gameShape": 6,
+          "salary": 2500,
+          "potential": 5
+        },
+        {
+          "playerId": "361acdc9-84e0-5b05-ad8c-44a91f99d8e4",
+          "name": "Ben Patel",
+          "position": "ShootingGuard",
+          "dmi": 51000,
+          "gameShape": 7,
+          "salary": 7000,
+          "potential": 10
+        },
+        {
+          "playerId": "39202dbb-06e4-58bc-83b1-70f64817a7ed",
+          "name": "Chris Brown",
+          "position": "SmallForward",
+          "dmi": 15500,
+          "gameShape": 9,
+          "salary": 6750,
+          "potential": 6
+        },
+        {
+          "playerId": "0d99bf6a-e9dd-5681-8149-75db84dd8b71",
+          "name": "Daniel Rossi",
+          "position": "PowerForward",
+          "dmi": 45000,
+          "gameShape": 9,
+          "salary": 3500,
+          "potential": 5
+        },
+        {
+          "playerId": "3a92d3ba-bb14-5a65-8bd5-5a9d8c2aa1bb",
+          "name": "Eli Lee",
+          "position": "Center",
+          "dmi": 72000,
+          "gameShape": 6,
+          "salary": 12500,
+          "potential": 8
+        },
+        {
+          "playerId": "9a32c654-9a66-5f13-8d93-995595c361a7",
+          "name": "Finn Carter",
+          "position": "PointGuard",
+          "dmi": 61000,
+          "gameShape": 8,
+          "salary": 18500,
+          "potential": 6
+        },
+        {
+          "playerId": "72f2c2eb-334d-5033-b121-30cfaa439662",
+          "name": "Gabriel Meyer",
+          "position": "ShootingGuard",
+          "dmi": 66000,
+          "gameShape": 5,
+          "salary": 6750,
+          "potential": 5
+        },
+        {
+          "playerId": "555871b4-9a89-5fd9-a8e8-aba6c1bba9b1",
+          "name": "Hugo Rivera",
+          "position": "SmallForward",
+          "dmi": 86500,
+          "gameShape": 5,
+          "salary": 13500,
+          "potential": 4
+        },
+        {
+          "playerId": "3042100d-b1a3-5c51-9172-f6f2215f6536",
+          "name": "Ivan Morgan",
+          "position": "PowerForward",
+          "dmi": 45500,
+          "gameShape": 8,
+          "salary": 7250,
+          "potential": 8
+        },
+        {
+          "playerId": "9d70ce91-dfff-5090-98f7-8dcf414b0e28",
+          "name": "Jonah Chen",
+          "position": "Center",
+          "dmi": 78500,
+          "gameShape": 9,
+          "salary": 16250,
+          "potential": 5
+        },
+        {
+          "playerId": "3ac78ab1-66f4-5ff3-bd48-06b7868ea714",
+          "name": "Kai Silva",
+          "position": "PointGuard",
+          "dmi": 40000,
+          "gameShape": 8,
+          "salary": 17000,
+          "potential": 9
+        },
+        {
+          "playerId": "23bb86ea-54b9-5ad2-a215-fe476c8b8444",
+          "name": "Luca Keller",
+          "position": "ShootingGuard",
+          "dmi": 51000,
+          "gameShape": 6,
+          "salary": 6500,
+          "potential": 5
+        }
+      ]
+    },
+    {
+      "name": "Ceska Rep.",
+      "countryId": "DEMO-07",
+      "teamId": "5a928535-4465-5196-8dbd-d8d63c0894b5",
+      "teamName": "Ceska Rep. U21 (demo)",
+      "players": [
+        {
+          "playerId": "24528abc-72e0-5588-9f38-07d93280e9e8",
+          "name": "Alex Patel",
+          "position": "PointGuard",
+          "dmi": 58500,
+          "gameShape": 9,
+          "salary": 6000,
+          "potential": 10
+        },
+        {
+          "playerId": "7c132b03-99c0-5b24-83b1-95b4684a7fc7",
+          "name": "Ben Brown",
+          "position": "ShootingGuard",
+          "dmi": 56500,
+          "gameShape": 9,
+          "salary": 19500,
+          "potential": 6
+        },
+        {
+          "playerId": "15e05325-a76f-5c59-98dd-4e20a892474b",
+          "name": "Chris Rossi",
+          "position": "SmallForward",
+          "dmi": 86500,
+          "gameShape": 5,
+          "salary": 9250,
+          "potential": 9
+        },
+        {
+          "playerId": "26b7ce91-9057-5193-8e45-63c50fa613e4",
+          "name": "Daniel Lee",
+          "position": "PowerForward",
+          "dmi": 28000,
+          "gameShape": 6,
+          "salary": 15750,
+          "potential": 8
+        },
+        {
+          "playerId": "9f09e506-6c11-5ac6-8655-63d03461c578",
+          "name": "Eli Carter",
+          "position": "Center",
+          "dmi": 50500,
+          "gameShape": 8,
+          "salary": 15750,
+          "potential": 9
+        },
+        {
+          "playerId": "2a319dd2-5a4e-580c-b0a1-fb72ea7bcec9",
+          "name": "Finn Meyer",
+          "position": "PointGuard",
+          "dmi": 52000,
+          "gameShape": 5,
+          "salary": 20250,
+          "potential": 4
+        },
+        {
+          "playerId": "8dbd94ae-db8f-5bc4-8a76-13c384ca5746",
+          "name": "Gabriel Rivera",
+          "position": "ShootingGuard",
+          "dmi": 31500,
+          "gameShape": 8,
+          "salary": 4750,
+          "potential": 9
+        },
+        {
+          "playerId": "74397ea4-6c99-5269-9e96-f614006b7e18",
+          "name": "Hugo Morgan",
+          "position": "SmallForward",
+          "dmi": 78000,
+          "gameShape": 6,
+          "salary": 12000,
+          "potential": 4
+        },
+        {
+          "playerId": "d38fe401-58e9-56d5-9efd-14814eef7148",
+          "name": "Ivan Chen",
+          "position": "PowerForward",
+          "dmi": 46000,
+          "gameShape": 6,
+          "salary": 21250,
+          "potential": 9
+        },
+        {
+          "playerId": "9e1e41cf-0277-51a1-a052-8cd2da3ee81e",
+          "name": "Jonah Silva",
+          "position": "Center",
+          "dmi": 50500,
+          "gameShape": 5,
+          "salary": 9250,
+          "potential": 7
+        },
+        {
+          "playerId": "e862b93e-4563-55bf-a865-2aa2d8c33c67",
+          "name": "Kai Keller",
+          "position": "PointGuard",
+          "dmi": 32000,
+          "gameShape": 6,
+          "salary": 4000,
+          "potential": 4
+        },
+        {
+          "playerId": "f4ff982d-274b-560f-af0a-fbd13792f0d2",
+          "name": "Luca Novak",
+          "position": "ShootingGuard",
+          "dmi": 86000,
+          "gameShape": 6,
+          "salary": 16500,
+          "potential": 5
+        }
+      ]
+    },
+    {
+      "name": "China",
+      "countryId": "DEMO-08",
+      "teamId": "ca3ee0cc-6bb1-55fc-9e87-074d9ff11faf",
+      "teamName": "China U21 (demo)",
+      "players": [
+        {
+          "playerId": "82545787-006d-5809-b95c-47e37465808d",
+          "name": "Alex Brown",
+          "position": "PointGuard",
+          "dmi": 19500,
+          "gameShape": 6,
+          "salary": 12250,
+          "potential": 4
+        },
+        {
+          "playerId": "753103e3-c9aa-5fc5-bea2-d1e674bc60b6",
+          "name": "Ben Rossi",
+          "position": "ShootingGuard",
+          "dmi": 45500,
+          "gameShape": 7,
+          "salary": 2750,
+          "potential": 5
+        },
+        {
+          "playerId": "21535813-b11c-5554-b942-5c7e178212f2",
+          "name": "Chris Lee",
+          "position": "SmallForward",
+          "dmi": 56500,
+          "gameShape": 6,
+          "salary": 18750,
+          "potential": 4
+        },
+        {
+          "playerId": "e7ecee0f-5d82-57cb-89b6-afa2c6bd6875",
+          "name": "Daniel Carter",
+          "position": "PowerForward",
+          "dmi": 58000,
+          "gameShape": 7,
+          "salary": 4750,
+          "potential": 9
+        },
+        {
+          "playerId": "fffcf753-8dea-528f-a398-3df6e38937a6",
+          "name": "Eli Meyer",
+          "position": "Center",
+          "dmi": 34500,
+          "gameShape": 7,
+          "salary": 7750,
+          "potential": 4
+        },
+        {
+          "playerId": "25f8ee72-4d94-54ef-9aeb-036e850a003a",
+          "name": "Finn Rivera",
+          "position": "PointGuard",
+          "dmi": 67500,
+          "gameShape": 7,
+          "salary": 6000,
+          "potential": 7
+        },
+        {
+          "playerId": "06b517d4-679e-585d-adac-8d5362277d87",
+          "name": "Gabriel Morgan",
+          "position": "ShootingGuard",
+          "dmi": 10000,
+          "gameShape": 6,
+          "salary": 20500,
+          "potential": 9
+        },
+        {
+          "playerId": "d475ed25-bfa0-5c7b-ae1f-b2c4d314a513",
+          "name": "Hugo Chen",
+          "position": "SmallForward",
+          "dmi": 82000,
+          "gameShape": 5,
+          "salary": 17750,
+          "potential": 5
+        },
+        {
+          "playerId": "25a8b783-fd5b-565f-b64e-e84ac500b6c2",
+          "name": "Ivan Silva",
+          "position": "PowerForward",
+          "dmi": 54000,
+          "gameShape": 9,
+          "salary": 12000,
+          "potential": 4
+        },
+        {
+          "playerId": "fa964f0f-d4a5-5548-85a5-263c485a73d9",
+          "name": "Jonah Keller",
+          "position": "Center",
+          "dmi": 62000,
+          "gameShape": 5,
+          "salary": 9500,
+          "potential": 4
+        },
+        {
+          "playerId": "cfc106fc-3ad7-5121-90d0-fafdc31d6df0",
+          "name": "Kai Novak",
+          "position": "PointGuard",
+          "dmi": 66500,
+          "gameShape": 8,
+          "salary": 2000,
+          "potential": 8
+        },
+        {
+          "playerId": "6ac2cd1c-d6c8-5c60-a731-5b804657330b",
+          "name": "Luca Patel",
+          "position": "ShootingGuard",
+          "dmi": 15000,
+          "gameShape": 7,
+          "salary": 5000,
+          "potential": 4
+        }
+      ]
+    },
+    {
+      "name": "Crna Gora",
+      "countryId": "DEMO-09",
+      "teamId": "c40b671d-a848-5055-b146-579f18f65fa9",
+      "teamName": "Crna Gora U21 (demo)",
+      "players": [
+        {
+          "playerId": "8d4f124b-872b-52f4-9e14-1b28235696f5",
+          "name": "Alex Rossi",
+          "position": "PointGuard",
+          "dmi": 59500,
+          "gameShape": 5,
+          "salary": 17000,
+          "potential": 5
+        },
+        {
+          "playerId": "aabc0fd8-a840-5f76-a8ba-6063d6e6ddff",
+          "name": "Ben Lee",
+          "position": "ShootingGuard",
+          "dmi": 51500,
+          "gameShape": 9,
+          "salary": 8000,
+          "potential": 5
+        },
+        {
+          "playerId": "ba3c107a-5f7d-59f6-891d-c70695d946de",
+          "name": "Chris Carter",
+          "position": "SmallForward",
+          "dmi": 22000,
+          "gameShape": 8,
+          "salary": 6000,
+          "potential": 6
+        },
+        {
+          "playerId": "e9ca1c34-4337-57d4-a73b-8b688f96a3af",
+          "name": "Daniel Meyer",
+          "position": "PowerForward",
+          "dmi": 33500,
+          "gameShape": 7,
+          "salary": 16750,
+          "potential": 8
+        },
+        {
+          "playerId": "8203058f-b284-51e7-a7b4-ababa0208c88",
+          "name": "Eli Rivera",
+          "position": "Center",
+          "dmi": 84500,
+          "gameShape": 7,
+          "salary": 7750,
+          "potential": 4
+        },
+        {
+          "playerId": "927e5924-4ff4-589e-91fd-e37a8b5555e6",
+          "name": "Finn Morgan",
+          "position": "PointGuard",
+          "dmi": 37000,
+          "gameShape": 6,
+          "salary": 11250,
+          "potential": 8
+        },
+        {
+          "playerId": "33dd4e08-dbef-5d28-8399-f58c35ac66ce",
+          "name": "Gabriel Chen",
+          "position": "ShootingGuard",
+          "dmi": 85500,
+          "gameShape": 9,
+          "salary": 15250,
+          "potential": 10
+        },
+        {
+          "playerId": "99a343be-e6a0-5206-9743-5faac15aa306",
+          "name": "Hugo Silva",
+          "position": "SmallForward",
+          "dmi": 68500,
+          "gameShape": 6,
+          "salary": 13750,
+          "potential": 6
+        },
+        {
+          "playerId": "48ebceb0-de12-52bc-9480-cb41c24a4164",
+          "name": "Ivan Keller",
+          "position": "PowerForward",
+          "dmi": 21000,
+          "gameShape": 5,
+          "salary": 16000,
+          "potential": 6
+        },
+        {
+          "playerId": "198cce72-712c-5eb9-b397-23ac9ae401d2",
+          "name": "Jonah Novak",
+          "position": "Center",
+          "dmi": 47000,
+          "gameShape": 6,
+          "salary": 14000,
+          "potential": 8
+        },
+        {
+          "playerId": "79434a82-fee1-51ea-a1e1-f931bed4eeaf",
+          "name": "Kai Patel",
+          "position": "PointGuard",
+          "dmi": 54000,
+          "gameShape": 9,
+          "salary": 14500,
+          "potential": 9
+        },
+        {
+          "playerId": "528aecc9-0911-5d27-b8a1-e48aa103d803",
+          "name": "Luca Brown",
+          "position": "ShootingGuard",
+          "dmi": 14000,
+          "gameShape": 7,
+          "salary": 10250,
+          "potential": 10
+        }
+      ]
+    },
+    {
+      "name": "Cymru",
+      "countryId": "DEMO-10",
+      "teamId": "1dd50810-04bd-5a0f-b3d1-dbc056538e31",
+      "teamName": "Cymru U21 (demo)",
+      "players": [
+        {
+          "playerId": "960e5615-4dee-5ed8-9768-8c8256e106ea",
+          "name": "Alex Lee",
+          "position": "PointGuard",
+          "dmi": 94500,
+          "gameShape": 6,
+          "salary": 5500,
+          "potential": 5
+        },
+        {
+          "playerId": "964b4383-1268-5f5e-9cec-131df3c343a8",
+          "name": "Ben Carter",
+          "position": "ShootingGuard",
+          "dmi": 15500,
+          "gameShape": 6,
+          "salary": 18000,
+          "potential": 5
+        },
+        {
+          "playerId": "041af8b6-f701-5d68-bcb0-6c242d064144",
+          "name": "Chris Meyer",
+          "position": "SmallForward",
+          "dmi": 79000,
+          "gameShape": 6,
+          "salary": 4250,
+          "potential": 5
+        },
+        {
+          "playerId": "bebf5e06-26cb-5518-931d-5e644b78a963",
+          "name": "Daniel Rivera",
+          "position": "PowerForward",
+          "dmi": 86000,
+          "gameShape": 6,
+          "salary": 11250,
+          "potential": 4
+        },
+        {
+          "playerId": "2a9d957e-e170-5fc6-8bc5-edd0a72753a3",
+          "name": "Eli Morgan",
+          "position": "Center",
+          "dmi": 11000,
+          "gameShape": 9,
+          "salary": 20750,
+          "potential": 10
+        },
+        {
+          "playerId": "30e77952-677a-506c-a693-0bf8db1af000",
+          "name": "Finn Chen",
+          "position": "PointGuard",
+          "dmi": 84500,
+          "gameShape": 9,
+          "salary": 7000,
+          "potential": 10
+        },
+        {
+          "playerId": "f039e892-025a-5007-90e9-1e7c02b84d7c",
+          "name": "Gabriel Silva",
+          "position": "ShootingGuard",
+          "dmi": 61000,
+          "gameShape": 8,
+          "salary": 3000,
+          "potential": 8
+        },
+        {
+          "playerId": "3f3dabce-4c39-5134-b034-c9dfeed76f71",
+          "name": "Hugo Keller",
+          "position": "SmallForward",
+          "dmi": 70500,
+          "gameShape": 6,
+          "salary": 10000,
+          "potential": 7
+        },
+        {
+          "playerId": "40dca4fa-b5ec-5b9b-bbf8-9d9b16ef5c2c",
+          "name": "Ivan Novak",
+          "position": "PowerForward",
+          "dmi": 59000,
+          "gameShape": 8,
+          "salary": 15750,
+          "potential": 8
+        },
+        {
+          "playerId": "45c2284b-bc83-51c4-b233-9bb105026802",
+          "name": "Jonah Patel",
+          "position": "Center",
+          "dmi": 17500,
+          "gameShape": 7,
+          "salary": 18000,
+          "potential": 4
+        },
+        {
+          "playerId": "8674a84c-09ef-5c2b-9e36-2683ba4127c1",
+          "name": "Kai Brown",
+          "position": "PointGuard",
+          "dmi": 67000,
+          "gameShape": 7,
+          "salary": 17750,
+          "potential": 9
+        },
+        {
+          "playerId": "3623fb44-c1b8-5764-869b-c17f7d787076",
+          "name": "Luca Rossi",
+          "position": "ShootingGuard",
+          "dmi": 60000,
+          "gameShape": 5,
+          "salary": 12750,
+          "potential": 4
+        }
+      ]
+    },
+    {
+      "name": "Cyprus",
+      "countryId": "DEMO-11",
+      "teamId": "150571ab-a94d-5494-b43f-06d0b84b78e4",
+      "teamName": "Cyprus U21 (demo)",
+      "players": [
+        {
+          "playerId": "60a6f03f-793d-512a-b616-a0a71eed7baa",
+          "name": "Alex Carter",
+          "position": "PointGuard",
+          "dmi": 87000,
+          "gameShape": 5,
+          "salary": 3000,
+          "potential": 9
+        },
+        {
+          "playerId": "74b87047-5dfd-57b7-9ca9-5c205332e084",
+          "name": "Ben Meyer",
+          "position": "ShootingGuard",
+          "dmi": 29000,
+          "gameShape": 9,
+          "salary": 18750,
+          "potential": 4
+        },
+        {
+          "playerId": "ef632989-b911-55da-bf18-69e755e8aaca",
+          "name": "Chris Rivera",
+          "position": "SmallForward",
+          "dmi": 44500,
+          "gameShape": 9,
+          "salary": 6000,
+          "potential": 4
+        },
+        {
+          "playerId": "5dbe993f-ccb0-5121-8e93-657f6c3a6a48",
+          "name": "Daniel Morgan",
+          "position": "PowerForward",
+          "dmi": 20500,
+          "gameShape": 9,
+          "salary": 19500,
+          "potential": 5
+        },
+        {
+          "playerId": "aa6b3b46-d5e5-59ce-b548-03aba9d78d63",
+          "name": "Eli Chen",
+          "position": "Center",
+          "dmi": 53500,
+          "gameShape": 7,
+          "salary": 6500,
+          "potential": 6
+        },
+        {
+          "playerId": "c38b7922-6c34-5fb2-bedc-e6800a0fb70e",
+          "name": "Finn Silva",
+          "position": "PointGuard",
+          "dmi": 63000,
+          "gameShape": 7,
+          "salary": 14250,
+          "potential": 7
+        },
+        {
+          "playerId": "c7f9ec5b-85ef-5633-8b97-70a0678ad848",
+          "name": "Gabriel Keller",
+          "position": "ShootingGuard",
+          "dmi": 63000,
+          "gameShape": 7,
+          "salary": 6000,
+          "potential": 8
+        },
+        {
+          "playerId": "7d5f1675-b285-502a-ab56-88eec8921a57",
+          "name": "Hugo Novak",
+          "position": "SmallForward",
+          "dmi": 88500,
+          "gameShape": 6,
+          "salary": 21750,
+          "potential": 5
+        },
+        {
+          "playerId": "5fc4f2bb-5b02-55b7-b792-df6310ced940",
+          "name": "Ivan Patel",
+          "position": "PowerForward",
+          "dmi": 15500,
+          "gameShape": 8,
+          "salary": 2250,
+          "potential": 8
+        },
+        {
+          "playerId": "4947697b-e64b-5eb8-8a0c-46b12a84c4f0",
+          "name": "Jonah Brown",
+          "position": "Center",
+          "dmi": 31500,
+          "gameShape": 8,
+          "salary": 17500,
+          "potential": 9
+        },
+        {
+          "playerId": "6119bcfb-c866-5239-a54a-2b45d6ad4d2e",
+          "name": "Kai Rossi",
+          "position": "PointGuard",
+          "dmi": 69000,
+          "gameShape": 8,
+          "salary": 7500,
+          "potential": 10
+        },
+        {
+          "playerId": "40fcab92-f367-544b-a75b-317498ea206f",
+          "name": "Luca Lee",
+          "position": "ShootingGuard",
+          "dmi": 87500,
+          "gameShape": 7,
+          "salary": 20250,
+          "potential": 4
+        }
+      ]
+    },
+    {
+      "name": "Danmark",
+      "countryId": "DEMO-12",
+      "teamId": "f542982d-250f-52ef-8027-8997acae3486",
+      "teamName": "Danmark U21 (demo)",
+      "players": [
+        {
+          "playerId": "fe561e99-6770-5aa8-84fd-69a56613642e",
+          "name": "Alex Meyer",
+          "position": "PointGuard",
+          "dmi": 91000,
+          "gameShape": 6,
+          "salary": 13000,
+          "potential": 5
+        },
+        {
+          "playerId": "83dd5241-8b53-5a11-adb9-09e5557b5852",
+          "name": "Ben Rivera",
+          "position": "ShootingGuard",
+          "dmi": 62000,
+          "gameShape": 9,
+          "salary": 13000,
+          "potential": 4
+        },
+        {
+          "playerId": "bd39e048-437e-5d0b-95fe-08dc5c157c33",
+          "name": "Chris Morgan",
+          "position": "SmallForward",
+          "dmi": 66500,
+          "gameShape": 7,
+          "salary": 10750,
+          "potential": 9
+        },
+        {
+          "playerId": "41974903-a53a-5319-a650-e581450d1f06",
+          "name": "Daniel Chen",
+          "position": "PowerForward",
+          "dmi": 72500,
+          "gameShape": 6,
+          "salary": 11000,
+          "potential": 9
+        },
+        {
+          "playerId": "33b9c264-b0b7-545c-adc3-9a001e6eae7a",
+          "name": "Eli Silva",
+          "position": "Center",
+          "dmi": 25000,
+          "gameShape": 7,
+          "salary": 5000,
+          "potential": 10
+        },
+        {
+          "playerId": "5598d39c-6073-5fe2-bb62-7eaafc1bc642",
+          "name": "Finn Keller",
+          "position": "PointGuard",
+          "dmi": 63000,
+          "gameShape": 5,
+          "salary": 21750,
+          "potential": 6
+        },
+        {
+          "playerId": "c4ff4d44-da59-53ea-b7fd-2bb7131b0168",
+          "name": "Gabriel Novak",
+          "position": "ShootingGuard",
+          "dmi": 25500,
+          "gameShape": 6,
+          "salary": 21500,
+          "potential": 10
+        },
+        {
+          "playerId": "3e7bfc6d-56b2-5fc1-9543-9ddfa69a0882",
+          "name": "Hugo Patel",
+          "position": "SmallForward",
+          "dmi": 65000,
+          "gameShape": 9,
+          "salary": 17500,
+          "potential": 6
+        },
+        {
+          "playerId": "e73a273e-553e-5712-ac86-1e32767349bf",
+          "name": "Ivan Brown",
+          "position": "PowerForward",
+          "dmi": 71500,
+          "gameShape": 9,
+          "salary": 7250,
+          "potential": 7
+        },
+        {
+          "playerId": "daf21446-c614-5399-9048-fc030931f003",
+          "name": "Jonah Rossi",
+          "position": "Center",
+          "dmi": 29500,
+          "gameShape": 5,
+          "salary": 10250,
+          "potential": 8
+        },
+        {
+          "playerId": "8e2e1f6a-9ba0-5c28-90e9-aeebb84d461e",
+          "name": "Kai Lee",
+          "position": "PointGuard",
+          "dmi": 22500,
+          "gameShape": 6,
+          "salary": 12750,
+          "potential": 7
+        },
+        {
+          "playerId": "88b9737a-dd7b-5ec9-95b5-7b53e0dc7e99",
+          "name": "Luca Carter",
+          "position": "ShootingGuard",
+          "dmi": 65500,
+          "gameShape": 6,
+          "salary": 9500,
+          "potential": 6
+        }
+      ]
+    },
+    {
+      "name": "Deutschland",
+      "countryId": "DEMO-13",
+      "teamId": "648d777f-e964-5022-9b8f-8280a2ce1215",
+      "teamName": "Deutschland U21 (demo)",
+      "players": [
+        {
+          "playerId": "b7be7bac-3b6f-5b64-bdc7-d00d1826ff1a",
+          "name": "Alex Rivera",
+          "position": "PointGuard",
+          "dmi": 18500,
+          "gameShape": 9,
+          "salary": 21000,
+          "potential": 4
+        },
+        {
+          "playerId": "ae47714b-d81e-5a6a-b676-2cc21c530c45",
+          "name": "Ben Morgan",
+          "position": "ShootingGuard",
+          "dmi": 18500,
+          "gameShape": 7,
+          "salary": 17750,
+          "potential": 6
+        },
+        {
+          "playerId": "7d3c5f30-6171-5398-9ba1-bbec65b055d1",
+          "name": "Chris Chen",
+          "position": "SmallForward",
+          "dmi": 48000,
+          "gameShape": 8,
+          "salary": 9500,
+          "potential": 9
+        },
+        {
+          "playerId": "e0e609b7-b432-59f9-80e9-6f564a7a7f59",
+          "name": "Daniel Silva",
+          "position": "PowerForward",
+          "dmi": 37500,
+          "gameShape": 7,
+          "salary": 10000,
+          "potential": 4
+        },
+        {
+          "playerId": "f844f1a1-9d53-5d16-827b-44a5ecefc20e",
+          "name": "Eli Keller",
+          "position": "Center",
+          "dmi": 70000,
+          "gameShape": 7,
+          "salary": 6000,
+          "potential": 4
+        },
+        {
+          "playerId": "8149bd37-c164-5ef7-97fa-37f2e889a242",
+          "name": "Finn Novak",
+          "position": "PointGuard",
+          "dmi": 23500,
+          "gameShape": 6,
+          "salary": 20750,
+          "potential": 6
+        },
+        {
+          "playerId": "c30b282a-3151-51a8-8be2-6e7c466f86e1",
+          "name": "Gabriel Patel",
+          "position": "ShootingGuard",
+          "dmi": 26000,
+          "gameShape": 9,
+          "salary": 20750,
+          "potential": 8
+        },
+        {
+          "playerId": "a2f98b49-4ef7-5304-bd47-937c1d83e4b5",
+          "name": "Hugo Brown",
+          "position": "SmallForward",
+          "dmi": 85500,
+          "gameShape": 7,
+          "salary": 13750,
+          "potential": 7
+        },
+        {
+          "playerId": "3b4be204-de91-50ab-87a9-e10be67f3cf0",
+          "name": "Ivan Rossi",
+          "position": "PowerForward",
+          "dmi": 83000,
+          "gameShape": 7,
+          "salary": 19250,
+          "potential": 9
+        },
+        {
+          "playerId": "47514294-22bc-50ea-9901-b37686f9f0b3",
+          "name": "Jonah Lee",
+          "position": "Center",
+          "dmi": 83500,
+          "gameShape": 5,
+          "salary": 8750,
+          "potential": 10
+        },
+        {
+          "playerId": "05527f18-f15b-57ed-aa27-3006631a2aa9",
+          "name": "Kai Carter",
+          "position": "PointGuard",
+          "dmi": 36500,
+          "gameShape": 7,
+          "salary": 7500,
+          "potential": 6
+        },
+        {
+          "playerId": "8740c559-3806-5eb1-9824-595d2139c2e3",
+          "name": "Luca Meyer",
+          "position": "ShootingGuard",
+          "dmi": 52000,
+          "gameShape": 8,
+          "salary": 21000,
+          "potential": 6
+        }
+      ]
+    },
+    {
+      "name": "Eesti",
+      "countryId": "DEMO-14",
+      "teamId": "4f7b367f-5f61-5d0f-a7bc-5caab753e2d7",
+      "teamName": "Eesti U21 (demo)",
+      "players": [
+        {
+          "playerId": "c9435140-608c-5c26-9f5d-5d5be992c2ce",
+          "name": "Alex Morgan",
+          "position": "PointGuard",
+          "dmi": 18000,
+          "gameShape": 8,
+          "salary": 21000,
+          "potential": 5
+        },
+        {
+          "playerId": "b96ccc14-b9ed-5667-9c6a-e5618171c457",
+          "name": "Ben Chen",
+          "position": "ShootingGuard",
+          "dmi": 91000,
+          "gameShape": 8,
+          "salary": 17750,
+          "potential": 6
+        },
+        {
+          "playerId": "aabbb527-e813-5869-b5fa-cc8937d687f7",
+          "name": "Chris Silva",
+          "position": "SmallForward",
+          "dmi": 70000,
+          "gameShape": 8,
+          "salary": 15750,
+          "potential": 8
+        },
+        {
+          "playerId": "d206ef8a-15e1-5253-8750-de34f3ee65e3",
+          "name": "Daniel Keller",
+          "position": "PowerForward",
+          "dmi": 22500,
+          "gameShape": 7,
+          "salary": 15500,
+          "potential": 5
+        },
+        {
+          "playerId": "6f21ec8d-e3bb-5d0b-9cd8-02bfcf20d3df",
+          "name": "Eli Novak",
+          "position": "Center",
+          "dmi": 77500,
+          "gameShape": 6,
+          "salary": 13500,
+          "potential": 5
+        },
+        {
+          "playerId": "40f49bea-2750-5dcc-be6d-6ce24d473ed0",
+          "name": "Finn Patel",
+          "position": "PointGuard",
+          "dmi": 70500,
+          "gameShape": 6,
+          "salary": 16250,
+          "potential": 10
+        },
+        {
+          "playerId": "c27e5ad6-5bf1-53ab-b370-dde43b11222e",
+          "name": "Gabriel Brown",
+          "position": "ShootingGuard",
+          "dmi": 68000,
+          "gameShape": 7,
+          "salary": 6750,
+          "potential": 5
+        },
+        {
+          "playerId": "0e3dd68a-b2a6-50e7-b942-308d1431d29b",
+          "name": "Hugo Rossi",
+          "position": "SmallForward",
+          "dmi": 37500,
+          "gameShape": 9,
+          "salary": 11500,
+          "potential": 5
+        },
+        {
+          "playerId": "fb0270f3-4024-5994-896f-809b7ed97b53",
+          "name": "Ivan Lee",
+          "position": "PowerForward",
+          "dmi": 23000,
+          "gameShape": 5,
+          "salary": 5250,
+          "potential": 8
+        },
+        {
+          "playerId": "0a8572cb-2d27-57b5-bd46-8c54d2414f00",
+          "name": "Jonah Carter",
+          "position": "Center",
+          "dmi": 93000,
+          "gameShape": 6,
+          "salary": 14750,
+          "potential": 7
+        },
+        {
+          "playerId": "e7593cb8-9d24-56b6-a1a9-3b1138aacacb",
+          "name": "Kai Meyer",
+          "position": "PointGuard",
+          "dmi": 66500,
+          "gameShape": 7,
+          "salary": 16000,
+          "potential": 9
+        },
+        {
+          "playerId": "4fbfecd7-ab77-5bcf-83ff-646c000e630d",
+          "name": "Luca Rivera",
+          "position": "ShootingGuard",
+          "dmi": 79500,
+          "gameShape": 5,
+          "salary": 12500,
+          "potential": 6
+        }
+      ]
+    },
+    {
+      "name": "England",
+      "countryId": "DEMO-15",
+      "teamId": "2b6bb762-5b46-59a7-8103-3dcdfcb321a7",
+      "teamName": "England U21 (demo)",
+      "players": [
+        {
+          "playerId": "f2204a4b-34fd-5821-9da9-91f1022b0a1c",
+          "name": "Alex Chen",
+          "position": "PointGuard",
+          "dmi": 86500,
+          "gameShape": 6,
+          "salary": 2500,
+          "potential": 5
+        },
+        {
+          "playerId": "24554e1c-b213-59ee-94c6-ff2544993724",
+          "name": "Ben Silva",
+          "position": "ShootingGuard",
+          "dmi": 81500,
+          "gameShape": 7,
+          "salary": 3000,
+          "potential": 6
+        },
+        {
+          "playerId": "1bf59b78-b582-5694-b38f-ae29e5e33621",
+          "name": "Chris Keller",
+          "position": "SmallForward",
+          "dmi": 12500,
+          "gameShape": 9,
+          "salary": 9750,
+          "potential": 8
+        },
+        {
+          "playerId": "f21fb8bc-1fde-5a7b-82c5-4eedca50ba14",
+          "name": "Daniel Novak",
+          "position": "PowerForward",
+          "dmi": 79500,
+          "gameShape": 5,
+          "salary": 19000,
+          "potential": 7
+        },
+        {
+          "playerId": "aea8510a-884a-55c3-bfc7-a822c4010fb7",
+          "name": "Eli Patel",
+          "position": "Center",
+          "dmi": 69000,
+          "gameShape": 6,
+          "salary": 4750,
+          "potential": 8
+        },
+        {
+          "playerId": "04a1f897-f43e-532e-8fe5-2dd7f61c025f",
+          "name": "Finn Brown",
+          "position": "PointGuard",
+          "dmi": 85000,
+          "gameShape": 5,
+          "salary": 10750,
+          "potential": 5
+        },
+        {
+          "playerId": "0c8c90a9-7ab9-5a9b-879c-914f68e8c9a8",
+          "name": "Gabriel Rossi",
+          "position": "ShootingGuard",
+          "dmi": 9000,
+          "gameShape": 5,
+          "salary": 16750,
+          "potential": 6
+        },
+        {
+          "playerId": "93b1d9ac-d1bc-54fa-b3ee-18beb6eb19ab",
+          "name": "Hugo Lee",
+          "position": "SmallForward",
+          "dmi": 26500,
+          "gameShape": 8,
+          "salary": 4250,
+          "potential": 4
+        },
+        {
+          "playerId": "b5bd020c-1f21-52e4-889e-1de3ad66ed9e",
+          "name": "Ivan Carter",
+          "position": "PowerForward",
+          "dmi": 45500,
+          "gameShape": 8,
+          "salary": 9000,
+          "potential": 5
+        },
+        {
+          "playerId": "256edd86-7fef-5a0b-800c-ed44b00758d1",
+          "name": "Jonah Meyer",
+          "position": "Center",
+          "dmi": 76000,
+          "gameShape": 7,
+          "salary": 7500,
+          "potential": 10
+        },
+        {
+          "playerId": "685bc5ca-2759-5704-8528-9151278ddb07",
+          "name": "Kai Rivera",
+          "position": "PointGuard",
+          "dmi": 28000,
+          "gameShape": 7,
+          "salary": 6000,
+          "potential": 9
+        },
+        {
+          "playerId": "79f0410e-876c-57b5-93fa-c4d3e9495f56",
+          "name": "Luca Morgan",
+          "position": "ShootingGuard",
+          "dmi": 87000,
+          "gameShape": 5,
+          "salary": 3750,
+          "potential": 6
+        }
+      ]
+    },
+    {
+      "name": "España",
+      "countryId": "DEMO-16",
+      "teamId": "1b18f757-27b1-57d8-a144-b70b7d108152",
+      "teamName": "España U21 (demo)",
+      "players": [
+        {
+          "playerId": "679f2918-2509-5090-a2b9-a0fbcfbdad15",
+          "name": "Alex Silva",
+          "position": "PointGuard",
+          "dmi": 57500,
+          "gameShape": 8,
+          "salary": 10250,
+          "potential": 5
+        },
+        {
+          "playerId": "bccb7612-055d-585c-a5df-f933f19457ea",
+          "name": "Ben Keller",
+          "position": "ShootingGuard",
+          "dmi": 47500,
+          "gameShape": 8,
+          "salary": 11250,
+          "potential": 5
+        },
+        {
+          "playerId": "0761a03b-5821-5ff6-96ae-bb93ab6c1549",
+          "name": "Chris Novak",
+          "position": "SmallForward",
+          "dmi": 31500,
+          "gameShape": 8,
+          "salary": 4500,
+          "potential": 9
+        },
+        {
+          "playerId": "5996a6dd-f63c-559c-a748-90523ed0bc44",
+          "name": "Daniel Patel",
+          "position": "PowerForward",
+          "dmi": 94500,
+          "gameShape": 8,
+          "salary": 13000,
+          "potential": 7
+        },
+        {
+          "playerId": "4cbc523b-3ec6-5bbc-b22b-7e201f4489ac",
+          "name": "Eli Brown",
+          "position": "Center",
+          "dmi": 64500,
+          "gameShape": 5,
+          "salary": 12250,
+          "potential": 7
+        },
+        {
+          "playerId": "550096b0-ec6e-57e9-8abe-01b7b25a6903",
+          "name": "Finn Rossi",
+          "position": "PointGuard",
+          "dmi": 12000,
+          "gameShape": 7,
+          "salary": 21750,
+          "potential": 6
+        },
+        {
+          "playerId": "fa73d414-e42a-50d1-ba4f-5b3394f17df1",
+          "name": "Gabriel Lee",
+          "position": "ShootingGuard",
+          "dmi": 78000,
+          "gameShape": 5,
+          "salary": 19750,
+          "potential": 6
+        },
+        {
+          "playerId": "62eb72d0-f2cb-5cd4-aa42-b35d1fdc4658",
+          "name": "Hugo Carter",
+          "position": "SmallForward",
+          "dmi": 83000,
+          "gameShape": 9,
+          "salary": 13250,
+          "potential": 9
+        },
+        {
+          "playerId": "e04fad85-828b-59c7-a93a-3bbcf4acfc27",
+          "name": "Ivan Meyer",
+          "position": "PowerForward",
+          "dmi": 70500,
+          "gameShape": 7,
+          "salary": 15750,
+          "potential": 5
+        },
+        {
+          "playerId": "05964393-858b-56cd-9158-58719268530b",
+          "name": "Jonah Rivera",
+          "position": "Center",
+          "dmi": 43500,
+          "gameShape": 6,
+          "salary": 9000,
+          "potential": 6
+        },
+        {
+          "playerId": "fc9da480-babd-5f8c-b7fc-69515244fd6b",
+          "name": "Kai Morgan",
+          "position": "PointGuard",
+          "dmi": 52500,
+          "gameShape": 7,
+          "salary": 5750,
+          "potential": 4
+        },
+        {
+          "playerId": "399e2e1f-14ef-557c-9ad5-1a7f59b5d3e6",
+          "name": "Luca Chen",
+          "position": "ShootingGuard",
+          "dmi": 49000,
+          "gameShape": 7,
+          "salary": 12000,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "name": "France",
+      "countryId": "DEMO-17",
+      "teamId": "348b7936-27ed-5108-a68c-72b2553adb42",
+      "teamName": "France U21 (demo)",
+      "players": [
+        {
+          "playerId": "a6dc063e-7e5d-56fe-b67c-cdc46e47b597",
+          "name": "Alex Keller",
+          "position": "PointGuard",
+          "dmi": 50500,
+          "gameShape": 6,
+          "salary": 12250,
+          "potential": 5
+        },
+        {
+          "playerId": "4773e71d-d5c1-5593-b876-348f125ee08d",
+          "name": "Ben Novak",
+          "position": "ShootingGuard",
+          "dmi": 49000,
+          "gameShape": 9,
+          "salary": 15500,
+          "potential": 5
+        },
+        {
+          "playerId": "76a3d604-4992-544b-8ffa-d0bfe5441864",
+          "name": "Chris Patel",
+          "position": "SmallForward",
+          "dmi": 22000,
+          "gameShape": 9,
+          "salary": 18500,
+          "potential": 10
+        },
+        {
+          "playerId": "e48d73a0-a2e2-5f14-9746-1dfbdaf21ff7",
+          "name": "Daniel Brown",
+          "position": "PowerForward",
+          "dmi": 13500,
+          "gameShape": 9,
+          "salary": 4000,
+          "potential": 6
+        },
+        {
+          "playerId": "38159679-de77-5576-b694-ac0d63ed4c14",
+          "name": "Eli Rossi",
+          "position": "Center",
+          "dmi": 14500,
+          "gameShape": 6,
+          "salary": 21250,
+          "potential": 7
+        },
+        {
+          "playerId": "66ced6e9-9201-5023-bb0f-f196751127bf",
+          "name": "Finn Lee",
+          "position": "PointGuard",
+          "dmi": 76500,
+          "gameShape": 9,
+          "salary": 10000,
+          "potential": 9
+        },
+        {
+          "playerId": "effa12f0-1770-53c2-a35a-5cb59ba744f7",
+          "name": "Gabriel Carter",
+          "position": "ShootingGuard",
+          "dmi": 23500,
+          "gameShape": 7,
+          "salary": 16500,
+          "potential": 5
+        },
+        {
+          "playerId": "ea44b202-6a75-5441-b071-845388d3c454",
+          "name": "Hugo Meyer",
+          "position": "SmallForward",
+          "dmi": 26500,
+          "gameShape": 7,
+          "salary": 10500,
+          "potential": 7
+        },
+        {
+          "playerId": "feab8501-76a8-5c44-949a-176c3950a368",
+          "name": "Ivan Rivera",
+          "position": "PowerForward",
+          "dmi": 40500,
+          "gameShape": 5,
+          "salary": 11750,
+          "potential": 8
+        },
+        {
+          "playerId": "66876b5c-4466-5bf2-846f-1678b96ad6fd",
+          "name": "Jonah Morgan",
+          "position": "Center",
+          "dmi": 87000,
+          "gameShape": 5,
+          "salary": 9500,
+          "potential": 4
+        },
+        {
+          "playerId": "ab165f8b-387c-549b-b7aa-fccd56005a25",
+          "name": "Kai Chen",
+          "position": "PointGuard",
+          "dmi": 42500,
+          "gameShape": 6,
+          "salary": 14500,
+          "potential": 4
+        },
+        {
+          "playerId": "4ee76c5a-b1e9-561b-8a86-96841024bfbf",
+          "name": "Luca Silva",
+          "position": "ShootingGuard",
+          "dmi": 62500,
+          "gameShape": 7,
+          "salary": 11250,
+          "potential": 5
+        }
+      ]
+    },
+    {
+      "name": "Hayastan",
+      "countryId": "DEMO-18",
+      "teamId": "80a58182-9bca-5e53-9919-aaedbec8bf77",
+      "teamName": "Hayastan U21 (demo)",
+      "players": [
+        {
+          "playerId": "8387ce05-a1f3-5fbe-90b7-3be25d276aa2",
+          "name": "Alex Novak",
+          "position": "PointGuard",
+          "dmi": 45000,
+          "gameShape": 5,
+          "salary": 11500,
+          "potential": 4
+        },
+        {
+          "playerId": "e2b3eb96-96f2-5704-bff3-de62817657f6",
+          "name": "Ben Patel",
+          "position": "ShootingGuard",
+          "dmi": 20500,
+          "gameShape": 8,
+          "salary": 2000,
+          "potential": 5
+        },
+        {
+          "playerId": "e799298e-9993-5911-b5fe-ca10df283219",
+          "name": "Chris Brown",
+          "position": "SmallForward",
+          "dmi": 24000,
+          "gameShape": 5,
+          "salary": 2000,
+          "potential": 7
+        },
+        {
+          "playerId": "ed8113c3-e263-5e07-9671-60fb3936fd0c",
+          "name": "Daniel Rossi",
+          "position": "PowerForward",
+          "dmi": 11000,
+          "gameShape": 6,
+          "salary": 11250,
+          "potential": 4
+        },
+        {
+          "playerId": "f8a9287f-b2c7-514b-8434-4cd2d5828eab",
+          "name": "Eli Lee",
+          "position": "Center",
+          "dmi": 21500,
+          "gameShape": 9,
+          "salary": 10750,
+          "potential": 6
+        },
+        {
+          "playerId": "ed2ffc5e-22f0-51a9-9510-63597cbb68c2",
+          "name": "Finn Carter",
+          "position": "PointGuard",
+          "dmi": 23000,
+          "gameShape": 8,
+          "salary": 10500,
+          "potential": 10
+        },
+        {
+          "playerId": "4cfe6a9c-5ca3-5258-b8dd-b325d1171321",
+          "name": "Gabriel Meyer",
+          "position": "ShootingGuard",
+          "dmi": 87500,
+          "gameShape": 7,
+          "salary": 5750,
+          "potential": 4
+        },
+        {
+          "playerId": "89f7cae7-acce-5ff9-a21d-e7f43b837608",
+          "name": "Hugo Rivera",
+          "position": "SmallForward",
+          "dmi": 55500,
+          "gameShape": 7,
+          "salary": 18500,
+          "potential": 4
+        },
+        {
+          "playerId": "7771d937-0504-507e-ad95-41e57403572f",
+          "name": "Ivan Morgan",
+          "position": "PowerForward",
+          "dmi": 22000,
+          "gameShape": 8,
+          "salary": 9750,
+          "potential": 4
+        },
+        {
+          "playerId": "d4f64557-86a6-5d0f-a69b-2d23828efca1",
+          "name": "Jonah Chen",
+          "position": "Center",
+          "dmi": 86500,
+          "gameShape": 9,
+          "salary": 11500,
+          "potential": 5
+        },
+        {
+          "playerId": "42d8ed77-fbef-5211-b7bf-215e65ca8a5c",
+          "name": "Kai Silva",
+          "position": "PointGuard",
+          "dmi": 10500,
+          "gameShape": 7,
+          "salary": 18750,
+          "potential": 5
+        },
+        {
+          "playerId": "e04c57ef-063e-5006-ac83-11772ae4c1dc",
+          "name": "Luca Keller",
+          "position": "ShootingGuard",
+          "dmi": 91500,
+          "gameShape": 7,
+          "salary": 10750,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "name": "Hellas",
+      "countryId": "DEMO-19",
+      "teamId": "aea7d364-3e03-5750-baaf-dcfaec0147ae",
+      "teamName": "Hellas U21 (demo)",
+      "players": [
+        {
+          "playerId": "a59abbd0-d2ac-578b-9b2b-20b95db0e1c8",
+          "name": "Alex Patel",
+          "position": "PointGuard",
+          "dmi": 70500,
+          "gameShape": 8,
+          "salary": 13000,
+          "potential": 7
+        },
+        {
+          "playerId": "97eb2249-9172-5d93-984a-76b59328c756",
+          "name": "Ben Brown",
+          "position": "ShootingGuard",
+          "dmi": 47000,
+          "gameShape": 9,
+          "salary": 9500,
+          "potential": 8
+        },
+        {
+          "playerId": "fd6e502a-a4d6-5cb9-9c61-e2fd821f1985",
+          "name": "Chris Rossi",
+          "position": "SmallForward",
+          "dmi": 33500,
+          "gameShape": 8,
+          "salary": 18000,
+          "potential": 7
+        },
+        {
+          "playerId": "ac85f5c6-504d-5e59-a6d8-133a6ff7b29e",
+          "name": "Daniel Lee",
+          "position": "PowerForward",
+          "dmi": 30000,
+          "gameShape": 9,
+          "salary": 14500,
+          "potential": 6
+        },
+        {
+          "playerId": "6af6e6bc-82f6-5d8f-82f1-8d76889948fc",
+          "name": "Eli Carter",
+          "position": "Center",
+          "dmi": 53500,
+          "gameShape": 5,
+          "salary": 11750,
+          "potential": 9
+        },
+        {
+          "playerId": "f294fe45-50a6-51ff-a1b1-01f417d68d68",
+          "name": "Finn Meyer",
+          "position": "PointGuard",
+          "dmi": 92000,
+          "gameShape": 9,
+          "salary": 4750,
+          "potential": 8
+        },
+        {
+          "playerId": "6d64441f-8d82-561f-a244-9e1c90998e59",
+          "name": "Gabriel Rivera",
+          "position": "ShootingGuard",
+          "dmi": 69000,
+          "gameShape": 6,
+          "salary": 12250,
+          "potential": 8
+        },
+        {
+          "playerId": "76f7028b-b2bd-5aa4-8dc7-0d85495f91a1",
+          "name": "Hugo Morgan",
+          "position": "SmallForward",
+          "dmi": 78000,
+          "gameShape": 8,
+          "salary": 19750,
+          "potential": 10
+        },
+        {
+          "playerId": "d192b5eb-aa8f-55b6-aa43-de3d60a945a8",
+          "name": "Ivan Chen",
+          "position": "PowerForward",
+          "dmi": 62000,
+          "gameShape": 6,
+          "salary": 14250,
+          "potential": 4
+        },
+        {
+          "playerId": "7a0efd99-5b6b-5660-bdb6-926923e620e8",
+          "name": "Jonah Silva",
+          "position": "Center",
+          "dmi": 72000,
+          "gameShape": 7,
+          "salary": 3500,
+          "potential": 9
+        },
+        {
+          "playerId": "0c98d452-e79b-5763-9218-e703a1a2b52a",
+          "name": "Kai Keller",
+          "position": "PointGuard",
+          "dmi": 61000,
+          "gameShape": 7,
+          "salary": 10750,
+          "potential": 10
+        },
+        {
+          "playerId": "53e073d4-d1c0-5855-a5b1-8ca4f036a7dc",
+          "name": "Luca Novak",
+          "position": "ShootingGuard",
+          "dmi": 39000,
+          "gameShape": 7,
+          "salary": 15250,
+          "potential": 5
+        }
+      ]
+    },
+    {
+      "name": "Hong Kong",
+      "countryId": "DEMO-20",
+      "teamId": "f594889a-f8e8-5d32-92ac-5290d1264458",
+      "teamName": "Hong Kong U21 (demo)",
+      "players": [
+        {
+          "playerId": "b2eaea49-63ac-55c9-8c0e-954b093c0d78",
+          "name": "Alex Brown",
+          "position": "PointGuard",
+          "dmi": 60500,
+          "gameShape": 8,
+          "salary": 13000,
+          "potential": 9
+        },
+        {
+          "playerId": "3fee2f54-7583-59b3-be51-c274fa3edc94",
+          "name": "Ben Rossi",
+          "position": "ShootingGuard",
+          "dmi": 50000,
+          "gameShape": 5,
+          "salary": 18500,
+          "potential": 7
+        },
+        {
+          "playerId": "8a61f219-6e9c-524d-bee7-71f8bc6442fb",
+          "name": "Chris Lee",
+          "position": "SmallForward",
+          "dmi": 37500,
+          "gameShape": 8,
+          "salary": 11750,
+          "potential": 9
+        },
+        {
+          "playerId": "30e04094-48c5-5ae7-a980-339e539afefc",
+          "name": "Daniel Carter",
+          "position": "PowerForward",
+          "dmi": 28000,
+          "gameShape": 9,
+          "salary": 12250,
+          "potential": 5
+        },
+        {
+          "playerId": "62a39952-e646-5cad-b7ce-a96ed906c815",
+          "name": "Eli Meyer",
+          "position": "Center",
+          "dmi": 19500,
+          "gameShape": 6,
+          "salary": 16500,
+          "potential": 4
+        },
+        {
+          "playerId": "74df8e25-9356-5a1c-a7a4-20e1d1dcc12f",
+          "name": "Finn Rivera",
+          "position": "PointGuard",
+          "dmi": 48000,
+          "gameShape": 8,
+          "salary": 14500,
+          "potential": 6
+        },
+        {
+          "playerId": "a08639d6-0f55-51f6-8111-680afb848719",
+          "name": "Gabriel Morgan",
+          "position": "ShootingGuard",
+          "dmi": 80500,
+          "gameShape": 8,
+          "salary": 8250,
+          "potential": 9
+        },
+        {
+          "playerId": "c9f36333-9082-51e0-8074-702eb555c9ff",
+          "name": "Hugo Chen",
+          "position": "SmallForward",
+          "dmi": 72500,
+          "gameShape": 9,
+          "salary": 13750,
+          "potential": 6
+        },
+        {
+          "playerId": "5bfe6455-7255-5964-90a0-4098b99bd6c7",
+          "name": "Ivan Silva",
+          "position": "PowerForward",
+          "dmi": 35000,
+          "gameShape": 7,
+          "salary": 7500,
+          "potential": 7
+        },
+        {
+          "playerId": "c8b7b527-603d-59e8-9091-250466d81a5c",
+          "name": "Jonah Keller",
+          "position": "Center",
+          "dmi": 54500,
+          "gameShape": 9,
+          "salary": 2250,
+          "potential": 5
+        },
+        {
+          "playerId": "4c75b7ac-9688-5124-941d-5b0b13a45211",
+          "name": "Kai Novak",
+          "position": "PointGuard",
+          "dmi": 94000,
+          "gameShape": 6,
+          "salary": 19000,
+          "potential": 6
+        },
+        {
+          "playerId": "8edd69a4-be20-54c8-ab4b-be8733ec8b55",
+          "name": "Luca Patel",
+          "position": "ShootingGuard",
+          "dmi": 16500,
+          "gameShape": 8,
+          "salary": 4500,
+          "potential": 8
+        }
+      ]
+    },
+    {
+      "name": "Hrvatska",
+      "countryId": "DEMO-21",
+      "teamId": "6f8b4ef0-b564-5598-8569-248794236ae7",
+      "teamName": "Hrvatska U21 (demo)",
+      "players": [
+        {
+          "playerId": "0e0ada58-8f40-59c1-b521-b5210f85a179",
+          "name": "Alex Rossi",
+          "position": "PointGuard",
+          "dmi": 78500,
+          "gameShape": 9,
+          "salary": 6000,
+          "potential": 8
+        },
+        {
+          "playerId": "1379c428-b513-53b8-99a0-cac36c796e01",
+          "name": "Ben Lee",
+          "position": "ShootingGuard",
+          "dmi": 35500,
+          "gameShape": 9,
+          "salary": 9000,
+          "potential": 6
+        },
+        {
+          "playerId": "edf3ce46-bd3b-5b81-92f0-096cb0aa6a1f",
+          "name": "Chris Carter",
+          "position": "SmallForward",
+          "dmi": 27500,
+          "gameShape": 7,
+          "salary": 4500,
+          "potential": 10
+        },
+        {
+          "playerId": "9da715b1-5c13-5ff9-b587-8093f9288322",
+          "name": "Daniel Meyer",
+          "position": "PowerForward",
+          "dmi": 74500,
+          "gameShape": 8,
+          "salary": 11250,
+          "potential": 9
+        },
+        {
+          "playerId": "d63d4492-e3f0-57b0-a5c8-ba15db48f8d4",
+          "name": "Eli Rivera",
+          "position": "Center",
+          "dmi": 81000,
+          "gameShape": 9,
+          "salary": 13750,
+          "potential": 5
+        },
+        {
+          "playerId": "e01b05e7-9884-57be-9187-89d7f87a2f59",
+          "name": "Finn Morgan",
+          "position": "PointGuard",
+          "dmi": 64500,
+          "gameShape": 6,
+          "salary": 7250,
+          "potential": 6
+        },
+        {
+          "playerId": "3aebd32e-512c-54e0-860b-48773ae36418",
+          "name": "Gabriel Chen",
+          "position": "ShootingGuard",
+          "dmi": 58000,
+          "gameShape": 6,
+          "salary": 13750,
+          "potential": 4
+        },
+        {
+          "playerId": "798854fd-084e-5b0b-8db1-e166cd4ef1af",
+          "name": "Hugo Silva",
+          "position": "SmallForward",
+          "dmi": 71000,
+          "gameShape": 6,
+          "salary": 16000,
+          "potential": 9
+        },
+        {
+          "playerId": "44487908-1e9f-514b-a9e3-8fb54062c472",
+          "name": "Ivan Keller",
+          "position": "PowerForward",
+          "dmi": 28500,
+          "gameShape": 8,
+          "salary": 6750,
+          "potential": 4
+        },
+        {
+          "playerId": "94818876-0430-581a-abac-df3d3a4b48e2",
+          "name": "Jonah Novak",
+          "position": "Center",
+          "dmi": 14500,
+          "gameShape": 5,
+          "salary": 17750,
+          "potential": 5
+        },
+        {
+          "playerId": "4f4822c9-027a-5f6e-a3d3-c25ed2b6aa89",
+          "name": "Kai Patel",
+          "position": "PointGuard",
+          "dmi": 44500,
+          "gameShape": 8,
+          "salary": 19000,
+          "potential": 5
+        },
+        {
+          "playerId": "32665fb1-39e4-50d7-9860-8bfc3848240e",
+          "name": "Luca Brown",
+          "position": "ShootingGuard",
+          "dmi": 17000,
+          "gameShape": 8,
+          "salary": 16250,
+          "potential": 10
+        }
+      ]
+    },
+    {
+      "name": "Ireland",
+      "countryId": "DEMO-22",
+      "teamId": "31b1fca9-5464-5a72-bb03-ea2233bbfa49",
+      "teamName": "Ireland U21 (demo)",
+      "players": [
+        {
+          "playerId": "a57d5aae-a1d9-5af3-8546-d309e776174f",
+          "name": "Alex Lee",
+          "position": "PointGuard",
+          "dmi": 51500,
+          "gameShape": 6,
+          "salary": 11000,
+          "potential": 8
+        },
+        {
+          "playerId": "bc2b2ea2-7318-5d2c-a053-c237fd0a669b",
+          "name": "Ben Carter",
+          "position": "ShootingGuard",
+          "dmi": 74500,
+          "gameShape": 6,
+          "salary": 18000,
+          "potential": 5
+        },
+        {
+          "playerId": "2998a87b-d36a-5b3d-aca4-f43d15369c91",
+          "name": "Chris Meyer",
+          "position": "SmallForward",
+          "dmi": 39000,
+          "gameShape": 7,
+          "salary": 10750,
+          "potential": 9
+        },
+        {
+          "playerId": "45509f0e-3f3f-5df3-9c44-e99e65223831",
+          "name": "Daniel Rivera",
+          "position": "PowerForward",
+          "dmi": 35500,
+          "gameShape": 7,
+          "salary": 18000,
+          "potential": 4
+        },
+        {
+          "playerId": "39184058-d7d4-5d0a-95e4-57a89b9853dc",
+          "name": "Eli Morgan",
+          "position": "Center",
+          "dmi": 57000,
+          "gameShape": 5,
+          "salary": 12000,
+          "potential": 10
+        },
+        {
+          "playerId": "304519d1-d925-5e41-a107-23c83f509391",
+          "name": "Finn Chen",
+          "position": "PointGuard",
+          "dmi": 63000,
+          "gameShape": 8,
+          "salary": 10500,
+          "potential": 9
+        },
+        {
+          "playerId": "d064dd13-27ae-50e4-9c24-69ca86861328",
+          "name": "Gabriel Silva",
+          "position": "ShootingGuard",
+          "dmi": 15000,
+          "gameShape": 9,
+          "salary": 14500,
+          "potential": 6
+        },
+        {
+          "playerId": "d084a489-5c3e-59ec-9037-7219ed3fb646",
+          "name": "Hugo Keller",
+          "position": "SmallForward",
+          "dmi": 23000,
+          "gameShape": 6,
+          "salary": 16500,
+          "potential": 5
+        },
+        {
+          "playerId": "5e39ebd2-baf4-542d-b8e4-f4f166a22d2c",
+          "name": "Ivan Novak",
+          "position": "PowerForward",
+          "dmi": 22500,
+          "gameShape": 8,
+          "salary": 21250,
+          "potential": 4
+        },
+        {
+          "playerId": "7b22ff7e-7a6e-59ce-8234-9288d462a96f",
+          "name": "Jonah Patel",
+          "position": "Center",
+          "dmi": 88500,
+          "gameShape": 6,
+          "salary": 19250,
+          "potential": 7
+        },
+        {
+          "playerId": "ba8c8b76-4bf7-5233-8b17-ba96b695adde",
+          "name": "Kai Brown",
+          "position": "PointGuard",
+          "dmi": 31000,
+          "gameShape": 9,
+          "salary": 15500,
+          "potential": 4
+        },
+        {
+          "playerId": "d4400526-c533-5023-96fd-7305ccc28454",
+          "name": "Luca Rossi",
+          "position": "ShootingGuard",
+          "dmi": 33000,
+          "gameShape": 8,
+          "salary": 7000,
+          "potential": 10
+        }
+      ]
+    },
+    {
+      "name": "Israel",
+      "countryId": "DEMO-23",
+      "teamId": "fb837404-341e-5263-9bbf-ef4d1a98993f",
+      "teamName": "Israel U21 (demo)",
+      "players": [
+        {
+          "playerId": "af04d711-7828-5b7c-bff1-f0c140dbc949",
+          "name": "Alex Carter",
+          "position": "PointGuard",
+          "dmi": 18500,
+          "gameShape": 7,
+          "salary": 17000,
+          "potential": 9
+        },
+        {
+          "playerId": "ba537c76-dc10-5540-808e-d0110c014a74",
+          "name": "Ben Meyer",
+          "position": "ShootingGuard",
+          "dmi": 23000,
+          "gameShape": 7,
+          "salary": 3500,
+          "potential": 8
+        },
+        {
+          "playerId": "be837224-3d20-58f4-acad-2777ae1cbacb",
+          "name": "Chris Rivera",
+          "position": "SmallForward",
+          "dmi": 61500,
+          "gameShape": 7,
+          "salary": 18000,
+          "potential": 4
+        },
+        {
+          "playerId": "41658a4d-768a-5043-9d39-b9b24214bcce",
+          "name": "Daniel Morgan",
+          "position": "PowerForward",
+          "dmi": 79500,
+          "gameShape": 6,
+          "salary": 16000,
+          "potential": 6
+        },
+        {
+          "playerId": "75b61af5-754b-522d-a081-33926faa7cac",
+          "name": "Eli Chen",
+          "position": "Center",
+          "dmi": 8500,
+          "gameShape": 6,
+          "salary": 15250,
+          "potential": 10
+        },
+        {
+          "playerId": "ab58909c-1b3d-5a4e-9792-50a51a657024",
+          "name": "Finn Silva",
+          "position": "PointGuard",
+          "dmi": 26000,
+          "gameShape": 7,
+          "salary": 12750,
+          "potential": 6
+        },
+        {
+          "playerId": "2175c1fc-696f-5789-9f87-40654c4605e6",
+          "name": "Gabriel Keller",
+          "position": "ShootingGuard",
+          "dmi": 61500,
+          "gameShape": 6,
+          "salary": 8750,
+          "potential": 5
+        },
+        {
+          "playerId": "580ad48e-4777-5ca9-a452-21c9c938a28d",
+          "name": "Hugo Novak",
+          "position": "SmallForward",
+          "dmi": 82000,
+          "gameShape": 8,
+          "salary": 7500,
+          "potential": 4
+        },
+        {
+          "playerId": "085f974e-8c9c-5aea-b524-eef6f902a856",
+          "name": "Ivan Patel",
+          "position": "PowerForward",
+          "dmi": 75000,
+          "gameShape": 5,
+          "salary": 7250,
+          "potential": 8
+        },
+        {
+          "playerId": "b27ea15d-6864-5173-bf1c-73cea7c444c8",
+          "name": "Jonah Brown",
+          "position": "Center",
+          "dmi": 51500,
+          "gameShape": 5,
+          "salary": 12000,
+          "potential": 6
+        },
+        {
+          "playerId": "898f98c9-944a-546e-8782-7d5ec436d7ce",
+          "name": "Kai Rossi",
+          "position": "PointGuard",
+          "dmi": 23000,
+          "gameShape": 8,
+          "salary": 7500,
+          "potential": 10
+        },
+        {
+          "playerId": "c6b7a48a-1eb4-53d5-9105-78f900928474",
+          "name": "Luca Lee",
+          "position": "ShootingGuard",
+          "dmi": 11500,
+          "gameShape": 7,
+          "salary": 15250,
+          "potential": 5
+        }
+      ]
+    },
+    {
+      "name": "Italia",
+      "countryId": "DEMO-24",
+      "teamId": "9ec25ba8-da06-501d-a195-73a9847af7e1",
+      "teamName": "Italia U21 (demo)",
+      "players": [
+        {
+          "playerId": "324e65d2-a750-529e-83c1-177ae95ea56a",
+          "name": "Alex Meyer",
+          "position": "PointGuard",
+          "dmi": 19500,
+          "gameShape": 9,
+          "salary": 8000,
+          "potential": 8
+        },
+        {
+          "playerId": "38e57097-ab05-5866-af59-70f77a176a7d",
+          "name": "Ben Rivera",
+          "position": "ShootingGuard",
+          "dmi": 88500,
+          "gameShape": 6,
+          "salary": 6250,
+          "potential": 5
+        },
+        {
+          "playerId": "0ae3f9e9-a7bf-5175-aff0-4d6490ebc07a",
+          "name": "Chris Morgan",
+          "position": "SmallForward",
+          "dmi": 36000,
+          "gameShape": 6,
+          "salary": 8750,
+          "potential": 6
+        },
+        {
+          "playerId": "71984b5f-03fe-5423-b307-58561908cb2b",
+          "name": "Daniel Chen",
+          "position": "PowerForward",
+          "dmi": 81500,
+          "gameShape": 7,
+          "salary": 12000,
+          "potential": 8
+        },
+        {
+          "playerId": "fec4956c-6d24-5019-aa1c-e23404a3f5c0",
+          "name": "Eli Silva",
+          "position": "Center",
+          "dmi": 87500,
+          "gameShape": 5,
+          "salary": 16250,
+          "potential": 4
+        },
+        {
+          "playerId": "9235ca11-5327-56c4-b278-5fa8b3d2d16f",
+          "name": "Finn Keller",
+          "position": "PointGuard",
+          "dmi": 67000,
+          "gameShape": 8,
+          "salary": 21750,
+          "potential": 9
+        },
+        {
+          "playerId": "40b7c005-67a5-50d1-8b7c-9c0979c90de1",
+          "name": "Gabriel Novak",
+          "position": "ShootingGuard",
+          "dmi": 87500,
+          "gameShape": 9,
+          "salary": 17000,
+          "potential": 9
+        },
+        {
+          "playerId": "1d922371-d990-5f85-b333-1e00815f03eb",
+          "name": "Hugo Patel",
+          "position": "SmallForward",
+          "dmi": 75000,
+          "gameShape": 9,
+          "salary": 8000,
+          "potential": 7
+        },
+        {
+          "playerId": "34c66154-e95c-55de-9c55-d8f0e253ecc4",
+          "name": "Ivan Brown",
+          "position": "PowerForward",
+          "dmi": 23000,
+          "gameShape": 8,
+          "salary": 18250,
+          "potential": 6
+        },
+        {
+          "playerId": "e23df383-9a8d-5fbf-a050-8aa5f947bdda",
+          "name": "Jonah Rossi",
+          "position": "Center",
+          "dmi": 59000,
+          "gameShape": 6,
+          "salary": 5500,
+          "potential": 7
+        },
+        {
+          "playerId": "a13a91ee-ddbc-5640-a91c-39190ad48560",
+          "name": "Kai Lee",
+          "position": "PointGuard",
+          "dmi": 79500,
+          "gameShape": 7,
+          "salary": 19250,
+          "potential": 6
+        },
+        {
+          "playerId": "157c0c6f-db42-5ae7-91fd-1152cb3efd3e",
+          "name": "Luca Carter",
+          "position": "ShootingGuard",
+          "dmi": 36000,
+          "gameShape": 8,
+          "salary": 16250,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "name": "Latvija",
+      "countryId": "DEMO-25",
+      "teamId": "84d710fc-f8ee-5ff9-8984-b69cde41432e",
+      "teamName": "Latvija U21 (demo)",
+      "players": [
+        {
+          "playerId": "5f9efd18-0c6b-5629-bbf1-e502ec3fc52b",
+          "name": "Alex Rivera",
+          "position": "PointGuard",
+          "dmi": 71500,
+          "gameShape": 9,
+          "salary": 13000,
+          "potential": 5
+        },
+        {
+          "playerId": "60f8d5c5-8f1b-5da5-ab5b-ee2d96a48cb6",
+          "name": "Ben Morgan",
+          "position": "ShootingGuard",
+          "dmi": 17500,
+          "gameShape": 6,
+          "salary": 18000,
+          "potential": 4
+        },
+        {
+          "playerId": "956ac120-3ce0-5e22-bff0-c3b4afcc3b53",
+          "name": "Chris Chen",
+          "position": "SmallForward",
+          "dmi": 67000,
+          "gameShape": 9,
+          "salary": 14000,
+          "potential": 10
+        },
+        {
+          "playerId": "3ee9ae9d-e331-597a-bbf0-fdd8aa77355c",
+          "name": "Daniel Silva",
+          "position": "PowerForward",
+          "dmi": 25500,
+          "gameShape": 8,
+          "salary": 11250,
+          "potential": 7
+        },
+        {
+          "playerId": "b2e136bc-c2ac-5339-b355-1be270b564cd",
+          "name": "Eli Keller",
+          "position": "Center",
+          "dmi": 33500,
+          "gameShape": 5,
+          "salary": 9000,
+          "potential": 6
+        },
+        {
+          "playerId": "89e7bafb-c445-5afe-adb6-bdb016e5e657",
+          "name": "Finn Novak",
+          "position": "PointGuard",
+          "dmi": 38500,
+          "gameShape": 8,
+          "salary": 19500,
+          "potential": 8
+        },
+        {
+          "playerId": "2378c6fb-16e5-5f54-acb6-86a86dcaeb92",
+          "name": "Gabriel Patel",
+          "position": "ShootingGuard",
+          "dmi": 65500,
+          "gameShape": 6,
+          "salary": 8000,
+          "potential": 5
+        },
+        {
+          "playerId": "cf6cbd72-d7f8-5429-bad4-a6bf6317975f",
+          "name": "Hugo Brown",
+          "position": "SmallForward",
+          "dmi": 9500,
+          "gameShape": 9,
+          "salary": 2250,
+          "potential": 8
+        },
+        {
+          "playerId": "27326792-a39b-580b-b072-590822b4ac22",
+          "name": "Ivan Rossi",
+          "position": "PowerForward",
+          "dmi": 60000,
+          "gameShape": 7,
+          "salary": 6500,
+          "potential": 8
+        },
+        {
+          "playerId": "8242d1c3-d258-5752-a67c-95fe8372e32f",
+          "name": "Jonah Lee",
+          "position": "Center",
+          "dmi": 72500,
+          "gameShape": 6,
+          "salary": 11250,
+          "potential": 7
+        },
+        {
+          "playerId": "13912dd2-9948-5380-b6bb-4c429f04e61f",
+          "name": "Kai Carter",
+          "position": "PointGuard",
+          "dmi": 39500,
+          "gameShape": 9,
+          "salary": 20000,
+          "potential": 10
+        },
+        {
+          "playerId": "744ec253-62c0-5104-80e7-02268d34d283",
+          "name": "Luca Meyer",
+          "position": "ShootingGuard",
+          "dmi": 85000,
+          "gameShape": 8,
+          "salary": 17500,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "name": "Lietuva",
+      "countryId": "DEMO-26",
+      "teamId": "8e95e428-0a97-581c-830f-818bf3a9a771",
+      "teamName": "Lietuva U21 (demo)",
+      "players": [
+        {
+          "playerId": "14573178-3ece-5648-b14c-140896ddf759",
+          "name": "Alex Morgan",
+          "position": "PointGuard",
+          "dmi": 9000,
+          "gameShape": 9,
+          "salary": 9750,
+          "potential": 8
+        },
+        {
+          "playerId": "0c2470ef-ba2c-521a-9342-c912bb25993a",
+          "name": "Ben Chen",
+          "position": "ShootingGuard",
+          "dmi": 19000,
+          "gameShape": 9,
+          "salary": 20750,
+          "potential": 10
+        },
+        {
+          "playerId": "128f3080-8864-50b1-9c4c-c56da2f14ff3",
+          "name": "Chris Silva",
+          "position": "SmallForward",
+          "dmi": 20500,
+          "gameShape": 6,
+          "salary": 2500,
+          "potential": 7
+        },
+        {
+          "playerId": "f3772322-0857-5955-9625-15db27d55a55",
+          "name": "Daniel Keller",
+          "position": "PowerForward",
+          "dmi": 71500,
+          "gameShape": 9,
+          "salary": 7250,
+          "potential": 5
+        },
+        {
+          "playerId": "c9ba940c-4c4c-5442-9e5f-fc88f34f370d",
+          "name": "Eli Novak",
+          "position": "Center",
+          "dmi": 75000,
+          "gameShape": 8,
+          "salary": 4500,
+          "potential": 6
+        },
+        {
+          "playerId": "d438eef7-04be-5051-86a6-100ccb931844",
+          "name": "Finn Patel",
+          "position": "PointGuard",
+          "dmi": 81000,
+          "gameShape": 6,
+          "salary": 10000,
+          "potential": 9
+        },
+        {
+          "playerId": "f5791218-4fa7-5cbf-aed4-c1e61485dfcc",
+          "name": "Gabriel Brown",
+          "position": "ShootingGuard",
+          "dmi": 91500,
+          "gameShape": 8,
+          "salary": 6250,
+          "potential": 5
+        },
+        {
+          "playerId": "94ee318a-48ad-5f2c-971b-dd7798674817",
+          "name": "Hugo Rossi",
+          "position": "SmallForward",
+          "dmi": 25000,
+          "gameShape": 5,
+          "salary": 7000,
+          "potential": 9
+        },
+        {
+          "playerId": "5aa97b74-1c13-5b1a-90f2-daf5448fda43",
+          "name": "Ivan Lee",
+          "position": "PowerForward",
+          "dmi": 32000,
+          "gameShape": 7,
+          "salary": 21500,
+          "potential": 6
+        },
+        {
+          "playerId": "4c516665-0a4a-58b7-85ae-8520a75973d4",
+          "name": "Jonah Carter",
+          "position": "Center",
+          "dmi": 10000,
+          "gameShape": 8,
+          "salary": 2500,
+          "potential": 4
+        },
+        {
+          "playerId": "51e2af5d-12f1-5c21-ba9d-05e9bddc88a5",
+          "name": "Kai Meyer",
+          "position": "PointGuard",
+          "dmi": 28500,
+          "gameShape": 7,
+          "salary": 6000,
+          "potential": 4
+        },
+        {
+          "playerId": "ff5778ad-385a-5a90-aeb4-8be33e5b6c08",
+          "name": "Luca Rivera",
+          "position": "ShootingGuard",
+          "dmi": 89000,
+          "gameShape": 8,
+          "salary": 15000,
+          "potential": 4
+        }
+      ]
+    },
+    {
+      "name": "Luxembourg",
+      "countryId": "DEMO-27",
+      "teamId": "483c9820-eac3-576f-ba74-015d5c53f947",
+      "teamName": "Luxembourg U21 (demo)",
+      "players": [
+        {
+          "playerId": "cc1b31dc-283b-5092-988d-9bb6e1842d69",
+          "name": "Alex Chen",
+          "position": "PointGuard",
+          "dmi": 59000,
+          "gameShape": 5,
+          "salary": 21000,
+          "potential": 9
+        },
+        {
+          "playerId": "7c14fe4b-7ef7-5276-8690-f15ba9820e97",
+          "name": "Ben Silva",
+          "position": "ShootingGuard",
+          "dmi": 47000,
+          "gameShape": 5,
+          "salary": 10000,
+          "potential": 4
+        },
+        {
+          "playerId": "68a7eb44-2f21-56eb-b334-2545cdfc5b32",
+          "name": "Chris Keller",
+          "position": "SmallForward",
+          "dmi": 55000,
+          "gameShape": 6,
+          "salary": 8500,
+          "potential": 10
+        },
+        {
+          "playerId": "019138d3-e8ec-5187-9935-ce1bd6d92639",
+          "name": "Daniel Novak",
+          "position": "PowerForward",
+          "dmi": 58000,
+          "gameShape": 7,
+          "salary": 5750,
+          "potential": 9
+        },
+        {
+          "playerId": "9ca14934-ee0c-5067-a363-18653c596a77",
+          "name": "Eli Patel",
+          "position": "Center",
+          "dmi": 40000,
+          "gameShape": 9,
+          "salary": 18750,
+          "potential": 5
+        },
+        {
+          "playerId": "b24e0c92-2dea-501e-8b3f-33101566fa39",
+          "name": "Finn Brown",
+          "position": "PointGuard",
+          "dmi": 36500,
+          "gameShape": 6,
+          "salary": 8750,
+          "potential": 7
+        },
+        {
+          "playerId": "3d27bdf8-d0f4-5852-8ecd-f65d49a7c5f1",
+          "name": "Gabriel Rossi",
+          "position": "ShootingGuard",
+          "dmi": 52500,
+          "gameShape": 9,
+          "salary": 2500,
+          "potential": 8
+        },
+        {
+          "playerId": "705a60a7-75af-5fa7-b498-2baabe69abb8",
+          "name": "Hugo Lee",
+          "position": "SmallForward",
+          "dmi": 27000,
+          "gameShape": 5,
+          "salary": 6250,
+          "potential": 4
+        },
+        {
+          "playerId": "0d9a18d7-41bf-594a-b88c-0bb666bde64d",
+          "name": "Ivan Carter",
+          "position": "PowerForward",
+          "dmi": 49000,
+          "gameShape": 8,
+          "salary": 13750,
+          "potential": 4
+        },
+        {
+          "playerId": "9804d69f-a4bf-5589-a319-d06dcaaa960f",
+          "name": "Jonah Meyer",
+          "position": "Center",
+          "dmi": 30500,
+          "gameShape": 7,
+          "salary": 18750,
+          "potential": 10
+        },
+        {
+          "playerId": "52868a5a-7499-55b7-bdb6-a264d350d91b",
+          "name": "Kai Rivera",
+          "position": "PointGuard",
+          "dmi": 67000,
+          "gameShape": 9,
+          "salary": 11250,
+          "potential": 9
+        },
+        {
+          "playerId": "4ac8b873-bff8-55f8-b38d-927fa68ba4ff",
+          "name": "Luca Morgan",
+          "position": "ShootingGuard",
+          "dmi": 81500,
+          "gameShape": 7,
+          "salary": 7750,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "name": "Magyarország",
+      "countryId": "DEMO-28",
+      "teamId": "d4f27378-09d0-5f7d-a6a8-7d3e472a1027",
+      "teamName": "Magyarország U21 (demo)",
+      "players": [
+        {
+          "playerId": "6ccb7137-46f9-51d6-acbc-ee8775589c80",
+          "name": "Alex Silva",
+          "position": "PointGuard",
+          "dmi": 82000,
+          "gameShape": 8,
+          "salary": 20500,
+          "potential": 6
+        },
+        {
+          "playerId": "060c8951-2936-5ac0-9fe3-a6815e337dc0",
+          "name": "Ben Keller",
+          "position": "ShootingGuard",
+          "dmi": 71500,
+          "gameShape": 8,
+          "salary": 14250,
+          "potential": 5
+        },
+        {
+          "playerId": "ad25316d-dba2-501b-8352-02103778f29e",
+          "name": "Chris Novak",
+          "position": "SmallForward",
+          "dmi": 24000,
+          "gameShape": 5,
+          "salary": 18000,
+          "potential": 5
+        },
+        {
+          "playerId": "1246349f-3d4d-5aa6-868b-8fcb3236c060",
+          "name": "Daniel Patel",
+          "position": "PowerForward",
+          "dmi": 25500,
+          "gameShape": 8,
+          "salary": 21250,
+          "potential": 8
+        },
+        {
+          "playerId": "915b5e20-980b-582e-8db1-00f2d441d3d3",
+          "name": "Eli Brown",
+          "position": "Center",
+          "dmi": 64000,
+          "gameShape": 7,
+          "salary": 14250,
+          "potential": 9
+        },
+        {
+          "playerId": "a9e3cfe0-f762-5e58-bcb6-aa76e9cb3243",
+          "name": "Finn Rossi",
+          "position": "PointGuard",
+          "dmi": 49500,
+          "gameShape": 6,
+          "salary": 18000,
+          "potential": 10
+        },
+        {
+          "playerId": "b7e11f10-560d-59d4-b923-f13f6a397be1",
+          "name": "Gabriel Lee",
+          "position": "ShootingGuard",
+          "dmi": 49000,
+          "gameShape": 7,
+          "salary": 12500,
+          "potential": 7
+        },
+        {
+          "playerId": "beb19701-0ee6-55dd-b5d2-eb47f372d163",
+          "name": "Hugo Carter",
+          "position": "SmallForward",
+          "dmi": 15000,
+          "gameShape": 7,
+          "salary": 21000,
+          "potential": 7
+        },
+        {
+          "playerId": "7f4f049a-d485-5f87-abd9-f53b326db452",
+          "name": "Ivan Meyer",
+          "position": "PowerForward",
+          "dmi": 43500,
+          "gameShape": 6,
+          "salary": 19750,
+          "potential": 5
+        },
+        {
+          "playerId": "58ad16c1-d363-5ca9-894b-82c808222cf7",
+          "name": "Jonah Rivera",
+          "position": "Center",
+          "dmi": 88000,
+          "gameShape": 6,
+          "salary": 20250,
+          "potential": 7
+        },
+        {
+          "playerId": "0e43b67f-3bf2-5bed-b3ff-a5868a54783d",
+          "name": "Kai Morgan",
+          "position": "PointGuard",
+          "dmi": 31000,
+          "gameShape": 6,
+          "salary": 12250,
+          "potential": 8
+        },
+        {
+          "playerId": "3853731d-3615-5f7c-81c8-108b4fc6bf00",
+          "name": "Luca Chen",
+          "position": "ShootingGuard",
+          "dmi": 38500,
+          "gameShape": 9,
+          "salary": 17750,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "name": "Makedonija",
+      "countryId": "DEMO-29",
+      "teamId": "b8b56f7b-0316-5669-80f3-2b4283953704",
+      "teamName": "Makedonija U21 (demo)",
+      "players": [
+        {
+          "playerId": "e2001121-5f93-57f1-a6a5-ffe8f7399567",
+          "name": "Alex Keller",
+          "position": "PointGuard",
+          "dmi": 12000,
+          "gameShape": 8,
+          "salary": 15000,
+          "potential": 8
+        },
+        {
+          "playerId": "43b16c6b-8b9a-5b97-9d1c-3b8f3e188f3c",
+          "name": "Ben Novak",
+          "position": "ShootingGuard",
+          "dmi": 50000,
+          "gameShape": 9,
+          "salary": 6250,
+          "potential": 7
+        },
+        {
+          "playerId": "41c9f530-d2d0-5316-b000-7cfc2d3295bb",
+          "name": "Chris Patel",
+          "position": "SmallForward",
+          "dmi": 16000,
+          "gameShape": 8,
+          "salary": 12500,
+          "potential": 4
+        },
+        {
+          "playerId": "74e7794a-ab83-5a23-832c-5018785ed531",
+          "name": "Daniel Brown",
+          "position": "PowerForward",
+          "dmi": 61500,
+          "gameShape": 9,
+          "salary": 4250,
+          "potential": 9
+        },
+        {
+          "playerId": "c51588b1-d580-558d-98af-217a246d4152",
+          "name": "Eli Rossi",
+          "position": "Center",
+          "dmi": 15000,
+          "gameShape": 5,
+          "salary": 18500,
+          "potential": 10
+        },
+        {
+          "playerId": "b5ac4ad4-db64-5f46-824c-4c34fe3db930",
+          "name": "Finn Lee",
+          "position": "PointGuard",
+          "dmi": 42500,
+          "gameShape": 5,
+          "salary": 16000,
+          "potential": 9
+        },
+        {
+          "playerId": "afd3e842-fc8b-56a8-8aa2-cc4866ba6cf8",
+          "name": "Gabriel Carter",
+          "position": "ShootingGuard",
+          "dmi": 11000,
+          "gameShape": 5,
+          "salary": 6000,
+          "potential": 10
+        },
+        {
+          "playerId": "7a2204cd-1393-50fb-9f79-1142b319b7ff",
+          "name": "Hugo Meyer",
+          "position": "SmallForward",
+          "dmi": 18500,
+          "gameShape": 5,
+          "salary": 21750,
+          "potential": 10
+        },
+        {
+          "playerId": "8f388bda-274c-58e9-8a90-67ac797a2143",
+          "name": "Ivan Rivera",
+          "position": "PowerForward",
+          "dmi": 81500,
+          "gameShape": 8,
+          "salary": 15500,
+          "potential": 8
+        },
+        {
+          "playerId": "8248e379-673d-595d-9aab-510edd677a50",
+          "name": "Jonah Morgan",
+          "position": "Center",
+          "dmi": 18500,
+          "gameShape": 5,
+          "salary": 18250,
+          "potential": 9
+        },
+        {
+          "playerId": "b3b7f4f3-cd60-5f43-9f5f-d6ddca2fe478",
+          "name": "Kai Chen",
+          "position": "PointGuard",
+          "dmi": 73000,
+          "gameShape": 5,
+          "salary": 8250,
+          "potential": 9
+        },
+        {
+          "playerId": "a1137679-71e0-568e-9a96-3ccc4c756e1e",
+          "name": "Luca Silva",
+          "position": "ShootingGuard",
+          "dmi": 91000,
+          "gameShape": 7,
+          "salary": 9250,
+          "potential": 5
+        }
+      ]
+    },
+    {
+      "name": "Malta",
+      "countryId": "DEMO-30",
+      "teamId": "620d4636-7707-5e48-a787-0839c8ce427a",
+      "teamName": "Malta U21 (demo)",
+      "players": [
+        {
+          "playerId": "0627bc42-5dde-5534-93a1-f618b0e4f724",
+          "name": "Alex Novak",
+          "position": "PointGuard",
+          "dmi": 48500,
+          "gameShape": 9,
+          "salary": 7750,
+          "potential": 8
+        },
+        {
+          "playerId": "2f7a22a4-9688-5358-b138-fd84e7d0fee8",
+          "name": "Ben Patel",
+          "position": "ShootingGuard",
+          "dmi": 42000,
+          "gameShape": 8,
+          "salary": 12750,
+          "potential": 5
+        },
+        {
+          "playerId": "3a15e60b-79b1-52bb-b396-6f34e64df6e7",
+          "name": "Chris Brown",
+          "position": "SmallForward",
+          "dmi": 81500,
+          "gameShape": 7,
+          "salary": 5750,
+          "potential": 6
+        },
+        {
+          "playerId": "6f43a820-d4e5-561e-8cb6-67ecdf9828ac",
+          "name": "Daniel Rossi",
+          "position": "PowerForward",
+          "dmi": 67500,
+          "gameShape": 5,
+          "salary": 17000,
+          "potential": 9
+        },
+        {
+          "playerId": "3bb80fba-6614-54e3-8abb-43e438a1edd0",
+          "name": "Eli Lee",
+          "position": "Center",
+          "dmi": 29500,
+          "gameShape": 9,
+          "salary": 13500,
+          "potential": 6
+        },
+        {
+          "playerId": "97d364f9-ff09-5b3a-bf48-2f5669fb3fd0",
+          "name": "Finn Carter",
+          "position": "PointGuard",
+          "dmi": 81000,
+          "gameShape": 9,
+          "salary": 7750,
+          "potential": 7
+        },
+        {
+          "playerId": "2f63c0b2-3c91-5cb1-ae70-0b5bcb8c5fee",
+          "name": "Gabriel Meyer",
+          "position": "ShootingGuard",
+          "dmi": 15500,
+          "gameShape": 9,
+          "salary": 14250,
+          "potential": 9
+        },
+        {
+          "playerId": "69ef14a5-769e-5987-ac54-4fb58f5c9b4a",
+          "name": "Hugo Rivera",
+          "position": "SmallForward",
+          "dmi": 73000,
+          "gameShape": 8,
+          "salary": 3000,
+          "potential": 7
+        },
+        {
+          "playerId": "82dfcece-3df4-5f75-92a5-1347c438e767",
+          "name": "Ivan Morgan",
+          "position": "PowerForward",
+          "dmi": 12500,
+          "gameShape": 6,
+          "salary": 4000,
+          "potential": 9
+        },
+        {
+          "playerId": "e191b8af-f91a-5063-8196-1262f04eccd0",
+          "name": "Jonah Chen",
+          "position": "Center",
+          "dmi": 41000,
+          "gameShape": 7,
+          "salary": 15750,
+          "potential": 4
+        },
+        {
+          "playerId": "7a7993a2-77ac-575e-ab44-a9cafa7f93c6",
+          "name": "Kai Silva",
+          "position": "PointGuard",
+          "dmi": 68500,
+          "gameShape": 5,
+          "salary": 9250,
+          "potential": 9
+        },
+        {
+          "playerId": "466e0ee4-5cd3-56e0-888d-0739f1939080",
+          "name": "Luca Keller",
+          "position": "ShootingGuard",
+          "dmi": 56000,
+          "gameShape": 5,
+          "salary": 21250,
+          "potential": 8
+        }
+      ]
+    },
+    {
+      "name": "Moldova",
+      "countryId": "DEMO-31",
+      "teamId": "9e925fb7-0ec3-5567-85da-658dccd15234",
+      "teamName": "Moldova U21 (demo)",
+      "players": [
+        {
+          "playerId": "ccd11258-5038-5720-904c-c7c6110a5832",
+          "name": "Alex Patel",
+          "position": "PointGuard",
+          "dmi": 9000,
+          "gameShape": 5,
+          "salary": 3500,
+          "potential": 7
+        },
+        {
+          "playerId": "c1673a3c-1efa-55d8-9aca-d7c99082bb06",
+          "name": "Ben Brown",
+          "position": "ShootingGuard",
+          "dmi": 79500,
+          "gameShape": 7,
+          "salary": 13750,
+          "potential": 7
+        },
+        {
+          "playerId": "dc0e92ca-3e13-59b8-9c9a-3fbc24fd33dc",
+          "name": "Chris Rossi",
+          "position": "SmallForward",
+          "dmi": 70000,
+          "gameShape": 8,
+          "salary": 13500,
+          "potential": 4
+        },
+        {
+          "playerId": "0829b480-821c-506d-ac08-54842235b597",
+          "name": "Daniel Lee",
+          "position": "PowerForward",
+          "dmi": 53000,
+          "gameShape": 6,
+          "salary": 12000,
+          "potential": 4
+        },
+        {
+          "playerId": "afca49e4-09ae-52a3-8373-8c5b916951dc",
+          "name": "Eli Carter",
+          "position": "Center",
+          "dmi": 33500,
+          "gameShape": 9,
+          "salary": 4750,
+          "potential": 4
+        },
+        {
+          "playerId": "71366d2b-8ca9-5f8a-95bc-3aaba8985343",
+          "name": "Finn Meyer",
+          "position": "PointGuard",
+          "dmi": 83000,
+          "gameShape": 8,
+          "salary": 17500,
+          "potential": 10
+        },
+        {
+          "playerId": "ae4f226a-0bcb-5b39-80b7-ca15ba515d70",
+          "name": "Gabriel Rivera",
+          "position": "ShootingGuard",
+          "dmi": 59000,
+          "gameShape": 7,
+          "salary": 4000,
+          "potential": 9
+        },
+        {
+          "playerId": "e6d31e45-9bda-50d2-990a-00138b88d57f",
+          "name": "Hugo Morgan",
+          "position": "SmallForward",
+          "dmi": 75000,
+          "gameShape": 9,
+          "salary": 8750,
+          "potential": 9
+        },
+        {
+          "playerId": "0cd21b27-ae1e-512c-9fd6-e6c1af1cb5f5",
+          "name": "Ivan Chen",
+          "position": "PowerForward",
+          "dmi": 51000,
+          "gameShape": 5,
+          "salary": 15250,
+          "potential": 5
+        },
+        {
+          "playerId": "5f77ef86-3504-5d3c-a02c-6a8984ab9efd",
+          "name": "Jonah Silva",
+          "position": "Center",
+          "dmi": 31000,
+          "gameShape": 7,
+          "salary": 14750,
+          "potential": 4
+        },
+        {
+          "playerId": "cc407202-6fb5-5ddb-a4aa-7c611439e396",
+          "name": "Kai Keller",
+          "position": "PointGuard",
+          "dmi": 81500,
+          "gameShape": 7,
+          "salary": 6750,
+          "potential": 4
+        },
+        {
+          "playerId": "fb2deb13-087d-57ff-886b-4717906db1d8",
+          "name": "Luca Novak",
+          "position": "ShootingGuard",
+          "dmi": 20500,
+          "gameShape": 5,
+          "salary": 9250,
+          "potential": 6
+        }
+      ]
+    },
+    {
+      "name": "Nederland",
+      "countryId": "DEMO-32",
+      "teamId": "6bf1eac3-abb7-5748-a8ae-df4cea6bea44",
+      "teamName": "Nederland U21 (demo)",
+      "players": [
+        {
+          "playerId": "af28de6a-2543-58c9-b4bb-0479e47e7992",
+          "name": "Alex Brown",
+          "position": "PointGuard",
+          "dmi": 86000,
+          "gameShape": 5,
+          "salary": 8000,
+          "potential": 5
+        },
+        {
+          "playerId": "a3254455-a4bf-5fd9-af58-bd999ace536e",
+          "name": "Ben Rossi",
+          "position": "ShootingGuard",
+          "dmi": 51500,
+          "gameShape": 8,
+          "salary": 5250,
+          "potential": 8
+        },
+        {
+          "playerId": "c03e4013-c977-5132-bf3e-aeca2d80267f",
+          "name": "Chris Lee",
+          "position": "SmallForward",
+          "dmi": 88500,
+          "gameShape": 6,
+          "salary": 2000,
+          "potential": 4
+        },
+        {
+          "playerId": "6e1660c3-aa49-5c72-9867-3d6161b6d699",
+          "name": "Daniel Carter",
+          "position": "PowerForward",
+          "dmi": 77500,
+          "gameShape": 6,
+          "salary": 7500,
+          "potential": 5
+        },
+        {
+          "playerId": "24154b17-7626-578d-9e21-d790d5827fa2",
+          "name": "Eli Meyer",
+          "position": "Center",
+          "dmi": 56500,
+          "gameShape": 7,
+          "salary": 18250,
+          "potential": 7
+        },
+        {
+          "playerId": "cbe954c5-90db-51a9-917d-d1f9cfd4695b",
+          "name": "Finn Rivera",
+          "position": "PointGuard",
+          "dmi": 86500,
+          "gameShape": 7,
+          "salary": 10500,
+          "potential": 5
+        },
+        {
+          "playerId": "818040b4-fe7b-527e-9bea-e7df29eb61dd",
+          "name": "Gabriel Morgan",
+          "position": "ShootingGuard",
+          "dmi": 56500,
+          "gameShape": 6,
+          "salary": 20000,
+          "potential": 10
+        },
+        {
+          "playerId": "07d94b72-c5fb-5e59-bed7-451d3d9ef4b0",
+          "name": "Hugo Chen",
+          "position": "SmallForward",
+          "dmi": 90500,
+          "gameShape": 8,
+          "salary": 9750,
+          "potential": 5
+        },
+        {
+          "playerId": "c6fb1856-1890-5ae8-bfe3-bc4feabdb444",
+          "name": "Ivan Silva",
+          "position": "PowerForward",
+          "dmi": 58000,
+          "gameShape": 7,
+          "salary": 4250,
+          "potential": 9
+        },
+        {
+          "playerId": "c2d9da41-605f-5368-8ee7-69ae46c76643",
+          "name": "Jonah Keller",
+          "position": "Center",
+          "dmi": 14000,
+          "gameShape": 7,
+          "salary": 20250,
+          "potential": 4
+        },
+        {
+          "playerId": "814bdc38-cf25-51c5-8f6c-4dc623a7241a",
+          "name": "Kai Novak",
+          "position": "PointGuard",
+          "dmi": 58000,
+          "gameShape": 8,
+          "salary": 11500,
+          "potential": 6
+        },
+        {
+          "playerId": "3b72fed6-ca03-5b2b-b3ef-b9d847da48d1",
+          "name": "Luca Patel",
+          "position": "ShootingGuard",
+          "dmi": 88000,
+          "gameShape": 8,
+          "salary": 12750,
+          "potential": 8
+        }
+      ]
+    },
+    {
+      "name": "Norge",
+      "countryId": "DEMO-33",
+      "teamId": "41f9eee7-281a-5f1c-847e-de007a4ba312",
+      "teamName": "Norge U21 (demo)",
+      "players": [
+        {
+          "playerId": "83a0c859-639b-561a-8f0c-05abcf294ddc",
+          "name": "Alex Rossi",
+          "position": "PointGuard",
+          "dmi": 52000,
+          "gameShape": 9,
+          "salary": 13000,
+          "potential": 5
+        },
+        {
+          "playerId": "8f028888-8d8b-55fc-b9f6-9c86b255c0db",
+          "name": "Ben Lee",
+          "position": "ShootingGuard",
+          "dmi": 70000,
+          "gameShape": 9,
+          "salary": 18750,
+          "potential": 8
+        },
+        {
+          "playerId": "5a8a5ab0-2235-533d-88e6-27cf0e91c954",
+          "name": "Chris Carter",
+          "position": "SmallForward",
+          "dmi": 80500,
+          "gameShape": 9,
+          "salary": 13500,
+          "potential": 5
+        },
+        {
+          "playerId": "1ef55146-afa5-5dc4-9d83-a157727f22cc",
+          "name": "Daniel Meyer",
+          "position": "PowerForward",
+          "dmi": 83000,
+          "gameShape": 7,
+          "salary": 2000,
+          "potential": 8
+        },
+        {
+          "playerId": "f69f327a-873c-59c7-8730-9953fb9f6d32",
+          "name": "Eli Rivera",
+          "position": "Center",
+          "dmi": 83000,
+          "gameShape": 9,
+          "salary": 11250,
+          "potential": 4
+        },
+        {
+          "playerId": "747f808f-2fb9-5703-84ec-49dfde8f5deb",
+          "name": "Finn Morgan",
+          "position": "PointGuard",
+          "dmi": 26000,
+          "gameShape": 8,
+          "salary": 14750,
+          "potential": 9
+        },
+        {
+          "playerId": "0fe54865-a936-57a7-b0cf-5cfd25cbbffc",
+          "name": "Gabriel Chen",
+          "position": "ShootingGuard",
+          "dmi": 92500,
+          "gameShape": 7,
+          "salary": 11500,
+          "potential": 4
+        },
+        {
+          "playerId": "3335acad-a4f4-5205-acd7-9f01be2f9539",
+          "name": "Hugo Silva",
+          "position": "SmallForward",
+          "dmi": 54000,
+          "gameShape": 7,
+          "salary": 2750,
+          "potential": 5
+        },
+        {
+          "playerId": "654360ec-3439-59ce-865a-024745ba384c",
+          "name": "Ivan Keller",
+          "position": "PowerForward",
+          "dmi": 81000,
+          "gameShape": 6,
+          "salary": 13000,
+          "potential": 6
+        },
+        {
+          "playerId": "06f6ae29-c10a-50e1-a24b-069fc3ef208a",
+          "name": "Jonah Novak",
+          "position": "Center",
+          "dmi": 85000,
+          "gameShape": 6,
+          "salary": 14000,
+          "potential": 8
+        },
+        {
+          "playerId": "ea63e1de-a31d-5683-abd7-13a7811faaed",
+          "name": "Kai Patel",
+          "position": "PointGuard",
+          "dmi": 80000,
+          "gameShape": 8,
+          "salary": 4000,
+          "potential": 10
+        },
+        {
+          "playerId": "784da6cc-20c2-5e81-95b2-6bfa11492c7b",
+          "name": "Luca Brown",
+          "position": "ShootingGuard",
+          "dmi": 42000,
+          "gameShape": 5,
+          "salary": 12750,
+          "potential": 6
+        }
+      ]
+    },
+    {
+      "name": "Polska",
+      "countryId": "DEMO-34",
+      "teamId": "87920a0e-b1cd-53e6-a756-08099cf128a2",
+      "teamName": "Polska U21 (demo)",
+      "players": [
+        {
+          "playerId": "192b1b36-6ac0-57fd-b6ec-a78a8c7929eb",
+          "name": "Alex Lee",
+          "position": "PointGuard",
+          "dmi": 51000,
+          "gameShape": 5,
+          "salary": 3250,
+          "potential": 4
+        },
+        {
+          "playerId": "c21c4e54-606c-54ac-8814-e93c6ac0d839",
+          "name": "Ben Carter",
+          "position": "ShootingGuard",
+          "dmi": 12000,
+          "gameShape": 8,
+          "salary": 17500,
+          "potential": 4
+        },
+        {
+          "playerId": "6d219bee-f5b9-5699-a5c6-35a9b2af1590",
+          "name": "Chris Meyer",
+          "position": "SmallForward",
+          "dmi": 51500,
+          "gameShape": 5,
+          "salary": 2500,
+          "potential": 8
+        },
+        {
+          "playerId": "b004efe4-6161-59fd-a335-b096de0fe941",
+          "name": "Daniel Rivera",
+          "position": "PowerForward",
+          "dmi": 18000,
+          "gameShape": 9,
+          "salary": 13500,
+          "potential": 6
+        },
+        {
+          "playerId": "53454399-5a42-54b3-8466-72bad18a6616",
+          "name": "Eli Morgan",
+          "position": "Center",
+          "dmi": 78000,
+          "gameShape": 5,
+          "salary": 9750,
+          "potential": 8
+        },
+        {
+          "playerId": "f3d23a63-ce40-5ce6-95b9-d7f3ddc494c6",
+          "name": "Finn Chen",
+          "position": "PointGuard",
+          "dmi": 21500,
+          "gameShape": 9,
+          "salary": 15750,
+          "potential": 7
+        },
+        {
+          "playerId": "7a521f3b-cfa8-5144-bb0c-f2afdcf6247a",
+          "name": "Gabriel Silva",
+          "position": "ShootingGuard",
+          "dmi": 47500,
+          "gameShape": 5,
+          "salary": 8250,
+          "potential": 8
+        },
+        {
+          "playerId": "821f6a1b-aef9-5d97-9d81-929eeed08181",
+          "name": "Hugo Keller",
+          "position": "SmallForward",
+          "dmi": 72500,
+          "gameShape": 9,
+          "salary": 13750,
+          "potential": 5
+        },
+        {
+          "playerId": "63b53ab5-85d8-5571-aaef-3c60c39f227e",
+          "name": "Ivan Novak",
+          "position": "PowerForward",
+          "dmi": 47500,
+          "gameShape": 5,
+          "salary": 2000,
+          "potential": 10
+        },
+        {
+          "playerId": "18f482b8-62a6-564b-b4e0-609803a37603",
+          "name": "Jonah Patel",
+          "position": "Center",
+          "dmi": 24500,
+          "gameShape": 5,
+          "salary": 3750,
+          "potential": 7
+        },
+        {
+          "playerId": "d044e5e1-4663-5037-84e9-38c99e02c8f6",
+          "name": "Kai Brown",
+          "position": "PointGuard",
+          "dmi": 65500,
+          "gameShape": 5,
+          "salary": 17500,
+          "potential": 10
+        },
+        {
+          "playerId": "f17cf3c1-2a40-52aa-acc0-983a672177b4",
+          "name": "Luca Rossi",
+          "position": "ShootingGuard",
+          "dmi": 65500,
+          "gameShape": 9,
+          "salary": 18000,
+          "potential": 10
+        }
+      ]
+    },
+    {
+      "name": "Portugal",
+      "countryId": "DEMO-35",
+      "teamId": "fb5f2b12-2677-520d-a66a-ebdd02597b3a",
+      "teamName": "Portugal U21 (demo)",
+      "players": [
+        {
+          "playerId": "aaf443f8-0708-58ae-994f-6f44c487fcf9",
+          "name": "Alex Carter",
+          "position": "PointGuard",
+          "dmi": 54500,
+          "gameShape": 5,
+          "salary": 10250,
+          "potential": 7
+        },
+        {
+          "playerId": "71eea67a-05cd-5f95-970e-795876cb2607",
+          "name": "Ben Meyer",
+          "position": "ShootingGuard",
+          "dmi": 92000,
+          "gameShape": 8,
+          "salary": 16750,
+          "potential": 5
+        },
+        {
+          "playerId": "d24dc327-b81f-51dc-83ee-91c10c9e6f5f",
+          "name": "Chris Rivera",
+          "position": "SmallForward",
+          "dmi": 87000,
+          "gameShape": 7,
+          "salary": 9250,
+          "potential": 6
+        },
+        {
+          "playerId": "2385cd5c-e51d-5e6e-a38a-824ca84a116a",
+          "name": "Daniel Morgan",
+          "position": "PowerForward",
+          "dmi": 82000,
+          "gameShape": 7,
+          "salary": 18250,
+          "potential": 6
+        },
+        {
+          "playerId": "237319cb-182e-5c94-b07a-270c7088c2d9",
+          "name": "Eli Chen",
+          "position": "Center",
+          "dmi": 39500,
+          "gameShape": 8,
+          "salary": 8750,
+          "potential": 7
+        },
+        {
+          "playerId": "c60a1172-c164-52d9-b8c3-014f7b15877f",
+          "name": "Finn Silva",
+          "position": "PointGuard",
+          "dmi": 29500,
+          "gameShape": 5,
+          "salary": 12500,
+          "potential": 9
+        },
+        {
+          "playerId": "4d2cb494-8119-5d05-ba28-2b2a32f22274",
+          "name": "Gabriel Keller",
+          "position": "ShootingGuard",
+          "dmi": 63000,
+          "gameShape": 8,
+          "salary": 4500,
+          "potential": 10
+        },
+        {
+          "playerId": "63416422-fde9-5574-b4da-077e8426e52f",
+          "name": "Hugo Novak",
+          "position": "SmallForward",
+          "dmi": 40000,
+          "gameShape": 6,
+          "salary": 12500,
+          "potential": 9
+        },
+        {
+          "playerId": "890da68f-2d0d-53ff-a92a-49a48579d75c",
+          "name": "Ivan Patel",
+          "position": "PowerForward",
+          "dmi": 89000,
+          "gameShape": 5,
+          "salary": 13750,
+          "potential": 9
+        },
+        {
+          "playerId": "700ac229-7fd1-51c6-b206-dfcd011b6ca8",
+          "name": "Jonah Brown",
+          "position": "Center",
+          "dmi": 72500,
+          "gameShape": 7,
+          "salary": 3250,
+          "potential": 8
+        },
+        {
+          "playerId": "940732c6-1857-5ee4-8b1c-c958d07c5c40",
+          "name": "Kai Rossi",
+          "position": "PointGuard",
+          "dmi": 14500,
+          "gameShape": 5,
+          "salary": 6000,
+          "potential": 4
+        },
+        {
+          "playerId": "50296db1-48a3-5852-99d4-d8cfef71eb10",
+          "name": "Luca Lee",
+          "position": "ShootingGuard",
+          "dmi": 41500,
+          "gameShape": 6,
+          "salary": 16000,
+          "potential": 8
+        }
+      ]
+    },
+    {
+      "name": "România",
+      "countryId": "DEMO-36",
+      "teamId": "519949b0-3f5c-55c2-a014-3b2a374a1994",
+      "teamName": "România U21 (demo)",
+      "players": [
+        {
+          "playerId": "af9f357d-f383-5d79-b34e-5d2d7b697c32",
+          "name": "Alex Meyer",
+          "position": "PointGuard",
+          "dmi": 94500,
+          "gameShape": 9,
+          "salary": 14750,
+          "potential": 8
+        },
+        {
+          "playerId": "cd7cb32e-a644-5c6e-8a6c-14e4db934422",
+          "name": "Ben Rivera",
+          "position": "ShootingGuard",
+          "dmi": 40500,
+          "gameShape": 5,
+          "salary": 14000,
+          "potential": 4
+        },
+        {
+          "playerId": "286c57a6-192d-5640-934a-4040a90ae209",
+          "name": "Chris Morgan",
+          "position": "SmallForward",
+          "dmi": 20500,
+          "gameShape": 8,
+          "salary": 16500,
+          "potential": 9
+        },
+        {
+          "playerId": "73613cee-f161-57af-a7e0-140b4bb45013",
+          "name": "Daniel Chen",
+          "position": "PowerForward",
+          "dmi": 46000,
+          "gameShape": 9,
+          "salary": 2000,
+          "potential": 8
+        },
+        {
+          "playerId": "7695ef73-2581-5565-ba97-e1c620b4d264",
+          "name": "Eli Silva",
+          "position": "Center",
+          "dmi": 84500,
+          "gameShape": 6,
+          "salary": 5000,
+          "potential": 5
+        },
+        {
+          "playerId": "789ee6fe-3b70-57dc-9060-1da3c9f26b23",
+          "name": "Finn Keller",
+          "position": "PointGuard",
+          "dmi": 40500,
+          "gameShape": 6,
+          "salary": 8750,
+          "potential": 6
+        },
+        {
+          "playerId": "75b1197a-5cac-5fc0-a746-275dc53b53b0",
+          "name": "Gabriel Novak",
+          "position": "ShootingGuard",
+          "dmi": 55000,
+          "gameShape": 7,
+          "salary": 6500,
+          "potential": 7
+        },
+        {
+          "playerId": "e946f65e-f6db-514f-be20-b70676c3bb98",
+          "name": "Hugo Patel",
+          "position": "SmallForward",
+          "dmi": 65500,
+          "gameShape": 6,
+          "salary": 6250,
+          "potential": 7
+        },
+        {
+          "playerId": "f733aeb9-88b9-5073-8878-1a9f0aa4b5bf",
+          "name": "Ivan Brown",
+          "position": "PowerForward",
+          "dmi": 37000,
+          "gameShape": 6,
+          "salary": 21000,
+          "potential": 5
+        },
+        {
+          "playerId": "56208877-fe06-566f-ade1-cc823406f288",
+          "name": "Jonah Rossi",
+          "position": "Center",
+          "dmi": 14000,
+          "gameShape": 5,
+          "salary": 7250,
+          "potential": 9
+        },
+        {
+          "playerId": "76a6be60-8aff-5df7-a598-378b15e89192",
+          "name": "Kai Lee",
+          "position": "PointGuard",
+          "dmi": 14000,
+          "gameShape": 9,
+          "salary": 4750,
+          "potential": 9
+        },
+        {
+          "playerId": "85fbc775-3866-57f5-9946-2e08bc1b5097",
+          "name": "Luca Carter",
+          "position": "ShootingGuard",
+          "dmi": 78500,
+          "gameShape": 7,
+          "salary": 21500,
+          "potential": 7
+        }
+      ]
+    },
+    {
+      "name": "Rossiya",
+      "countryId": "DEMO-37",
+      "teamId": "2a55d742-e402-5d00-80c8-b893a303e01c",
+      "teamName": "Rossiya U21 (demo)",
+      "players": [
+        {
+          "playerId": "52640307-90e1-5a50-bfdf-7df641a8b1b9",
+          "name": "Alex Rivera",
+          "position": "PointGuard",
+          "dmi": 21000,
+          "gameShape": 7,
+          "salary": 6750,
+          "potential": 8
+        },
+        {
+          "playerId": "e366b049-b203-582e-bc32-e0421d0c0eb9",
+          "name": "Ben Morgan",
+          "position": "ShootingGuard",
+          "dmi": 44500,
+          "gameShape": 6,
+          "salary": 7250,
+          "potential": 7
+        },
+        {
+          "playerId": "cc9114bd-3548-5beb-8438-3f9509c828d1",
+          "name": "Chris Chen",
+          "position": "SmallForward",
+          "dmi": 64500,
+          "gameShape": 8,
+          "salary": 20000,
+          "potential": 4
+        },
+        {
+          "playerId": "4a709f58-2837-5526-a7a9-bc7cc39f2137",
+          "name": "Daniel Silva",
+          "position": "PowerForward",
+          "dmi": 55500,
+          "gameShape": 9,
+          "salary": 8500,
+          "potential": 4
+        },
+        {
+          "playerId": "a30e7979-186a-5995-b5e6-88e73d7d0d8b",
+          "name": "Eli Keller",
+          "position": "Center",
+          "dmi": 54000,
+          "gameShape": 8,
+          "salary": 18250,
+          "potential": 10
+        },
+        {
+          "playerId": "d62a3128-0b16-5019-bcc5-54f96ad77a38",
+          "name": "Finn Novak",
+          "position": "PointGuard",
+          "dmi": 52500,
+          "gameShape": 9,
+          "salary": 21250,
+          "potential": 6
+        },
+        {
+          "playerId": "d0b2eb26-934a-5ec0-aefc-fad4e1e0410a",
+          "name": "Gabriel Patel",
+          "position": "ShootingGuard",
+          "dmi": 65500,
+          "gameShape": 9,
+          "salary": 5250,
+          "potential": 6
+        },
+        {
+          "playerId": "3e1ed2eb-9f55-5a83-8f5b-634854572d8e",
+          "name": "Hugo Brown",
+          "position": "SmallForward",
+          "dmi": 67500,
+          "gameShape": 5,
+          "salary": 16250,
+          "potential": 6
+        },
+        {
+          "playerId": "72a05ae4-14d5-598a-8d2d-fa9babacc78d",
+          "name": "Ivan Rossi",
+          "position": "PowerForward",
+          "dmi": 36500,
+          "gameShape": 7,
+          "salary": 5500,
+          "potential": 6
+        },
+        {
+          "playerId": "62122e6c-5906-59a5-8524-a865abf19181",
+          "name": "Jonah Lee",
+          "position": "Center",
+          "dmi": 26500,
+          "gameShape": 7,
+          "salary": 5000,
+          "potential": 5
+        },
+        {
+          "playerId": "1ed7e389-7f67-548d-9d03-285903a04c92",
+          "name": "Kai Carter",
+          "position": "PointGuard",
+          "dmi": 39000,
+          "gameShape": 7,
+          "salary": 10250,
+          "potential": 6
+        },
+        {
+          "playerId": "12ef8ed0-8b77-5f2d-ad0f-c110b0219ff8",
+          "name": "Luca Meyer",
+          "position": "ShootingGuard",
+          "dmi": 44500,
+          "gameShape": 7,
+          "salary": 21750,
+          "potential": 5
+        }
+      ]
+    },
+    {
+      "name": "Sakartvelo",
+      "countryId": "DEMO-38",
+      "teamId": "8dd5d972-bd60-548e-9688-063a01f3a5b1",
+      "teamName": "Sakartvelo U21 (demo)",
+      "players": [
+        {
+          "playerId": "29aedd6f-c6ee-5218-ae89-aba476f5a20d",
+          "name": "Alex Morgan",
+          "position": "PointGuard",
+          "dmi": 80500,
+          "gameShape": 8,
+          "salary": 21000,
+          "potential": 5
+        },
+        {
+          "playerId": "d8af5551-cd7b-5890-97a0-ec59006cc3ae",
+          "name": "Ben Chen",
+          "position": "ShootingGuard",
+          "dmi": 69000,
+          "gameShape": 5,
+          "salary": 19250,
+          "potential": 10
+        },
+        {
+          "playerId": "2337c1ae-d975-52ce-a617-25b24c386e97",
+          "name": "Chris Silva",
+          "position": "SmallForward",
+          "dmi": 18500,
+          "gameShape": 7,
+          "salary": 17500,
+          "potential": 5
+        },
+        {
+          "playerId": "e02d4015-210c-5911-978f-e339625abbda",
+          "name": "Daniel Keller",
+          "position": "PowerForward",
+          "dmi": 89000,
+          "gameShape": 5,
+          "salary": 5750,
+          "potential": 8
+        },
+        {
+          "playerId": "a9ebe560-e06d-5099-8a33-68b047367a61",
+          "name": "Eli Novak",
+          "position": "Center",
+          "dmi": 56500,
+          "gameShape": 5,
+          "salary": 21500,
+          "potential": 10
+        },
+        {
+          "playerId": "4c4e51c4-f9cb-5a55-8f68-6925ea08a387",
+          "name": "Finn Patel",
+          "position": "PointGuard",
+          "dmi": 79500,
+          "gameShape": 5,
+          "salary": 7250,
+          "potential": 5
+        },
+        {
+          "playerId": "de27f546-6aca-52a3-8389-d6de94eed4d3",
+          "name": "Gabriel Brown",
+          "position": "ShootingGuard",
+          "dmi": 54000,
+          "gameShape": 6,
+          "salary": 18250,
+          "potential": 10
+        },
+        {
+          "playerId": "de30bf7b-c213-5475-8d72-4ca83e329bdb",
+          "name": "Hugo Rossi",
+          "position": "SmallForward",
+          "dmi": 78000,
+          "gameShape": 9,
+          "salary": 10500,
+          "potential": 8
+        },
+        {
+          "playerId": "3a6916f1-2223-5f28-af12-f03e7ec1a059",
+          "name": "Ivan Lee",
+          "position": "PowerForward",
+          "dmi": 25500,
+          "gameShape": 5,
+          "salary": 19750,
+          "potential": 7
+        },
+        {
+          "playerId": "1dd12fcb-3092-53bd-b93c-40f2bcaf82cc",
+          "name": "Jonah Carter",
+          "position": "Center",
+          "dmi": 78500,
+          "gameShape": 7,
+          "salary": 5750,
+          "potential": 9
+        },
+        {
+          "playerId": "0835a2f7-3a6b-5dea-9ab6-72d7ba3daefb",
+          "name": "Kai Meyer",
+          "position": "PointGuard",
+          "dmi": 45000,
+          "gameShape": 7,
+          "salary": 16250,
+          "potential": 6
+        },
+        {
+          "playerId": "98e443f4-9ce7-531d-b9a6-d1d51b7f2e6b",
+          "name": "Luca Rivera",
+          "position": "ShootingGuard",
+          "dmi": 38500,
+          "gameShape": 8,
+          "salary": 7500,
+          "potential": 4
+        }
+      ]
+    },
+    {
+      "name": "Schweiz",
+      "countryId": "DEMO-39",
+      "teamId": "d015611e-c902-5dc3-88cf-6d76bd9dda94",
+      "teamName": "Schweiz U21 (demo)",
+      "players": [
+        {
+          "playerId": "bd0112c7-064e-5452-9800-be05e25eae68",
+          "name": "Alex Chen",
+          "position": "PointGuard",
+          "dmi": 71500,
+          "gameShape": 9,
+          "salary": 12250,
+          "potential": 7
+        },
+        {
+          "playerId": "348a1207-3f30-5b11-9d5c-a5d262adbe72",
+          "name": "Ben Silva",
+          "position": "ShootingGuard",
+          "dmi": 90500,
+          "gameShape": 9,
+          "salary": 3750,
+          "potential": 9
+        },
+        {
+          "playerId": "f432c34f-3edf-586c-befd-e7f446e985ef",
+          "name": "Chris Keller",
+          "position": "SmallForward",
+          "dmi": 26500,
+          "gameShape": 9,
+          "salary": 5750,
+          "potential": 4
+        },
+        {
+          "playerId": "b169f2c3-ff1c-5151-8696-e6aba7da27b5",
+          "name": "Daniel Novak",
+          "position": "PowerForward",
+          "dmi": 37500,
+          "gameShape": 8,
+          "salary": 11500,
+          "potential": 6
+        },
+        {
+          "playerId": "c1f5de1b-51d6-510a-b890-6a799f53fcfd",
+          "name": "Eli Patel",
+          "position": "Center",
+          "dmi": 39000,
+          "gameShape": 8,
+          "salary": 15250,
+          "potential": 10
+        },
+        {
+          "playerId": "3b16dc4a-2032-5db5-b4f7-92d3f241879f",
+          "name": "Finn Brown",
+          "position": "PointGuard",
+          "dmi": 12000,
+          "gameShape": 6,
+          "salary": 7250,
+          "potential": 6
+        },
+        {
+          "playerId": "c6ef68e4-e544-5f87-9843-0b3105e8f610",
+          "name": "Gabriel Rossi",
+          "position": "ShootingGuard",
+          "dmi": 53000,
+          "gameShape": 9,
+          "salary": 17500,
+          "potential": 4
+        },
+        {
+          "playerId": "ea6a85df-6a22-5b88-bcb4-af3965415c82",
+          "name": "Hugo Lee",
+          "position": "SmallForward",
+          "dmi": 91500,
+          "gameShape": 5,
+          "salary": 10500,
+          "potential": 10
+        },
+        {
+          "playerId": "4ce1a0fd-1e56-5704-91c2-fd4e54f0f635",
+          "name": "Ivan Carter",
+          "position": "PowerForward",
+          "dmi": 88500,
+          "gameShape": 9,
+          "salary": 4000,
+          "potential": 4
+        },
+        {
+          "playerId": "bf29361b-ad17-5c09-8147-a1d6fb8ffb3b",
+          "name": "Jonah Meyer",
+          "position": "Center",
+          "dmi": 35000,
+          "gameShape": 6,
+          "salary": 13250,
+          "potential": 4
+        },
+        {
+          "playerId": "e47ee3e7-34d7-5ee0-8e78-3c54efda335c",
+          "name": "Kai Rivera",
+          "position": "PointGuard",
+          "dmi": 24500,
+          "gameShape": 7,
+          "salary": 17750,
+          "potential": 9
+        },
+        {
+          "playerId": "936a244d-c47c-5c25-91e8-a607c00e21c2",
+          "name": "Luca Morgan",
+          "position": "ShootingGuard",
+          "dmi": 60500,
+          "gameShape": 8,
+          "salary": 18500,
+          "potential": 5
+        }
+      ]
+    },
+    {
+      "name": "Scotland",
+      "countryId": "DEMO-40",
+      "teamId": "e0535868-b30f-5714-b006-988a940808ee",
+      "teamName": "Scotland U21 (demo)",
+      "players": [
+        {
+          "playerId": "84b33768-06e5-5dd8-a044-d57c5c5e8b35",
+          "name": "Alex Silva",
+          "position": "PointGuard",
+          "dmi": 65500,
+          "gameShape": 6,
+          "salary": 11750,
+          "potential": 5
+        },
+        {
+          "playerId": "78797e13-3344-5150-b76b-1fd9fe7a43bd",
+          "name": "Ben Keller",
+          "position": "ShootingGuard",
+          "dmi": 52500,
+          "gameShape": 5,
+          "salary": 19000,
+          "potential": 6
+        },
+        {
+          "playerId": "d99fc2ba-da16-5398-8d8d-3c5fa9e456b0",
+          "name": "Chris Novak",
+          "position": "SmallForward",
+          "dmi": 9000,
+          "gameShape": 5,
+          "salary": 3250,
+          "potential": 4
+        },
+        {
+          "playerId": "e2fafe0c-15ef-5bae-a652-02f5d4524cea",
+          "name": "Daniel Patel",
+          "position": "PowerForward",
+          "dmi": 13000,
+          "gameShape": 6,
+          "salary": 7000,
+          "potential": 8
+        },
+        {
+          "playerId": "37520963-7ee6-5444-a86a-be58026ba51a",
+          "name": "Eli Brown",
+          "position": "Center",
+          "dmi": 24500,
+          "gameShape": 9,
+          "salary": 2500,
+          "potential": 5
+        },
+        {
+          "playerId": "6be88bc8-dcc9-53cb-97f1-4f2468802d5f",
+          "name": "Finn Rossi",
+          "position": "PointGuard",
+          "dmi": 88000,
+          "gameShape": 7,
+          "salary": 11500,
+          "potential": 7
+        },
+        {
+          "playerId": "2cf28c6f-6ddc-533b-b74c-c1839919a670",
+          "name": "Gabriel Lee",
+          "position": "ShootingGuard",
+          "dmi": 92000,
+          "gameShape": 6,
+          "salary": 4000,
+          "potential": 7
+        },
+        {
+          "playerId": "0ebd217c-a0d9-515b-842a-51375f5d5e58",
+          "name": "Hugo Carter",
+          "position": "SmallForward",
+          "dmi": 35500,
+          "gameShape": 6,
+          "salary": 20500,
+          "potential": 10
+        },
+        {
+          "playerId": "35448804-ddab-5b32-abc4-292787a1a258",
+          "name": "Ivan Meyer",
+          "position": "PowerForward",
+          "dmi": 27000,
+          "gameShape": 6,
+          "salary": 2750,
+          "potential": 10
+        },
+        {
+          "playerId": "9e703a0c-7a45-5e14-adef-a01d4b5ace99",
+          "name": "Jonah Rivera",
+          "position": "Center",
+          "dmi": 29000,
+          "gameShape": 6,
+          "salary": 3000,
+          "potential": 7
+        },
+        {
+          "playerId": "63e58db8-30ea-505b-96e9-95a2d221cc11",
+          "name": "Kai Morgan",
+          "position": "PointGuard",
+          "dmi": 82000,
+          "gameShape": 9,
+          "salary": 13000,
+          "potential": 8
+        },
+        {
+          "playerId": "212921e4-1505-502e-9d54-569bb8c56235",
+          "name": "Luca Chen",
+          "position": "ShootingGuard",
+          "dmi": 71500,
+          "gameShape": 7,
+          "salary": 11500,
+          "potential": 7
+        }
+      ]
+    },
+    {
+      "name": "Shqipëria",
+      "countryId": "DEMO-41",
+      "teamId": "98432263-27a1-5ff9-b78c-b8928021e023",
+      "teamName": "Shqipëria U21 (demo)",
+      "players": [
+        {
+          "playerId": "1b12482a-918a-5842-80a1-c29f8db9b3e4",
+          "name": "Alex Keller",
+          "position": "PointGuard",
+          "dmi": 54000,
+          "gameShape": 8,
+          "salary": 16000,
+          "potential": 10
+        },
+        {
+          "playerId": "534de5cf-f0a4-5f09-88ec-6f52b8470b6f",
+          "name": "Ben Novak",
+          "position": "ShootingGuard",
+          "dmi": 30000,
+          "gameShape": 5,
+          "salary": 6250,
+          "potential": 10
+        },
+        {
+          "playerId": "f5c823b5-46e8-51a0-869b-b4253a963bfd",
+          "name": "Chris Patel",
+          "position": "SmallForward",
+          "dmi": 56000,
+          "gameShape": 5,
+          "salary": 5750,
+          "potential": 8
+        },
+        {
+          "playerId": "21047c8c-3693-549b-af25-605302ad5c02",
+          "name": "Daniel Brown",
+          "position": "PowerForward",
+          "dmi": 15000,
+          "gameShape": 5,
+          "salary": 12250,
+          "potential": 9
+        },
+        {
+          "playerId": "6e482c9b-8a98-577a-af88-4346ff99973a",
+          "name": "Eli Rossi",
+          "position": "Center",
+          "dmi": 84500,
+          "gameShape": 6,
+          "salary": 9500,
+          "potential": 9
+        },
+        {
+          "playerId": "22e29da4-142c-5294-82e9-e89db413b4ba",
+          "name": "Finn Lee",
+          "position": "PointGuard",
+          "dmi": 68500,
+          "gameShape": 9,
+          "salary": 5750,
+          "potential": 7
+        },
+        {
+          "playerId": "9b5d746b-cd62-5107-b4f1-9a019ab1dc6a",
+          "name": "Gabriel Carter",
+          "position": "ShootingGuard",
+          "dmi": 17500,
+          "gameShape": 9,
+          "salary": 4500,
+          "potential": 4
+        },
+        {
+          "playerId": "4b505877-253b-5fe0-898d-2ec723809639",
+          "name": "Hugo Meyer",
+          "position": "SmallForward",
+          "dmi": 46500,
+          "gameShape": 8,
+          "salary": 18750,
+          "potential": 9
+        },
+        {
+          "playerId": "383eb9b6-574c-5f5e-9757-675362a301db",
+          "name": "Ivan Rivera",
+          "position": "PowerForward",
+          "dmi": 21500,
+          "gameShape": 9,
+          "salary": 15500,
+          "potential": 6
+        },
+        {
+          "playerId": "4ec32f17-b6b5-5a5a-b886-4d6ed41c751e",
+          "name": "Jonah Morgan",
+          "position": "Center",
+          "dmi": 24000,
+          "gameShape": 8,
+          "salary": 15000,
+          "potential": 8
+        },
+        {
+          "playerId": "e3a0cfe1-60e1-56f9-a8d8-b24f22c5bd7a",
+          "name": "Kai Chen",
+          "position": "PointGuard",
+          "dmi": 89500,
+          "gameShape": 6,
+          "salary": 8750,
+          "potential": 8
+        },
+        {
+          "playerId": "b5ac23df-1552-5cd5-8a4d-22f459dcd422",
+          "name": "Luca Silva",
+          "position": "ShootingGuard",
+          "dmi": 49500,
+          "gameShape": 9,
+          "salary": 11000,
+          "potential": 7
+        }
+      ]
+    },
+    {
+      "name": "Slovenija",
+      "countryId": "DEMO-42",
+      "teamId": "67f5c587-d877-512c-b28d-1c6e60d153c7",
+      "teamName": "Slovenija U21 (demo)",
+      "players": [
+        {
+          "playerId": "a93e8f1e-5b3d-53a4-a263-87d84c62065c",
+          "name": "Alex Novak",
+          "position": "PointGuard",
+          "dmi": 44000,
+          "gameShape": 7,
+          "salary": 5500,
+          "potential": 6
+        },
+        {
+          "playerId": "c066ac24-71a5-5e10-aec3-c0cf717fc113",
+          "name": "Ben Patel",
+          "position": "ShootingGuard",
+          "dmi": 43000,
+          "gameShape": 9,
+          "salary": 3250,
+          "potential": 10
+        },
+        {
+          "playerId": "478644e2-ddc3-5899-b640-bbe664d65534",
+          "name": "Chris Brown",
+          "position": "SmallForward",
+          "dmi": 43500,
+          "gameShape": 5,
+          "salary": 4000,
+          "potential": 4
+        },
+        {
+          "playerId": "f7db8f6c-1e9b-5ba4-9ed8-ac287b0ac554",
+          "name": "Daniel Rossi",
+          "position": "PowerForward",
+          "dmi": 49500,
+          "gameShape": 7,
+          "salary": 10250,
+          "potential": 10
+        },
+        {
+          "playerId": "892f8d28-1687-50a2-baaa-41e26a3d1bc8",
+          "name": "Eli Lee",
+          "position": "Center",
+          "dmi": 13000,
+          "gameShape": 6,
+          "salary": 2500,
+          "potential": 10
+        },
+        {
+          "playerId": "85fd6b36-1276-5a1d-a688-47627ed6418f",
+          "name": "Finn Carter",
+          "position": "PointGuard",
+          "dmi": 16500,
+          "gameShape": 6,
+          "salary": 5500,
+          "potential": 4
+        },
+        {
+          "playerId": "51080dd5-9267-5012-bd18-9d92c6959b72",
+          "name": "Gabriel Meyer",
+          "position": "ShootingGuard",
+          "dmi": 28000,
+          "gameShape": 8,
+          "salary": 9250,
+          "potential": 4
+        },
+        {
+          "playerId": "079cee4f-a66e-5327-9e6f-45d27109e942",
+          "name": "Hugo Rivera",
+          "position": "SmallForward",
+          "dmi": 42000,
+          "gameShape": 6,
+          "salary": 20250,
+          "potential": 7
+        },
+        {
+          "playerId": "8074bbef-7964-5b14-b6b6-ad38b5c424f3",
+          "name": "Ivan Morgan",
+          "position": "PowerForward",
+          "dmi": 94500,
+          "gameShape": 8,
+          "salary": 13750,
+          "potential": 9
+        },
+        {
+          "playerId": "8f99bcf6-acea-5d8f-b2d8-4dacff652050",
+          "name": "Jonah Chen",
+          "position": "Center",
+          "dmi": 92000,
+          "gameShape": 8,
+          "salary": 18250,
+          "potential": 7
+        },
+        {
+          "playerId": "36a56969-3744-5ffa-a875-445a720cc5ec",
+          "name": "Kai Silva",
+          "position": "PointGuard",
+          "dmi": 77000,
+          "gameShape": 9,
+          "salary": 18500,
+          "potential": 7
+        },
+        {
+          "playerId": "84d0ffb8-7e46-5b46-9472-9ce1e60dfee4",
+          "name": "Luca Keller",
+          "position": "ShootingGuard",
+          "dmi": 87000,
+          "gameShape": 9,
+          "salary": 9000,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "name": "Slovensko",
+      "countryId": "DEMO-43",
+      "teamId": "aca6a1c8-0b98-5e3d-9b19-55d607f89bcb",
+      "teamName": "Slovensko U21 (demo)",
+      "players": [
+        {
+          "playerId": "512ad454-cce5-5e9f-ae93-4ea2c56ad72b",
+          "name": "Alex Patel",
+          "position": "PointGuard",
+          "dmi": 23500,
+          "gameShape": 5,
+          "salary": 19000,
+          "potential": 9
+        },
+        {
+          "playerId": "c8f03dc0-ed4a-568a-9710-307c5b541690",
+          "name": "Ben Brown",
+          "position": "ShootingGuard",
+          "dmi": 10000,
+          "gameShape": 7,
+          "salary": 5750,
+          "potential": 10
+        },
+        {
+          "playerId": "c74ccb2c-4e55-5695-a17a-71755cf473b3",
+          "name": "Chris Rossi",
+          "position": "SmallForward",
+          "dmi": 24500,
+          "gameShape": 8,
+          "salary": 11250,
+          "potential": 5
+        },
+        {
+          "playerId": "79422c96-fb11-54b5-aaf3-288b76250f6e",
+          "name": "Daniel Lee",
+          "position": "PowerForward",
+          "dmi": 19500,
+          "gameShape": 5,
+          "salary": 4750,
+          "potential": 8
+        },
+        {
+          "playerId": "9a67e27f-2f7d-5d59-9410-30596f4b0049",
+          "name": "Eli Carter",
+          "position": "Center",
+          "dmi": 65000,
+          "gameShape": 9,
+          "salary": 17000,
+          "potential": 7
+        },
+        {
+          "playerId": "02fcc9f8-8119-5333-a527-9ce234870832",
+          "name": "Finn Meyer",
+          "position": "PointGuard",
+          "dmi": 61500,
+          "gameShape": 7,
+          "salary": 15250,
+          "potential": 8
+        },
+        {
+          "playerId": "0a5fe7d6-94e8-564e-b306-2b2fc3189fbc",
+          "name": "Gabriel Rivera",
+          "position": "ShootingGuard",
+          "dmi": 94500,
+          "gameShape": 9,
+          "salary": 17250,
+          "potential": 7
+        },
+        {
+          "playerId": "1a596108-d76f-58bf-938f-bf5eafe62641",
+          "name": "Hugo Morgan",
+          "position": "SmallForward",
+          "dmi": 82500,
+          "gameShape": 5,
+          "salary": 9750,
+          "potential": 9
+        },
+        {
+          "playerId": "d475ecfd-e87c-5fdb-a6fb-f12bde8ac6e3",
+          "name": "Ivan Chen",
+          "position": "PowerForward",
+          "dmi": 75500,
+          "gameShape": 6,
+          "salary": 11000,
+          "potential": 6
+        },
+        {
+          "playerId": "a07e8788-260c-51e1-8064-c7cf02cfd088",
+          "name": "Jonah Silva",
+          "position": "Center",
+          "dmi": 91500,
+          "gameShape": 7,
+          "salary": 18000,
+          "potential": 4
+        },
+        {
+          "playerId": "3ee1cbf0-8a46-54bb-99d8-3552a080374c",
+          "name": "Kai Keller",
+          "position": "PointGuard",
+          "dmi": 54000,
+          "gameShape": 7,
+          "salary": 11000,
+          "potential": 6
+        },
+        {
+          "playerId": "2ab0e7a1-992b-5b9a-83a1-a79f134bfa54",
+          "name": "Luca Novak",
+          "position": "ShootingGuard",
+          "dmi": 37000,
+          "gameShape": 7,
+          "salary": 5250,
+          "potential": 8
+        }
+      ]
+    },
+    {
+      "name": "Srbija",
+      "countryId": "DEMO-44",
+      "teamId": "df0bf671-9693-50dd-9dc9-14353857916f",
+      "teamName": "Srbija U21 (demo)",
+      "players": [
+        {
+          "playerId": "ad09b36e-78df-53cb-ba73-7a7afcb9282c",
+          "name": "Alex Brown",
+          "position": "PointGuard",
+          "dmi": 33000,
+          "gameShape": 5,
+          "salary": 17000,
+          "potential": 5
+        },
+        {
+          "playerId": "88749914-16d5-503d-b53b-39c1efb8ffde",
+          "name": "Ben Rossi",
+          "position": "ShootingGuard",
+          "dmi": 80500,
+          "gameShape": 6,
+          "salary": 17750,
+          "potential": 6
+        },
+        {
+          "playerId": "0534a46c-4d4f-5daf-8c87-e8ca6737bf76",
+          "name": "Chris Lee",
+          "position": "SmallForward",
+          "dmi": 18000,
+          "gameShape": 8,
+          "salary": 21000,
+          "potential": 6
+        },
+        {
+          "playerId": "cc7d6dce-fa8f-519d-8db3-67d5f559e523",
+          "name": "Daniel Carter",
+          "position": "PowerForward",
+          "dmi": 8000,
+          "gameShape": 7,
+          "salary": 17250,
+          "potential": 8
+        },
+        {
+          "playerId": "f2d8b2ef-0a13-59d7-8033-20e8a81a9c22",
+          "name": "Eli Meyer",
+          "position": "Center",
+          "dmi": 41500,
+          "gameShape": 5,
+          "salary": 21000,
+          "potential": 4
+        },
+        {
+          "playerId": "9666579f-2a71-5065-8878-78473c8dd710",
+          "name": "Finn Rivera",
+          "position": "PointGuard",
+          "dmi": 66000,
+          "gameShape": 8,
+          "salary": 7750,
+          "potential": 6
+        },
+        {
+          "playerId": "6217ac1f-7327-5de0-b728-474a16a28991",
+          "name": "Gabriel Morgan",
+          "position": "ShootingGuard",
+          "dmi": 81500,
+          "gameShape": 6,
+          "salary": 17250,
+          "potential": 7
+        },
+        {
+          "playerId": "e662f2c4-5436-5ca0-a706-897e0a256584",
+          "name": "Hugo Chen",
+          "position": "SmallForward",
+          "dmi": 86500,
+          "gameShape": 7,
+          "salary": 10250,
+          "potential": 8
+        },
+        {
+          "playerId": "d40c0473-265e-5cde-9a9a-93424c953398",
+          "name": "Ivan Silva",
+          "position": "PowerForward",
+          "dmi": 86000,
+          "gameShape": 6,
+          "salary": 11750,
+          "potential": 7
+        },
+        {
+          "playerId": "2b7cdee4-7cfe-5815-81f9-c75ed2638f25",
+          "name": "Jonah Keller",
+          "position": "Center",
+          "dmi": 90500,
+          "gameShape": 9,
+          "salary": 8250,
+          "potential": 10
+        },
+        {
+          "playerId": "557b78bf-397e-507c-b310-ae79defb4dda",
+          "name": "Kai Novak",
+          "position": "PointGuard",
+          "dmi": 49500,
+          "gameShape": 7,
+          "salary": 19250,
+          "potential": 8
+        },
+        {
+          "playerId": "ce5a4cb5-b8d1-5d00-ad29-4587d315ca3c",
+          "name": "Luca Patel",
+          "position": "ShootingGuard",
+          "dmi": 55000,
+          "gameShape": 5,
+          "salary": 10000,
+          "potential": 8
+        }
+      ]
+    },
+    {
+      "name": "Suomi",
+      "countryId": "DEMO-45",
+      "teamId": "f9c1d477-b2fb-5fa5-86ab-d13d95b42d4e",
+      "teamName": "Suomi U21 (demo)",
+      "players": [
+        {
+          "playerId": "62403b06-13f2-5bf3-84f0-d56f54607850",
+          "name": "Alex Rossi",
+          "position": "PointGuard",
+          "dmi": 34000,
+          "gameShape": 6,
+          "salary": 2250,
+          "potential": 7
+        },
+        {
+          "playerId": "26235474-11bf-5b45-813d-1c2707040a20",
+          "name": "Ben Lee",
+          "position": "ShootingGuard",
+          "dmi": 64500,
+          "gameShape": 6,
+          "salary": 7750,
+          "potential": 4
+        },
+        {
+          "playerId": "2fa56802-5d73-5dfe-9469-2938d98961bb",
+          "name": "Chris Carter",
+          "position": "SmallForward",
+          "dmi": 61500,
+          "gameShape": 6,
+          "salary": 4000,
+          "potential": 4
+        },
+        {
+          "playerId": "b127b5cb-7acd-5d83-b890-7f290bc749b7",
+          "name": "Daniel Meyer",
+          "position": "PowerForward",
+          "dmi": 40500,
+          "gameShape": 7,
+          "salary": 9750,
+          "potential": 4
+        },
+        {
+          "playerId": "d378ac8e-173c-5a17-9af1-1aac571c68b2",
+          "name": "Eli Rivera",
+          "position": "Center",
+          "dmi": 46500,
+          "gameShape": 5,
+          "salary": 3250,
+          "potential": 9
+        },
+        {
+          "playerId": "9f4f8790-c0b9-5925-aad6-35b47c34df13",
+          "name": "Finn Morgan",
+          "position": "PointGuard",
+          "dmi": 39000,
+          "gameShape": 9,
+          "salary": 4750,
+          "potential": 7
+        },
+        {
+          "playerId": "beee71f9-9d1b-561d-8a87-64c6a601b508",
+          "name": "Gabriel Chen",
+          "position": "ShootingGuard",
+          "dmi": 56500,
+          "gameShape": 6,
+          "salary": 20750,
+          "potential": 5
+        },
+        {
+          "playerId": "ed54f7eb-3142-55dc-9118-6a993a411812",
+          "name": "Hugo Silva",
+          "position": "SmallForward",
+          "dmi": 33000,
+          "gameShape": 6,
+          "salary": 20750,
+          "potential": 10
+        },
+        {
+          "playerId": "2c7aed2c-9c41-50be-828d-350f98957308",
+          "name": "Ivan Keller",
+          "position": "PowerForward",
+          "dmi": 77500,
+          "gameShape": 6,
+          "salary": 14750,
+          "potential": 10
+        },
+        {
+          "playerId": "d6636e4d-c18b-5dcf-a1f9-8ed6453f63c9",
+          "name": "Jonah Novak",
+          "position": "Center",
+          "dmi": 49000,
+          "gameShape": 5,
+          "salary": 2500,
+          "potential": 6
+        },
+        {
+          "playerId": "3befca06-d8a0-5c5c-9ef3-9352861fe08b",
+          "name": "Kai Patel",
+          "position": "PointGuard",
+          "dmi": 21000,
+          "gameShape": 8,
+          "salary": 17000,
+          "potential": 5
+        },
+        {
+          "playerId": "e19339ad-f093-544e-bcf3-dbc32d204377",
+          "name": "Luca Brown",
+          "position": "ShootingGuard",
+          "dmi": 29000,
+          "gameShape": 9,
+          "salary": 20250,
+          "potential": 7
+        }
+      ]
+    },
+    {
+      "name": "Sverige",
+      "countryId": "DEMO-46",
+      "teamId": "6d0d9e47-20d6-588b-b661-28b6784d3a32",
+      "teamName": "Sverige U21 (demo)",
+      "players": [
+        {
+          "playerId": "bf3a4110-85fa-544a-87db-9ac7ff12a797",
+          "name": "Alex Lee",
+          "position": "PointGuard",
+          "dmi": 81000,
+          "gameShape": 8,
+          "salary": 19750,
+          "potential": 9
+        },
+        {
+          "playerId": "5291ec27-3fc4-5c93-8afe-baa7e9527224",
+          "name": "Ben Carter",
+          "position": "ShootingGuard",
+          "dmi": 88000,
+          "gameShape": 5,
+          "salary": 14250,
+          "potential": 7
+        },
+        {
+          "playerId": "8fdfcfc4-ac03-57ff-9310-9c1c4df794ea",
+          "name": "Chris Meyer",
+          "position": "SmallForward",
+          "dmi": 68000,
+          "gameShape": 8,
+          "salary": 15250,
+          "potential": 10
+        },
+        {
+          "playerId": "f402d20a-c804-51de-9cf7-ea383bd846ba",
+          "name": "Daniel Rivera",
+          "position": "PowerForward",
+          "dmi": 60000,
+          "gameShape": 8,
+          "salary": 5750,
+          "potential": 10
+        },
+        {
+          "playerId": "31875c1d-4f79-5bb1-bb8a-60425eb08bde",
+          "name": "Eli Morgan",
+          "position": "Center",
+          "dmi": 12000,
+          "gameShape": 9,
+          "salary": 9250,
+          "potential": 8
+        },
+        {
+          "playerId": "240e5640-00eb-594a-998f-e2554ac44f70",
+          "name": "Finn Chen",
+          "position": "PointGuard",
+          "dmi": 19000,
+          "gameShape": 9,
+          "salary": 4000,
+          "potential": 7
+        },
+        {
+          "playerId": "4b9aad39-e919-5b1f-8c92-3ccb8aedb932",
+          "name": "Gabriel Silva",
+          "position": "ShootingGuard",
+          "dmi": 52500,
+          "gameShape": 7,
+          "salary": 9500,
+          "potential": 5
+        },
+        {
+          "playerId": "4e5e4b9a-952a-52f3-a07e-6a6f1f4ca6d9",
+          "name": "Hugo Keller",
+          "position": "SmallForward",
+          "dmi": 68000,
+          "gameShape": 5,
+          "salary": 20500,
+          "potential": 8
+        },
+        {
+          "playerId": "0227da03-4452-5517-8d59-9e2a18731ce6",
+          "name": "Ivan Novak",
+          "position": "PowerForward",
+          "dmi": 92000,
+          "gameShape": 9,
+          "salary": 15250,
+          "potential": 9
+        },
+        {
+          "playerId": "7e6d2b0a-044b-5664-8b61-d5a0b75303df",
+          "name": "Jonah Patel",
+          "position": "Center",
+          "dmi": 85500,
+          "gameShape": 5,
+          "salary": 20750,
+          "potential": 7
+        },
+        {
+          "playerId": "a5ba7cba-ce68-524f-ae72-8cc01546df04",
+          "name": "Kai Brown",
+          "position": "PointGuard",
+          "dmi": 82000,
+          "gameShape": 7,
+          "salary": 19500,
+          "potential": 9
+        },
+        {
+          "playerId": "633c0e43-b39a-56e6-815e-594510f372ea",
+          "name": "Luca Rossi",
+          "position": "ShootingGuard",
+          "dmi": 28500,
+          "gameShape": 6,
+          "salary": 7000,
+          "potential": 7
+        }
+      ]
+    },
+    {
+      "name": "Taiwan",
+      "countryId": "DEMO-47",
+      "teamId": "127858da-7795-5606-857e-eae8e9811432",
+      "teamName": "Taiwan U21 (demo)",
+      "players": [
+        {
+          "playerId": "2a7bba38-eb5a-54e9-9b91-80af373d65b0",
+          "name": "Alex Carter",
+          "position": "PointGuard",
+          "dmi": 86000,
+          "gameShape": 8,
+          "salary": 11250,
+          "potential": 4
+        },
+        {
+          "playerId": "495211e7-eb85-57e3-9ee9-b843067d1423",
+          "name": "Ben Meyer",
+          "position": "ShootingGuard",
+          "dmi": 27500,
+          "gameShape": 9,
+          "salary": 4000,
+          "potential": 5
+        },
+        {
+          "playerId": "a7e0c00f-7b25-5ed2-8ef1-932715b2455e",
+          "name": "Chris Rivera",
+          "position": "SmallForward",
+          "dmi": 61500,
+          "gameShape": 7,
+          "salary": 21000,
+          "potential": 6
+        },
+        {
+          "playerId": "80a014c5-b895-5a7d-8239-09d8f6b4eb71",
+          "name": "Daniel Morgan",
+          "position": "PowerForward",
+          "dmi": 78500,
+          "gameShape": 9,
+          "salary": 3750,
+          "potential": 7
+        },
+        {
+          "playerId": "d5b911b2-8bcb-5a1b-826a-ea10faaf48a7",
+          "name": "Eli Chen",
+          "position": "Center",
+          "dmi": 29000,
+          "gameShape": 7,
+          "salary": 16000,
+          "potential": 6
+        },
+        {
+          "playerId": "bc5614d6-cdc5-50cf-8712-808710c2e73e",
+          "name": "Finn Silva",
+          "position": "PointGuard",
+          "dmi": 82500,
+          "gameShape": 9,
+          "salary": 17000,
+          "potential": 5
+        },
+        {
+          "playerId": "623a9c9a-dfc0-5957-951a-54cb68169b2f",
+          "name": "Gabriel Keller",
+          "position": "ShootingGuard",
+          "dmi": 89000,
+          "gameShape": 6,
+          "salary": 5000,
+          "potential": 8
+        },
+        {
+          "playerId": "0d95abe5-5c6d-5882-aa30-53da3d5335d6",
+          "name": "Hugo Novak",
+          "position": "SmallForward",
+          "dmi": 14000,
+          "gameShape": 7,
+          "salary": 17250,
+          "potential": 7
+        },
+        {
+          "playerId": "f498e413-02c9-5c33-89fa-4f44f41be1b4",
+          "name": "Ivan Patel",
+          "position": "PowerForward",
+          "dmi": 28500,
+          "gameShape": 7,
+          "salary": 8250,
+          "potential": 5
+        },
+        {
+          "playerId": "21a19f8f-4b81-5bb6-82ea-969d3797bec9",
+          "name": "Jonah Brown",
+          "position": "Center",
+          "dmi": 11000,
+          "gameShape": 8,
+          "salary": 16250,
+          "potential": 7
+        },
+        {
+          "playerId": "94301bbb-768b-58a0-9909-278877ed1800",
+          "name": "Kai Rossi",
+          "position": "PointGuard",
+          "dmi": 81500,
+          "gameShape": 6,
+          "salary": 17000,
+          "potential": 9
+        },
+        {
+          "playerId": "8b09e463-4d2c-5c32-bc43-b0a2d00207ef",
+          "name": "Luca Lee",
+          "position": "ShootingGuard",
+          "dmi": 69000,
+          "gameShape": 7,
+          "salary": 19250,
+          "potential": 4
+        }
+      ]
+    },
+    {
+      "name": "Türkiye",
+      "countryId": "DEMO-48",
+      "teamId": "bfcee4ab-d4f4-5e5a-a732-33e37472eaac",
+      "teamName": "Türkiye U21 (demo)",
+      "players": [
+        {
+          "playerId": "e85ba616-4fd1-50e4-b833-21d4438e1757",
+          "name": "Alex Meyer",
+          "position": "PointGuard",
+          "dmi": 54500,
+          "gameShape": 7,
+          "salary": 10250,
+          "potential": 4
+        },
+        {
+          "playerId": "ba131cf4-6c2d-5e3a-a37b-014ad4ec17aa",
+          "name": "Ben Rivera",
+          "position": "ShootingGuard",
+          "dmi": 34500,
+          "gameShape": 6,
+          "salary": 2000,
+          "potential": 4
+        },
+        {
+          "playerId": "b7d33bb4-26dd-596d-9ce4-7ba0ceca4a81",
+          "name": "Chris Morgan",
+          "position": "SmallForward",
+          "dmi": 65000,
+          "gameShape": 7,
+          "salary": 18500,
+          "potential": 10
+        },
+        {
+          "playerId": "9b9a7c10-1b23-565c-bb25-f36c4c2b8001",
+          "name": "Daniel Chen",
+          "position": "PowerForward",
+          "dmi": 29000,
+          "gameShape": 6,
+          "salary": 4750,
+          "potential": 8
+        },
+        {
+          "playerId": "cf365457-036c-5f2d-bef9-029ea964dd98",
+          "name": "Eli Silva",
+          "position": "Center",
+          "dmi": 54500,
+          "gameShape": 5,
+          "salary": 8750,
+          "potential": 4
+        },
+        {
+          "playerId": "a826ca84-40f3-51ee-8711-05e2ec101e56",
+          "name": "Finn Keller",
+          "position": "PointGuard",
+          "dmi": 48000,
+          "gameShape": 5,
+          "salary": 13250,
+          "potential": 9
+        },
+        {
+          "playerId": "a89c2f9c-8967-506b-a779-cd0b09195eff",
+          "name": "Gabriel Novak",
+          "position": "ShootingGuard",
+          "dmi": 18500,
+          "gameShape": 8,
+          "salary": 9500,
+          "potential": 10
+        },
+        {
+          "playerId": "0c49f016-b4d2-560c-a133-3c22630b66b9",
+          "name": "Hugo Patel",
+          "position": "SmallForward",
+          "dmi": 68000,
+          "gameShape": 6,
+          "salary": 4750,
+          "potential": 5
+        },
+        {
+          "playerId": "e5cc984d-65dc-5e53-9759-85f2a195e7bd",
+          "name": "Ivan Brown",
+          "position": "PowerForward",
+          "dmi": 10500,
+          "gameShape": 6,
+          "salary": 16750,
+          "potential": 8
+        },
+        {
+          "playerId": "aa6918fd-515b-53f5-a5dd-48cbd41b38ca",
+          "name": "Jonah Rossi",
+          "position": "Center",
+          "dmi": 38000,
+          "gameShape": 7,
+          "salary": 9250,
+          "potential": 9
+        },
+        {
+          "playerId": "39506072-97ac-501d-895b-434abdf2f558",
+          "name": "Kai Lee",
+          "position": "PointGuard",
+          "dmi": 16000,
+          "gameShape": 8,
+          "salary": 15000,
+          "potential": 10
+        },
+        {
+          "playerId": "3dd33d33-240a-5e0e-9a0e-cc164f2219cd",
+          "name": "Luca Carter",
+          "position": "ShootingGuard",
+          "dmi": 75000,
+          "gameShape": 5,
+          "salary": 14000,
+          "potential": 7
+        }
+      ]
+    },
+    {
+      "name": "Ukraina",
+      "countryId": "DEMO-49",
+      "teamId": "6d18976e-8835-5e31-a123-9ba2b58da54c",
+      "teamName": "Ukraina U21 (demo)",
+      "players": [
+        {
+          "playerId": "425b8885-8701-561c-809e-23eda681d6a7",
+          "name": "Alex Rivera",
+          "position": "PointGuard",
+          "dmi": 94000,
+          "gameShape": 9,
+          "salary": 14500,
+          "potential": 6
+        },
+        {
+          "playerId": "bb2fc986-9b04-5321-bd0b-215b5c8ac3dd",
+          "name": "Ben Morgan",
+          "position": "ShootingGuard",
+          "dmi": 47500,
+          "gameShape": 6,
+          "salary": 20250,
+          "potential": 10
+        },
+        {
+          "playerId": "a8e5da43-9cb3-5cee-8190-cfb08a3bfcbb",
+          "name": "Chris Chen",
+          "position": "SmallForward",
+          "dmi": 53500,
+          "gameShape": 9,
+          "salary": 19250,
+          "potential": 8
+        },
+        {
+          "playerId": "17b0dce5-4172-5fba-8baf-e0c4cc0afcaf",
+          "name": "Daniel Silva",
+          "position": "PowerForward",
+          "dmi": 57500,
+          "gameShape": 5,
+          "salary": 17250,
+          "potential": 6
+        },
+        {
+          "playerId": "4b949a9f-5ee9-535d-afcc-e0b5293f03c7",
+          "name": "Eli Keller",
+          "position": "Center",
+          "dmi": 58500,
+          "gameShape": 5,
+          "salary": 7500,
+          "potential": 10
+        },
+        {
+          "playerId": "e69d92a6-635c-585a-8ce4-0b4b0e4aec40",
+          "name": "Finn Novak",
+          "position": "PointGuard",
+          "dmi": 14000,
+          "gameShape": 7,
+          "salary": 18250,
+          "potential": 8
+        },
+        {
+          "playerId": "13971b64-caed-5d8d-b273-0a775e72f3d3",
+          "name": "Gabriel Patel",
+          "position": "ShootingGuard",
+          "dmi": 26000,
+          "gameShape": 9,
+          "salary": 2500,
+          "potential": 8
+        },
+        {
+          "playerId": "b6a5a5f8-a192-55b5-8c39-5b9dd885f731",
+          "name": "Hugo Brown",
+          "position": "SmallForward",
+          "dmi": 38500,
+          "gameShape": 7,
+          "salary": 21750,
+          "potential": 9
+        },
+        {
+          "playerId": "bf5dcf6d-4af1-5c99-b049-4b7c68ad7a05",
+          "name": "Ivan Rossi",
+          "position": "PowerForward",
+          "dmi": 72000,
+          "gameShape": 6,
+          "salary": 17500,
+          "potential": 5
+        },
+        {
+          "playerId": "60cfd3ce-d1c1-5a04-9289-8c567f1a8087",
+          "name": "Jonah Lee",
+          "position": "Center",
+          "dmi": 26500,
+          "gameShape": 8,
+          "salary": 10000,
+          "potential": 6
+        },
+        {
+          "playerId": "bc7b3a6e-113b-5101-9444-fd58c5a7a0a6",
+          "name": "Kai Carter",
+          "position": "PointGuard",
+          "dmi": 37500,
+          "gameShape": 8,
+          "salary": 7000,
+          "potential": 7
+        },
+        {
+          "playerId": "a1cd90f0-032e-56bd-8d43-3165da7f0ae5",
+          "name": "Luca Meyer",
+          "position": "ShootingGuard",
+          "dmi": 82500,
+          "gameShape": 5,
+          "salary": 21750,
+          "potential": 5
+        }
+      ]
+    },
+    {
+      "name": "USA",
+      "countryId": "DEMO-50",
+      "teamId": "9025e2a3-e3f0-52ab-8e26-5719cabfcec2",
+      "teamName": "USA U21 (demo)",
+      "players": [
+        {
+          "playerId": "ad4bd29f-0cbc-5f50-9357-e14bc015505d",
+          "name": "Alex Morgan",
+          "position": "PointGuard",
+          "dmi": 27000,
+          "gameShape": 9,
+          "salary": 18000,
+          "potential": 10
+        },
+        {
+          "playerId": "3b8c4072-2db1-5084-8f52-885820d35f07",
+          "name": "Ben Chen",
+          "position": "ShootingGuard",
+          "dmi": 9000,
+          "gameShape": 9,
+          "salary": 6250,
+          "potential": 10
+        },
+        {
+          "playerId": "96f19359-317f-56c5-979f-023597c2d5d5",
+          "name": "Chris Silva",
+          "position": "SmallForward",
+          "dmi": 51000,
+          "gameShape": 6,
+          "salary": 16750,
+          "potential": 7
+        },
+        {
+          "playerId": "8b9e5cc4-f865-5f6f-b52e-7afb20d0b68f",
+          "name": "Daniel Keller",
+          "position": "PowerForward",
+          "dmi": 16000,
+          "gameShape": 9,
+          "salary": 5000,
+          "potential": 9
+        },
+        {
+          "playerId": "0d49fe9b-ccde-54e8-b12c-7cfc6ac289eb",
+          "name": "Eli Novak",
+          "position": "Center",
+          "dmi": 82500,
+          "gameShape": 5,
+          "salary": 9250,
+          "potential": 6
+        },
+        {
+          "playerId": "6982e25d-aa07-54ab-8343-e0f845fc7988",
+          "name": "Finn Patel",
+          "position": "PointGuard",
+          "dmi": 17000,
+          "gameShape": 6,
+          "salary": 6000,
+          "potential": 4
+        },
+        {
+          "playerId": "05d9508a-ec47-543d-a524-12df1cf898ab",
+          "name": "Gabriel Brown",
+          "position": "ShootingGuard",
+          "dmi": 90000,
+          "gameShape": 7,
+          "salary": 10500,
+          "potential": 6
+        },
+        {
+          "playerId": "df16aca5-87bf-5ba7-8472-3828d6b0c4a8",
+          "name": "Hugo Rossi",
+          "position": "SmallForward",
+          "dmi": 32500,
+          "gameShape": 7,
+          "salary": 7750,
+          "potential": 9
+        },
+        {
+          "playerId": "0d7d57a6-2fa7-5a4a-8897-8703653ba778",
+          "name": "Ivan Lee",
+          "position": "PowerForward",
+          "dmi": 76000,
+          "gameShape": 8,
+          "salary": 7750,
+          "potential": 6
+        },
+        {
+          "playerId": "527b53f6-7917-5c18-ac4f-aac3343671f5",
+          "name": "Jonah Carter",
+          "position": "Center",
+          "dmi": 30000,
+          "gameShape": 8,
+          "salary": 3750,
+          "potential": 7
+        },
+        {
+          "playerId": "29e555b0-7930-5e07-ac9f-98de535ec780",
+          "name": "Kai Meyer",
+          "position": "PointGuard",
+          "dmi": 69000,
+          "gameShape": 9,
+          "salary": 6250,
+          "potential": 4
+        },
+        {
+          "playerId": "f8ebafc4-3750-52ab-9fbf-08cfdeafc092",
+          "name": "Luca Rivera",
+          "position": "ShootingGuard",
+          "dmi": 25500,
+          "gameShape": 9,
+          "salary": 9500,
+          "potential": 5
+        }
+      ]
+    },
+    {
+      "name": "Ísland",
+      "countryId": "DEMO-51",
+      "teamId": "3d28d8e2-5c82-59bc-95a2-1ba33793bc5c",
+      "teamName": "Ísland U21 (demo)",
+      "players": [
+        {
+          "playerId": "d0612b67-a759-50d2-99bf-923591c0a3a0",
+          "name": "Alex Chen",
+          "position": "PointGuard",
+          "dmi": 27500,
+          "gameShape": 9,
+          "salary": 13750,
+          "potential": 10
+        },
+        {
+          "playerId": "f287b615-4c88-5102-b77c-7a776a0d0b64",
+          "name": "Ben Silva",
+          "position": "ShootingGuard",
+          "dmi": 31500,
+          "gameShape": 6,
+          "salary": 2500,
+          "potential": 9
+        },
+        {
+          "playerId": "ad0c503d-4950-5306-b85d-97da3ed9f251",
+          "name": "Chris Keller",
+          "position": "SmallForward",
+          "dmi": 61000,
+          "gameShape": 8,
+          "salary": 4000,
+          "potential": 10
+        },
+        {
+          "playerId": "6615267c-6a04-5431-ba1a-0c6209a917f7",
+          "name": "Daniel Novak",
+          "position": "PowerForward",
+          "dmi": 82500,
+          "gameShape": 5,
+          "salary": 7750,
+          "potential": 5
+        },
+        {
+          "playerId": "81515ea4-02c5-5522-ba1d-c44ea3bf630c",
+          "name": "Eli Patel",
+          "position": "Center",
+          "dmi": 44000,
+          "gameShape": 8,
+          "salary": 14750,
+          "potential": 8
+        },
+        {
+          "playerId": "9047b947-9c1d-5bb4-b3b4-ea74aafcda7d",
+          "name": "Finn Brown",
+          "position": "PointGuard",
+          "dmi": 45500,
+          "gameShape": 8,
+          "salary": 8750,
+          "potential": 5
+        },
+        {
+          "playerId": "a45eefcd-5e97-5a62-8a6f-976bb2dc25dd",
+          "name": "Gabriel Rossi",
+          "position": "ShootingGuard",
+          "dmi": 88000,
+          "gameShape": 7,
+          "salary": 15000,
+          "potential": 5
+        },
+        {
+          "playerId": "2a50b014-2e5b-5d8f-8bec-154920cfcb4b",
+          "name": "Hugo Lee",
+          "position": "SmallForward",
+          "dmi": 48000,
+          "gameShape": 7,
+          "salary": 5250,
+          "potential": 8
+        },
+        {
+          "playerId": "062eff5b-37f0-5e39-b2f6-1c2f2bd6c0ce",
+          "name": "Ivan Carter",
+          "position": "PowerForward",
+          "dmi": 27500,
+          "gameShape": 8,
+          "salary": 4750,
+          "potential": 8
+        },
+        {
+          "playerId": "eacaa699-638a-5440-a402-80b36b381f70",
+          "name": "Jonah Meyer",
+          "position": "Center",
+          "dmi": 61500,
+          "gameShape": 8,
+          "salary": 16000,
+          "potential": 5
+        },
+        {
+          "playerId": "7d403d81-51a3-5754-8db9-b6d7fa432eaf",
+          "name": "Kai Rivera",
+          "position": "PointGuard",
+          "dmi": 43500,
+          "gameShape": 7,
+          "salary": 9250,
+          "potential": 7
+        },
+        {
+          "playerId": "53b0075d-bad6-501c-ad71-86fd1b6647fd",
+          "name": "Luca Morgan",
+          "position": "ShootingGuard",
+          "dmi": 91500,
+          "gameShape": 9,
+          "salary": 9750,
+          "potential": 6
+        }
+      ]
+    },
+    {
+      "name": "Österreich",
+      "countryId": "DEMO-52",
+      "teamId": "214865b1-4303-5ff6-b8fc-ea673ffc3f27",
+      "teamName": "Österreich U21 (demo)",
+      "players": [
+        {
+          "playerId": "38502336-d468-551a-a684-cec58be0f5bc",
+          "name": "Alex Silva",
+          "position": "PointGuard",
+          "dmi": 76500,
+          "gameShape": 7,
+          "salary": 17500,
+          "potential": 6
+        },
+        {
+          "playerId": "0f342bb6-e64b-56f7-923e-6dcc60f215ba",
+          "name": "Ben Keller",
+          "position": "ShootingGuard",
+          "dmi": 54000,
+          "gameShape": 9,
+          "salary": 21750,
+          "potential": 7
+        },
+        {
+          "playerId": "a3da0817-7417-5cf0-8a3e-5c16901b3a5a",
+          "name": "Chris Novak",
+          "position": "SmallForward",
+          "dmi": 74000,
+          "gameShape": 5,
+          "salary": 6250,
+          "potential": 8
+        },
+        {
+          "playerId": "32b3bccc-44dd-5c1b-b2a5-f49921e7c3f2",
+          "name": "Daniel Patel",
+          "position": "PowerForward",
+          "dmi": 66000,
+          "gameShape": 5,
+          "salary": 10750,
+          "potential": 9
+        },
+        {
+          "playerId": "ae43b4f3-45cc-5d15-9383-6c766ce53161",
+          "name": "Eli Brown",
+          "position": "Center",
+          "dmi": 67000,
+          "gameShape": 8,
+          "salary": 15750,
+          "potential": 7
+        },
+        {
+          "playerId": "354c16a7-4255-54a8-a358-990909a39988",
+          "name": "Finn Rossi",
+          "position": "PointGuard",
+          "dmi": 9000,
+          "gameShape": 8,
+          "salary": 4000,
+          "potential": 5
+        },
+        {
+          "playerId": "0b5a5557-2183-5acf-bd7f-5652562a03c8",
+          "name": "Gabriel Lee",
+          "position": "ShootingGuard",
+          "dmi": 26000,
+          "gameShape": 5,
+          "salary": 8500,
+          "potential": 9
+        },
+        {
+          "playerId": "3e8a6d0f-09d8-5a6b-ba74-08b4f3a09a94",
+          "name": "Hugo Carter",
+          "position": "SmallForward",
+          "dmi": 57000,
+          "gameShape": 9,
+          "salary": 10000,
+          "potential": 5
+        },
+        {
+          "playerId": "c21358f1-a9df-505a-ad20-cd3385fd42ca",
+          "name": "Ivan Meyer",
+          "position": "PowerForward",
+          "dmi": 37500,
+          "gameShape": 9,
+          "salary": 11000,
+          "potential": 9
+        },
+        {
+          "playerId": "f433b6d5-469e-523e-a8d1-ac0f3c570eb2",
+          "name": "Jonah Rivera",
+          "position": "Center",
+          "dmi": 8500,
+          "gameShape": 5,
+          "salary": 17000,
+          "potential": 9
+        },
+        {
+          "playerId": "03008fa3-9bf9-51c9-b9dc-87ba55af458c",
+          "name": "Kai Morgan",
+          "position": "PointGuard",
+          "dmi": 79000,
+          "gameShape": 7,
+          "salary": 2750,
+          "potential": 5
+        },
+        {
+          "playerId": "cd913646-5971-56e3-8a28-f91daa37ae46",
+          "name": "Luca Chen",
+          "position": "ShootingGuard",
+          "dmi": 61000,
+          "gameShape": 5,
+          "salary": 13250,
+          "potential": 9
+        }
+      ]
+    }
+  ]
+}
