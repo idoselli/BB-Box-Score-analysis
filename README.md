@@ -22,6 +22,12 @@ The v1 API does not expose play-by-play, so the beta multi-match report is a box
 * credit to Radek for bulding BB Insider, which this tool was built upon.
 
 ### local development
+
+BuzzerBeater Coach information is available at `/buzzerbeater-coach/`, with
+support at `/buzzerbeater-coach/support`, privacy at `/buzzerbeater-coach/privacy`,
+and terms at `/buzzerbeater-coach/terms`. Publication preparation is tracked in
+`docs/buzzerbeater-coach-publication.md`.
+
 Copy `.env.example` to `.env` and fill in local-only values.
 
 Start the web app:

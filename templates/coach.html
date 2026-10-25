@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="BuzzerBeater Coach by Ido Sellinger: help with training, tactics, scouting, and team management for BuzzerBeater.">
+  <title>{{ title }} · NIKA</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='coach.css') }}">
+</head>
+<body>
+  <main class="coach-wrap">
+    <a class="brand" href="/" aria-label="NIKA home"><img src="{{ url_for('static', filename='nika-logo.png') }}" alt="NIKA"></a>
+    <nav class="coach-nav" aria-label="BuzzerBeater Coach">
+      <a href="{{ url_for('coach.overview') }}" {% if page == 'overview' %}aria-current="page"{% endif %}>BuzzerBeater Coach</a>
+      <a href="{{ url_for('coach.information', page='support') }}" {% if page == 'support' %}aria-current="page"{% endif %}>Support</a>
+      <a href="{{ url_for('coach.information', page='privacy') }}" {% if page == 'privacy' %}aria-current="page"{% endif %}>Privacy</a>
+      <a href="{{ url_for('coach.information', page='terms') }}" {% if page == 'terms' %}aria-current="page"{% endif %}>Terms</a>
+    </nav>
+    <article class="coach-card">
+    {% if page == 'overview' %}
+      <p class="eyebrow">A plugin for ChatGPT and Codex · By Ido Sellinger</p>
+      <h1>BuzzerBeater Coach</h1>
+      <p class="lead">Training, tactics &amp; scouting</p>
+      <p><strong>Free to use. No purchases or subscriptions are offered by the plugin.</strong></p>
+      <p>Turn player information, game documentation, and NIKA reports into practical plans for your BuzzerBeater team.</p>
+      <div class="feature-grid">
+        <section><h2>Build a training plan</h2><p>Discuss U21 development, player roles, training priorities, and weekly minutes using the supplied guides and CoachParrot references.</p></section>
+        <section><h2>Prepare for an opponent</h2><p>Use NIKA results to examine tactical tendencies, player usage, shot profiles, and matchups, then work through lineup and game-plan choices.</p></section>
+        <section><h2>Manage your team</h2><p>Explore arena income, scouting, salaries, game shape, and roster decisions with guidance grounded in the bundled reference material.</p></section>
+      </div>
+      <h2>Try asking</h2>
+      <ul class="prompts">
+        <li>Help me plan training for an 18-year-old outside guard.</li>
+        <li>Use these NIKA results to prepare a scouting report for my next opponent.</li>
+        <li>Help me balance weekly minutes between training and competitive games.</li>
+      </ul>
+      <h2>Using the plugin</h2>
+      <p>Once you have access and have installed BuzzerBeater Coach, select it in ChatGPT or Codex and describe your team or question. Attach relevant player details or NIKA exports when needed. This page does not install the plugin; a public directory link will be added after publication.</p>
+      <p><a class="action" href="/">Open NIKA analysis</a> <a class="secondary" href="{{ url_for('coach.information', page='support') }}">Get help</a></p>
+      <p class="note">An independent community project, not an official BuzzerBeater product. Advice and estimates may be incomplete; game outcomes and training progress are not guaranteed. NIKA analysis and CoachParrot calculations are distinct from official game mechanics.</p>
+    {% elif page == 'support' %}
+      <p class="eyebrow">BuzzerBeater Coach · By Ido Sellinger</p>
+      <h1>Support</h1>
+      <p>For questions, incorrect guidance, or problems with BuzzerBeater Coach, <a href="https://github.com/idoselli/BB-Box-Score-analysis/issues">open an issue in the NIKA GitHub repository</a>. A GitHub account is required to post.</p>
+      <h2>Include enough detail to reproduce the problem</h2>
+      <ul><li>Start the issue title with “BuzzerBeater Coach”.</li><li>Include the prompt, what happened, and what you expected.</li><li>Mention whether you used ChatGPT or Codex and whether the problem involves a NIKA report.</li><li>Use game or match IDs and redacted examples when useful.</li></ul>
+      <p class="note">GitHub issues are public. Never post passwords, API tokens, private account details, or unredacted conversations. Use a minimal example with sensitive details removed.</p>
+      <h2>Before reporting</h2>
+      <p>Check that the plugin is installed and selected in your chat. For advice based on a NIKA report, include the relevant tables or export. For account, billing, or installation problems in ChatGPT or Codex, use the support options provided by OpenAI.</p>
+      <p>CoachParrot is credited to Joey Ka (Jozef Ka). Please distinguish issues with BuzzerBeater Coach’s interpretation from issues with the original spreadsheet.</p>
+    {% elif page == 'privacy' %}
+      <p class="eyebrow">BuzzerBeater Coach · Updated October 25, 2026</p>
+      <h1>Privacy policy</h1>
+      <p>This policy covers BuzzerBeater Coach, published by Ido Sellinger, and its information pages on NIKA.</p>
+      <h2>Information used in your chat</h2>
+      <p>BuzzerBeater Coach provides instructions and reference material within ChatGPT or Codex. The plugin does not collect, transmit to its publisher, or retain your conversations, uploaded files, account details, or other personal information. Its package has no dedicated server connection or account registration.</p>
+      <p>You may provide player information, match reports, or files for the assistant to interpret. ChatGPT or Codex processes that material under the applicable OpenAI policies and your account settings. The plugin publisher does not control OpenAI’s storage or retention of your chats.</p>
+      <h2>These web pages</h2>
+      <p>NIKA hosts these information pages on Vercel and loads Vercel Web Analytics. Requests to the website are handled by that hosting infrastructure, separately from your plugin conversations. The plugin’s statement that it collects no user data does not mean that visiting this website produces no hosting or analytics activity.</p>
+      <h2>Support and external links</h2>
+      <p>If you choose to post a support issue on GitHub, the issue and information you include are public and can be read by the maintainer and others. GitHub handles your account and posts under its own policies. Share redacted examples rather than private conversations, passwords, or API tokens.</p>
+      <p>Links to NIKA’s analysis tools and other services open separate services. This plugin policy does not describe all data processing performed by those tools, including any credentials you choose to enter there.</p>
+      <h2>Questions and data requests</h2>
+      <p>Use the <a href="{{ url_for('coach.information', page='support') }}">support page</a> for questions about this policy. Since the plugin does not collect or retain your chat data, its publisher has no separate copy to retrieve or delete. Manage your chats and files through the service where you used the plugin. For questions involving sensitive information, open a general issue requesting a private contact method without including that information.</p>
+    {% elif page == 'terms' %}
+      <p class="eyebrow">BuzzerBeater Coach · Updated October 25, 2026</p>
+      <h1>Terms of use</h1>
+      <p>These terms describe use of BuzzerBeater Coach, published by Ido Sellinger.</p>
+      <h2>Free community guidance</h2>
+      <p>The plugin is free to use and offers no purchases or paid subscriptions. Access to ChatGPT, Codex, or other services may be subject to those services’ own terms and pricing.</p>
+      <p>BuzzerBeater Coach helps interpret game documentation, training references, player information, and NIKA reports. It is an independent community project and is not an official BuzzerBeater product.</p>
+      <h2>Using the advice</h2>
+      <p>AI-generated advice, calculations, and interpretations can contain errors or omit context. Check relevant game rules and source material before making team decisions. Training progress, player values, and match outcomes are not guaranteed.</p>
+      <p>Provide only material you are entitled to share, and avoid including passwords, API tokens, or private account information in chats or public support issues. Use the plugin in accordance with the game’s rules and the terms of the services you access.</p>
+      <h2>References and other services</h2>
+      <p>CoachParrot is credited to Joey Ka (Jozef Ka). References and third-party materials remain subject to their respective rights and permissions. Use of this plugin does not grant ownership of those materials.</p>
+      <p>NIKA analysis, GitHub, OpenAI services, and other external services have their own terms. The plugin does not operate your BuzzerBeater account or make game decisions on your behalf.</p>
+      <h2>Support</h2>
+      <p>Report problems through the <a href="{{ url_for('coach.information', page='support') }}">support page</a>. See the <a href="{{ url_for('coach.information', page='privacy') }}">privacy policy</a> for information about plugin data handling and these web pages.</p>
+    {% endif %}
+    </article>
+    <footer>BuzzerBeater Coach · Ido Sellinger · <a href="/">NIKA</a></footer>
+  </main>
+</body>
+</html>

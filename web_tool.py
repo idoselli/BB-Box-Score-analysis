@@ -28,11 +28,13 @@ from minutes_analyzer import minutes_bp
 from u21_tracker import u21_tracker_bp
 from u21_training import PlayerMetadata, estimate_player, target_seasons_for_player
 from beta_v1 import beta_bp
+from coach_pages import coach_bp
 
 app = Flask(__name__)
 app.register_blueprint(minutes_bp)
 app.register_blueprint(u21_tracker_bp)
 app.register_blueprint(beta_bp)
+app.register_blueprint(coach_bp)
 
 LOCAL_NATIONAL_OPTIONS_PATH = Path(__file__).with_name("national_options.json")
 DEFAULT_CURRENT_SEASON = int(os.environ.get("CURRENT_SEASON", "73"))
@@ -60,6 +62,7 @@ def add_vercel_analytics(response):
                        '<a href="/">Home</a><a href="/u21-tracker">U21 tracker</a>'
                        '<a href="/u21-minutes">U21 minutes</a><a href="/nt-minutes">NT minutes</a>'
                        '<a href="/player-minutes">Player analyzer</a><a href="/beta/">New-world beta</a>'
+                       '<a href="/buzzerbeater-coach/">BuzzerBeater Coach</a>'
                        '</nav></div></header>')
         if re.search(r"<body(?:\s[^>]*)?>", html, flags=re.IGNORECASE):
             html = re.sub(r"(<body(?:\s[^>]*)?>)", lambda match: match.group(1) + site_header, html, count=1, flags=re.IGNORECASE)
