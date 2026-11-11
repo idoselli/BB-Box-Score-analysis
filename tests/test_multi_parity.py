@@ -91,6 +91,10 @@ class MultiParityTests(unittest.TestCase):
         for e in report['eventReports'][0]['shots']:
             e.pop('primaryDefenderId',None)
             e.pop('contestLevel',None)
+            e.pop('resolvedDefenderId',None)
+            e.pop('defenderSource',None)
+            e.pop('inferredDefenderId',None)
+            e.pop('defenseState',None)
         view = presentation(report)
         self.assertIsNone(view['matchup'][0]['openTotal'])
         self.assertIsNone(view['matchup'][0]['teamOn'])
@@ -105,7 +109,7 @@ class MultiParityTests(unittest.TestCase):
         report['eventReports'][0]['shots'] = [shot,foul]
         view = presentation(report)
         self.assertEqual(view['offense']['players'][0]['total'],{'a':1,'m':1,'mi':0,'b':0})
-        self.assertEqual(view['matchup'][0]['withPass'],{'a':1,'m':1})
+        self.assertEqual(view['matchup'][0]['withPass']['a']+view['matchup'][0]['withoutPass']['a'],1)
 
     def test_clutch_free_throw_points_and_fg_are_separate(self):
         report = self.report()

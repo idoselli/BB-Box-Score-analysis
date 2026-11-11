@@ -1,4 +1,4 @@
-"""Public ordered play facts. Never infer defenders from player2 or replay lineups."""
+"""Public play facts plus role/lineup reconstruction validated against box scores."""
 from __future__ import annotations
 
 from collections import Counter
@@ -68,16 +68,35 @@ def analyze_events(match_id: str, rows: list[dict[str, Any]], match: dict, box: 
             e["countsAsAttempt"] = e.get("shotResult") not in FOUL_MISSES | {None, "None"}
             e["points"] = (3 if e.get("shotType") in THREES else 2) if e["made"] else 0
             shots.append(e)
-            defender = e.get("primaryDefenderId")
-            if e["countsAsAttempt"] and defender and defender != ZERO_UUID:
-                key = (e.get("player1Id"), defender)
-                group = matchups.setdefault(key, {"shooterId": key[0], "shooter": e["player1Name"], "defenderId": defender, "defender": e["defenderName"], "attempts": 0, "made": 0, "points": 0})
-                group["attempts"] += 1
-                group["made"] += int(e["made"])
-                group["points"] += e["points"]
         types[str(e.get("eventType"))] += 1
         raw.update(e)
+    from .reconstruction import infer_roles, reconstruct
+    from .commentary_roles import describe_shot
+    infer_roles(rows, box)
+    shots = [e for e in rows if e.get("eventType") == "Shot" and not e.get("isCommentary")]
+    matchups = {}
+    for e in shots:
+        defender = e.get("primaryDefenderId") or e.get("inferredDefenderId")
+        if defender == ZERO_UUID:
+            defender = e.get("inferredDefenderId")
+        e["resolvedDefenderId"] = defender
+        e["defenderName"] = players.get(defender, {}).get("name") or ("Unknown player" if defender else "")
+        e["passerName"] = players.get(e.get("passerId"), {}).get("name") or ""
+        describe_shot(e)
+        if defender and e.get("countsAsAttempt"):
+            key = (e.get("player1Id"), defender)
+            entry = matchups.setdefault(key, {"shooterId":key[0],"shooter":e["player1Name"],"defenderId":defender,
+                                               "defender":e["defenderName"],"attempts":0,"made":0,"points":0})
+            entry["attempts"] += 1
+            entry["made"] += int(e["made"])
+            entry["points"] += e["points"]
+    reconstruction = reconstruct(rows, match, box)
     return {"matchId": match_id, "events": rows, "shots": shots,
             "matchups": list(matchups.values()), "eventTypes": dict(types),
+            "reconstruction": reconstruction,
             "ownShots": [e for e in shots if e["playerTeamId"] == team_id],
-            "defenderCoverage": {"known": sum(bool(e.get("primaryDefenderId") and e["primaryDefenderId"] != ZERO_UUID) for e in shots), "shots": len(shots)}}
+            "defenderCoverage": {"known": sum(bool(e.get("resolvedDefenderId")) for e in shots),
+                                "apiKnown":sum(e.get("defenderSource")=="api" for e in shots),
+                                "inferred":sum(bool(e.get("inferredDefenderId")) for e in shots),
+                                "open":sum(e.get("defenseState")=="open" for e in shots),
+                                "unknown":sum(e.get("defenseState")=="unknown" for e in shots),"shots":len(shots)}}

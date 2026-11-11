@@ -21,21 +21,37 @@ pagination, a maximum of 30 matches and the manager's API quotas still apply.
 | Summary cards and Match Summary | Restored; scores, side, result, both tactics/GDP, effort difference; extra rating/sublevel/rebounding/PP100 panel retained |
 | Tactic Position Minutes | Same Inside / Outside / Balanced cards, PG–C, top three players per role; only valid saved position splits, zero-minute entries excluded |
 | Player Summary | Same sortable totals and shooting columns; box-score minute precision |
-| Player Matchup Overview | Restored columns and color bands; assisted-result and explicit open/contest splits; on/off unavailable |
-| Player Defense Overview | Restored columns and color bands; explicit event ranges and saved defended totals; on/off unavailable |
-| Defended Shot Log | Same defender/shot-type/result multiselects and summary; only attributed selected-team defense; unknown attribution remains in the all-shot log |
+| Player Matchup Overview | Restored columns and color bands; sentence-role passing and open/defended splits; on/off available for validated reconstructions |
+| Player Defense Overview | Restored columns and color bands; API/reconstructed event ranges and saved defended totals; on/off available for validated reconstructions |
+| Defended Shot Log | Same defender/shot-type/result multiselects and summary; API and play-by-play-attributed selected-team defense; unresolved attribution remains in the all-shot log |
 | NBA-Style Dashboard | All six original views: Traditional, Advanced Lite, Shooting, Defense, Clutch, Four Factors; same filters, sorting and glossary |
-| Detections & Suggestions | Same high-usage, shot-diet, range-efficiency and supported defended-shot rules; same grouped cards/table, minimum eight attempts; no invented on/off findings |
+| Detections & Suggestions | Same high-usage, shot-diet, range-efficiency and supported defended-shot rules; same grouped cards/table, minimum eight attempts; on/off findings enabled for validated reconstructions |
 | Offense Shot Profile By Player | Restored per-shot-type columns, made/missed/blocked totals and range grouping |
 | Global filters | Player, result, tactic group, attempts and minutes; reset. As in the old renderer, result/tactic affect match/event selection; NBA dashboard filters separately recalculate its own totals |
 | Exports | JSON, CSV ZIP and combined CSV; include native facts and the derived `aggregate` presentation. All-shot/event CSV and Print/PDF retained |
 | Extra shooting facts | Team/opponent zone and player split tables retained behind side buttons |
 
-Clutch points and field-goal/three-point figures are calculated from pre-play
-score margin and recorded events. Clutch AST, TO and +/− stay explicitly
-unavailable pending actor semantics and lineup data. Advanced metrics such as
-TS%, usage proxy, per-36 and estimated possessions retain the old formulas and
-labels. Missing contest/defender history is not interpreted as open or zero.
+Clutch points and field-goal/three-point figures use pre-play score margin.
+Clutch assists use the linked shot's pre-play state, not the score after the
+basket. Clutch assists/turnovers are enabled when their full-game actor counts
+match every player's official totals. Reconstructed lineups must identify five
+starters per side, follow a consistent substitution/swap timeline and reconcile
+with official scores, field goals, rounded minutes and plus/minus. Exact role
+seconds are used only when a unique role assignment also matches the saved
+position minutes. Per-row flags prevent incomplete games from becoming fake
+zero on/off or clutch figures.
+
+The English commentary catalog was confirmed by the owner. Reconstructed shot descriptions summarize recorded shot/actor/result facts and are labeled accordingly; they do not invent movement, contest intensity or an original wording variation. Defense wrappers
+name the opponent; passing wrappers name a teammate. Direct API attribution
+takes precedence. The same role grammar applies to structured events, including
+blocked-assist outcomes where the second actor is an opponent. Complete supplied
+shot sentences without a defender classify as open; result-only text and
+unresolved actors remain distinct. Original template wording cannot be recovered
+from a bare event enum when the API omits text/variation codes.
+
+Advanced metrics retain the old formulas and labels. Reconstructed timing and
+role data carry their provenance and validation status in exports and per-match
+expandable details.
 
 ## Names and scrolling
 
@@ -60,7 +76,7 @@ labels. Missing contest/defender history is not interpreted as open or zero.
   Event play facts are available despite an outdated prose migration statement.
 - A captured production match provides 530 events, 199 shot events and both
   rosters. Selected-team attempts reconcile at 84 and field-goal points at 53.
-  It has no explicit defender coverage, exercising the unavailable state.
+  Although direct defender fields are absent, sentence actor roles recover 112 defended and 87 open/pass-assisted events; block attribution matches official totals. Every player's reconstructed minutes and plus/minus reconcile, as do assists and turnovers.
 - Chromium compares the old and new renderers with the same underlying match:
   Player Summary, Matchup and Defense colors and font sizes match exactly.
   The first ten core report panels retain their original order.
@@ -68,9 +84,7 @@ labels. Missing contest/defender history is not interpreted as open or zero.
   scrolling, height changes, pagination, search, player/minute filters, glossary,
   all six NBA views and JSON/ZIP/combined exports. A 390px viewport has no document
   horizontal overflow and the browser reports no JavaScript errors.
-- Synthetic regressions cover explicit defensive attribution, missing contest
-  history, unknown identities, foul-miss attempt rules, clutch free throws,
-  tactic minutes, label escaping and the shared legacy structure.
+- Synthetic regressions cover all six defense wrappers, passing/open sentence rules, validated starters/substitutions/swaps, missing/inconsistent timelines, official statistical reconciliation, clutch scoring-state links, identity handling, exports and the shared legacy structure.
 
 No application credentials, personal tokens or captured account payloads are
 committed. The API requests above are data limitations; the listed visual and

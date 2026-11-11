@@ -131,7 +131,9 @@ class PublicEventTests(unittest.TestCase):
         self.assertFalse(result['shots'][0]['countsAsAttempt'])
         self.assertEqual(result['shots'][1]['points'], 3)
         self.assertEqual(len(result['matchups']), 1)
-        self.assertEqual(result['defenderCoverage'], {'known': 1, 'shots': 2})
+        self.assertEqual(result['defenderCoverage']['known'],1)
+        self.assertEqual(result['defenderCoverage']['shots'],2)
+        self.assertEqual(result['defenderCoverage']['unknown'],1)
         self.assertTrue(result['shots'][1]['clutch'])
         self.assertEqual(len(result['ownShots']), 2)
 

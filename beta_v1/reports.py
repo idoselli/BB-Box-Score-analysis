@@ -18,11 +18,7 @@ COUNT_FIELDS = (
 )
 
 POSITIONS = ("pointGuard", "shootingGuard", "smallForward", "powerForward", "center")
-UNAVAILABLE = (
-    "On/off and lineup-based metrics need starting lineups and complete substitution state, "
-    "which the API does not export. Individual effort settings are unavailable; effort "
-    "difference is shown instead. Missing historical defender/contest fields are never treated as open shots."
-)
+
 
 
 def shooting_totals(sides: list[dict[str, Any]]) -> dict[str, Any] | None:
@@ -114,7 +110,7 @@ def build_report(client: V1Client, match_ids: list[str], selected_team_id: str =
         raise ValueError("Invalid report filter.")
     match_ids = list(dict.fromkeys(uuid_id(value) for value in match_ids))
     games: list[tuple[dict[str, Any], dict[str, Any]]] = []
-    warnings = [UNAVAILABLE]
+    warnings = []
     skipped = []
     for match_id in match_ids:
         try:
@@ -207,8 +203,11 @@ def build_report(client: V1Client, match_ids: list[str], selected_team_id: str =
                 event_report = analyze_events(match_id, read_events(client, match_id), match, box, team_id, player_directory)
                 event_reports.append(event_report)
                 coverage = event_report["defenderCoverage"]
-                if coverage["known"] < coverage["shots"]:
-                    warnings.append(f"{match_id}: explicit defenders recorded for {coverage['known']} of {coverage['shots']} shots; unmatched shots are excluded from matchup totals.")
+                if coverage["unknown"]:
+                    warnings.append(f"{match_id}: {coverage['unknown']} shot roles could not be resolved from the recorded play-by-play.")
+                reconstruction = event_report["reconstruction"]
+                if reconstruction["status"] != "validated":
+                    warnings.append(f"{match_id}: On/off reconstruction unavailable: {' '.join(reconstruction['reasons'])}")
             except V1ApiError as exc:
                 warnings.append(f"Events unavailable for {match_id}: {exc.code}: {exc}")
         shooting = None
@@ -235,11 +234,13 @@ def build_report(client: V1Client, match_ids: list[str], selected_team_id: str =
             "opponentPp100": opponent_box.get("pp100"),
             "shooting": shot,
             "opponentShooting": opponent_shot,
+            "reconstruction": next((r["reconstruction"] for r in event_reports if r["matchId"]==match_id), None),
             "playerLines": lines,
             "opponentPlayerLines": opponent_box.get("players") or [],
             "scheduledAt": match.get("scheduledAt", ""),
             "team": team_names.get(team_id, team_id),
             "opponent": opponent.get("name") or opponent_id,
+            "opponentId": opponent_id,
             "home": own.get("isHome"),
             "score": f"{own_score}–{opponent_score}",
             "result": "W" if own_score > opponent_score else "L",
@@ -324,9 +325,12 @@ def build_report(client: V1Client, match_ids: list[str], selected_team_id: str =
             player_directory[pid] = {"name":label,"teamId":(player.get("club") or {}).get("id")}
     for event_report in event_reports:
         for event in event_report["events"] + event_report["shots"]:
-            for field,label in (("player1Id","player1Name"),("player2Id","player2Name"),("primaryDefenderId","defenderName"),("helpDefenderId","helpDefenderName")):
+            for field,label in (("player1Id","player1Name"),("player2Id","player2Name"),("resolvedDefenderId","defenderName"),("helpDefenderId","helpDefenderName"),("passerId","passerName")):
                 pid = str(event.get(field) or "")
                 event[label] = player_directory.get(pid, {}).get("name") or ("Unknown player" if pid and pid != ZERO_UUID else "")
+            if event.get("eventType")=="Shot" and not event.get("isCommentary"):
+                from .commentary_roles import describe_shot
+                describe_shot(event)
         for row in event_report["matchups"]:
             row["shooter"] = player_directory.get(row["shooterId"],{}).get("name") or "Unknown player"
             row["defender"] = player_directory.get(row["defenderId"],{}).get("name") or "Unknown player"

@@ -93,6 +93,7 @@ def presentation(report):
     minutes = {g: {pos: defaultdict(int) for pos in POSITIONS} for g in ('inside','outside','balanced')}
     shot_codes = set()
     results = set()
+    derived_seconds=Counter();invalid_minutes=set()
     event_by_match = {r['matchId']: r for r in report.get('eventReports', [])}
     for match in report.get('matches', []):
         mid = match['matchId']
@@ -101,18 +102,39 @@ def presentation(report):
         own_ids = {str((line.get('player') or {}).get('id')) for line in match.get('playerLines', [])}
         opponent_ids = {str((line.get('player') or {}).get('id')) for line in match.get('opponentPlayerLines', [])}
         event_report = event_by_match.get(mid, {})
+        reconstructed=event_report.get('reconstruction') or match.get('reconstruction') or {}
+        lineup_valid=reconstructed.get('status')=='validated'
+        role_valid=lineup_valid and reconstructed.get('positionsValidated',False)
         nba_players = {}
         for line in match.get('playerLines', []):
             pid = str((line.get('player') or {}).get('id'))
             if not line.get('minutes') and not line.get('fieldGoalsAttempts'):
                 continue
             row = empty_nba_player_row(mid, match['result'], tactic_group, name(pid))
-            row.update(stats(line), playerId=pid)
+            row.update(stats(line), playerId=pid, lineup_valid=lineup_valid,
+                       assists_valid=reconstructed.get('assistsValidated',False),turnovers_valid=reconstructed.get('turnoversValidated',False))
+            derived=(reconstructed.get('players') or {}).get(pid,{})
+            if lineup_valid:
+                row['mins']=round(derived.get('seconds',0)/60,1)
+                derived_seconds[pid]+=derived.get('seconds',0)
+                for source,target in [('teamDefOn','team_def_on'),('teamDefOff','team_def_off')]:
+                    row[target]=dict(derived.get(source) or split())
+                row['clutch']['pm']=derived.get('clutchPlusMinus',0)
+            else:
+                invalid_minutes.add(pid)
+            row['clutch']['ast']=derived.get('clutchAssists',0)
+            row['clutch']['to']=derived.get('clutchTurnovers',0)
             nba_players[pid] = row
-            matchups.setdefault(pid, dict(name=name(pid), playerId=pid, **{key: split() for key in ('defended','openClose','openMid','openThree','openTotal','withPass','withoutPass')}, teamOn=None, teamOff=None))
-            defenses.setdefault(pid, dict(name=name(pid), playerId=pid, **{key: split() for key in ('defendedTotal','defendedClose','defendedMid','defendedThree')}, teamDefOn=None, teamDefOff=None))
-            role_minutes = line.get('minutesByPosition')
-            if isinstance(role_minutes, dict) and all(isinstance(role_minutes.get(pos), int) and role_minutes[pos] >= 0 for pos in POSITIONS) and sum(role_minutes[pos] for pos in POSITIONS) == line.get('minutes'):
+            matchups.setdefault(pid, dict(name=name(pid), playerId=pid, **{key: split() for key in ('defended','openClose','openMid','openThree','openTotal','withPass','withoutPass')}, teamOn=split(), teamOff=split(), lineup_valid=True))
+            defenses.setdefault(pid, dict(name=name(pid), playerId=pid, **{key: split() for key in ('defendedTotal','defendedClose','defendedMid','defendedThree')}, teamDefOn=split(), teamDefOff=split(), lineup_valid=True))
+            for store,keys in [(matchups[pid],('teamOn','teamOff')),(defenses[pid],('teamDefOn','teamDefOff'))]:
+                store['lineup_valid'] = store['lineup_valid'] and lineup_valid
+                if lineup_valid:
+                    for key in keys:
+                        value=derived.get(key) or split()
+                        store[key]['a']+=value['a'];store[key]['m']+=value['m']
+            role_minutes = ({pos:value/60 for pos,value in derived.get('secondsByPosition',{}).items()} if role_valid else line.get('minutesByPosition'))
+            if isinstance(role_minutes, dict) and (role_valid or (all(isinstance(role_minutes.get(pos), int) and role_minutes[pos] >= 0 for pos in POSITIONS) and sum(role_minutes[pos] for pos in POSITIONS) == line.get('minutes'))):
                 for pos in POSITIONS:
                     if role_minutes[pos] > 0:
                         minutes[tactic_group][pos][pid] += role_minutes[pos]
@@ -139,11 +161,11 @@ def presentation(report):
             range_key = ('Three' if code.startswith('10') else 'Mid' if code.startswith('20') else 'Close') if e.get('shotType') in SHOT_CODES else None
             made = bool(e.get('made'))
             attempt = bool(e.get('countsAsAttempt'))
-            defender = str(e.get('primaryDefenderId') or '')
+            defender = str(e.get('resolvedDefenderId') or e.get('primaryDefenderId') or e.get('inferredDefenderId') or '')
             explicit_defender = defender and defender != ZERO_UUID
-            is_open = e.get('contestLevel') == 'Open'
+            is_open = e.get('defenseState') == 'open' or e.get('contestLevel') == 'Open'
             is_defended = bool(explicit_defender) or e.get('contestLevel') in {'Light','Contested','Smothered'}
-            assisted = 'Assist' in (e.get('shotResult') or '')
+            assisted = bool(e.get('passerId')) if 'defenseState' in e else 'Assist' in (e.get('shotResult') or '')
             result = '1' if made else '3' if 'Blocked' in (e.get('shotResult') or '') else '4' if 'Foul' in (e.get('shotResult') or '') else '0'
             if e.get('shotResult') == 'Goaltending':
                 result = '2'
@@ -193,7 +215,7 @@ def presentation(report):
                 shot_codes.add(code)
                 defended_events.append({'matchid':mid,'defenderId':defender,'shooterId':pid,
                     'defender':name(defender),'shooter':name(pid),'opponent':match.get('opponent'),
-                    'shot_type':code,'shot_result':result,'comment':f"Q{e.get('period')} {e.get('clock',0)//60}:{e.get('clock',0)%60:02d} · {e.get('contestLevel') or 'Contest unavailable'}",
+                    'shot_type':code,'shot_result':result,'comment':f"Q{e.get('period')} {e.get('clock',0)//60}:{e.get('clock',0)%60:02d} · {e.get('playDescription') or e.get('defenderSource') or 'API attribution'}",
                     'attempt':attempt, 'made':made})
         # Use the official saved defended total when more complete than event attribution.
         for shot in (match.get('shooting') or {}).get('players', []):
@@ -221,15 +243,22 @@ def presentation(report):
             'effort_display': {'stronger': 'Unavailable' if delta is None else home if delta >= 0 else away,
                 'other': '' if delta is None else away if delta >= 0 else home,
                 'symbol': '' if delta is None else '==' if delta == 0 else '>>' if abs(delta)==2 else '>'}})
-    known_contest = sum(bool(e.get('contestLevel') or (e.get('primaryDefenderId') and e['primaryDefenderId'] != ZERO_UUID))
+    known_contest = sum(bool(e.get('defenseState') in {'open','defended'} or e.get('contestLevel') or (e.get('primaryDefenderId') and e['primaryDefenderId'] != ZERO_UUID))
                         for event in report.get('eventReports', []) for e in event.get('shots', []) if e.get('countsAsAttempt'))
-    known_defense = any(row['defendedTotal']['a'] for row in defenses.values())
+    known_defense = bool(known_contest) or any(row['defendedTotal']['a'] for row in defenses.values())
+    for row in summary:
+        if row['playerId'] not in invalid_minutes and row['playerId'] in derived_seconds:
+            row['mins']=round(derived_seconds[row['playerId']]/60,1)
     for row in matchups.values():
+        if not row['lineup_valid']:
+            row['teamOn']=row['teamOff']=None
         if not known_contest:
             for key in ('defended','openClose','openMid','openThree','openTotal'):
                 row[key] = None
         row['total_attempts'] = row['withPass']['a'] + row['withoutPass']['a']
     for row in defenses.values():
+        if not row['lineup_valid']:
+            row['teamDefOn']=row['teamDefOff']=None
         row['total_attempts'] = row['defendedTotal']['a']
         if not known_defense:
             for key in ('defendedTotal','defendedClose','defendedMid','defendedThree'):
@@ -247,14 +276,15 @@ def presentation(report):
         'wins':report['wins'],'losses':report['losses'],'warnings':report.get('warnings',[]),
         'player_summary':summary,'matches':matches,'matchup':list(matchups.values()),'defense':list(defenses.values()),
         'tactic_minutes':[{'key':g,'label':g.title(),'positions':[
-            {'key':pos,'label':label,'players':[{'playerId':pid,'name':name(pid),'mins':value}
+            {'key':pos,'label':label,'players':[{'playerId':pid,'name':name(pid),'mins':round(value,1)}
               for pid,value in sorted(minutes[g][pos].items(),key=lambda pair:(-pair[1],name(pair[0])))[:3]]}
             for pos,label in zip(POSITIONS,('PG','SG','SF','PF','C'))]} for g in ('inside','outside','balanced')],
         'offense':{'players':offense_rows,'shot_types':codes},
         'defended_shots':{'players':sorted({e['defender'] for e in defended_events}),'shot_types':codes,'results':sorted(results),'events':defended_events},
         'nba_dashboard':{'players':nba,'team_rows':team_rows},'return_state':{},
         'selected_team_key':report.get('teamId'),'input_matchids':[m['matchId'] for m in report.get('matches',[])],
-        'playerNames':names,'coverage':{'contest':bool(known_contest),'defense':known_defense,'events':bool(report.get('eventCoverageGames'))}}
+        'playerNames':names,'coverage':{'contest':bool(known_contest),'defense':known_defense,'events':bool(report.get('eventCoverageGames')),
+            'lineups':sum((m.get('reconstruction') or event_by_match.get(m['matchId'],{}).get('reconstruction') or {}).get('status')=='validated' for m in report.get('matches',[]))}}
 
 
 def render_report(report, fields, username=''):
@@ -290,8 +320,11 @@ def render_report(report, fields, username=''):
     # Null is different from an actual empty sample.
     for signature in ('shotStatHtml(stat)','defenseStatHtml(stat)','defensePctHtml(stat)'):
         template = template.replace('function '+signature+' {','function '+signature+' {\n        if(stat == null)return "Unavailable";')
+    template = template.replace('name,\n          matches: new Set(),', 'name,\n          lineup_valid:true,assists_valid:true,turnovers_valid:true,\n          matches: new Set(),')
+    template = template.replace('item.matches.add(row.matchid);', 'item.matches.add(row.matchid);\n          for(const flag of ["lineup_valid","assists_valid","turnovers_valid"])item[flag]=item[flag]&&row[flag]===true;')
     template = template.replace('function renderNbaTable(columns, rows, emptyColspan, emptyMessage) {','''function renderNbaTable(columns, rows, emptyColspan, emptyMessage) {
-        columns = columns.map(c=>['teamDefOn','teamDefOff','clutchPm','clutchAst','clutchTo'].includes(c.key) ? {...c,value:()=>"Unavailable",sortValue:()=>null} : c);
+        const requirements={teamDefOn:'lineup_valid',teamDefOff:'lineup_valid',clutchPm:'lineup_valid',clutchAst:'assists_valid',clutchTo:'turnovers_valid'};
+        columns=columns.map(c=>requirements[c.key]?{...c,value:r=>r[requirements[c.key]]?c.value(r):"Unavailable",sortValue:r=>r[requirements[c.key]]?(c.sortValue?c.sortValue(r):Number(c.value(r))):null}:c);
         if(nbaViewFilter.value==='defense' && !data.coverage.defense) columns=columns.map(c=>c.key==='name'?c:{...c,value:()=>"Unavailable",sortValue:()=>null});
         if(nbaViewFilter.value==='shooting' && !data.coverage.contest) columns=columns.map(c=>['open','defended'].includes(c.key)?{...c,value:()=>"Unavailable",sortValue:()=>null}:c);
         if(nbaViewFilter.value==='clutch' && sourceReport.eventCoverageGames===0){rows=[];emptyMessage='Public events unavailable; clutch figures cannot be calculated.'}
@@ -304,14 +337,14 @@ def render_report(report, fields, username=''):
     template = template.replace('const madeCount = filtered.filter', 'const attempts = filtered.filter(ev=>ev.attempt);\n        const madeCount = attempts.filter')
     template = template.replace('const fgPct = filtered.length ? ((madeCount / filtered.length)', 'const fgPct = attempts.length ? ((madeCount / attempts.length)')
     template = template.replace('const fgPct = attempts.length ? ((madeCount / attempts.length) * 100).toFixed(1) + "%" : "0.0%";', 'const fgPct = attempts.length ? ((madeCount / attempts.length) * 100).toFixed(1) + "%" : "Unavailable";')
-    template = template.replace('Event-derived split based on whether the play-by-play identified a defender on the shot.', 'Only explicitly recorded open/contest states are classified. Missing defender IDs are not assumed to mean an open shot.')
+    template = template.replace('Event-derived split based on whether the play-by-play identified a defender on the shot.', 'Defense wrappers name the opposing player; passing wrappers name a teammate. A known passer-only shot has no named primary defender. Unresolved actors are labeled separately.')
     template = template.replace('function playerPassesGlobalFilters(row, attempts = 0, minutes = 0) {', 'function playerPassesGlobalFilters(row, attempts = 0, minutes = 0) {\n        if(!minutes)minutes=data.player_summary.find(p=>p.name===row.name)?.mins||0;')
     template = template.replace('Filters update detailed tables only. Summary and detections stay based on the full aggregate.', 'Result/tactic filters select matches and events. Player and threshold filters select aggregate rows. NBA dashboard filters recalculate its totals; summary and detections use the full aggregate.')
-    template = template.replace('<h2>Player Matchup Overview</h2>', '<h2>Player Matchup Overview</h2><p class="coverage-note">Open/defended splits use recorded contest data only. Team FG On/Off is unavailable without starting lineup state. Passing splits refer to shot-result assist flags.</p>')
-    template = template.replace('<h2>Player Defense Overview</h2>', '<h2>Player Defense Overview</h2><p class="coverage-note">Team Def On/Off is unavailable. Defended ranges include explicitly attributed events; saved API totals may cover more attempts. Blank range samples are not evidence of zero defensive involvement.</p>')
-    template = template.replace('<h2>Defended Shot Log</h2>', '<h2>Defended Shot Log</h2><p class="coverage-note">Only shots with an explicit selected-team primary defender appear here. Unknown historical attribution stays in the all-shot log below.</p>')
-    template = template.replace('These filters apply only to this NBA-style dashboard. Estimated and proxy metrics are labeled in the glossary.', 'These filters apply only to this NBA-style dashboard. Clutch points and shots use recorded events; clutch AST, TO and +/- and team on/off are unavailable. Event coverage: {{ source_report.eventCoverageGames or 0 }}/{{ source_report.usedMatches }} games. Estimates and proxies are labeled in the glossary.')
-    template = template.replace('Findings favor large percentage swings', 'On/off findings are unavailable without lineup state. Other findings favor large percentage swings')
+    template = template.replace('<h2>Player Matchup Overview</h2>', '<h2>Player Matchup Overview</h2><p class="coverage-note">Defenders and passers follow the play-by-play sentence roles. On/off figures are shown when reconstructed lineups reconcile with the official minutes and plus/minus.</p>')
+    template = template.replace('<h2>Player Defense Overview</h2>', '<h2>Player Defense Overview</h2><p class="coverage-note">Defense includes named opponents recovered from play-by-play. On/off figures require a validated reconstruction. Saved API totals may cover additional attempts.</p>')
+    template = template.replace('<h2>Defended Shot Log</h2>', '<h2>Defended Shot Log</h2><p class="coverage-note">Includes selected-team defenders from direct API fields or reconstructed play-by-play roles. The all-shot log retains the attribution source.</p>')
+    template = template.replace('These filters apply only to this NBA-style dashboard. Estimated and proxy metrics are labeled in the glossary.', 'These filters apply only to this NBA-style dashboard. On/off and clutch roles appear only when their reconstruction reconciles with official statistics. Event coverage: {{ source_report.eventCoverageGames or 0 }}/{{ source_report.usedMatches }} games. Estimates and proxies are labeled in the glossary.')
+    template = template.replace('Findings favor large percentage swings', 'On/off findings use validated reconstructed lineups. Findings favor large percentage swings')
     template = template.replace('</head>', '<link rel="stylesheet" href="/static/legacy-beta-theme.css"><link rel="stylesheet" href="/static/new-multi-report.css"></head>')
     template = template.replace('<body>', '<body><header class="legacy-site-header"><div class="legacy-site-inner"><strong>BuzzerBeater · New site</strong><nav><a href="/beta/">Home</a><a href="/beta/multi-match">Multi match</a><a href="/legacy/">Old site</a></nav></div></header>')
     # Supplementary facts retain their original available fields and opponent names.

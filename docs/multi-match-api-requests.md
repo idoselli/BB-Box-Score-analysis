@@ -1,29 +1,32 @@
-# API requests for NIKA Multi Match Team Aggregate
+# Remaining API requests after play-by-play reconstruction
 
-Please add or clarify the following in the public match/event API:
+NIKA now uses the owner-confirmed English sentence grammar and equivalent event
+actor roles to recover defenders, passers, starters, substitutions and swaps.
+Validated games support on/off, precise position minutes, clutch plus/minus,
+assists and turnovers without new endpoints. Missing direct defender fields
+alone no longer block these features.
 
-1. **Starting lineups and complete lineup changes**, including player positions,
-   timestamped substitutions, swaps and removals at each period. This is needed
-   for Team FG On/Off, Team Defense On/Off, clutch +/− and the corresponding
-   on/off detections. Exact playing seconds by position, or enough lineup data
-   to calculate them, would also match the old report's minute precision.
-2. **Complete saved primary/help defender and contest attribution on historical
-   shots**, where available, plus a coverage indicator when it was not recorded.
-   The fields already exist, but older reports can omit them. Without them we
-   cannot fully reproduce open/defended splits, defended-shot logs, per-range
-   defense or their detections. A missing defender must not imply an open shot.
-3. **Document participant roles for every event type**, especially which player
-   IDs identify the assister/passer and the player committing a turnover. Explicit
-   `assisterId`/`turnoverPlayerId` fields would remove ambiguity. This is needed
-   to validate exact clutch assists/turnovers and richer passing attribution.
-4. **Individual played effort settings, if intended to be public.** The API
-   currently exports only home-minus-away `effortDelta`, which NIKA displays.
-   Individual settings cannot be recovered uniquely from that difference.
+The remaining requests are:
 
-These are requests for fields/semantics on `/matches/{id}`,
-`/matches/{id}/boxscore` and `/matches/{id}/events`, not necessarily new endpoints.
+1. **Individual played effort settings**, if intended to be public. Only
+   home-minus-away effort difference is exported, so the two settings cannot
+   always be uniquely determined.
+2. **Rendered commentary or its template/variation IDs**, if exact original
+   sentences are needed. The current event schema exports facts and actors but
+   not the sentence text. The supplied sentence catalog explains their roles;
+   it cannot identify which wording variant was used in a particular game.
+3. **Repair incomplete historical event feeds, or provide starting-lineup
+   snapshots for those games.** These are fallbacks for games that cannot pass
+   reconstruction checks, rather than a requirement for every match. Document
+   and guarantee event actor, substitution-detail and clock semantics.
 
-Player-name resolution, bounded scrolling, panel arrangement, tactic groups,
-colors, dashboard views, supported detections and exports are application fixes;
-they are not requests for new API endpoints. Replay/animation and other NIKA
-modes are outside this audit.
+Unknown/incomplete records remain labeled. A complete known shot sentence with
+no named defender is open under NIKA's commentary definition; an omitted API
+field by itself is not treated as a complete sentence.
+
+Evidence from the captured finished game: all 199 shot events resolve to 112
+named-defender and 87 passer-only/open events; all 24 blocked-shot defenders
+match official block totals. Both starting fives, substitutions and positional
+swaps reconcile with every official player's rounded minutes and plus/minus.
+Assist and turnover actor totals also reconcile for every player. This is a
+verified example, not proof that all historical games have complete records.
