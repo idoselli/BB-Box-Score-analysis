@@ -52,7 +52,7 @@ class FakeBBSiteClient:
 class U21ModeFlaskTests(unittest.TestCase):
     def test_form_renders_new_mode(self):
         client = web_tool.app.test_client()
-        response = client.get("/")
+        response = client.get("/legacy/")
 
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"/static/nika-logo.png", response.data)

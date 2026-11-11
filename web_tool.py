@@ -17,7 +17,7 @@ from typing import Any
 import xml.etree.ElementTree as xml
 import zipfile
 
-from flask import Flask, jsonify, render_template_string, request, send_file
+from flask import Flask, g, jsonify, redirect, render_template_string, request, send_file
 
 from bbapi import BBApi
 from bb_site import BBSiteClient
@@ -29,8 +29,10 @@ from u21_tracker import u21_tracker_bp
 from u21_training import PlayerMetadata, estimate_player, target_seasons_for_player
 from beta_v1 import beta_bp
 from coach_pages import coach_bp
+from site_access import init_site_access
 
 app = Flask(__name__)
+init_site_access(app)
 app.register_blueprint(minutes_bp)
 app.register_blueprint(u21_tracker_bp)
 app.register_blueprint(beta_bp)
@@ -47,6 +49,8 @@ MAX_MULTI_EXPORT_BYTES = 25 * 1024 * 1024
 
 @app.after_request
 def add_vercel_analytics(response):
+    if getattr(g, "site_access_page", False):
+        return response
     if response.status_code != 200 or response.direct_passthrough:
         return response
     if not response.content_type.startswith("text/html"):
@@ -61,7 +65,7 @@ def add_vercel_analytics(response):
                        '<strong>BuzzerBeater · Current tool</strong><nav aria-label="Site navigation">'
                        '<a href="/">Home</a><a href="/u21-tracker">U21 tracker</a>'
                        '<a href="/u21-minutes">U21 minutes</a><a href="/nt-minutes">NT minutes</a>'
-                       '<a href="/player-minutes">Player analyzer</a><a href="/beta/">New site</a>'
+                       '<a href="/player-minutes">Player analyzer</a><a href="/legacy/">Legacy tool</a>'
                        '<a href="/buzzerbeater-coach/">BuzzerBeater Coach</a>'
                        '</nav></div></header>')
         if re.search(r"<body(?:\s[^>]*)?>", html, flags=re.IGNORECASE):
@@ -339,7 +343,7 @@ FORM_HTML = """<!doctype html>
         ·
         <a href="/u21-tracker">U21 Tracker</a>
         ·
-        <a href="/beta/">New site</a>
+        <a href="/legacy/">Legacy tool</a>
       </div>
       <form method="post" action="/report">
         <input type="hidden" name="mode" id="modeInput" value="{{ mode }}" />
@@ -1021,7 +1025,7 @@ TEAM_CHOICE_HTML = """<!doctype html>
         </form>
         {% endfor %}
       </div>
-      <a href="/" class="back">Back to report form</a>
+      <a href="/legacy/" class="back">Back to report form</a>
     </section>
   </main>
   <script>
@@ -1228,7 +1232,7 @@ U21_TRAINING_REPORT_HTML = """<!doctype html>
 <body>
   <main class="wrap">
     <div class="topbar">
-      <a href="/">Back to report form</a>
+      <a href="/legacy/">Back to report form</a>
       <span class="muted">Generated {{ report.generated_at }}</span>
     </div>
     <section class="hero">
@@ -2164,7 +2168,7 @@ MULTI_REPORT_HTML = """<!doctype html>
         <button type="button" class="export-btn" data-export-format="csv_zip">Export CSV Package</button>
         <button type="button" class="export-btn" data-export-format="csv_combined">Export Combined CSV</button>
         <span id="exportStatus" class="export-status" role="status" aria-live="polite"></span>
-        <a href="/">Run another report</a>
+        <a href="/legacy/">Run another report</a>
       </div>
     </div>
 
@@ -4420,7 +4424,7 @@ REPORT_HTML = """<!doctype html>
           <button type="submit">Back to Multi Match</button>
         </form>
         {% endif %}
-        <a href="/">Run another report</a>
+        <a href="/legacy/">Run another report</a>
       </div>
     </div>
 
@@ -6267,7 +6271,7 @@ ANIMATION_REPORT_HTML = """<!doctype html>
         <div class="small">Match {{ matchid }} | BBAPI user: {{ username }}</div>
       </div>
       <div class="topbar-actions">
-        <a href="/">New report</a>
+        <a href="/legacy/">New report</a>
       </div>
     </div>
 
@@ -9388,6 +9392,11 @@ def get_court_image_data_url() -> str:
 
 
 @app.get("/")
+def home_redirect():
+    return redirect("/beta/")
+
+
+@app.get("/legacy/")
 def form() -> str:
     return render_template_string(FORM_HTML, **empty_form_context())
 

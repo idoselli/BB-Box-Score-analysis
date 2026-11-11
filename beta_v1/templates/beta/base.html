@@ -15,18 +15,19 @@
     button,.button{font:inherit;display:inline-block;padding:.58rem .85rem;border:0;border-radius:7px;background:#14699b;color:#fff;text-decoration:none;cursor:pointer}button:hover,.button:hover{background:#0c547f}.secondary{background:#e5edf2;color:#19394d}.secondary:hover{background:#cfdee7}
     table{border-collapse:collapse;width:100%;font-size:.92rem}th,td{padding:.55rem;border-bottom:1px solid #e1e8ee;text-align:left;vertical-align:top}th{background:#f0f5f8}.scroll{overflow-x:auto}.badge{display:inline-block;padding:.2rem .45rem;background:#e8f2f8;border-radius:5px;font-size:.82rem}
     @media print{header,form,button,.row:has(input){display:none}.scroll{overflow:visible}.card{break-inside:avoid;box-shadow:none}main{max-width:none;padding:0}body{background:white}}
+    .nav-primary{font-weight:800;color:#a2edf0}
     code{overflow-wrap:anywhere}details{margin:.5rem 0}summary{cursor:pointer;font-weight:600}
   </style>
   {% block head %}{% endblock %}
 </head>
 <body>
-  <header><strong>BuzzerBeater · New site</strong><nav>
-    <a href="{{ url_for('beta_v1.home') }}">New site home</a>
+  <header><strong>NIKA</strong><nav>
+    <a href="{{ url_for('beta_v1.home') }}">Home</a>
+    <a class="nav-primary" href="{{ url_for('beta_v1.multi_match_page') }}">Match Analysis</a>
     <a href="{{ url_for('beta_v1.tracker_page') }}">U21 tracker</a>
-    <a href="{{ url_for('beta_v1.multi_match_page') }}">Multi match</a>
     <a href="{{ url_for('beta_v1.training_page') }}">National & training</a>
     <a href="{{ url_for('beta_v1.market_page') }}">Market</a>
-    <a href="/">Current tool</a>
+    <a href="/legacy/">Legacy tool</a>
   </nav></header>
   <main>{% block content %}{% endblock %}</main>
 </body>

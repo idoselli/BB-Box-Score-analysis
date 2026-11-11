@@ -2,6 +2,11 @@
 
 ### New BuzzerBeater site
 
+The app opens on the new-site home, with **Match Analysis** as its primary
+feature. The old-site tool is at `/legacy/`. To enable the shared password
+lock screen, set `NIKA_SITE_PASSWORD` as a Vercel Production Secret and redeploy.
+See [site access setup](docs/site-access.md).
+
 For the exact registration, Redis and production settings, follow
 [Enable public NIKA sign-in](docs/oauth-production-setup.md).
 

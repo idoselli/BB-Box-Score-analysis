@@ -33,9 +33,9 @@ class FakeClient:
 class BetaRoutesTests(unittest.TestCase):
     def test_beta_is_separate_from_legacy_routes(self):
         client = web_tool.app.test_client()
-        home = client.get("/")
+        home = client.get("/legacy/")
         self.assertEqual(home.status_code, 200)
-        self.assertIn(b'/beta/', home.data)
+        self.assertEqual(client.get('/').location, '/beta/')
         self.assertIn(b'Multi Match Team Aggregate', home.data)
         for path in ("/beta/", "/beta/u21-tracker", "/beta/multi-match", "/beta/national-training", "/beta/market"):
             self.assertEqual(client.get(path).status_code, 200, path)
@@ -87,7 +87,7 @@ class BetaRoutesTests(unittest.TestCase):
             csrf = re.search(rb'name="login_csrf" value="([^"]+)"', home.data).group(1).decode()
             response = client.post("/beta/token/sign-in", data={"login_csrf": csrf, "api_token": "test-personal-token"}, follow_redirects=True)
             self.assertEqual(response.status_code, 200)
-            self.assertIn(b"Signed in as Beta Manager", response.data)
+            self.assertIn(b"Beta Manager", response.data)
             self.assertNotIn(b"test-personal-token", response.data)
             self.assertNotIn("test-personal-token", response.headers.get("Set-Cookie", ""))
             sid_cookie = client.get_cookie("bb_beta_sid", path="/beta")

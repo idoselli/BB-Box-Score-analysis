@@ -267,7 +267,7 @@ def render_report(report, fields, username=''):
     report.pop('shotLog', None)
     template = MULTI_REPORT_HTML
     template = template.replace('BBAPI user:', 'New site · Manager:')
-    template = template.replace('href="/"', 'href="/beta/multi-match"')
+    template = template.replace('href="/"', 'href="/beta/multi-match"').replace('href="/legacy/"', 'href="/beta/multi-match"')
     template = template.replace('fetch("/export-multi"', 'fetch("/beta/export-multi"')
     template = template.replace('const data = {{ report_json | tojson }};', '''const sourceReport = JSON.parse(document.getElementById('native-report').textContent);
       sourceReport.shotLog=(sourceReport.events||[]).filter(e=>e.eventType==='Shot'&&!e.isCommentary);
@@ -313,7 +313,7 @@ def render_report(report, fields, username=''):
     template = template.replace('These filters apply only to this NBA-style dashboard. Estimated and proxy metrics are labeled in the glossary.', 'These filters apply only to this NBA-style dashboard. Clutch points and shots use recorded events; clutch AST, TO and +/- and team on/off are unavailable. Event coverage: {{ source_report.eventCoverageGames or 0 }}/{{ source_report.usedMatches }} games. Estimates and proxies are labeled in the glossary.')
     template = template.replace('Findings favor large percentage swings', 'On/off findings are unavailable without lineup state. Other findings favor large percentage swings')
     template = template.replace('</head>', '<link rel="stylesheet" href="/static/legacy-beta-theme.css"><link rel="stylesheet" href="/static/new-multi-report.css"></head>')
-    template = template.replace('<body>', '<body><header class="legacy-site-header"><div class="legacy-site-inner"><strong>BuzzerBeater · New site</strong><nav><a href="/beta/">Home</a><a href="/beta/multi-match">Multi match</a><a href="/">Old site</a></nav></div></header>')
+    template = template.replace('<body>', '<body><header class="legacy-site-header"><div class="legacy-site-inner"><strong>BuzzerBeater · New site</strong><nav><a href="/beta/">Home</a><a href="/beta/multi-match">Multi match</a><a href="/legacy/">Old site</a></nav></div></header>')
     # Supplementary facts retain their original available fields and opponent names.
     template = template.replace('    <div id="nbaGlossaryModal"', '{% include "beta/multi_supplement.html" %}\n    <div id="nbaGlossaryModal"')
     return render_template_string(template, report_json=view, source_report=report, username=username, password='', report=report, names=view['playerNames'])
