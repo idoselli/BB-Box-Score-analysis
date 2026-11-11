@@ -29,7 +29,7 @@ def collect(client: V1Client, *, now: datetime | None = None, path: Path = MARKE
     budget = min(13, 20 - recent_day, 150 - len(reveals))
     listings = []
     for offset in range(0, 150, 30):
-        page = client.get("/market/players", {"OrderBy": "Salary", "Sort": "Desc", "Offset": offset, "Limit": 30})
+        page = client.get("/market/players", {"orderBy": "Salary", "sort": "Desc", "offset": offset, "limit": 30})
         batch = page.get("players", [])
         listings.extend(batch)
         if len(batch) < 30:

@@ -1,5 +1,5 @@
 {% extends 'beta/base.html' %}
-{% block title %}National and training · Beta{% endblock %}
+{% block title %}National and training · New site{% endblock %}
 {% block content %}
 <section class="card"><h1>National & club training</h1><p>Recorded changes are available for a national squad you coach or a club you own. Older club sessions may lack recorded conditions and minutes.</p>
 {% if not connected %}<div class="warning">{{ connection_message }} <a href="{{ url_for('beta_v1.home') }}#token-signin">Sign in</a></div>{% endif %}

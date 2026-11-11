@@ -18,7 +18,7 @@ from flask import request
 from .api import API_BASE, V1Client
 
 
-AUTHORIZE_URL = os.environ.get("BB_V1_AUTHORIZE_URL", "https://sb1.buzzerbeater.com/oauth/authorize")
+AUTHORIZE_URL = os.environ.get("BB_V1_AUTHORIZE_URL", "https://play.buzzerbeater.com/oauth/authorize")
 SCOPES = {"Public", "Team", "National", "Market"}
 FEATURE_SCOPES = {
     "public": {"Public"},

@@ -1,11 +1,11 @@
 {% extends 'beta/base.html' %}
-{% block title %}U21 tracker · Beta{% endblock %}
+{% block title %}U21 tracker · New site{% endblock %}
 {% block content %}
 <section class="card">
   <h1>U21 tracker · new world</h1>
   <p>Weekly roster figures for the selected junior national squad. Legacy history is available in the <a href="/u21-tracker">current tracker</a>.</p>
   {% if meta and meta.demo %}<div class="warning">Demo data: every player, value, and team ID shown here is simulated. These are not BuzzerBeater observations.</div>{% endif %}
-  {% if not meta %}<div class="warning">No beta snapshot is available yet.</div>{% else %}
+  {% if not meta %}<div class="warning">No snapshot is available yet.</div>{% else %}
   <form class="row" method="get">
     <label>Season<select name="season" onchange="this.form.submit()">{% for item in seasons %}<option value="{{ item }}"{% if item == season %} selected{% endif %}>{{ item }}</option>{% endfor %}</select></label>
     <label>Squad<select name="countryId" onchange="this.form.submit()">{% for item in meta.countries %}<option value="{{ item.countryId }}"{% if item.countryId == country_id %} selected{% endif %}>{{ item.name }}</option>{% endfor %}</select></label>

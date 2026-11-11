@@ -1,4 +1,4 @@
-"""Box-score-only multi-match aggregation for the beta world."""
+"""Finished-match analysis using the production public API, without invented events."""
 
 from __future__ import annotations
 
@@ -6,6 +6,7 @@ from collections import Counter, defaultdict
 from typing import Any
 from uuid import UUID
 
+from .events import read_events, analyze_events
 from .api import V1ApiError, V1Client, pages, segment
 
 
@@ -16,11 +17,48 @@ COUNT_FIELDS = (
     "blocks", "fouls", "plusMinus", "minutes",
 )
 
+POSITIONS = ("pointGuard", "shootingGuard", "smallForward", "powerForward", "center")
 UNAVAILABLE = (
-    "Play-by-play, shot maps, defended shots, on/off, matchups, clutch analysis, "
-    "effort, GDP, and minutes split by position are not exposed by the v1 API. "
-    "This report uses box-score totals only."
+    "Play-by-play uses the public events endpoint. Exact coordinates, replay movement, "
+    "starting lineups and individual effort settings are not exported. On/off and lineup "
+    "stints cannot be reproduced reliably without starting lineups and complete substitutions. "
+    "Defender attribution is used only where explicitly recorded."
 )
+
+
+def shooting_totals(sides: list[dict[str, Any]]) -> dict[str, Any] | None:
+    if not sides:
+        return None
+    result: dict[str, Any] = {"games": len(sides), "zones": [], "sideZones": [], "players": []}
+    def add(target, source):
+        for field in ("made", "attempts", "points"):
+            target[field] = target.get(field, 0) + (source.get(field) or 0)
+    for split in ("open", "contested", "assisted", "unassisted"):
+        result[split] = {}
+        for side in sides:
+            add(result[split], side.get(split) or {})
+    for collection, keys in (("zones", ("zone", "side")), ("sideZones", ("zone", "side")), ("players", ("playerId",))):
+        groups = {}
+        for side in sides:
+            for row in side.get(collection) or []:
+                key = tuple(row.get(k) for k in keys)
+                target = groups.setdefault(key, {k: row.get(k) for k in keys})
+                for split in (("shots",) if collection != "players" else ("inside", "midRange", "three", "contested", "defended")):
+                    add(target.setdefault(split, {}), row.get(split) or {})
+        result[collection] = list(groups.values())
+    return result
+
+
+def percentages(row: dict[str, Any]) -> dict[str, Any]:
+    def ratio(numerator, denominator):
+        return round(100 * numerator / denominator, 2) if denominator else None
+    fg, fga = row["fieldGoals"], row["fieldGoalsAttempts"]
+    three, threes = row["threePointFieldGoals"], row["threePointFieldGoalsAttempts"]
+    return {"fgPercent": ratio(fg, fga), "threePercent": ratio(three, threes),
+            "ftPercent": ratio(row["freeThrows"], row["freeThrowsAttempts"]),
+            "efgPercent": ratio(fg + .5 * three, fga),
+            "tsPercent": ratio(row["points"], 2 * (fga + .44 * row["freeThrowsAttempts"]))}
+
 
 
 def uuid_id(value: str) -> str:
@@ -62,16 +100,27 @@ def _totals(lines: list[dict[str, Any]]) -> dict[str, int]:
     return {field: sum(int(line.get(field) or 0) for line in lines) for field in COUNT_FIELDS}
 
 
-def build_report(client: V1Client, match_ids: list[str], selected_team_id: str = "") -> dict[str, Any]:
+def build_report(client: V1Client, match_ids: list[str], selected_team_id: str = "", *, result_filter: str = "", offense: str = "", defense: str = "", location: str = "", match_type: str = "", include_shooting: bool = True, include_events: bool = True) -> dict[str, Any]:
     if not match_ids:
         raise ValueError("Enter or select at least one match.")
+    if len(match_ids) > 30:
+        raise ValueError("Select at most 30 matches per report.")
+    if result_filter not in {"", "W", "L"} or location not in {"", "home", "away"}:
+        raise ValueError("Invalid report filter.")
+    match_ids = list(dict.fromkeys(uuid_id(value) for value in match_ids))
     games: list[tuple[dict[str, Any], dict[str, Any]]] = []
     warnings = [UNAVAILABLE]
     skipped = []
     for match_id in match_ids:
         try:
-            match = client.get(f"/matches/{segment(match_id)}")
-            box = client.get(f"/matches/{segment(match_id)}/boxscore")
+            match = client.get(f"/matches/{segment(match_id)}", {"include": "boxscore"})
+            box = match.get("boxScore")
+            # Compatibility with servers that omit the optional expansion.
+            if "boxScore" not in match:
+                box = client.get(f"/matches/{segment(match_id)}/boxscore")
+            if not box or match.get("isLive"):
+                skipped.append({"matchId": match_id, "reason": "The finished box score is not available."})
+                continue
         except V1ApiError as exc:
             skipped.append({"matchId": match_id, "reason": str(exc)})
             continue
@@ -94,6 +143,8 @@ def build_report(client: V1Client, match_ids: list[str], selected_team_id: str =
     else:
         max_count = max(team_counts.values(), default=0)
         candidates = [key for key, count in team_counts.items() if count == max_count]
+        if len(games) == 1 and candidates:
+            candidates = candidates[:1]
         if len(candidates) != 1:
             raise ValueError("More than one team appears equally often. Enter the team UUID to aggregate.")
         team_id = candidates[0]
@@ -102,6 +153,10 @@ def build_report(client: V1Client, match_ids: list[str], selected_team_id: str =
     match_rows: list[dict[str, Any]] = []
     strategy_counts: dict[str, Counter[str]] = defaultdict(Counter)
     rating_distributions: dict[str, Counter[str]] = defaultdict(Counter)
+    own_shooting = []
+    opponent_shooting = []
+    position_rows = []
+    event_reports = []
     for match, box in games:
         match_id = str(match.get("id") or box.get("matchId") or "")
         sides = {str(side.get("teamId")): side for side in match.get("teams", []) if side.get("teamId")}
@@ -122,8 +177,50 @@ def build_report(client: V1Client, match_ids: list[str], selected_team_id: str =
         if own_score is None or opponent_score is None:
             skipped.append({"matchId": match_id, "reason": "The match is not complete."})
             continue
+        ratings = own_box.get("ratings") or {}
+        result = "W" if own_score > opponent_score else "L"
+        if ((result_filter and result != result_filter)
+                or (offense and ratings.get("offenseStrategy") != offense)
+                or (defense and ratings.get("defensiveStrategy") != defense)
+                or (location and bool(own.get("isHome")) != (location == "home"))
+                or (match_type and match.get("type") != match_type)):
+            skipped.append({"matchId": match_id, "reason": "Excluded by report filters."})
+            continue
+        if include_events:
+            try:
+                event_report = analyze_events(match_id, read_events(client, match_id), match, box, team_id)
+                event_reports.append(event_report)
+                coverage = event_report["defenderCoverage"]
+                if coverage["known"] < coverage["shots"]:
+                    warnings.append(f"{match_id}: explicit defenders recorded for {coverage['known']} of {coverage['shots']} shots; unmatched shots are excluded from matchup totals.")
+            except V1ApiError as exc:
+                warnings.append(f"Events unavailable for {match_id}: {exc.code}: {exc}")
+        shooting = None
+        if include_shooting:
+            try:
+                shooting = client.get(f"/matches/{segment(match_id)}/shooting")
+            except V1ApiError as exc:
+                warnings.append(f"Shooting unavailable for {match_id}: {exc.code}: {exc}")
+        shooting_sides = (shooting or {}).get("sides") or []
+        def shooting_side(side_id, home):
+            return next((side for side in shooting_sides if side.get("teamId") == side_id or
+                         (side.get("teamId") is None and side.get("teamIndex") == (0 if home else 1))), None)
+        shot = shooting_side(team_id, own.get("isHome"))
+        opponent_shot = shooting_side(opponent_id, opponent.get("isHome"))
+        if shot is not None:
+            own_shooting.append(shot)
+        if opponent_shot is not None:
+            opponent_shooting.append(opponent_shot)
         match_rows.append({
             "matchId": match_id,
+            "type": match.get("type"),
+            "effortDelta": box.get("effortDelta"),
+            "pp100": own_box.get("pp100"),
+            "opponentPp100": opponent_box.get("pp100"),
+            "shooting": shot,
+            "opponentShooting": opponent_shot,
+            "playerLines": lines,
+            "opponentPlayerLines": opponent_box.get("players") or [],
             "scheduledAt": match.get("scheduledAt", ""),
             "team": team_names.get(team_id, team_id),
             "opponent": opponent.get("name") or opponent_id,
@@ -140,25 +237,42 @@ def build_report(client: V1Client, match_ids: list[str], selected_team_id: str =
         for key, value in (own_box.get("ratings") or {}).items():
             if value is None:
                 continue
-            if key in {"offenseStrategy", "defensiveStrategy"}:
+            if key in {"offenseStrategy", "defensiveStrategy", "predictionFocus", "predictionPace", "offensiveRebounding", "defensiveRebounding"}:
                 strategy_counts[key][str(value)] += 1
-            else:
+            elif key != "sublevels":
                 rating_distributions[key][str(value)] += 1
         for line in lines:
             player = line.get("player") or {}
             player_id = str(player.get("id") or "")
             if not player_id:
                 continue
+            if not any(line.get(field) for field in COUNT_FIELDS) and line.get("starRating") is None:
+                continue
             entry = player_totals.setdefault(player_id, {
                 "playerId": player_id,
                 "name": " ".join(part for part in (player.get("firstName"), player.get("lastName")) if part) or player_id,
                 "games": 0,
+                "minutesByPosition": {pos: 0 for pos in POSITIONS},
+                "positionMinutesGames": 0,
+                "missingPositionMinutesGames": 0,
                 "positions": set(),
                 "starRatingTotal": 0.0,
                 "starRatingGames": 0,
                 **{field: 0 for field in COUNT_FIELDS},
             })
             entry["games"] += 1
+            split = line.get("minutesByPosition")
+            valid_split = (isinstance(split, dict) and all(isinstance(split.get(pos), int) and split[pos] >= 0 for pos in POSITIONS)
+                           and sum(split[pos] for pos in POSITIONS) == line.get("minutes", 0))
+            if valid_split:
+                entry["positionMinutesGames"] += 1
+                for pos in POSITIONS:
+                    entry["minutesByPosition"][pos] += split[pos]
+                position_rows.append({"matchId": match_id, "playerId": player_id,
+                                      "offense": ratings.get("offenseStrategy"),
+                                      "defense": ratings.get("defensiveStrategy"), **split})
+            else:
+                entry["missingPositionMinutesGames"] += 1
             if line.get("position"):
                 entry["positions"].add(str(line["position"]))
             if line.get("starRating") is not None:
@@ -174,6 +288,9 @@ def build_report(client: V1Client, match_ids: list[str], selected_team_id: str =
         star_total = entry.pop("starRatingTotal")
         entry["averageStarRating"] = round(star_total / star_games, 2) if star_games else None
         entry["positions"] = sorted(entry["positions"])
+        entry.update(percentages(entry))
+        entry["perGame"] = {field: entry[field] / entry["games"] for field in COUNT_FIELDS}
+        entry["per36"] = {field: 36 * entry[field] / entry["minutes"] if entry["minutes"] else None for field in COUNT_FIELDS if field != "minutes"}
         players.append(entry)
     players.sort(key=lambda entry: (-entry["minutes"], entry["name"]))
     match_rows.sort(key=lambda row: row["scheduledAt"], reverse=True)
@@ -181,7 +298,18 @@ def build_report(client: V1Client, match_ids: list[str], selected_team_id: str =
         "world": "v1",
         "teamId": team_id,
         "teamName": team_names.get(team_id, team_id),
-        "warnings": warnings,
+        "teamChoices": [{"id": key, "name": value} for key, value in team_names.items()],
+        "warnings": list(dict.fromkeys(warnings)),
+        "shooting": shooting_totals(own_shooting),
+        "opponentShooting": shooting_totals(opponent_shooting),
+        "positionMinutes": position_rows,
+        "eventReports": event_reports,
+        "events": [e for r in event_reports for e in r["events"]],
+        "shotLog": [e for r in event_reports for e in r["shots"]],
+        "matchups": [dict(row, matchId=r["matchId"]) for r in event_reports for row in r["matchups"]],
+        "eventCoverageGames": len(event_reports),
+        "totals": _totals([row["totals"] for row in match_rows]),
+        "opponentTotals": _totals([row["opponentTotals"] for row in match_rows]),
         "matches": match_rows,
         "players": players,
         "strategyCounts": {key: dict(counts) for key, counts in strategy_counts.items()},

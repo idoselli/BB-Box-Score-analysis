@@ -61,7 +61,7 @@ def add_vercel_analytics(response):
                        '<strong>BuzzerBeater · Current tool</strong><nav aria-label="Site navigation">'
                        '<a href="/">Home</a><a href="/u21-tracker">U21 tracker</a>'
                        '<a href="/u21-minutes">U21 minutes</a><a href="/nt-minutes">NT minutes</a>'
-                       '<a href="/player-minutes">Player analyzer</a><a href="/beta/">New-world beta</a>'
+                       '<a href="/player-minutes">Player analyzer</a><a href="/beta/">New site</a>'
                        '<a href="/buzzerbeater-coach/">BuzzerBeater Coach</a>'
                        '</nav></div></header>')
         if re.search(r"<body(?:\s[^>]*)?>", html, flags=re.IGNORECASE):
@@ -339,7 +339,7 @@ FORM_HTML = """<!doctype html>
         ·
         <a href="/u21-tracker">U21 Tracker</a>
         ·
-        <a href="/beta/">Beta</a>
+        <a href="/beta/">New site</a>
       </div>
       <form method="post" action="/report">
         <input type="hidden" name="mode" id="modeInput" value="{{ mode }}" />

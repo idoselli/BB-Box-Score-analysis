@@ -99,7 +99,7 @@ class BetaRoutesTests(unittest.TestCase):
             self.assertIn(b"Sign in with API token", logout.data)
 
     def test_national_schedule_selects_the_national_team_for_aggregation(self):
-        fake = FakeClient({"/countries/IL/national-teams": {"teams": [{"id": TEAM_ID, "kind": "JuniorNationalTeam"}]}})
+        fake = FakeClient({"/countries": {"countries": []}, "/countries/IL/national-teams": {"teams": [{"id": TEAM_ID, "kind": "JuniorNationalTeam"}]}})
         report = {"teamName": "Israel U21", "usedMatches": 1, "wins": 1, "losses": 0, "warnings": [], "skipped": [], "matches": [], "players": []}
         with patch("beta_v1.routes._connection", return_value=(fake, {}, "")), patch("beta_v1.routes.reports.schedule_ids", return_value=[MATCH_ID]) as schedule, patch("beta_v1.routes.reports.build_report", return_value=report) as build:
             response = web_tool.app.test_client().post("/beta/multi-match", data={"national_country_id": "IL", "national_kind": "JuniorNationalTeam", "season": "1", "count": "1"})
@@ -132,7 +132,7 @@ class BetaReportTests(unittest.TestCase):
             {"teamId": TEAM_ID, "ratings": {"offenseStrategy": "Motion", "outsideScoring": "Strong"}, "players": [line]},
             {"teamId": OTHER_ID, "ratings": {}, "players": []},
         ]}
-        client = FakeClient({f"/matches/{MATCH_ID}": match, f"/matches/{MATCH_ID}/boxscore": box})
+        client = FakeClient({f"/matches/{MATCH_ID}": match, f"/matches/{MATCH_ID}/boxscore": box, f"/matches/{MATCH_ID}/shooting": {"sides": []}, f"/matches/{MATCH_ID}/events": {"events": [], "nextCursor": None, "totalEvents": 0}})
         result = reports.build_report(client, [MATCH_ID], TEAM_ID)
         self.assertEqual(result["teamId"], TEAM_ID)
         self.assertEqual(result["players"][0]["points"], 20)
@@ -141,7 +141,7 @@ class BetaReportTests(unittest.TestCase):
         self.assertEqual(result["strategyCounts"]["offenseStrategy"], {"Motion": 1})
         self.assertEqual(result["ratingDistributions"]["outsideScoring"], {"Strong": 1})
         self.assertIn("Play-by-play", result["warnings"][0])
-        self.assertNotIn("events", result)
+        self.assertEqual(result["events"], [])
 
     def test_schedule_pages_and_completed_filter(self):
         rows = [{"id": f"{i:08x}-1111-4111-8111-111111111111", "scheduledAt": f"2026-09-{(i % 28) + 1:02d}T00:00:00Z", "finishedAt": "2026-09-29T00:00:00Z", "teams": [{"score": 1}, {"score": 2}]} for i in range(33)]

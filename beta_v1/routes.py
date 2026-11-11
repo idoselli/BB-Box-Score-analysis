@@ -167,13 +167,20 @@ def tracker_api():
     return jsonify(tracker.series(season, country_id, root=root) if country_id else meta)
 
 
+@beta_bp.route("/match", methods=["GET", "POST"])
 @beta_bp.route("/multi-match", methods=["GET", "POST"])
 def multi_match_page():
     client, record, connection_message = _connection({"Public"})
     report = None
     error = ""
-    fields = {key: request.form.get(key, "") for key in ("match_ids", "team_id", "schedule_team_id", "season", "count", "national_country_id", "national_other_code", "national_kind")}
+    fields = {key: request.form.get(key, "") for key in ("match_ids", "team_id", "schedule_team_id", "season", "count", "national_country_id", "national_other_code", "national_kind", "result_filter", "offense", "defense", "location", "match_type", "include_shooting", "include_events")}
     national_choices = (tracker._read(tracker.TRACKER_ROOT / "team-map.json") or {}).get("teams", [])
+    if client and not national_choices:
+        try:
+            national_choices = [{"countryId": row["id"], "name": row.get("name") or row["id"]}
+                                for row in client.get("/countries").get("countries", [])]
+        except V1ApiError:
+            pass
     if request.method == "POST":
         if not client:
             error = connection_message
@@ -199,7 +206,12 @@ def multi_match_page():
                     selected_team = selected_team or source_team
                 else:
                     ids = reports.parse_ids(fields["match_ids"])
-                report = reports.build_report(client, ids, selected_team)
+                options = {key: fields[key].strip() for key in ("result_filter", "offense", "defense", "location", "match_type") if fields[key].strip()}
+                if fields["include_shooting"] == "no":
+                    options["include_shooting"] = False
+                if fields["include_events"] == "no":
+                    options["include_events"] = False
+                report = reports.build_report(client, ids, selected_team, **options)
             except Exception as exc:
                 error, _ = _api_error(exc)
     return render_template("beta/multi.html", report=report, error=error, fields=fields, national_choices=national_choices, connected=client is not None, connection_message=connection_message)
@@ -244,9 +256,9 @@ def market_page():
     listings: list[dict[str, Any]] = []
     if client and request.method == "POST":
         try:
-            params: dict[str, Any] = {"OrderBy": "Salary", "Sort": "Desc", "Offset": 0, "Limit": 30}
+            params: dict[str, Any] = {"orderBy": "Salary", "sort": "Desc", "offset": 0, "limit": 30}
             if request.form.get("min_salary", "").strip():
-                params["MinSalary"] = max(0, int(request.form["min_salary"]))
+                params["minSalary"] = max(0, int(request.form["min_salary"]))
             listings = client.get("/market/players", params).get("players", [])
         except Exception as exc:
             error, _ = _api_error(exc)
@@ -288,3 +300,37 @@ def market_archive_player(player_id: str):
     if not player:
         abort(404)
     return render_template("beta/archive_player.html", player=player, demo=bool(archive.get("demo")))
+
+
+@beta_bp.post("/export-multi")
+def export_multi():
+    """Export the report supplied by the browser; no extra API reads or storage."""
+    import io
+    import zipfile
+    from flask import send_file
+    # Share the legacy serialization and spreadsheet-formula escaping rules.
+    from web_tool import combined_csv_rows, csv_bytes, indexed_csv_rows
+
+    if request.content_length is None or request.content_length > 12 * 1024 * 1024:
+        return jsonify({"error": "Export payload is missing or too large."}), 413
+    payload = request.get_json(silent=True)
+    if not isinstance(payload, dict):
+        return jsonify({"error": "A JSON export request is required."}), 400
+    report = payload.get("report")
+    if not isinstance(report, dict) or report.get("world") != "v1" or not isinstance(report.get("matches"), list):
+        return jsonify({"error": "A new-site report is required."}), 400
+    export_format = payload.get("format")
+    if export_format == "csv_combined":
+        content = csv_bytes(combined_csv_rows(report), ["section", "record_index", "record_label", "field", "value"])
+        filename, mimetype = "nika-multi-combined.csv", "text/csv; charset=utf-8"
+    elif export_format == "csv_zip":
+        output = io.BytesIO()
+        with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED) as archive:
+            for key in ("matches", "players", "positionMinutes", "matchups", "events", "shotLog"):
+                archive.writestr(key + ".csv", csv_bytes(indexed_csv_rows(report.get(key))))
+            archive.writestr("report_all_fields.csv", csv_bytes(combined_csv_rows(report)))
+        content = output.getvalue()
+        filename, mimetype = "nika-multi-csv.zip", "application/zip"
+    else:
+        return jsonify({"error": "Choose csv_zip or csv_combined."}), 400
+    return send_file(io.BytesIO(content), mimetype=mimetype, as_attachment=True, download_name=filename)

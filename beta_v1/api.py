@@ -11,7 +11,7 @@ from urllib.parse import quote
 import requests
 
 
-API_BASE = os.environ.get("BB_V1_API_BASE", "https://sb1-api.buzzerbeater.com/v1").rstrip("/")
+API_BASE = os.environ.get("BB_V1_API_BASE", "https://next-api.buzzerbeater.com/v1").rstrip("/")
 
 
 @dataclass
@@ -77,7 +77,7 @@ class V1Client:
             retry_after = int(retry) if retry.isdigit() else None
             reset_at = int(reset) if reset.isdigit() else None
             retryable_limit = response.status_code == 429 and code == "RateLimited" and (retry_after is None or retry_after <= 10)
-            if attempt < 3 and (retryable_limit or response.status_code == 503):
+            if attempt < 3 and (retryable_limit or (response.status_code == 503 and (retry_after is None or retry_after <= 10))):
                 time.sleep(retry_after if retry_after is not None else min(2 ** attempt, 10))
                 continue
             raise V1ApiError(response.status_code, code, description, retry_after, reset_at)
