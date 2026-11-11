@@ -2,7 +2,7 @@
 {% block title %}Multi match · New site{% endblock %}
 {% block content %}
 <section class="card"><h1>Multi match team aggregate</h1><p>Use new-world UUIDs. Enter match IDs, or a club/team ID to load its completed schedule. Leave the team ID blank to detect the most frequent team.</p>
-{% if not connected %}<div class="warning">{{ connection_message }} <a href="{{ url_for('beta_v1.home') }}#token-signin">Sign in</a></div>{% endif %}
+{% if not connected %}<div class="warning">{{ connection_message }} <a href="{{ url_for('beta_v1.home') }}">Sign in</a></div>{% endif %}
 {% if error %}<div class="error">{{ error }}</div>{% endif %}
 <form method="post" class="stack"><label>Match UUIDs, separated by commas or spaces<textarea name="match_ids" placeholder="New-world match UUIDs">{{ fields.match_ids }}</textarea></label>
 <div class="row"><label>Selected team UUID (optional)<input name="team_id" value="{{ fields.team_id }}"></label></div>

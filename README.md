@@ -2,6 +2,9 @@
 
 ### New BuzzerBeater site
 
+For the exact registration, Redis and production settings, follow
+[Enable public NIKA sign-in](docs/oauth-production-setup.md).
+
 The production integration remains at `/beta/` to preserve existing bookmarks,
 OAuth callbacks and sessions. It now defaults to `https://next-api.buzzerbeater.com/v1`
 and `https://play.buzzerbeater.com/oauth/authorize`. Remove stale `BB_V1_API_BASE`

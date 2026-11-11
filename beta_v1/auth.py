@@ -35,9 +35,11 @@ def configured() -> bool:
 
 
 def token_signin_available() -> bool:
-    if os.environ.get("BB_V1_REDIS_URL") and os.environ.get("BB_V1_TOKEN_ENCRYPTION_KEY"):
-        return True
-    return os.environ.get("BB_V1_ALLOW_INMEMORY_TOKEN_LOGIN") == "true" and request.host.split(":", 1)[0] in {"localhost", "127.0.0.1"} and request.remote_addr in {"localhost", "127.0.0.1", "::1"}
+    # Personal tokens are only for the owner's local tools, never public visitors.
+    localhost = (not os.environ.get("VERCEL") and request.host.split(":", 1)[0] in {"localhost", "127.0.0.1"}
+                 and request.remote_addr in {"localhost", "127.0.0.1", "::1"})
+    storage = _use_redis() or os.environ.get("BB_V1_ALLOW_INMEMORY_TOKEN_LOGIN") == "true"
+    return localhost and storage
 
 
 def _use_redis() -> bool:

@@ -34,13 +34,13 @@ def _connection(required: set[str] | None = None) -> tuple[V1Client | None, dict
     try:
         pair = auth.current_session()
     except Exception:
-        return None, None, "Beta sign-in is temporarily unavailable."
+        return None, None, "BuzzerBeater sign-in is temporarily unavailable."
     if not pair:
-        return None, None, "Sign in with your API token on the beta home page to use this feature."
+        return None, None, "Sign in with BuzzerBeater on the new-site home page to use this feature."
     client, record = pair
     granted = set(record.get("scopes", []))
     if required and not required <= granted:
-        return None, record, "This account needs a token or OAuth grant with the required access scopes."
+        return None, record, "Connect the required BuzzerBeater access from the new-site home page."
     return client, record, ""
 
 
