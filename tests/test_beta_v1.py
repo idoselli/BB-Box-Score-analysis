@@ -140,7 +140,7 @@ class BetaReportTests(unittest.TestCase):
         self.assertEqual(result["matches"][0]["ratings"]["offenseStrategy"], "Motion")
         self.assertEqual(result["strategyCounts"]["offenseStrategy"], {"Motion": 1})
         self.assertEqual(result["ratingDistributions"]["outsideScoring"], {"Strong": 1})
-        self.assertIn("Play-by-play", result["warnings"][0])
+        self.assertIn("On/off", result["warnings"][0])
         self.assertEqual(result["events"], [])
 
     def test_schedule_pages_and_completed_filter(self):

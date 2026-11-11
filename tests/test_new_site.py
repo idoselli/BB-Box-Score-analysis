@@ -102,7 +102,7 @@ class ProductionReportTests(unittest.TestCase):
         with patch('beta_v1.routes._connection', return_value=(fake, {}, '')), patch('beta_v1.routes.tracker._read', return_value={'teams': [{'countryId': 'IL', 'name': 'Israel'}]}):
             response = web_tool.app.test_client().post('/beta/multi-match', data={'match_ids': MATCH_ID})
         self.assertEqual(response.status_code, 200)
-        for label in [b'Tactic position minutes', b'Play-by-play result', b'Defended shot log', b'62.5']:
+        for label in [b'Tactic Position Minutes', b'Play-by-play result', b'Defended shot log', b'62.5']:
             self.assertIn(label, response.data)
 
 

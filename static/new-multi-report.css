@@ -1,0 +1,21 @@
+/* The core report inherits the old mode's exact CSS and palette from MULTI_REPORT_HTML. */
+.wrap{min-width:0} .card{min-width:0;overflow:visible} .card>h2:first-child{border-radius:12px 12px 0 0}
+.table-wrap{max-height:520px;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;position:relative;border-radius:0 0 12px 12px}
+.table-wrap:focus-visible{outline:3px solid #14699b;outline-offset:2px}
+.table-wrap th{position:sticky;top:0;z-index:2} .table-wrap th:first-child{z-index:4}
+.table-wrap td:first-child,.table-wrap th:first-child{position:sticky;left:0;background:#fff;max-width:250px;z-index:3}
+.table-wrap th:first-child{background:#f0f5f8;z-index:5}
+.table-wrap td{max-width:360px;overflow:hidden;text-overflow:ellipsis}
+#defShotsTable td:last-child{white-space:normal;min-width:220px}
+.panel-controls{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap;padding:6px 12px;background:#fcfdff;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}
+.panel-controls select{font:inherit;padding:4px;border:1px solid var(--line);background:white;border-radius:6px}
+.panel-controls button{font-size:12px;padding:4px 8px} .tactic-card .position-block{max-height:180px;overflow:auto}
+#tacticMinutesPanel{max-height:600px;overflow:auto}.events-head label{font-size:12px;display:flex;gap:6px;align-items:center}.events-head input[type=number]{width:85px}
+.side-tabs{display:flex;gap:8px;padding:12px}.side-tabs button[aria-pressed=true]{background:#14699b;color:white}
+.section-subheading{font-size:14px;padding:0 12px}.shooting-side[hidden]{display:none}.shooting-players td:nth-child(2),.shooting-players td:nth-child(3),.shooting-players td:nth-child(4){background:#f0fdf4}.shooting-players td:last-child{background:#eef6ff}
+#event-log td:nth-child(7),#event-log td:nth-child(8),#shot-log td:nth-child(4),#shot-log td:nth-child(7){font-weight:600;max-width:220px}
+.coverage-note{padding:10px 14px;background:#fff8df;border-bottom:1px solid #e6bd64;color:#5d481a;font-size:12px}
+@media(max-width:680px){.wrap{padding:12px}.hero h1{font-size:24px}.table-wrap{max-height:380px}.filter-bar,.nba-controls{grid-template-columns:1fr 1fr}.events-head{align-items:flex-start;gap:12px}.events-head label{flex-wrap:wrap}.hero{padding:14px}.tactic-grid{grid-template-columns:1fr}}
+@media print{.legacy-site-header,.topbar-actions,.filter-bar,.nba-controls,.events-head,.panel-controls,.side-tabs{display:none}.wrap{max-width:none}.table-wrap,#tacticMinutesPanel,.tactic-card .position-block{max-height:none!important;overflow:visible}.shooting-side[hidden]{display:block}.card{box-shadow:none;break-inside:avoid}th,td{white-space:normal}.modal-backdrop{display:none!important}}
+
+.dropdown-label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase}

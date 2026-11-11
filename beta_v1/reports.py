@@ -19,10 +19,9 @@ COUNT_FIELDS = (
 
 POSITIONS = ("pointGuard", "shootingGuard", "smallForward", "powerForward", "center")
 UNAVAILABLE = (
-    "Play-by-play uses the public events endpoint. Exact coordinates, replay movement, "
-    "starting lineups and individual effort settings are not exported. On/off and lineup "
-    "stints cannot be reproduced reliably without starting lineups and complete substitutions. "
-    "Defender attribution is used only where explicitly recorded."
+    "On/off and lineup-based metrics need starting lineups and complete substitution state, "
+    "which the API does not export. Individual effort settings are unavailable; effort "
+    "difference is shown instead. Missing historical defender/contest fields are never treated as open shots."
 )
 
 
@@ -59,6 +58,12 @@ def percentages(row: dict[str, Any]) -> dict[str, Any]:
             "efgPercent": ratio(fg + .5 * three, fga),
             "tsPercent": ratio(row["points"], 2 * (fga + .44 * row["freeThrowsAttempts"]))}
 
+
+
+class TeamSelectionRequired(ValueError):
+    def __init__(self, choices):
+        super().__init__("Choose the team to aggregate from the list.")
+        self.choices = choices
 
 
 def uuid_id(value: str) -> str:
@@ -146,9 +151,20 @@ def build_report(client: V1Client, match_ids: list[str], selected_team_id: str =
         if len(games) == 1 and candidates:
             candidates = candidates[:1]
         if len(candidates) != 1:
-            raise ValueError("More than one team appears equally often. Enter the team UUID to aggregate.")
+            raise TeamSelectionRequired([{"id":key,"name":team_names.get(key,key),"games":team_counts[key]} for key in candidates])
         team_id = candidates[0]
 
+    # Both sides across every selected match share one identity directory.
+    # Opponent names must not depend on the selected team's summary rows.
+    player_directory = {}
+    for _, box in games:
+        for side in box.get("teams", []):
+            for line in side.get("players", []):
+                player = line.get("player") or {}
+                pid = str(player.get("id") or "")
+                name = " ".join(str(part) for part in (player.get("firstName"), player.get("lastName")) if part).strip()
+                if pid and name and name.lower() != "unknown player":
+                    player_directory[pid] = {"name": name, "teamId": side.get("teamId")}
     player_totals: dict[str, dict[str, Any]] = {}
     match_rows: list[dict[str, Any]] = []
     strategy_counts: dict[str, Counter[str]] = defaultdict(Counter)
@@ -188,7 +204,7 @@ def build_report(client: V1Client, match_ids: list[str], selected_team_id: str =
             continue
         if include_events:
             try:
-                event_report = analyze_events(match_id, read_events(client, match_id), match, box, team_id)
+                event_report = analyze_events(match_id, read_events(client, match_id), match, box, team_id, player_directory)
                 event_reports.append(event_report)
                 coverage = event_report["defenderCoverage"]
                 if coverage["known"] < coverage["shots"]:
@@ -250,7 +266,7 @@ def build_report(client: V1Client, match_ids: list[str], selected_team_id: str =
                 continue
             entry = player_totals.setdefault(player_id, {
                 "playerId": player_id,
-                "name": " ".join(part for part in (player.get("firstName"), player.get("lastName")) if part) or player_id,
+                "name": player_directory.get(player_id, {}).get("name") or "Unknown player",
                 "games": 0,
                 "minutesByPosition": {pos: 0 for pos in POSITIONS},
                 "positionMinutesGames": 0,
@@ -292,10 +308,39 @@ def build_report(client: V1Client, match_ids: list[str], selected_team_id: str =
         entry["perGame"] = {field: entry[field] / entry["games"] for field in COUNT_FIELDS}
         entry["per36"] = {field: 36 * entry[field] / entry["minutes"] if entry["minutes"] else None for field in COUNT_FIELDS if field != "minutes"}
         players.append(entry)
+    referenced = {str(e.get(field)) for event_report in event_reports for e in event_report["events"]
+                  for field in ("player1Id", "player2Id", "primaryDefenderId", "helpDefenderId") if e.get(field)}
+    from .events import ZERO_UUID
+    unresolved = sorted(pid for pid in referenced if pid != ZERO_UUID and pid not in player_directory)
+    for pid in unresolved[:8]:
+        try:
+            player = client.get(f"/players/{segment(uuid_id(pid))}")
+        except V1ApiError as exc:
+            if exc.status in {401,429,503}:
+                break
+            continue
+        label = " ".join(str(part) for part in (player.get("firstName"), player.get("lastName")) if part).strip()
+        if label and label.lower() != "unknown player":
+            player_directory[pid] = {"name":label,"teamId":(player.get("club") or {}).get("id")}
+    for event_report in event_reports:
+        for event in event_report["events"] + event_report["shots"]:
+            for field,label in (("player1Id","player1Name"),("player2Id","player2Name"),("primaryDefenderId","defenderName"),("helpDefenderId","helpDefenderName")):
+                pid = str(event.get(field) or "")
+                event[label] = player_directory.get(pid, {}).get("name") or ("Unknown player" if pid and pid != ZERO_UUID else "")
+        for row in event_report["matchups"]:
+            row["shooter"] = player_directory.get(row["shooterId"],{}).get("name") or "Unknown player"
+            row["defender"] = player_directory.get(row["defenderId"],{}).get("name") or "Unknown player"
+    for entry in players:
+        entry["name"] = player_directory.get(entry["playerId"],{}).get("name") or "Unknown player"
+    remaining = sum(pid not in player_directory for pid in unresolved)
+    if remaining:
+        warnings.append(f"Names unavailable for {remaining} event participants; shown as Unknown player with IDs retained only in exports and tooltips.")
     players.sort(key=lambda entry: (-entry["minutes"], entry["name"]))
     match_rows.sort(key=lambda row: row["scheduledAt"], reverse=True)
     return {
         "world": "v1",
+        "submittedMatches": len(match_ids),
+        "playerNames": {pid: row["name"] for pid, row in player_directory.items()},
         "teamId": team_id,
         "teamName": team_names.get(team_id, team_id),
         "teamChoices": [{"id": key, "name": value} for key, value in team_names.items()],

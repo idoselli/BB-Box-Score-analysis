@@ -39,12 +39,14 @@ def read_events(client, match_id: str) -> list[dict[str, Any]]:
         cursor = next_cursor
 
 
-def analyze_events(match_id: str, rows: list[dict[str, Any]], match: dict, box: dict, team_id: str) -> dict:
-    players = {}
+def analyze_events(match_id: str, rows: list[dict[str, Any]], match: dict, box: dict, team_id: str, player_directory: dict | None = None) -> dict:
+    players = dict(player_directory or {})
     for side in box.get("teams", []):
         for line in side.get("players", []):
             p = line.get("player") or {}
-            players[p.get("id")] = {"teamId": side.get("teamId"), "name": " ".join(filter(None, [p.get("firstName"), p.get("lastName")]))}
+            pid = p.get("id")
+            if pid not in players:
+                players[pid] = {"teamId": side.get("teamId"), "name": " ".join(filter(None, [p.get("firstName"), p.get("lastName")]))}
     types = Counter()
     shots = []
     matchups = {}
@@ -52,8 +54,13 @@ def analyze_events(match_id: str, rows: list[dict[str, Any]], match: dict, box: 
     for raw in rows:
         e = dict(raw, matchId=match_id)
         for key, label in (("player1Id", "player1Name"), ("player2Id", "player2Name"), ("primaryDefenderId", "defenderName")):
-            e[label] = players.get(e.get(key), {}).get("name") or (e.get(key) if e.get(key) != ZERO_UUID else "")
-        e["playerTeamId"] = players.get(e.get("player1Id"), {}).get("teamId")
+            e[label] = players.get(e.get(key), {}).get("name") or ("Unknown player" if e.get(key) and e.get(key) != ZERO_UUID else "")
+        e["playerTeamId"] = next((side.get("teamId") for side in box.get("teams", [])
+                                  if any((line.get("player") or {}).get("id") == e.get("player1Id") for line in side.get("players", []))), None)
+        if e["playerTeamId"] is None and e.get("teamIndex") in (0, 1):
+            e["playerTeamId"] = next((side.get("teamId") for side in match.get("teams", [])
+                                      if bool(side.get("isHome")) == (e["teamIndex"] == 0)), None)
+        e["helpDefenderName"] = players.get(e.get("helpDefenderId"), {}).get("name") or ("Unknown player" if e.get("helpDefenderId") and e.get("helpDefenderId") != ZERO_UUID else "")
         e["clutch"] = (e.get("period", 0) >= 4 and 0 <= e.get("clock", -1) <= 300 and abs(previous_home - previous_away) <= 5)
         previous_home, previous_away = e.get("homePoints", previous_home), e.get("awayPoints", previous_away)
         if e.get("eventType") == "Shot" and not e.get("isCommentary"):

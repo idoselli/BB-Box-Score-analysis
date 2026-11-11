@@ -1,98 +1,77 @@
-# NIKA new-site parity audit — 11 November 2026
+# NIKA Multi Match Team Aggregate parity — 11 November 2026
 
-This change is local source work, not a production deployment. It upgrades the
-existing `/beta/` integration to the production API. It does **not** establish
-100% parity with the legacy tool. The legacy report engine stays available.
+This audit covers **Multi Match Team Aggregate only**. Other modes are out of
+scope. Full data parity remains limited by the API items in the
+[short developer request list](multi-match-api-requests.md).
 
-## Sources and verification
+## Implementation
 
-- Official guides: https://play.buzzerbeater.com/play/developers/
-- Authoritative response schema: https://next-api.buzzerbeater.com/v1/public.json
-- Interactive schema: https://next-api.buzzerbeater.com/v1/reference
-- The prose migration guide still says play-by-play is unavailable. The live
-  OpenAPI schema and a successful live `/events` response contradict that claim.
-  The implementation follows the live contract, not the outdated statement.
-- Tested an owner-team completed match using the supplied token (Public scope).
-  All 530 ordered events loaded through cursors 0, 200 and 400. Its 84 selected-team
-  field-goal attempts and 53 points excluding free throws reconcile with the box
-  score. Position minutes total 240. No defender IDs were present in this sample.
-- Chromium checked real captured report rendering, event/shot filters, JSON
-  download, JavaScript errors and a 390px viewport. This is not a live OAuth or
-  private-scope browser test. The supplied token cannot test private endpoints.
+The new-site report now adapts its source data to the original
+`MULTI_REPORT_HTML` renderer. It shares the legacy panel order, table columns,
+tactic grouping, color bands, typography, sorting, multiselect controls,
+dashboard tabs/glossary and supported detection rules. The old site's report
+code and routes are unchanged.
 
-## Feature comparison
+The new-site form accepts explicit match IDs, club schedules and national
+schedules, with a team chooser when the common team is ambiguous. Public API
+pagination, a maximum of 30 matches and the manager's API quotas still apply.
 
-| Existing feature | New-site behavior in this change | Limitation |
-| --- | --- | --- |
-| Single match | Submit one match UUID; switch the analyzed team | Uses the new report layout |
-| Multi-match | Manual UUIDs, club schedule, national schedule; selected team | Maximum 30 matches; quotas still apply |
-| Match summary | Score, periods in export, tactics, ratings/sublevels, GDP results, rebounding priorities, effort difference, PP100 | Historical nulls stay null; individual effort is not returned |
-| Player summary | Totals, averages, per-36, FG/3PT/FT/eFG and estimated TS | Integer box-score minutes; TS uses FTA × 0.44 |
-| Tactic position minutes | Saved role minutes, with per-match offense/defense | Missing splits have an explicit missing-game count; no primary-role guessing |
-| Offense shot profile | Team/opponent zones, left/right, assisted/open/contested; player inside/midrange/three | No exact shot coordinates; historical split coverage may be incomplete |
-| Player matchup overview | Per-match shooter/primary-defender FG and points | Only explicit defender IDs; historical match tested has none |
-| Player defense overview | API per-player defended aggregates plus explicit matchup rows | No assumed player2-to-defender mapping |
-| Defended shot log | Public shot events, explicit defender/help/contest fields, search and clutch filters | Missing defender fields remain missing |
-| Play-by-play result | Full ordered cursor feed, scores, periods, clocks, players, event types/results | Public facts; no localized legacy commentary reconstruction |
-| NBA-style dashboard | Common box-score rates and per-game/per-36 table | Legacy interactive dashboard/on-off panels are not reproduced |
-| Filters | Wins/losses, court, exact offense/defense/type; event/player/type search, minimum shot-type attempts, clutch/defender-only | Legacy tactic-group selectors and all cross-table filters are not reproduced |
-| Exports | Full JSON; player, match, shot and event CSV; CSV ZIP/combined CSV; browser print/PDF | New-site schema uses UUIDs and explicit coverage fields |
-| Animation / court replay | Unavailable | See API data request list below |
-| On/off, stint and lineup analysis | Unavailable | Need unambiguous lineup state |
-| Detections & suggestions | No unsupported tactical recommendations generated | Legacy rules requiring full on/off/defender coverage are not ported |
-| U21 historical tracker | Existing new-world collector and labeled demo/published archive | Needs real longitudinal snapshots; old-world history cannot be transferred |
-| National/club training | Existing owner/staff scope checks and recorded training views use production host | Legacy squad analyzer/player-minutes planner is not fully ported |
-| Market | Production host and documented parameter casing | Existing collection/publication gates retained |
+| Old aggregate feature | New-site status |
+| --- | --- |
+| Summary cards and Match Summary | Restored; scores, side, result, both tactics/GDP, effort difference; extra rating/sublevel/rebounding/PP100 panel retained |
+| Tactic Position Minutes | Same Inside / Outside / Balanced cards, PG–C, top three players per role; only valid saved position splits, zero-minute entries excluded |
+| Player Summary | Same sortable totals and shooting columns; box-score minute precision |
+| Player Matchup Overview | Restored columns and color bands; assisted-result and explicit open/contest splits; on/off unavailable |
+| Player Defense Overview | Restored columns and color bands; explicit event ranges and saved defended totals; on/off unavailable |
+| Defended Shot Log | Same defender/shot-type/result multiselects and summary; only attributed selected-team defense; unknown attribution remains in the all-shot log |
+| NBA-Style Dashboard | All six original views: Traditional, Advanced Lite, Shooting, Defense, Clutch, Four Factors; same filters, sorting and glossary |
+| Detections & Suggestions | Same high-usage, shot-diet, range-efficiency and supported defended-shot rules; same grouped cards/table, minimum eight attempts; no invented on/off findings |
+| Offense Shot Profile By Player | Restored per-shot-type columns, made/missed/blocked totals and range grouping |
+| Global filters | Player, result, tactic group, attempts and minutes; reset. As in the old renderer, result/tactic affect match/event selection; NBA dashboard filters separately recalculate its own totals |
+| Exports | JSON, CSV ZIP and combined CSV; include native facts and the derived `aggregate` presentation. All-shot/event CSV and Print/PDF retained |
+| Extra shooting facts | Team/opponent zone and player split tables retained behind side buttons |
 
-## API data / endpoint request list for BuzzerBeater
+Clutch points and field-goal/three-point figures are calculated from pre-play
+score margin and recorded events. Clutch AST, TO and +/− stay explicitly
+unavailable pending actor semantics and lineup data. Advanced metrics such as
+TS%, usage proxy, per-36 and estimated possessions retain the old formulas and
+labels. Missing contest/defender history is not interpreted as open or zero.
 
-These are requests, **not existing documented endpoints**. Some could be added
-as fields on `/matches/{id}` or `/matches/{id}/events` rather than new endpoints.
+## Names and scrolling
 
-1. **Starting five with positions for each side, plus complete timestamped
-   substitution/position-swap and removal semantics.** Box-score primary roles
-   and minutesByPosition do not identify who was on court at a given moment.
-   Needed for exact on/off, lineup stints and event-based positional matchups.
-   Document player1/player2/detail/teamIndex semantics for substitutions as well.
-2. **Shot x/y coordinates and court orientation.** Public events expose a shot
-   type, not exact coordinates. Needed for the same point-based shot maps.
-   Aggregate zones are already exposed and used.
-3. **Replay frames / player and ball movement, or an equivalent public replay
-   export.** The events contract explicitly excludes replay movement. Needed for
-   equivalent animation. A text-event feed alone cannot reconstruct it.
-4. **Complete primary defender, help defender and contest attribution on old
-   shots, where historical records exist.** Fields exist in the schema, but the
-   tested historical match omits them and has zero recorded open/contested
-   attempts. Needed for complete matchup/defense tables and their detections.
-   If unrecoverable, an explicit coverage flag would distinguish missing history
-   from a genuine zero.
-5. **Individual effort values, if public disclosure is intended.** Only
-   effortDelta (home minus away) is exported. Equal effort cannot distinguish
-   two normal settings from two crunch-time settings. Do not infer them.
-6. **Historical public player game logs including club at game time and role
-   minutes**, or equivalent bounded player-match discovery. The documented API
-   offers current club schedules and owner-only training history, but no public
-   career game-log endpoint. Needed for the legacy player analyzer and U21
-   minute planning across transfers without scanning other clubs' schedules.
-7. **Historical DMI/game-shape/salary/roster snapshots**, if available for export.
-   Current player/roster endpoints provide current public figures. Existing
-   collector snapshots can build future history but cannot backfill missing
-   new-world weeks, much less turn old-world IDs into new ones.
+- A shared directory contains players from **both teams across all loaded
+  matches**, not just the selected team's summary. Event actor, opponent shooting,
+  matchup, tactic and defense labels use it.
+- Truly unresolved referenced names can be repaired through a bounded maximum
+  of eight player reads per report. Quota/auth/transient errors stop that repair;
+  they do not destroy the report. A missing label is shown as Unknown player,
+  with an identifying number where needed; raw IDs remain in exports/tooltips.
+- Equal full names receive stable numbered display labels in the presentation,
+  keeping the inherited name-keyed dashboard from merging different players.
+- Every report table has sticky headers, keyboard-focusable bounded scrolling,
+  Compact/Comfortable/Large height selection and Expand/Collapse. Comfortable
+  height is capped at 520px; mobile uses a smaller default.
+- Public event/shot tables show 200 rows per page with Previous/Next and complete
+  CSV/JSON exports. All events remain accessible. The browser payload embeds the flat event feed once, derives the shot-log view from it, and omits duplicate helper eventReports. No long page-wide event dump.
 
-The first four are the main blockers to matching detailed legacy match analysis.
-Items 5–7 affect effort display and player/U21 history parity. Missing archive
-publication, unported UI panels and export formats are implementation or setup
-gaps, not evidence of missing API endpoints.
+## Evidence and checks
 
-## Access/setup requirements (not missing endpoints)
+- Live OpenAPI contract reread at https://next-api.buzzerbeater.com/v1/public.json.
+  Event play facts are available despite an outdated prose migration statement.
+- A captured production match provides 530 events, 199 shot events and both
+  rosters. Selected-team attempts reconcile at 84 and field-goal points at 53.
+  It has no explicit defender coverage, exercising the unavailable state.
+- Chromium compares the old and new renderers with the same underlying match:
+  Player Summary, Matchup and Defense colors and font sizes match exactly.
+  The first ten core report panels retain their original order.
+- Browser checks cover both-side names (no visible UUID labels), actual vertical
+  scrolling, height changes, pagination, search, player/minute filters, glossary,
+  all six NBA views and JSON/ZIP/combined exports. A 390px viewport has no document
+  horizontal overflow and the browser reports no JavaScript errors.
+- Synthetic regressions cover explicit defensive attribution, missing contest
+  history, unknown identities, foul-miss attempt rules, clutch free throws,
+  tactic minutes, label escaping and the shared legacy structure.
 
-- The supplied token grants **Public only**. Club private skills/training require
-  **Team**; national private training/prospects require **National** and the
-  game's coach/staff permissions; auctions/search require **Market**.
-- Some advanced shooting/scouting calls require supporter access. A 403 or a
-  quota error leaves the report with a warning rather than fabricated zeros.
-- Public OAuth needs the registered application and encrypted Redis session
-  configuration on the host. This patch changes defaults but cannot alter an
-  already configured environment override or deploy credentials.
-- Public tracker/market demos remain clearly labeled. No token, live account
-  payload or fabricated historical data is added to the repository.
+No application credentials, personal tokens or captured account payloads are
+committed. The API requests above are data limitations; the listed visual and
+identity fixes do not depend on additional API endpoints.

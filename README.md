@@ -20,7 +20,7 @@ aggregates, actual role minutes, strategies, GDP outcomes, effort difference,
 rating sublevels and expected PP100. Player totals, averages, per-36 rates and
 estimated TS% are available. JSON and CSV exports retain advanced fields.
 Shooting/events failures leave the box-score report available with warnings.
-The old event/replay engine is not fed invented coordinates or starting lineups.
+Multi Match Team Aggregate shares the original report renderer, colors, grouping, dashboard views and supported detection rules. Table panels have bounded scrolling and height controls. Opponent and event names resolve across both teams. Unavailable lineup metrics remain labeled.
 See [the parity audit and API request list](docs/new-site-parity.md).
 
 For public use, configure the registered OAuth application with

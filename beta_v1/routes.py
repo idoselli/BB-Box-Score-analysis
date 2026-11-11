@@ -173,6 +173,7 @@ def multi_match_page():
     client, record, connection_message = _connection({"Public"})
     report = None
     error = ""
+    team_choices = []
     fields = {key: request.form.get(key, "") for key in ("match_ids", "team_id", "schedule_team_id", "season", "count", "national_country_id", "national_other_code", "national_kind", "result_filter", "offense", "defense", "location", "match_type", "include_shooting", "include_events")}
     national_choices = (tracker._read(tracker.TRACKER_ROOT / "team-map.json") or {}).get("teams", [])
     if client and not national_choices:
@@ -212,9 +213,15 @@ def multi_match_page():
                 if fields["include_events"] == "no":
                     options["include_events"] = False
                 report = reports.build_report(client, ids, selected_team, **options)
+            except reports.TeamSelectionRequired as exc:
+                team_choices = exc.choices
+                error = str(exc)
             except Exception as exc:
                 error, _ = _api_error(exc)
-    return render_template("beta/multi.html", report=report, error=error, fields=fields, national_choices=national_choices, connected=client is not None, connection_message=connection_message)
+    if report is not None:
+        from .multi_view import render_report
+        return render_report(report, fields, (record or {}).get("me", {}).get("username", ""))
+    return render_template("beta/multi.html", report=report, team_choices=team_choices, error=error, fields=fields, national_choices=national_choices, connected=client is not None, connection_message=connection_message)
 
 
 @beta_bp.route("/national-training", methods=["GET", "POST"])
@@ -320,7 +327,10 @@ def export_multi():
     if not isinstance(report, dict) or report.get("world") != "v1" or not isinstance(report.get("matches"), list):
         return jsonify({"error": "A new-site report is required."}), 400
     export_format = payload.get("format")
-    if export_format == "csv_combined":
+    if export_format == "json":
+        content = json.dumps(report, ensure_ascii=False, indent=2).encode("utf-8")
+        filename, mimetype = "nika-multi-report.json", "application/json"
+    elif export_format == "csv_combined":
         content = csv_bytes(combined_csv_rows(report), ["section", "record_index", "record_label", "field", "value"])
         filename, mimetype = "nika-multi-combined.csv", "text/csv; charset=utf-8"
     elif export_format == "csv_zip":
@@ -332,5 +342,5 @@ def export_multi():
         content = output.getvalue()
         filename, mimetype = "nika-multi-csv.zip", "application/zip"
     else:
-        return jsonify({"error": "Choose csv_zip or csv_combined."}), 400
+        return jsonify({"error": "Choose json, csv_zip or csv_combined."}), 400
     return send_file(io.BytesIO(content), mimetype=mimetype, as_attachment=True, download_name=filename)
