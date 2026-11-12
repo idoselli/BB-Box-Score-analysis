@@ -106,6 +106,47 @@ class ProductionReportTests(unittest.TestCase):
             self.assertIn(label, response.data)
 
 
+class ReportSourceSelectionTests(unittest.TestCase):
+    def post_selection(self, data):
+        fake=FakeClient({'/countries/IL/national-teams':{'teams':[{'id':TEAM_ID,'kind':'JuniorNationalTeam'}]}})
+        with patch('beta_v1.routes._connection',return_value=(fake,{},'')), \
+             patch('beta_v1.routes.tracker._read',return_value={'teams':[{'countryId':'IL','name':'Israel'}]}), \
+             patch('beta_v1.routes.reports.schedule_ids',return_value=[MATCH_ID]) as schedule, \
+             patch('beta_v1.routes.reports.build_report',return_value={}) as build, \
+             patch('beta_v1.multi_view.render_report',return_value='Report ready'):
+            response=web_tool.app.test_client().post('/beta/multi-match',data=data)
+        return response,fake,schedule,build
+
+    def test_match_source_ignores_inactive_schedule_values(self):
+        response,fake,schedule,build=self.post_selection({'source_mode':'matches','match_ids':MATCH_ID,
+            'national_country_id':'IL','schedule_team_id':OTHER_ID,'season':'invalid'})
+        self.assertIn(b'Report ready',response.data)
+        self.assertEqual(fake.calls,[])
+        schedule.assert_not_called()
+        self.assertEqual(build.call_args.args[1:],([MATCH_ID],''))
+
+    def test_club_source_ignores_inactive_national_and_match_values(self):
+        response,fake,schedule,build=self.post_selection({'source_mode':'club','schedule_team_id':TEAM_ID,
+            'national_country_id':'IL','match_ids':'invalid','season':'73','count':'10'})
+        self.assertIn(b'Report ready',response.data)
+        self.assertEqual(fake.calls,[])
+        self.assertEqual(schedule.call_args.args[1:],(TEAM_ID,73,10))
+        self.assertEqual(build.call_args.args[1:],([MATCH_ID],TEAM_ID))
+
+    def test_national_source_keeps_selected_squad_and_options(self):
+        response,fake,schedule,build=self.post_selection({'source_mode':'national','national_country_id':'IL',
+            'national_kind':'JuniorNationalTeam','season':'73','count':'10','include_events':'no','result_filter':'W'})
+        self.assertIn(b'Report ready',response.data)
+        self.assertEqual(schedule.call_args.args[1:],(TEAM_ID,73,10))
+        self.assertEqual(build.call_args.kwargs,{'include_events':False,'result_filter':'W'})
+
+    def test_empty_schedule_source_does_not_fall_back_to_match_ids(self):
+        for mode,message in [('club',b'Enter a club team ID'),('national',b'Choose a country')]:
+            response,_,schedule,build=self.post_selection({'source_mode':mode,'match_ids':MATCH_ID})
+            self.assertIn(message,response.data)
+            schedule.assert_not_called();build.assert_not_called()
+
+
 class PublicEventTests(unittest.TestCase):
     def test_cursor_pages_preserve_sequence(self):
         fake = FakeClient({f'/matches/{MATCH_ID}/events': lambda params: {

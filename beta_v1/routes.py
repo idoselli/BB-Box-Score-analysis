@@ -174,7 +174,9 @@ def multi_match_page():
     report = None
     error = ""
     team_choices = []
-    fields = {key: request.form.get(key, "") for key in ("match_ids", "team_id", "schedule_team_id", "season", "count", "national_country_id", "national_other_code", "national_kind", "result_filter", "offense", "defense", "location", "match_type", "include_shooting", "include_events")}
+    fields = {key: request.form.get(key, "") for key in ("source_mode", "match_ids", "team_id", "schedule_team_id", "season", "count", "national_country_id", "national_other_code", "national_kind", "result_filter", "offense", "defense", "location", "match_type", "include_shooting", "include_events")}
+    # Preserve older report links/forms, while making the new source choice explicit.
+    fields["source_mode"] = fields["source_mode"] or ("national" if fields["national_other_code"] or fields["national_country_id"] else "club" if fields["schedule_team_id"] else "matches")
     national_choices = (tracker._read(tracker.TRACKER_ROOT / "team-map.json") or {}).get("teams", [])
     if client and not national_choices:
         try:
@@ -187,10 +189,15 @@ def multi_match_page():
             error = connection_message
         else:
             try:
-                season = int(fields["season"]) if fields["season"].strip() else None
+                source_mode = fields["source_mode"]
+                if source_mode not in {"matches", "club", "national"}:
+                    raise ValueError("Choose match IDs, a club schedule, or a national team.")
+                season = int(fields["season"]) if source_mode != "matches" and fields["season"].strip() else None
                 selected_team = fields["team_id"].strip()
                 country_code = fields["national_other_code"].strip().upper() or fields["national_country_id"].strip()
-                if country_code:
+                if source_mode == "national":
+                    if not country_code:
+                        raise ValueError("Choose a country or enter its country code.")
                     desired_kind = fields["national_kind"] or "JuniorNationalTeam"
                     if desired_kind not in {"JuniorNationalTeam", "SeniorNationalTeam"}:
                         raise ValueError("Choose a valid national-team level.")
@@ -201,7 +208,9 @@ def multi_match_page():
                     source_team = str(national["id"])
                     ids = reports.schedule_ids(client, source_team, season, int(fields["count"] or "10"))
                     selected_team = selected_team or source_team
-                elif fields["schedule_team_id"].strip():
+                elif source_mode == "club":
+                    if not fields["schedule_team_id"].strip():
+                        raise ValueError("Enter a club team ID to load its schedule.")
                     source_team = fields["schedule_team_id"].strip()
                     ids = reports.schedule_ids(client, source_team, season, int(fields["count"] or "10"))
                     selected_team = selected_team or source_team
