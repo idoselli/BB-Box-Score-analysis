@@ -1,4 +1,4 @@
-# NIKA Multi Match Team Aggregate parity — 11 November 2026
+# NIKA Multi Match Team Aggregate parity — 12 November 2026
 
 This audit covers **Multi Match Team Aggregate only**. Other modes are out of
 scope. Full data parity remains limited by the API items in the
@@ -36,10 +36,19 @@ Clutch assists use the linked shot's pre-play state, not the score after the
 basket. Clutch assists/turnovers are enabled when their full-game actor counts
 match every player's official totals. Reconstructed lineups must identify five
 starters per side, follow a consistent substitution/swap timeline and reconcile
-with official scores, field goals, rounded minutes and plus/minus. Exact role
+with official scores, field goals and plus/minus. Whole-minute totals must be
+compatible with the floor or ceiling of event minutes. If they differ from
+nearest-minute timing, complete player FG/plus-minus evidence is required;
+clock timing stays unvalidated and displayed totals retain official minutes.
+A discrepancy of a full minute or more still rejects the reconstruction. Exact role
 seconds are used only when a unique role assignment also matches the saved
 position minutes. Per-row flags prevent incomplete games from becoming fake
-zero on/off or clutch figures.
+zero on/off or clutch figures. A failed game no longer erases the valid subset:
+both on/off splits use the same validated games, and an On/off games column
+shows validated games / games played. Partial coverage is highlighted in both
+main tables and the NBA Defense view, preserved in exports, and stated in
+detection evidence. Empty samples say No attempts; unavailable is reserved for
+missing validation. Clutch plus/minus still requires every contributing game.
 
 The English commentary catalog was confirmed by the owner. Reconstructed shot descriptions summarize recorded shot/actor/result facts and are labeled accordingly; they do not invent movement, contest intensity or an original wording variation. Defense wrappers
 name the opponent; passing wrappers name a teammate. Direct API attribution
@@ -72,6 +81,14 @@ expandable details.
 
 ## Evidence and checks
 
+- Israel U21, season 73, last ten completed games (7 September–9 November):
+  all ten have complete, consistent lineups, player FG totals and plus/minus.
+  Eight previously failed the nearest-minute check alone; the largest total
+  difference is 39 seconds. All ten now contribute on/off counts. Separate
+  clock/position validation and official-minute fallbacks remain visible.
+- The Israel U21 report was checked in Chromium at 1440px and 390px, including
+  complete and mixed-validity coverage, actual zero-attempt off-court samples,
+  all NBA views, result/tactic filters, bounded scrolling and legacy colors.
 - Live OpenAPI contract reread at https://next-api.buzzerbeater.com/v1/public.json.
   Event play facts are available despite an outdated prose migration statement.
 - A captured production match provides 530 events, 199 shot events and both

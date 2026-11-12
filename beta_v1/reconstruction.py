@@ -84,7 +84,9 @@ def reconstruct(events, match, box):
     team_ids={team for team,_ in players.values()}
     rosters={team:{pid for pid,(tid,line) in players.items() if tid==team and (line.get('minutes') or line.get('fieldGoalsAttempts') or line.get('position'))} for team in team_ids}
     result={'status':'unavailable','reasons':[],'players':{pid:_player() for pid in players},
-            'assistsValidated':False,'turnoversValidated':False,'defenderBlocksValidated':False,'positionsValidated':False,'starters':{},'stints':[]}
+            'assistsValidated':False,'turnoversValidated':False,'defenderBlocksValidated':False,
+            'timingValidated':False,'timingMismatches':[],'notes':[],
+            'positionsValidated':False,'starters':{},'stints':[]}
     stats=result['players']
     blocks=Counter((e.get('resolvedDefenderId') or e.get('primaryDefenderId') or e.get('inferredDefenderId'))
                    for e in events if e.get('eventType')=='Shot' and 'Blocked' in (e.get('shotResult') or '') and not e.get('isCommentary'))
@@ -205,14 +207,31 @@ def reconstruct(events, match, box):
     if home_score!=expected.get(home) or away_score!=expected.get(away):
         return fail('The final event score differs from the official match score.')
     mismatches=[]
+    # On/off counts depend on event order, not clock deltas. Whole-minute box
+    # lines can disagree with nearest-minute event timing even when every
+    # substitution, player FG total and plus/minus agrees. Accept floor/ceiling
+    # compatibility for COUNTS only, with complete independent box evidence.
+    # Keep timing validation separate; do not present these seconds as exact.
+    complete_count_evidence=all(all(isinstance(line.get(field),int) for field in
+                                  ('fieldGoals','fieldGoalsAttempts','plusMinus','minutes'))
+                                for _,line in players.values())
     for pid,(_,line) in players.items():
-        if abs(stats[pid]['seconds']/60-(line.get('minutes') or 0))>.51:
-            mismatches.append('minutes')
+        difference=abs(stats[pid]['seconds']-60*(line.get('minutes') or 0))
+        if difference>30:
+            result['timingMismatches'].append({'playerId':pid,'officialMinutes':line.get('minutes'),
+                                              'eventSeconds':stats[pid]['seconds']})
+            if difference>=60 or not complete_count_evidence:
+                mismatches.append('minutes')
         if line.get('plusMinus') is not None and stats[pid]['plusMinus']!=line['plusMinus']:
             mismatches.append('plus/minus')
     if mismatches:
         return fail('Reconstructed '+', '.join(sorted(set(mismatches)))+' do not reconcile with the official player lines.')
     result['status']='validated'
+    result['timingValidated']=not result['timingMismatches']
+    if not result['timingValidated']:
+        result['notes'].append('Shot on/off validated against player field goals and plus/minus. '
+                               'Whole-minute box totals differ from event-clock timing by less than one minute; '
+                               'official minutes are retained.')
     # At most 5! assignments per side; accept exact roles only when unique.
     resolved_roles={}
     if not position_conflict:

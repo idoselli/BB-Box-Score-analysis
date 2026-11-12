@@ -111,12 +111,15 @@ def presentation(report):
             if not line.get('minutes') and not line.get('fieldGoalsAttempts'):
                 continue
             row = empty_nba_player_row(mid, match['result'], tactic_group, name(pid))
-            row.update(stats(line), playerId=pid, lineup_valid=lineup_valid,
+            row.update(stats(line), playerId=pid, lineup_valid=lineup_valid, onoff_games=int(lineup_valid),
                        assists_valid=reconstructed.get('assistsValidated',False),turnovers_valid=reconstructed.get('turnoversValidated',False))
             derived=(reconstructed.get('players') or {}).get(pid,{})
             if lineup_valid:
-                row['mins']=round(derived.get('seconds',0)/60,1)
-                derived_seconds[pid]+=derived.get('seconds',0)
+                if reconstructed.get('timingValidated', True):
+                    row['mins']=round(derived.get('seconds',0)/60,1)
+                    derived_seconds[pid]+=derived.get('seconds',0)
+                else:
+                    invalid_minutes.add(pid)
                 for source,target in [('teamDefOn','team_def_on'),('teamDefOff','team_def_off')]:
                     row[target]=dict(derived.get(source) or split())
                 row['clutch']['pm']=derived.get('clutchPlusMinus',0)
@@ -125,10 +128,14 @@ def presentation(report):
             row['clutch']['ast']=derived.get('clutchAssists',0)
             row['clutch']['to']=derived.get('clutchTurnovers',0)
             nba_players[pid] = row
-            matchups.setdefault(pid, dict(name=name(pid), playerId=pid, **{key: split() for key in ('defended','openClose','openMid','openThree','openTotal','withPass','withoutPass')}, teamOn=split(), teamOff=split(), lineup_valid=True))
-            defenses.setdefault(pid, dict(name=name(pid), playerId=pid, **{key: split() for key in ('defendedTotal','defendedClose','defendedMid','defendedThree')}, teamDefOn=split(), teamDefOff=split(), lineup_valid=True))
+            matchups.setdefault(pid, dict(name=name(pid), playerId=pid, **{key: split() for key in ('defended','openClose','openMid','openThree','openTotal','withPass','withoutPass')}, teamOn=split(), teamOff=split(), lineup_valid=True, onoff_games=0, onoff_total=0, onoff_missing=[]))
+            defenses.setdefault(pid, dict(name=name(pid), playerId=pid, **{key: split() for key in ('defendedTotal','defendedClose','defendedMid','defendedThree')}, teamDefOn=split(), teamDefOff=split(), lineup_valid=True, onoff_games=0, onoff_total=0, onoff_missing=[]))
             for store,keys in [(matchups[pid],('teamOn','teamOff')),(defenses[pid],('teamDefOn','teamDefOff'))]:
                 store['lineup_valid'] = store['lineup_valid'] and lineup_valid
+                store['onoff_total'] += 1
+                store['onoff_games'] += int(lineup_valid)
+                if not lineup_valid:
+                    store['onoff_missing'].append(mid)
                 if lineup_valid:
                     for key in keys:
                         value=derived.get(key) or split()
@@ -250,14 +257,14 @@ def presentation(report):
         if row['playerId'] not in invalid_minutes and row['playerId'] in derived_seconds:
             row['mins']=round(derived_seconds[row['playerId']]/60,1)
     for row in matchups.values():
-        if not row['lineup_valid']:
+        if not row['onoff_games']:
             row['teamOn']=row['teamOff']=None
         if not known_contest:
             for key in ('defended','openClose','openMid','openThree','openTotal'):
                 row[key] = None
         row['total_attempts'] = row['withPass']['a'] + row['withoutPass']['a']
     for row in defenses.values():
-        if not row['lineup_valid']:
+        if not row['onoff_games']:
             row['teamDefOn']=row['teamDefOff']=None
         row['total_attempts'] = row['defendedTotal']['a']
         if not known_defense:
@@ -319,13 +326,34 @@ def render_report(report, fields, username=''):
         template = template.replace('${'+expression+'}', '${escapeHtml('+expression+')}')
     # Null is different from an actual empty sample.
     for signature in ('shotStatHtml(stat)','defenseStatHtml(stat)','defensePctHtml(stat)'):
-        template = template.replace('function '+signature+' {','function '+signature+' {\n        if(stat == null)return "Unavailable";')
-    template = template.replace('name,\n          matches: new Set(),', 'name,\n          lineup_valid:true,assists_valid:true,turnovers_valid:true,\n          matches: new Set(),')
-    template = template.replace('item.matches.add(row.matchid);', 'item.matches.add(row.matchid);\n          for(const flag of ["lineup_valid","assists_valid","turnovers_valid"])item[flag]=item[flag]&&row[flag]===true;')
+        template = template.replace('function '+signature+' {','function '+signature+' {\n        if(stat == null)return "Unavailable";\n        if(!stat.a)return "No attempts";')
+    # Keep validated games useful without disguising a partial report as complete.
+    template = template.replace('name,\n          matches: new Set(),', 'name,\n          lineup_valid:true,assists_valid:true,turnovers_valid:true,onoff_games:0,\n          matches: new Set(),')
+    template = template.replace('item.matches.add(row.matchid);', 'item.matches.add(row.matchid);\n          item.onoff_games+=row.onoff_games||0;\n          for(const flag of ["lineup_valid","assists_valid","turnovers_valid"])item[flag]=item[flag]&&row[flag]===true;')
+    template = template.replace('const matchupColumns = [', '''function onoffCoverage(row){return `${row.onoff_games}/${row.onoff_total??row.gp} games`}
+      function onoffCoverageHtml(row){return `<span class="onoff-coverage ${row.lineup_valid?'':'partial'}" title="Validated games / games played. Both on/off splits use this same subset.">${onoffCoverage(row)}</span>`}
+      const onoffColumn={key:'onoffCoverage',label:'On/off games',type:'number',get:r=>r.onoff_games};
+      const matchupColumns = [''')
+    template=template.replace('{ key: "total_attempts", label: "Attempts", type: "number", get: row => row.total_attempts }',
+                              'onoffColumn, { key: "total_attempts", label: "Attempts", type: "number", get: row => row.total_attempts }')
+    # Append coverage so the shared player/metric colors and column order stay intact.
+    for function_name,next_function in [('renderPlayerMatchupTable','renderPlayerDefenseTable'),('renderPlayerDefenseTable','renderDetections')]:
+        start=template.index('function '+function_name+'(')
+        end=template.index(next_function+'(',start+10)
+        segment=template[start:end]
+        last_cell='${shotStatHtml(row.withoutPass)}</td>' if function_name=='renderPlayerMatchupTable' else '${defenseStatHtml(row.defendedThree)}</td>'
+        segment=segment.replace(last_cell,last_cell+'<td>${onoffCoverageHtml(row)}</td>')
+        segment=segment.replace('colspan="10"','colspan="11"').replace('colspan="7"','colspan="8"')
+        template=template[:start]+segment+template[end:]
+    for prefix in ('On ${formatPctRatio(on)} (${row.teamOn.m}/${row.teamOn.a}), off ${formatPctRatio(off)} (${row.teamOff.m}/${row.teamOff.a})',
+                   'On ${formatPctRatio(on)} (${row.teamDefOn.a - row.teamDefOn.m}/${row.teamDefOn.a}), off ${formatPctRatio(off)} (${row.teamDefOff.a - row.teamDefOff.m}/${row.teamDefOff.a})'):
+        template=template.replace(prefix,prefix+' · ${onoffCoverage(row)}')
     template = template.replace('function renderNbaTable(columns, rows, emptyColspan, emptyMessage) {','''function renderNbaTable(columns, rows, emptyColspan, emptyMessage) {
-        const requirements={teamDefOn:'lineup_valid',teamDefOff:'lineup_valid',clutchPm:'lineup_valid',clutchAst:'assists_valid',clutchTo:'turnovers_valid'};
+        const requirements={teamDefOn:'onoff_games',teamDefOff:'onoff_games',clutchPm:'lineup_valid',clutchAst:'assists_valid',clutchTo:'turnovers_valid'};
         columns=columns.map(c=>requirements[c.key]?{...c,value:r=>r[requirements[c.key]]?c.value(r):"Unavailable",sortValue:r=>r[requirements[c.key]]?(c.sortValue?c.sortValue(r):Number(c.value(r))):null}:c);
-        if(nbaViewFilter.value==='defense' && !data.coverage.defense) columns=columns.map(c=>c.key==='name'?c:{...c,value:()=>"Unavailable",sortValue:()=>null});
+        columns=columns.map(c=>['teamDefOn','teamDefOff'].includes(c.key)?{...c,value:r=>r.onoff_games?(r[c.key==='teamDefOn'?'team_def_on':'team_def_off'].a?c.value(r):'No attempts'):'Unavailable'}:c);
+        if(nbaViewFilter.value==='defense' && !data.coverage.defense) columns=columns.map(c=>['name','teamDefOn','teamDefOff'].includes(c.key)?c:{...c,value:()=>"Unavailable",sortValue:()=>null});
+        if(nbaViewFilter.value==='defense'){columns=[...columns,{key:'onoffCoverage',label:'On/off games',value:onoffCoverage,render:onoffCoverageHtml,sortValue:r=>r.onoff_games}];emptyColspan=columns.length}
         if(nbaViewFilter.value==='shooting' && !data.coverage.contest) columns=columns.map(c=>['open','defended'].includes(c.key)?{...c,value:()=>"Unavailable",sortValue:()=>null}:c);
         if(nbaViewFilter.value==='clutch' && sourceReport.eventCoverageGames===0){rows=[];emptyMessage='Public events unavailable; clutch figures cannot be calculated.'}
     ''')
@@ -340,8 +368,8 @@ def render_report(report, fields, username=''):
     template = template.replace('Event-derived split based on whether the play-by-play identified a defender on the shot.', 'Defense wrappers name the opposing player; passing wrappers name a teammate. A known passer-only shot has no named primary defender. Unresolved actors are labeled separately.')
     template = template.replace('function playerPassesGlobalFilters(row, attempts = 0, minutes = 0) {', 'function playerPassesGlobalFilters(row, attempts = 0, minutes = 0) {\n        if(!minutes)minutes=data.player_summary.find(p=>p.name===row.name)?.mins||0;')
     template = template.replace('Filters update detailed tables only. Summary and detections stay based on the full aggregate.', 'Result/tactic filters select matches and events. Player and threshold filters select aggregate rows. NBA dashboard filters recalculate its totals; summary and detections use the full aggregate.')
-    template = template.replace('<h2>Player Matchup Overview</h2>', '<h2>Player Matchup Overview</h2><p class="coverage-note">Defenders and passers follow the play-by-play sentence roles. On/off figures are shown when reconstructed lineups reconcile with the official minutes and plus/minus.</p>')
-    template = template.replace('<h2>Player Defense Overview</h2>', '<h2>Player Defense Overview</h2><p class="coverage-note">Defense includes named opponents recovered from play-by-play. On/off figures require a validated reconstruction. Saved API totals may cover additional attempts.</p>')
+    template = template.replace('<h2>Player Matchup Overview</h2>', '<h2>Player Matchup Overview</h2><p class="coverage-note">Defenders and passers follow the play-by-play sentence roles. On/off games shows validated games / games played; both FG splits use the same subset. No attempts means an empty sample.</p>')
+    template = template.replace('<h2>Player Defense Overview</h2>', '<h2>Player Defense Overview</h2><p class="coverage-note">On/off games shows validated games / games played; both defense splits use the same subset. Partial coverage is highlighted. Saved API defended totals may cover additional attempts.</p>')
     template = template.replace('<h2>Defended Shot Log</h2>', '<h2>Defended Shot Log</h2><p class="coverage-note">Includes selected-team defenders from direct API fields or reconstructed play-by-play roles. The all-shot log retains the attribution source.</p>')
     template = template.replace('These filters apply only to this NBA-style dashboard. Estimated and proxy metrics are labeled in the glossary.', 'These filters apply only to this NBA-style dashboard. On/off and clutch roles appear only when their reconstruction reconciles with official statistics. Event coverage: {{ source_report.eventCoverageGames or 0 }}/{{ source_report.usedMatches }} games. Estimates and proxies are labeled in the glossary.')
     template = template.replace('Findings favor large percentage swings', 'On/off findings use validated reconstructed lineups. Findings favor large percentage swings')

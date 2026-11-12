@@ -87,6 +87,34 @@ class ReconstructionTests(unittest.TestCase):
         e,m,b=fixture();b['teams'][0]['players'][0]['plusMinus']=3
         self.assertEqual(analyze_events('test',e,m,b,'home')['reconstruction']['status'],'unavailable')
 
+    def test_whole_minute_clock_difference_preserves_validated_onoff_counts(self):
+        e,m,b=fixture()
+        # 41:21 / 6:39, published as 42 / 6. The active fives and all player
+        # field goals/plus-minus still reconcile; nearest-minute timing does not.
+        e[6]['clock']=399
+        x=analyze_events('test',e,m,b,'home')['reconstruction']
+        self.assertEqual(x['status'],'validated',x['reasons'])
+        self.assertFalse(x['timingValidated'])
+        self.assertFalse(x['positionsValidated'])
+        self.assertEqual(len(x['timingMismatches']),2)
+        self.assertTrue(x['notes'])
+        self.assertEqual(x['players']['home5']['teamDefOn'],{'a':1,'m':1})
+
+    def test_whole_minute_tolerance_requires_independent_count_evidence(self):
+        e,m,b=fixture();e[6]['clock']=399
+        b['teams'][0]['players'][0]['plusMinus']=None
+        self.assertEqual(analyze_events('test',e,m,b,'home')['reconstruction']['status'],'unavailable')
+
+    def test_a_full_minute_disagreement_still_rejects_onoff(self):
+        e,m,b=fixture();e[6]['clock']=420
+        self.assertEqual(analyze_events('test',e,m,b,'home')['reconstruction']['status'],'unavailable')
+
+    def test_clock_tolerance_does_not_hide_shooting_or_plusminus_errors(self):
+        for field in ('fieldGoalsAttempts','plusMinus'):
+            e,m,b=fixture();e[6]['clock']=399
+            b['teams'][0]['players'][0][field]+=1
+            self.assertEqual(analyze_events('test',e,m,b,'home')['reconstruction']['status'],'unavailable')
+
     def test_assist_disagreement_does_not_invent_clutch_assists(self):
         e,m,b=fixture();b['teams'][1]['players'][1]['assists']=2
         x=analyze_events('test',e,m,b,'home')['reconstruction']

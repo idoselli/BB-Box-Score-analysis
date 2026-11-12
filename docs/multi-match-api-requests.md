@@ -2,7 +2,7 @@
 
 NIKA now uses the owner-confirmed English sentence grammar and equivalent event
 actor roles to recover defenders, passers, starters, substitutions and swaps.
-Validated games support on/off, precise position minutes, clutch plus/minus,
+Validated games support on/off, separately validated position minutes, clutch plus/minus,
 assists and turnovers without new endpoints. Missing direct defender fields
 alone no longer block these features.
 
@@ -19,6 +19,10 @@ The remaining requests are:
    snapshots for those games.** These are fallbacks for games that cannot pass
    reconstruction checks, rather than a requirement for every match. Document
    and guarantee event actor, substitution-detail and clock semantics.
+4. **Document minute accounting and expose per-player/per-position seconds.**
+   Integer box-score minutes sometimes differ from nearest-minute event-clock
+   totals despite identical FG and plus/minus. Exact seconds would resolve
+   timing precision; shot on/off does not need to wait for this endpoint.
 
 Unknown/incomplete records remain labeled. A complete known shot sentence with
 no named defender is open under NIKA's commentary definition; an omitted API
@@ -30,3 +34,10 @@ match official block totals. Both starting fives, substitutions and positional
 swaps reconcile with every official player's rounded minutes and plus/minus.
 Assist and turnover actor totals also reconcile for every player. This is a
 verified example, not proof that all historical games have complete records.
+
+Israel U21 season 73's last ten finished games were also checked. All ten match
+official player FG and plus/minus; eight have small whole-minute timing
+differences (largest total discrepancy: 39 seconds). On/off counts now work for
+all ten, with clock validation reported separately and official minutes retained
+where timing cannot be confirmed. No additional endpoint is required for this
+on/off case.

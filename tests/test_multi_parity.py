@@ -135,6 +135,43 @@ class MultiParityTests(unittest.TestCase):
         self.assertNotIn('name="password"',html)
         self.assertIn('/beta/export-multi',html)
 
+    def mixed_onoff_report(self):
+        report=self.report()
+        second=deepcopy(report['matches'][0]);second['matchId']='99999999-1111-4111-8111-111111111111'
+        report['matches'].append(second);report['usedMatches']=2
+        r={'status':'validated','positionsValidated':False,'timingValidated':False,
+           'players':{PLAYER_ID:{'seconds':1790,'teamOn':{'m':4,'a':10},'teamOff':{'m':2,'a':5},
+                                 'teamDefOn':{'m':3,'a':8},'teamDefOff':{'m':1,'a':4}}}}
+        report['eventReports'][0]['reconstruction']=r
+        report['eventReports'].append({'matchId':second['matchId'],'reconstruction':{'status':'unavailable'}})
+        return report
+
+    def test_one_invalid_match_preserves_explicitly_partial_onoff(self):
+        report=self.mixed_onoff_report();view=presentation(report)
+        offense=view['matchup'][0];defense=view['defense'][0]
+        self.assertEqual(offense['teamOn'],{'m':4,'a':10})
+        self.assertEqual(offense['teamOff'],{'m':2,'a':5})
+        self.assertEqual(defense['teamDefOn'],{'m':3,'a':8})
+        self.assertEqual(defense['teamDefOff'],{'m':1,'a':4})
+        for row in (offense,defense):
+            self.assertEqual((row['onoff_games'],row['onoff_total']),(1,2))
+            self.assertFalse(row['lineup_valid'])
+            self.assertEqual(row['onoff_missing'],[report['matches'][1]['matchId']])
+        nba=view['nba_dashboard']['players']
+        self.assertEqual([r['onoff_games'] for r in nba],[1,0])
+        self.assertEqual(nba[1]['team_def_on'],{'m':0,'a':0})
+
+    def test_unconfirmed_clock_timing_retains_official_minutes(self):
+        report=self.mixed_onoff_report();view=presentation(report)
+        self.assertEqual(view['nba_dashboard']['players'][0]['mins'],report['matches'][0]['playerLines'][0]['minutes'])
+        self.assertEqual(view['player_summary'][0]['mins'],report['players'][0]['minutes'])
+
+    def test_no_valid_matches_keeps_onoff_unavailable_with_zero_coverage(self):
+        view=presentation(self.report())
+        self.assertIsNone(view['matchup'][0]['teamOn'])
+        self.assertEqual(view['matchup'][0]['onoff_games'],0)
+        self.assertEqual(view['matchup'][0]['onoff_total'],1)
+
 
 if __name__=='__main__':
     unittest.main()
