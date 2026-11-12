@@ -51,7 +51,11 @@ def analyze_events(match_id: str, rows: list[dict[str, Any]], match: dict, box: 
     shots = []
     matchups = {}
     previous_home = previous_away = 0
+    from .pbp_catalog import apply_sentence_facts
+    from .reconstruction import identities
+    role_players = identities(box)
     for raw in rows:
+        apply_sentence_facts(raw, role_players)
         e = dict(raw, matchId=match_id)
         for key, label in (("player1Id", "player1Name"), ("player2Id", "player2Name"), ("primaryDefenderId", "defenderName")):
             e[label] = players.get(e.get(key), {}).get("name") or ("Unknown player" if e.get(key) and e.get(key) != ZERO_UUID else "")
@@ -71,7 +75,7 @@ def analyze_events(match_id: str, rows: list[dict[str, Any]], match: dict, box: 
         types[str(e.get("eventType"))] += 1
         raw.update(e)
     from .reconstruction import infer_roles, reconstruct
-    from .commentary_roles import describe_shot
+    from .commentary_roles import describe_shot, describe_event
     infer_roles(rows, box)
     shots = [e for e in rows if e.get("eventType") == "Shot" and not e.get("isCommentary")]
     matchups = {}
@@ -82,6 +86,7 @@ def analyze_events(match_id: str, rows: list[dict[str, Any]], match: dict, box: 
         e["resolvedDefenderId"] = defender
         e["defenderName"] = players.get(defender, {}).get("name") or ("Unknown player" if defender else "")
         e["passerName"] = players.get(e.get("passerId"), {}).get("name") or ""
+        e["helpDefenderName"] = players.get(e.get("helpDefenderId") or e.get("inferredHelpDefenderId"), {}).get("name") or ""
         describe_shot(e)
         if defender and e.get("countsAsAttempt"):
             key = (e.get("player1Id"), defender)
@@ -90,6 +95,9 @@ def analyze_events(match_id: str, rows: list[dict[str, Any]], match: dict, box: 
             entry["attempts"] += 1
             entry["made"] += int(e["made"])
             entry["points"] += e["points"]
+    for e in rows:
+        if e.get('eventType')!='Shot' or e.get('isCommentary'):
+            describe_event(e)
     reconstruction = reconstruct(rows, match, box)
     return {"matchId": match_id, "events": rows, "shots": shots,
             "matchups": list(matchups.values()), "eventTypes": dict(types),

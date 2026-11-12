@@ -326,11 +326,10 @@ def build_report(client: V1Client, match_ids: list[str], selected_team_id: str =
     for event_report in event_reports:
         for event in event_report["events"] + event_report["shots"]:
             for field,label in (("player1Id","player1Name"),("player2Id","player2Name"),("resolvedDefenderId","defenderName"),("helpDefenderId","helpDefenderName"),("passerId","passerName")):
-                pid = str(event.get(field) or "")
+                pid = str(event.get(field) or (event.get('inferredHelpDefenderId') if field=='helpDefenderId' else '') or "")
                 event[label] = player_directory.get(pid, {}).get("name") or ("Unknown player" if pid and pid != ZERO_UUID else "")
-            if event.get("eventType")=="Shot" and not event.get("isCommentary"):
-                from .commentary_roles import describe_shot
-                describe_shot(event)
+            from .commentary_roles import describe_event
+            describe_event(event)
         for row in event_report["matchups"]:
             row["shooter"] = player_directory.get(row["shooterId"],{}).get("name") or "Unknown player"
             row["defender"] = player_directory.get(row["defenderId"],{}).get("name") or "Unknown player"

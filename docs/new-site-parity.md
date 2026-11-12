@@ -1,8 +1,9 @@
 # NIKA Multi Match Team Aggregate parity — 12 November 2026
 
 This audit covers **Multi Match Team Aggregate only**. Other modes are out of
-scope. Full data parity remains limited by the API items in the
-[short developer request list](multi-match-api-requests.md).
+scope. Core analysis has no confirmed missing endpoint for complete feeds. Individual
+effort and exact original wording remain optional differences in the
+[API notes](multi-match-api-requests.md).
 
 ## Implementation
 
@@ -50,7 +51,13 @@ main tables and the NBA Defense view, preserved in exports, and stated in
 detection evidence. Empty samples say No attempts; unavailable is reserved for
 missing validation. Clutch plus/minus still requires every contributing game.
 
-The English commentary catalog was confirmed by the owner. Reconstructed shot descriptions summarize recorded shot/actor/result facts and are labeled accordingly; they do not invent movement, contest intensity or an original wording variation. Defense wrappers
+The owner supplied the new-site English JSON catalog as well as the old sentence list.
+The [catalog audit](new-site-pbp-audit.md) classifies all 390 relevant entries /
+891 variants. New assisted, blocked, guard/help, lineup, turnover and free-throw
+phrases are supported; broadcast/summary text cannot create statistical rows.
+Passer, primary defender and help defender are tracked separately, including
+passers recovered from linked Assist rows. Original text is shown when supplied.
+ Fallback shot descriptions summarize recorded shot/actor/result facts and are labeled accordingly; they do not invent movement, contest intensity or an original wording variation. Defense wrappers
 name the opponent; passing wrappers name a teammate. Direct API attribution
 takes precedence. The same role grammar applies to structured events, including
 blocked-assist outcomes where the second actor is an opponent. Complete supplied

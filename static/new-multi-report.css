@@ -13,10 +13,12 @@
 #tacticMinutesPanel{max-height:600px;overflow:auto}.events-head label{font-size:12px;display:flex;gap:6px;align-items:center}.events-head input[type=number]{width:85px}
 .side-tabs{display:flex;gap:8px;padding:12px}.side-tabs button[aria-pressed=true]{background:#14699b;color:white}
 .section-subheading{font-size:14px;padding:0 12px}.shooting-side[hidden]{display:none}.shooting-players td:nth-child(2),.shooting-players td:nth-child(3),.shooting-players td:nth-child(4){background:#f0fdf4}.shooting-players td:last-child{background:#eef6ff}
-#event-log td:nth-child(7),#event-log td:nth-child(8),#shot-log td:nth-child(4),#shot-log td:nth-child(7){font-weight:600;max-width:220px}
+#event-log td:nth-child(7),#event-log td:nth-child(8),#shot-log td:nth-child(4),#shot-log td:nth-child(7),#shot-log td:nth-child(8){font-weight:600;max-width:220px}
 .coverage-note{padding:10px 14px;background:#fff8df;border-bottom:1px solid #e6bd64;color:#5d481a;font-size:12px}
 .onoff-coverage{font-size:12px;white-space:nowrap;color:#315065}.onoff-coverage.partial{background:#fff1cc;color:#714b0b;border:1px solid #e6bd64;border-radius:4px;padding:2px 5px}
 @media(max-width:680px){.wrap{padding:12px}.hero h1{font-size:24px}.table-wrap{max-height:380px}.filter-bar,.nba-controls{grid-template-columns:1fr 1fr}.events-head{align-items:flex-start;gap:12px}.events-head label{flex-wrap:wrap}.hero{padding:14px}.tactic-grid{grid-template-columns:1fr}}
 @media print{.legacy-site-header,.topbar-actions,.filter-bar,.nba-controls,.events-head,.panel-controls,.side-tabs{display:none}.wrap{max-width:none}.table-wrap,#tacticMinutesPanel,.tactic-card .position-block{max-height:none!important;overflow:visible}.shooting-side[hidden]{display:block}.card{box-shadow:none;break-inside:avoid}th,td{white-space:normal}.modal-backdrop{display:none!important}}
 
 .dropdown-label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase}
+
+#shot-log td:last-child,#event-log td:last-child{white-space:normal;min-width:260px;max-width:430px}

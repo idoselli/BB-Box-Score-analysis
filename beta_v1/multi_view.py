@@ -172,10 +172,12 @@ def presentation(report):
             explicit_defender = defender and defender != ZERO_UUID
             is_open = e.get('defenseState') == 'open' or e.get('contestLevel') == 'Open'
             is_defended = bool(explicit_defender) or e.get('contestLevel') in {'Light','Contested','Smothered'}
-            assisted = bool(e.get('passerId')) if 'defenseState' in e else 'Assist' in (e.get('shotResult') or '')
+            assisted = bool(e.get('receivedPass',e.get('passerId'))) if 'defenseState' in e else 'Assist' in (e.get('shotResult') or '')
             result = '1' if made else '3' if 'Blocked' in (e.get('shotResult') or '') else '4' if 'Foul' in (e.get('shotResult') or '') else '0'
             if e.get('shotResult') == 'Goaltending':
                 result = '2'
+            if (e.get('pbpFacts') or {}).get('andOne'):
+                result = '5' if made else result
             if pid in own_ids and attempt:
                 shot_codes.add(code)
                 item = offense.setdefault(pid, {'name': name(pid), 'playerId': pid, 'counts': {}})

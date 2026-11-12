@@ -1,4 +1,4 @@
-# Remaining API requests after play-by-play reconstruction
+# Optional API improvements after play-by-play reconstruction
 
 NIKA now uses the owner-confirmed English sentence grammar and equivalent event
 actor roles to recover defenders, passers, starters, substitutions and swaps.
@@ -6,7 +6,8 @@ Validated games support on/off, separately validated position minutes, clutch pl
 assists and turnovers without new endpoints. Missing direct defender fields
 alone no longer block these features.
 
-The remaining requests are:
+There is no confirmed missing endpoint blocking core multi-match analysis for
+complete event feeds. The owner considers these two remaining differences low priority:
 
 1. **Individual played effort settings**, if intended to be public. Only
    home-minus-away effort difference is exported, so the two settings cannot
@@ -15,14 +16,15 @@ The remaining requests are:
    sentences are needed. The current event schema exports facts and actors but
    not the sentence text. The supplied sentence catalog explains their roles;
    it cannot identify which wording variant was used in a particular game.
-3. **Repair incomplete historical event feeds, or provide starting-lineup
-   snapshots for those games.** These are fallbacks for games that cannot pass
-   reconstruction checks, rather than a requirement for every match. Document
-   and guarantee event actor, substitution-detail and clock semantics.
-4. **Document minute accounting and expose per-player/per-position seconds.**
-   Integer box-score minutes sometimes differ from nearest-minute event-clock
-   totals despite identical FG and plus/minus. Exact seconds would resolve
-   timing precision; shot on/off does not need to wait for this endpoint.
+
+Starting fives, substitutions, swaps and event-clock seconds are reconstructed
+from play-by-play. Exact-second or lineup snapshot endpoints are optional
+cross-checks, not requirements. Only genuinely missing/corrupt events would
+prevent recovery; that has not been established for the tested Israel U21 games.
+
+The new-site `en.json` catalog has now been audited and bundled. See
+[new-site-pbp-audit.md](new-site-pbp-audit.md) for all 390 relevant entries and
+the distinction between physical plays and broadcast/color/summary text.
 
 Unknown/incomplete records remain labeled. A complete known shot sentence with
 no named defender is open under NIKA's commentary definition; an omitted API

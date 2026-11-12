@@ -8,7 +8,7 @@ ZERO = '00000000-0000-0000-0000-000000000000'
 POSITIONS = ('pointGuard','shootingGuard','smallForward','powerForward','center')
 ACTIVE_EVENTS = {'Shot','FreeThrow','ShootingFoul','NoShootFoul','Assist','Steal','StealOnPass',
                  'BadPass','OffFoul','Travel','ThreeSecond','ShotClockZero','BackCourtViol',
-                 'TenSecViol','Rebound','ReboundOut','ReboundFoul','JumpBall','Injury','SubstitutionSwap'}
+                 'TenSecViol','LoseControl','Rebound','ReboundOut','ReboundFoul','JumpBall','Injury','SubstitutionSwap'}
 TURNOVERS = {'ThreeSecond','BadPass','OffFoul','ShotClockZero','BackCourtViol','TenSecViol','Travel','LoseControl'}
 
 
@@ -18,56 +18,73 @@ def identities(box):
 
 
 def infer_roles(events, box):
-    """The legacy shot grammar distinguishes an opposing defender from a teammate passer."""
+    """Resolve passer and defender independently, then link actual assist events."""
+    from .commentary_roles import sentence_roles
+    from .pbp_catalog import sentence_facts
     players=identities(box)
     for e in events:
+        if e.get('isCommentary'):
+            continue
         kind=e.get('eventType');p1=str(e.get('player1Id') or '');p2=str(e.get('player2Id') or '')
         if kind=='Assist':
             e['assisterId']=p1 if p1 in players else None
         if kind in TURNOVERS or kind in {'Steal','StealOnPass'} or (kind=='ReboundOut' and e.get('reboundType')=='Offensive'):
             pid=p2 if kind in {'Steal','StealOnPass'} else p1
             e['turnoverPlayerId']=pid if pid in players else None
-        if kind!='Shot' or e.get('isCommentary'):
+        if kind!='Shot':
             continue
-        for key in ('inferredDefenderId','resolvedDefenderId','passerId','defenseState','defenderSource'):
+        for key in ('inferredDefenderId','resolvedDefenderId','inferredHelpDefenderId','passerId','passerSource','receivedPass','defenseState','defenderSource'):
             e.pop(key,None)
-        from .commentary_roles import sentence_roles
+        facts=e.get('pbpFacts') or sentence_facts(e,players)
         sentence=sentence_roles(e,players)
+        if facts.get('passerId'):
+            e['passerId']=facts['passerId'];e['passerSource']='sentence'
+        elif sentence and sentence.get('passerId'):
+            e['passerId']=sentence['passerId'];e['passerSource']='sentence'
+        elif p1 in players and p2 in players and p1!=p2 and players[p1][0]==players[p2][0]:
+            e['passerId']=p2;e['passerSource']='play-by-play-teammate'
+        else:
+            e['passerId']=None
+        e['receivedPass']=bool(e.get('passerId') or facts.get('receivedPass'))
+        if facts.get('helpDefenderId'):
+            e['inferredHelpDefenderId']=facts['helpDefenderId'];e['isHelped']=True
         primary=e.get('primaryDefenderId')
-        e['defenderSource']='api' if primary and primary!=ZERO else None
-        e['passerId']=None
         if primary and primary!=ZERO:
-            e['defenseState']='defended'
+            e['defenseState']='defended';e['defenderSource']='api'
         elif e.get('contestLevel')=='Open':
             e['defenseState']='open';e['defenderSource']='api-contest'
+        elif e.get('contestLevel') in {'Light','Contested','Smothered'}:
+            e['defenseState']='defended';e['defenderSource']='api-contest'
+            if sentence and sentence.get('defenderId'):e['inferredDefenderId']=sentence['defenderId']
+            elif p1 in players and p2 in players and players[p1][0]!=players[p2][0]:e['inferredDefenderId']=p2
         elif sentence is not None:
             e['defenseState']=sentence['state'];e['defenderSource']=sentence['source']
             if sentence.get('defenderId'):e['inferredDefenderId']=sentence['defenderId']
-            if sentence.get('passerId'):e['passerId']=sentence['passerId']
         elif p1 in players and p2 in players and players[p1][0]!=players[p2][0]:
-            # player2 is an opposing participant in the shot grammar. This also
-            # covers ShotBlockedAssist; the enum suffix alone does not identify a passer.
+            # An opposing second actor is a defender/blocker, including a
+            # ShotBlockedAssist result. A teammate passer is a separate role.
             e['inferredDefenderId']=p2
             e['defenseState']='defended';e['defenderSource']='play-by-play-opponent'
-        elif p1 in players and p2 in players and p1!=p2 and players[p1][0]==players[p2][0]:
-            e['passerId']=p2
-            e['defenseState']='defended' if e.get('contestLevel') in {'Light','Contested','Smothered'} else 'open'
-            e['defenderSource']='play-by-play-passer'
-        elif e.get('contestLevel') in {'Light','Contested','Smothered'}:
-            e['defenseState']='defended';e['defenderSource']='api-contest'
+        elif e.get('passerId'):
+            e['defenseState']='open';e['defenderSource']='play-by-play-passer'
         else:
-            # The current API does not export rendered sentences. A genuinely
-            # missing/unknown actor remains distinct from a known passer-only play.
-            e['defenseState']='unknown'
-    # Assist events follow their scoring shot: use that shot's PRE-play clutch state.
+            e['defenseState']='unknown';e['defenderSource']=None
+    # Actual Assist rows identify a teammate even when the Shot's second actor
+    # identifies the opposing defender. Commentary assist totals create no rows.
     last_shot=None
     for e in events:
-        if e.get('eventType')=='Shot' and not e.get('isCommentary'):
+        if e.get('isCommentary'):
+            continue
+        if e.get('eventType')=='Shot':
             last_shot=e
         elif e.get('eventType')=='Assist' and last_shot:
             if (e.get('period'),e.get('clock'),e.get('player2Id')) == (last_shot.get('period'),last_shot.get('clock'),last_shot.get('player1Id')):
                 e['clutch']=last_shot.get('clutch',False)
                 e['linkedShotSequence']=last_shot.get('sequenceIndex')
+                assister=e.get('player1Id');shooter=last_shot.get('player1Id')
+                if assister in players and shooter in players and assister!=shooter and players[assister][0]==players[shooter][0]:
+                    last_shot['passerId']=assister;last_shot['passerSource']='linked-assist-event'
+                    last_shot['receivedPass']=True
 
 
 def _split():
