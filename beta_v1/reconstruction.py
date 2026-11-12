@@ -97,6 +97,10 @@ def _player():
 
 
 def reconstruct(events, match, box):
+    # Snapshots belong to this validation pass, never to a previous analysis.
+    for event in events:
+        event.pop('defendingLineup',None)
+        event.pop('lineupValidated',None)
     players=identities(box)
     team_ids={team for team,_ in players.values()}
     rosters={team:{pid for pid,(tid,line) in players.items() if tid==team and (line.get('minutes') or line.get('fieldGoalsAttempts') or line.get('position'))} for team in team_ids}
@@ -151,7 +155,7 @@ def reconstruct(events, match, box):
     if {home,away}!=team_ids:
         result['reasons'].append('Home and away identities could not be reconciled.')
         return result
-    elapsed=0;home_score=away_score=0;position_conflict=False
+    elapsed=0;home_score=away_score=0;position_conflict=False;shot_lineups=[]
     def fail(reason):
         result['reasons'].append(reason)
         return result
@@ -211,6 +215,8 @@ def reconstruct(events, match, box):
             shooter_team=players.get(p1,(None,None))[0]
             if shooter_team not in active:
                 return fail('A shot has no resolvable shooting team.')
+            defending_team=next(team for team in team_ids if team!=shooter_team)
+            shot_lineups.append((e,sorted(active[defending_team])))
             for team,ids in rosters.items():
                 for pid in ids:
                     key=('teamOn' if pid in active[team] else 'teamOff') if team==shooter_team else ('teamDefOn' if pid in active[team] else 'teamDefOff')
@@ -244,6 +250,11 @@ def reconstruct(events, match, box):
     if mismatches:
         return fail('Reconstructed '+', '.join(sorted(set(mismatches)))+' do not reconcile with the official player lines.')
     result['status']='validated'
+    # Capture exact event order, including substitutions at the same clock.
+    # Publish these identities only after the whole game reconciles.
+    for event,lineup in shot_lineups:
+        event['defendingLineup']=lineup
+        event['lineupValidated']=True
     result['timingValidated']=not result['timingMismatches']
     if not result['timingValidated']:
         result['notes'].append('Shot on/off validated against player field goals and plus/minus. '

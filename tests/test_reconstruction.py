@@ -83,6 +83,30 @@ class ReconstructionTests(unittest.TestCase):
         self.assertEqual(x['status'],'unavailable')
         self.assertTrue(x['reasons'])
 
+    def test_validated_shots_capture_exact_defending_five(self):
+        result=self.analyze();first,second=result['shots']
+        self.assertTrue(first['lineupValidated'])
+        self.assertEqual(set(first['defendingLineup']),{'away0','away1','away2','away3','away4'})
+        self.assertIn('home5',second['defendingLineup'])
+        self.assertNotIn('home0',second['defendingLineup'])
+
+    def test_same_clock_substitution_uses_event_order_for_defending_five(self):
+        e,m,b=fixture();e[6]['clock']=300;e[7]['clock']=300
+        for index,minutes in [(0,43),(5,5)]:
+            b['teams'][0]['players'][index]['minutes']=minutes
+            b['teams'][0]['players'][index]['minutesByPosition']['pointGuard']=minutes
+        result=analyze_events('test',e,m,b,'home')
+        self.assertEqual(result['reconstruction']['status'],'validated')
+        self.assertIn('home5',result['shots'][1]['defendingLineup'])
+        self.assertNotIn('home0',result['shots'][1]['defendingLineup'])
+
+    def test_failed_reanalysis_does_not_publish_stale_lineup_snapshots(self):
+        e,m,b=fixture();analyze_events('test',e,m,b,'home')
+        b['teams'][0]['players'][0]['plusMinus']=100
+        result=analyze_events('test',e,m,b,'home')
+        self.assertEqual(result['reconstruction']['status'],'unavailable')
+        self.assertTrue(all('defendingLineup' not in shot and 'lineupValidated' not in shot for shot in result['shots']))
+
     def test_official_plusminus_disagreement_rejects_reconstruction(self):
         e,m,b=fixture();b['teams'][0]['players'][0]['plusMinus']=3
         self.assertEqual(analyze_events('test',e,m,b,'home')['reconstruction']['status'],'unavailable')
