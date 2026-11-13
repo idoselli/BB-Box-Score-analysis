@@ -3859,6 +3859,8 @@ MULTI_REPORT_HTML = """<!doctype html>
       globalResetFilters.addEventListener("click", resetGlobalFilters);
       renderFilteredTables();
     </script>
+    <link rel="stylesheet" href="/static/player-shot-chart.css">
+    <script src="/static/player-shot-chart.js"></script>
   </main>
 </body>
 </html>
@@ -5983,6 +5985,8 @@ REPORT_HTML = """<!doctype html>
     setupEventFeedFilters();
     renderEvents();
   </script>
+  <link rel="stylesheet" href="/static/player-shot-chart.css">
+  <script src="/static/player-shot-chart.js"></script>
 </body>
 </html>
 """
