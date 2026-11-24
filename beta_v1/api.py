@@ -35,6 +35,7 @@ class V1Client:
         base_url: str = API_BASE,
         on_unauthorized: Callable[[str], str | None] | None = None,
         min_request_interval: float = 0,
+        retry_network_errors: bool = False,
     ):
         if not token:
             raise ValueError("A v1 bearer token is required.")
@@ -44,6 +45,7 @@ class V1Client:
         self.last_limits: dict[str, str] = {}
         self.on_unauthorized = on_unauthorized
         self.min_request_interval = min_request_interval
+        self.retry_network_errors = retry_network_errors
         self.next_request_at = 0.0
 
     def get(self, path: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -58,6 +60,11 @@ class V1Client:
             try:
                 response = self.session.get(self.base_url + path, params=params, timeout=25)
             except requests.RequestException as exc:
+                if self.retry_network_errors and attempt < 3 and isinstance(
+                    exc, (requests.ConnectionError, requests.Timeout)
+                ):
+                    time.sleep(2 ** attempt)
+                    continue
                 raise V1ApiError(503, "NetworkError", "Could not reach the BuzzerBeater API.") from exc
             self.last_limits = {
                 name: response.headers.get(name, "")

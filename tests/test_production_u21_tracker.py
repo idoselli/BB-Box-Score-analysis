@@ -4,12 +4,27 @@ import tempfile
 import unittest
 from unittest.mock import Mock, patch
 
+import requests
+
 from beta_v1 import tracker
+from beta_v1.api import V1Client
 from collect_u21_tracker import collect_roster, snapshot_period, tracked_countries
 from web_tool import app
 
 
 class ProductionU21TrackerTests(unittest.TestCase):
+    def test_collector_can_recover_a_dropped_api_connection(self):
+        session = Mock(headers={})
+        session.get.side_effect = [
+            requests.ConnectionError("remote end closed connection"),
+            Mock(ok=True, headers={}, json=Mock(return_value={"players": []})),
+        ]
+        client = V1Client("test", session=session, retry_network_errors=True)
+        with patch("beta_v1.api.time.sleep") as sleep:
+            self.assertEqual(client.get("/national-teams/team/roster"), {"players": []})
+        self.assertEqual(session.get.call_count, 2)
+        sleep.assert_called_once_with(1)
+
     def test_week_two_and_rollover_follow_friday_calendar(self):
         seasons = [
             {"number": 74, "startDate": "2026-11-21", "endDate": "2027-02-26"},
@@ -67,13 +82,16 @@ class ProductionU21TrackerTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             with patch.object(tracker, "PRODUCTION_TRACKER_ROOT", root), patch.dict("os.environ", {"VERCEL": ""}):
-                tracker.save_snapshot(root, 74, 2, [squad], "2026-11-27T11:30:00+00:00")
+                empty_squad = {"countryId": "FR", "name": "France", "teamId": "france", "players": []}
+                tracker.save_snapshot(root, 74, 2, [squad, empty_squad], "2026-11-27T11:30:00+00:00")
                 tracker.write_production_index()
                 browser = app.test_client()
                 page = browser.get("/beta/u21-tracker")
+                empty_page = browser.get("/beta/u21-tracker?season=74&countryId=FR")
                 api = browser.get("/beta/api/u21-tracker?season=74&countryId=IL")
         self.assertEqual(page.status_code, 200)
         self.assertIn(b"Test Guard", page.data)
+        self.assertIn(b"No players appeared in the recorded squad.", empty_page.data)
         self.assertEqual(api.json["weeks"], [2])
         self.assertEqual(api.json["players"][0]["playerId"], player_id)
         self.assertEqual(api.json["players"][0]["points"][0]["dmi"], 123456)

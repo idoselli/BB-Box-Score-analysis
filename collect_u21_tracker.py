@@ -118,7 +118,12 @@ def main() -> None:
     token = env_value("BB_U21_API_TOKEN")
     if not token:
         raise SystemExit("BB_U21_API_TOKEN must contain a production personal token with Public scope.")
-    client = V1Client(token, base_url=PRODUCTION_API, min_request_interval=REQUEST_INTERVAL)
+    client = V1Client(
+        token,
+        base_url=PRODUCTION_API,
+        min_request_interval=REQUEST_INTERVAL,
+        retry_network_errors=True,
+    )
     now = datetime.now(timezone.utc)
     today = now.astimezone(ZoneInfo("Asia/Jerusalem")).date()
     if os.environ.get("GITHUB_EVENT_NAME") == "schedule":

@@ -74,5 +74,10 @@ metric.addEventListener('change',draw);selector.addEventListener('change',draw);
 document.querySelectorAll('[data-player-id]').forEach(button=>button.addEventListener('click',()=>{selector.value=button.dataset.playerId;draw();chart.scrollIntoView({behavior:'smooth',block:'center'})}));
 draw();
 </script>
+{% elif data and data.countryName %}
+<section class="card">
+  <h2>{{ data.countryName }}</h2>
+  <p>No players appeared in the recorded squad.</p>
+</section>
 {% endif %}
 {% endblock %}
