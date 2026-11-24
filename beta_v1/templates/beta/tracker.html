@@ -10,8 +10,15 @@
   'SF': 'SF', 'PF': 'PF', 'C': 'C'
 } %}
 {% set metrics = {'dmi': 'DMI', 'gameShape': 'Game shape', 'salary': 'Salary', 'potential': 'Potential'} %}
-{% macro metric_value(value, grouped=false) -%}
+{% macro metric_cell(value, grouped=false) -%}
+  <td class="tracker-number" data-sort-value="{{ value if value is not none else '' }}">
   {%- if value is none -%}—{%- elif grouped -%}{{ '{:,}'.format(value) }}{%- else -%}{{ value }}{%- endif -%}
+  </td>
+{%- endmacro %}
+{% macro sort_heading(label, numeric=false, default=false) -%}
+  <th scope="col"{% if numeric %} class="tracker-number"{% endif %}{% if default %} aria-sort="descending"{% endif %}>
+    <button type="button" class="tracker-sort" data-sort="{{ 'number' if numeric else 'text' }}">{{ label }}<span class="tracker-sort-icon" aria-hidden="true"></span></button>
+  </th>
 {%- endmacro %}
 
 <section class="card tracker-header">
@@ -111,25 +118,33 @@
   <div class="scroll">
     <table class="tracker-table" aria-labelledby="tracker-squad-{{ loop.index }}">
       <thead>
-        <tr><th scope="col">Player</th><th scope="col">Position</th><th scope="col" class="tracker-number">Latest DMI</th><th scope="col" class="tracker-number">Game shape</th><th scope="col" class="tracker-number">Salary</th><th scope="col" class="tracker-number">Potential</th><th scope="col" class="tracker-number">Weeks</th></tr>
+        <tr>
+          {{ sort_heading('Player') }}
+          {{ sort_heading('Position') }}
+          {{ sort_heading('Latest DMI', numeric=true, default=true) }}
+          {{ sort_heading('Game shape', numeric=true) }}
+          {{ sort_heading('Salary', numeric=true) }}
+          {{ sort_heading('Potential', numeric=true) }}
+          {{ sort_heading('Weeks', numeric=true) }}
+        </tr>
       </thead>
       <tbody>
-      {% for player in squad.players %}
+      {% for player in roster_rows[loop.index0] %}
         {% set latest = player.points[-1] %}
         {% set position = position_codes.get(player.position, '') %}
         <tr>
-          <th scope="row">
+          <th scope="row" data-sort-value="{{ player.name }}">
             <label class="tracker-player-toggle">
               <input type="checkbox" data-player-key="{{ squad.countryId }}/{{ player.playerId }}">
               <span>{{ player.name }}</span>
             </label>
           </th>
-          <td><span class="tracker-position" data-position="{{ position }}">{{ position or '—' }}</span></td>
-          <td class="tracker-number">{{ metric_value(latest.dmi, grouped=true) }}</td>
-          <td class="tracker-number">{{ metric_value(latest.gameShape) }}</td>
-          <td class="tracker-number">{{ metric_value(latest.salary, grouped=true) }}</td>
-          <td class="tracker-number">{{ metric_value(latest.potential) }}</td>
-          <td class="tracker-number">{{ player.points|length }}</td>
+          <td data-sort-value="{{ position }}"><span class="tracker-position" data-position="{{ position }}">{{ position or '—' }}</span></td>
+          {{ metric_cell(latest.dmi, grouped=true) }}
+          {{ metric_cell(latest.gameShape) }}
+          {{ metric_cell(latest.salary, grouped=true) }}
+          {{ metric_cell(latest.potential) }}
+          {{ metric_cell(player.points|length) }}
         </tr>
       {% endfor %}
       </tbody>

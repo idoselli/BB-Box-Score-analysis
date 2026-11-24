@@ -115,10 +115,31 @@
 .tracker-player-toggle { display: flex; align-items: center; gap: .5rem; cursor: pointer; }
 .tracker-player-toggle input { flex: none; width: 1rem; height: 1rem; margin: 0; accent-color: #14699b; }
 .tracker-table th[scope="row"] { background: transparent; min-width: 11rem; }
+.tracker-table th[scope="col"] { padding: 0; }
 .tracker-table tr.is-selected { background: #f0f7fb; }
 .tracker-table th, .tracker-table td { vertical-align: middle; }
 .tracker-number { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .tracker-roster .scroll { border: 1px solid #e1e8ee; border-radius: 8px; }
+
+.tracker-sort {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+  width: 100%;
+  padding: .55rem;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font-weight: inherit;
+  text-align: inherit;
+}
+.tracker-number .tracker-sort { justify-content: end; }
+.tracker-sort:hover { background: transparent; color: #14699b; }
+.tracker-sort:focus-visible { outline: 2px solid #14699b; outline-offset: -2px; }
+.tracker-sort-icon { width: .8em; color: #526576; text-align: center; }
+.tracker-sort-icon::after { content: "\2195"; }
+[aria-sort="ascending"] .tracker-sort-icon::after { content: "\2191"; color: #14699b; }
+[aria-sort="descending"] .tracker-sort-icon::after { content: "\2193"; color: #14699b; }
 
 @media (max-width: 560px) {
   .tracker-filters { grid-template-columns: minmax(5rem, .8fr) minmax(0, 2fr); }
@@ -129,4 +150,5 @@
 
 @media print {
   .tracker-chart-controls, .tracker-player-toggle input { display: none; }
+  .tracker-table .tracker-sort { display: flex; }
 }

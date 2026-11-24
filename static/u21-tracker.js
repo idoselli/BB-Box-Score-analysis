@@ -8,8 +8,36 @@ filters?.addEventListener("change", () => {
 
 const chart = document.getElementById("chart");
 const numberFormat = new Intl.NumberFormat("en-US");
+const nameOrder = new Intl.Collator("en", { sensitivity: "base" });
 
 if (chart) initializeChart();
+document.querySelectorAll(".tracker-table").forEach(enableRosterSorting);
+
+function enableRosterSorting(table) {
+  const body = table.tBodies[0];
+  let sortedHeader = table.tHead.querySelector("[aria-sort]");
+
+  table.tHead.addEventListener("click", event => {
+    const button = event.target.closest("button[data-sort]");
+    if (!button) return;
+    const header = button.closest("th");
+    const numeric = button.dataset.sort === "number";
+    const ascending = header === sortedHeader ? header.getAttribute("aria-sort") === "descending" : !numeric;
+    const direction = ascending ? 1 : -1;
+    const sorted = Array.from(body.rows, row => ({ row, value: row.cells[header.cellIndex].dataset.sortValue }));
+    sorted.sort((a, b) => {
+      // Missing figures stay below recorded figures in both directions.
+      if (!a.value || !b.value) return Number(!a.value) - Number(!b.value);
+      const order = numeric ? Number(a.value) - Number(b.value) : nameOrder.compare(a.value, b.value);
+      return direction * order;
+    });
+
+    body.append(...sorted.map(item => item.row));
+    sortedHeader.removeAttribute("aria-sort");
+    header.setAttribute("aria-sort", ascending ? "ascending" : "descending");
+    sortedHeader = header;
+  });
+}
 
 function initializeChart() {
   const { season, squads, positions, weeks } = JSON.parse(document.getElementById("tracker-data").textContent);

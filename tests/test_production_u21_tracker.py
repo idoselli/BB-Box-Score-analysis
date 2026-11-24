@@ -73,6 +73,10 @@ class ProductionU21TrackerTests(unittest.TestCase):
                 "id": player_id, "firstName": "Test", "lastName": "Guard",
                 "dmi": 123456, "bestPosition": "PointGuard", "gameShape": 8,
                 "salary": 10000, "potential": 9,
+            }, {
+                "id": "55555555-5555-4555-8555-555555555555",
+                "firstName": "Zed", "lastName": "Center", "dmi": 234567,
+                "bestPosition": "Center",
             }]},
         ]
         squad = collect_roster(client, {"id": "IL", "name": "Israel"})
@@ -96,6 +100,10 @@ class ProductionU21TrackerTests(unittest.TestCase):
         self.assertIn(b"123,456", page.data)
         self.assertIn(b"10,000", page.data)
         self.assertIn(b'data-position="PG"', page.data)
+        roster = page.data.split(b'<table class="tracker-table"', 1)[1]
+        self.assertIn(b'aria-sort="descending"', roster)
+        self.assertIn(b'data-sort-value="234567"', roster)
+        self.assertLess(roster.index(b"Zed Center"), roster.index(b"Test Guard"))
         self.assertIn(b"No players appeared in the recorded squad.", empty_page.data)
         self.assertIn(b'id="tracker-squad-2"', compared.data)
         self.assertNotIn(b'id="tracker-squad-2"', duplicate.data)

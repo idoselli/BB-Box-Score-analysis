@@ -163,9 +163,15 @@ def tracker_page():
         compare_id = None
     selected = [item for item in (country_id, compare_id) if item]
     squads = tracker.squad_series(season, selected, root=root, meta=meta) if selected else []
+    roster_rows = [
+        sorted(squad["players"], key=lambda player: (
+            player["points"][-1]["dmi"] is not None, player["points"][-1]["dmi"],
+        ), reverse=True)
+        for squad in squads
+    ]
     return render_template(
         "beta/tracker.html", seasons=seasons, season=season, meta=meta,
-        country_id=country_id, compare_id=compare_id, squads=squads,
+        country_id=country_id, compare_id=compare_id, squads=squads, roster_rows=roster_rows,
     )
 
 
