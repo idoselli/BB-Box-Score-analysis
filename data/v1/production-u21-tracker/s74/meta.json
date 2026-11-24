@@ -1,0 +1,271 @@
+{
+  "world": "v1",
+  "season": 74,
+  "weeks": [
+    1
+  ],
+  "updatedAt": "2026-11-24T17:42:58.045166+00:00",
+  "syntheticWeeks": [],
+  "countries": [
+    {
+      "name": "Andorra",
+      "countryId": "AD",
+      "teamId": "011bb347-3f22-7c9a-8e7a-0056e6fbf7d4"
+    },
+    {
+      "name": "Azərbaycan",
+      "countryId": "AZ",
+      "teamId": "011dabe9-f1ee-7aef-a3ba-ca5e08033d6e"
+    },
+    {
+      "name": "Belarus",
+      "countryId": "BY",
+      "teamId": "011bb347-3f2c-7767-b32d-1a3718b34c7f"
+    },
+    {
+      "name": "Belgium",
+      "countryId": "BE",
+      "teamId": "011bb347-3ee4-7f68-b671-a5a143e59857"
+    },
+    {
+      "name": "Bosna i Hercegovina",
+      "countryId": "BA",
+      "teamId": "011bb347-3efa-7273-ae43-0119fc30bf3f"
+    },
+    {
+      "name": "Bulgaria",
+      "countryId": "BG",
+      "teamId": "011bb347-3efb-7273-8937-76fe95ce8052"
+    },
+    {
+      "name": "China",
+      "countryId": "CN",
+      "teamId": "011bb347-3edc-7a7e-b873-c7b8a1a48aff"
+    },
+    {
+      "name": "Crna Gora",
+      "countryId": "ME",
+      "teamId": "011bb347-3f23-727f-9be5-9ca6a6676fa3"
+    },
+    {
+      "name": "Cymru",
+      "countryId": "GB-WLS",
+      "teamId": "011bb347-3f28-7dfe-a8c6-b9c36a656ec8"
+    },
+    {
+      "name": "Cyprus",
+      "countryId": "CY",
+      "teamId": "011bb347-3f24-7892-92bf-bb9c37a1e19c"
+    },
+    {
+      "name": "Danmark",
+      "countryId": "DK",
+      "teamId": "011bb347-3efe-7ab2-b933-28ee520fdd9f"
+    },
+    {
+      "name": "Deutschland",
+      "countryId": "DE",
+      "teamId": "011bb347-3edf-748f-aa5b-f2de5aed934b"
+    },
+    {
+      "name": "Eesti",
+      "countryId": "EE",
+      "teamId": "011bb347-3f00-7892-9a19-02490cd70f4f"
+    },
+    {
+      "name": "England",
+      "countryId": "GB-ENG",
+      "teamId": "011bb347-3ee5-7f56-b917-4334fb15d1ab"
+    },
+    {
+      "name": "España",
+      "countryId": "ES",
+      "teamId": "011bb347-3ede-7aeb-bdbb-30c25d33761d"
+    },
+    {
+      "name": "France",
+      "countryId": "FR",
+      "teamId": "011bb347-3ee2-7f52-b112-a12ae0e1cc9d"
+    },
+    {
+      "name": "Hayastan",
+      "countryId": "AM",
+      "teamId": "011dabe9-f1ed-79e5-ae01-860b84903839"
+    },
+    {
+      "name": "Hellas",
+      "countryId": "GR",
+      "teamId": "011bb347-3ee3-77e2-b50f-283e7b1fbbc9"
+    },
+    {
+      "name": "Hong Kong",
+      "countryId": "HK",
+      "teamId": "011bb347-3f04-7816-8373-ebc4f47bc9ef"
+    },
+    {
+      "name": "Hrvatska",
+      "countryId": "HR",
+      "teamId": "011bb347-3eef-70c7-8ee5-0a1e2a574115"
+    },
+    {
+      "name": "Ireland",
+      "countryId": "IE",
+      "teamId": "011bb347-3f03-74b4-acac-1531e07d45ac"
+    },
+    {
+      "name": "Israel",
+      "countryId": "IL",
+      "teamId": "011bb347-3ee6-7fa5-b685-7df640c34346"
+    },
+    {
+      "name": "Italia",
+      "countryId": "IT",
+      "teamId": "011bb347-3ee1-7f35-9a54-d0601c2fc4ba"
+    },
+    {
+      "name": "Latvija",
+      "countryId": "LV",
+      "teamId": "011bb347-3f05-7026-ac06-160f6a8e1be5"
+    },
+    {
+      "name": "Lietuva",
+      "countryId": "LT",
+      "teamId": "011bb347-3eeb-7cc1-b74b-4de167070a7b"
+    },
+    {
+      "name": "Luxembourg",
+      "countryId": "LU",
+      "teamId": "01219d1d-1d17-7848-8175-33169c8cd461"
+    },
+    {
+      "name": "Magyarország",
+      "countryId": "HU",
+      "teamId": "011bb347-3f07-705e-b419-848dc885930f"
+    },
+    {
+      "name": "Makedonija",
+      "countryId": "MK",
+      "teamId": "011bb347-3f08-7226-9c2e-5db1cf761930"
+    },
+    {
+      "name": "Malta",
+      "countryId": "MT",
+      "teamId": "011fa4bb-ae66-7260-b747-c514f0cd5cfe"
+    },
+    {
+      "name": "Moldova",
+      "countryId": "MD",
+      "teamId": "011bb347-3f2d-747b-827d-58832662b6cd"
+    },
+    {
+      "name": "Nederland",
+      "countryId": "NL",
+      "teamId": "011bb347-3ee7-75e3-8fd5-33f509f8f5f5"
+    },
+    {
+      "name": "Norge",
+      "countryId": "NO",
+      "teamId": "011bb347-3ef1-7a15-86ad-e4b1d7a1a33e"
+    },
+    {
+      "name": "Polska",
+      "countryId": "PL",
+      "teamId": "011bb347-3f11-74b5-a912-a6b676d29293"
+    },
+    {
+      "name": "Portugal",
+      "countryId": "PT",
+      "teamId": "011bb347-3ee9-7095-91f5-68815b372339"
+    },
+    {
+      "name": "România",
+      "countryId": "RO",
+      "teamId": "011bb347-3f14-7ec7-8537-de1f3742607f"
+    },
+    {
+      "name": "Rossiya",
+      "countryId": "RU",
+      "teamId": "011bb347-3eea-7aca-9b88-81ef7a21876f"
+    },
+    {
+      "name": "Sakartvelo",
+      "countryId": "GE",
+      "teamId": "011bb347-3f15-7613-9294-823ecd1cb60b"
+    },
+    {
+      "name": "Schweiz",
+      "countryId": "CH",
+      "teamId": "011bb347-3ef3-77a8-96eb-f3464feffbf8"
+    },
+    {
+      "name": "Scotland",
+      "countryId": "GB-SCT",
+      "teamId": "011bb347-3f17-7056-ae4f-27cff3d82009"
+    },
+    {
+      "name": "Shqipëria",
+      "countryId": "AL",
+      "teamId": "011bb347-3f26-72ab-b0df-8f7401bed211"
+    },
+    {
+      "name": "Slovenija",
+      "countryId": "SI",
+      "teamId": "011bb347-3f19-783e-9e92-a785593911bd"
+    },
+    {
+      "name": "Slovensko",
+      "countryId": "SK",
+      "teamId": "011bb347-3f1a-7cc1-b140-64a1ee6680bd"
+    },
+    {
+      "name": "Srbija",
+      "countryId": "RS",
+      "teamId": "011bb347-3ef4-7a0c-b614-5a76f1a2294c"
+    },
+    {
+      "name": "Suomi",
+      "countryId": "FI",
+      "teamId": "011bb347-3f1c-7dc3-832f-a90941dab5b2"
+    },
+    {
+      "name": "Sverige",
+      "countryId": "SE",
+      "teamId": "011bb347-3ee0-7868-822d-ec45dc2ee6a0"
+    },
+    {
+      "name": "Taiwan",
+      "countryId": "TW",
+      "teamId": "011bb347-3f1d-7b21-99fa-d3bcd36bbe20"
+    },
+    {
+      "name": "Türkiye",
+      "countryId": "TR",
+      "teamId": "011bb347-3edd-7a9b-87b1-27916711fabd"
+    },
+    {
+      "name": "Ukraina",
+      "countryId": "UA",
+      "teamId": "011bb347-3ef8-73df-a659-a79fff1a73ad"
+    },
+    {
+      "name": "USA",
+      "countryId": "US",
+      "teamId": "011bb347-3ed8-7818-8c16-b85be550c0a5"
+    },
+    {
+      "name": "Ísland",
+      "countryId": "IS",
+      "teamId": "011bb347-3f25-7c5a-b540-189c61d38c92"
+    },
+    {
+      "name": "Österreich",
+      "countryId": "AT",
+      "teamId": "011bb347-3ef2-7043-8d2e-27dbd7f625e5"
+    },
+    {
+      "name": "Česká Rep.",
+      "countryId": "CZ",
+      "teamId": "011bb347-3efc-72e5-97ce-6c51b3519941"
+    }
+  ]
+}

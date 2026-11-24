@@ -1,0 +1,6642 @@
+{
+  "world": "v1",
+  "season": 74,
+  "week": 1,
+  "scrapedAt": "2026-11-24T17:42:58.045166+00:00",
+  "countries": [
+    {
+      "countryId": "AD",
+      "name": "Andorra",
+      "teamId": "011bb347-3f22-7c9a-8e7a-0056e6fbf7d4",
+      "players": [
+        {
+          "playerId": "019c4e9e-3bb0-723d-9f6e-4d3dced0ee5b",
+          "name": "Daniel Obrador",
+          "position": "SmallForward",
+          "dmi": 61531,
+          "gameShape": 7,
+          "salary": 14361,
+          "potential": 8
+        },
+        {
+          "playerId": "019a56ff-23f8-73f7-897c-8c7f53564025",
+          "name": "Ferran Angulo",
+          "position": "PointGuard",
+          "dmi": 95651,
+          "gameShape": 7,
+          "salary": 20967,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4e6c-265f-77a7-92cc-721557d57569",
+          "name": "Francesc Piferrer",
+          "position": "SmallForward",
+          "dmi": 49779,
+          "gameShape": 7,
+          "salary": 10271,
+          "potential": 6
+        },
+        {
+          "playerId": "019c4ef0-5ea7-73be-b25b-21c825f617e2",
+          "name": "Lluís Colobran",
+          "position": "Center",
+          "dmi": 121325,
+          "gameShape": 7,
+          "salary": 27913,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4f6b-6fba-7b3c-a154-75a8f3194027",
+          "name": "Martí Castell",
+          "position": "SmallForward",
+          "dmi": 57229,
+          "gameShape": 7,
+          "salary": 15082,
+          "potential": 8
+        },
+        {
+          "playerId": "019a5689-f324-7b11-8128-ba0b32738093",
+          "name": "Pol Escribà",
+          "position": "SmallForward",
+          "dmi": 65298,
+          "gameShape": 7,
+          "salary": 14251,
+          "potential": 8
+        }
+      ]
+    },
+    {
+      "countryId": "AZ",
+      "name": "Azərbaycan",
+      "teamId": "011dabe9-f1ee-7aef-a3ba-ca5e08033d6e",
+      "players": [
+        {
+          "playerId": "019a564d-d033-7867-8f2c-fe34fb71a2a1",
+          "name": "Afşar Zeynalov",
+          "position": "PowerForward",
+          "dmi": 94291,
+          "gameShape": 7,
+          "salary": 20372,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4f03-66c1-763c-a821-771d1adc91c5",
+          "name": "Aras Qərabəyli",
+          "position": "SmallForward",
+          "dmi": 54178,
+          "gameShape": 7,
+          "salary": 12867,
+          "potential": 10
+        },
+        {
+          "playerId": "019a568a-92a1-7a39-b15b-645ef8c27d18",
+          "name": "Ayman Əjdərov",
+          "position": "PointGuard",
+          "dmi": 148712,
+          "gameShape": 7,
+          "salary": 28937,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4e83-b4d0-7110-b266-7df2b2a0f6c8",
+          "name": "Bahadır Vekilov",
+          "position": "PowerForward",
+          "dmi": 54291,
+          "gameShape": 7,
+          "salary": 12781,
+          "potential": 9
+        },
+        {
+          "playerId": "019e45af-54f8-7af6-a25a-9a548e24f51a",
+          "name": "Baysu Həşimov",
+          "position": "PowerForward",
+          "dmi": 85586,
+          "gameShape": 7,
+          "salary": 18093,
+          "potential": 9
+        },
+        {
+          "playerId": "019e45c6-14e6-7d9a-816a-8f4b6bef23ff",
+          "name": "Elşən Əlibabyev",
+          "position": "ShootingGuard",
+          "dmi": 46003,
+          "gameShape": 7,
+          "salary": 10002,
+          "potential": 8
+        },
+        {
+          "playerId": "019a56d6-d783-7f73-9309-83c3d7baa326",
+          "name": "Gelenovca Şirinov",
+          "position": "PowerForward",
+          "dmi": 39639,
+          "gameShape": 7,
+          "salary": 9297,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4eec-27e4-7dda-9c06-873962818611",
+          "name": "Gennady Fil",
+          "position": "PowerForward",
+          "dmi": 63300,
+          "gameShape": 7,
+          "salary": 14791,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4e94-df6e-76e7-9bdd-21cdbf155672",
+          "name": "Geray Musayev",
+          "position": "SmallForward",
+          "dmi": 37695,
+          "gameShape": 7,
+          "salary": 9416,
+          "potential": 9
+        },
+        {
+          "playerId": "019a56ea-a59a-7dff-b202-96a45983db44",
+          "name": "Həsən Mikayilov",
+          "position": "PointGuard",
+          "dmi": 127209,
+          "gameShape": 7,
+          "salary": 31771,
+          "potential": 10
+        },
+        {
+          "playerId": "019a5675-293a-7ea5-89e2-1b1a8e0b0c30",
+          "name": "Olcay Əlizadə",
+          "position": "PointGuard",
+          "dmi": 47851,
+          "gameShape": 7,
+          "salary": 12632,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4f8f-999a-7f5c-bfd0-292fa3765d09",
+          "name": "Qayım Bayramov",
+          "position": "Center",
+          "dmi": 82566,
+          "gameShape": 7,
+          "salary": 19958,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4ebd-636f-7c3f-ba96-aef709e3fcf6",
+          "name": "Ruslan Yolçuyev",
+          "position": "SmallForward",
+          "dmi": 67523,
+          "gameShape": 7,
+          "salary": 15409,
+          "potential": 7
+        },
+        {
+          "playerId": "019a5684-cd41-74c8-b16f-bcbb137e60f9",
+          "name": "Selgüc Hasanov",
+          "position": "PointGuard",
+          "dmi": 59498,
+          "gameShape": 7,
+          "salary": 14191,
+          "potential": 8
+        },
+        {
+          "playerId": "019a574e-b044-77da-be15-e709afac67f9",
+          "name": "Serin Abdulla",
+          "position": "PointGuard",
+          "dmi": 106103,
+          "gameShape": 7,
+          "salary": 25718,
+          "potential": 9
+        },
+        {
+          "playerId": "019e45ce-67d4-7d4c-b392-9d631c0c5647",
+          "name": "Xan Muxtarov",
+          "position": "PointGuard",
+          "dmi": 45129,
+          "gameShape": 7,
+          "salary": 10138,
+          "potential": 5
+        },
+        {
+          "playerId": "019c4e4d-1927-7c1a-937c-c94e5f990c1a",
+          "name": "Əfsələddin Alizada",
+          "position": "SmallForward",
+          "dmi": 39719,
+          "gameShape": 7,
+          "salary": 9319,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "countryId": "BY",
+      "name": "Belarus",
+      "teamId": "011bb347-3f2c-7767-b32d-1a3718b34c7f",
+      "players": [
+        {
+          "playerId": "019a5625-59c6-7896-a159-9be074117afa",
+          "name": "Alexey Soloninkin",
+          "position": "SmallForward",
+          "dmi": 132747,
+          "gameShape": 7,
+          "salary": 26324,
+          "potential": 9
+        },
+        {
+          "playerId": "019a5629-05ec-77ce-baf9-b816f84e21cf",
+          "name": "Antsip Tsyrul'",
+          "position": "SmallForward",
+          "dmi": 135139,
+          "gameShape": 7,
+          "salary": 28694,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4e24-7a9f-7926-9c04-65bd7a846096",
+          "name": "Apanas Zholnacz",
+          "position": "PointGuard",
+          "dmi": 51129,
+          "gameShape": 7,
+          "salary": 13880,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4e23-f5fd-7278-9991-beccde44a5a3",
+          "name": "Arhip Zubkovich",
+          "position": "Center",
+          "dmi": 111665,
+          "gameShape": 7,
+          "salary": 27600,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4e23-a668-739a-9f69-b5e9cb75457c",
+          "name": "Davyd Maistruk",
+          "position": "Center",
+          "dmi": 195513,
+          "gameShape": 7,
+          "salary": 35108,
+          "potential": 7
+        },
+        {
+          "playerId": "019a5625-48fc-7936-b54a-43af1fd78c1f",
+          "name": "Hipalit Larszyk",
+          "position": "SmallForward",
+          "dmi": 83255,
+          "gameShape": 7,
+          "salary": 18723,
+          "potential": 9
+        },
+        {
+          "playerId": "019a5626-7f92-760b-a519-f34dd3489e1c",
+          "name": "Jakub Al'hovik",
+          "position": "PointGuard",
+          "dmi": 73751,
+          "gameShape": 7,
+          "salary": 16845,
+          "potential": 9
+        },
+        {
+          "playerId": "019e452c-8c22-7e15-9aa3-cdcb2e0bf145",
+          "name": "Juras' Alizarchyk",
+          "position": "Center",
+          "dmi": 38035,
+          "gameShape": 7,
+          "salary": 10243,
+          "potential": 8
+        },
+        {
+          "playerId": "019a5629-3849-7dae-ad8a-483c0ff41854",
+          "name": "Liaksej Ratau",
+          "position": "Center",
+          "dmi": 179841,
+          "gameShape": 7,
+          "salary": 32775,
+          "potential": 9
+        },
+        {
+          "playerId": "019a5625-622b-78b7-94e6-468490ea5f49",
+          "name": "Makar Atrakhovich",
+          "position": "ShootingGuard",
+          "dmi": 114648,
+          "gameShape": 7,
+          "salary": 23819,
+          "potential": 8
+        },
+        {
+          "playerId": "019a5627-0e45-72ec-8256-599f54119bab",
+          "name": "Nestser Petrykau",
+          "position": "Center",
+          "dmi": 169167,
+          "gameShape": 7,
+          "salary": 36180,
+          "potential": 11
+        },
+        {
+          "playerId": "019c4e23-af40-7953-a22a-97d3f45e6909",
+          "name": "Siarhey Kirykovich",
+          "position": "ShootingGuard",
+          "dmi": 44644,
+          "gameShape": 7,
+          "salary": 12157,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4e24-afad-7bae-8b65-caa51bc4a50e",
+          "name": "Siarhey Miadouski",
+          "position": "Center",
+          "dmi": 226537,
+          "gameShape": 7,
+          "salary": 45763,
+          "potential": 10
+        },
+        {
+          "playerId": "019a56ae-a43d-70e8-b55c-d7645b11629d",
+          "name": "Vitaut Markijanau",
+          "position": "ShootingGuard",
+          "dmi": 178726,
+          "gameShape": 7,
+          "salary": 31948,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4e25-ffaf-7a51-ab98-e37db6708599",
+          "name": "Vojtus' Bakuta",
+          "position": "Center",
+          "dmi": 95897,
+          "gameShape": 7,
+          "salary": 18983,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4e24-8377-742c-9ddf-225543c45f99",
+          "name": "Zbigniew Denko",
+          "position": "Center",
+          "dmi": 54384,
+          "gameShape": 7,
+          "salary": 11867,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "countryId": "BE",
+      "name": "Belgium",
+      "teamId": "011bb347-3ee4-7f68-b671-a5a143e59857",
+      "players": [
+        {
+          "playerId": "019a48a4-4a75-76e4-b8e7-b01eb7d2afbe",
+          "name": "Colin Blommaerts",
+          "position": "PointGuard",
+          "dmi": 126000,
+          "gameShape": 7,
+          "salary": 29057,
+          "potential": 10
+        },
+        {
+          "playerId": "019a489a-ec9a-7cef-b58c-f1f65695c487",
+          "name": "Dylan Bogemans",
+          "position": "SmallForward",
+          "dmi": 107598,
+          "gameShape": 7,
+          "salary": 25786,
+          "potential": 9
+        },
+        {
+          "playerId": "019a48a2-86c8-7655-962d-2c58bf143c3d",
+          "name": "Edmundo Moutinho",
+          "position": "Center",
+          "dmi": 210272,
+          "gameShape": 7,
+          "salary": 38132,
+          "potential": 8
+        },
+        {
+          "playerId": "019a489f-0cb8-7002-9f62-b9b6a4b74c49",
+          "name": "Elias Mathieu",
+          "position": "PointGuard",
+          "dmi": 103742,
+          "gameShape": 7,
+          "salary": 22428,
+          "potential": 9
+        },
+        {
+          "playerId": "019a48a2-8d6d-75db-872d-5814f893ddbb",
+          "name": "Mahmoud Ali",
+          "position": "Center",
+          "dmi": 297060,
+          "gameShape": 7,
+          "salary": 47440,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4899-4a23-7428-9a42-07fda85783a2",
+          "name": "Marijn Hennuy",
+          "position": "SmallForward",
+          "dmi": 146011,
+          "gameShape": 7,
+          "salary": 29417,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4ee1-2334-72f0-9d87-55992b087be7",
+          "name": "Marnix Lefevre",
+          "position": "SmallForward",
+          "dmi": 94871,
+          "gameShape": 7,
+          "salary": 21439,
+          "potential": 10
+        },
+        {
+          "playerId": "019c307d-1966-7bb4-9184-9e57cdc0d93c",
+          "name": "Milan Leuntjens",
+          "position": "Center",
+          "dmi": 67241,
+          "gameShape": 7,
+          "salary": 14754,
+          "potential": 9
+        },
+        {
+          "playerId": "019a489c-4ca4-7f28-b52d-69b0b102a1df",
+          "name": "Mouss N'Dao",
+          "position": "PowerForward",
+          "dmi": 263932,
+          "gameShape": 7,
+          "salary": 55456,
+          "potential": 9
+        },
+        {
+          "playerId": "019a489f-b2c7-7948-ac8d-eeaeace65c72",
+          "name": "Nemo De Laere",
+          "position": "PointGuard",
+          "dmi": 94337,
+          "gameShape": 7,
+          "salary": 21640,
+          "potential": 10
+        },
+        {
+          "playerId": "019a489d-b9f7-75df-9905-2247532f7dfe",
+          "name": "Noah Robbens",
+          "position": "PowerForward",
+          "dmi": 183251,
+          "gameShape": 7,
+          "salary": 35300,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4e53-363d-7589-808b-53788f115981",
+          "name": "Olaf Perelman",
+          "position": "ShootingGuard",
+          "dmi": 118215,
+          "gameShape": 7,
+          "salary": 24798,
+          "potential": 10
+        },
+        {
+          "playerId": "019a48a4-5119-7ae9-bf4e-41ff3473d531",
+          "name": "Oleg De Leyn",
+          "position": "PowerForward",
+          "dmi": 269383,
+          "gameShape": 7,
+          "salary": 51266,
+          "potential": 10
+        },
+        {
+          "playerId": "019a48a1-12d1-7ac3-8a00-4469432c8ac3",
+          "name": "Seth Delcart",
+          "position": "Center",
+          "dmi": 307324,
+          "gameShape": 7,
+          "salary": 50968,
+          "potential": 9
+        },
+        {
+          "playerId": "019c2fb3-bf26-71ae-b54f-0d23dbfc5ceb",
+          "name": "Willy Moons",
+          "position": "PointGuard",
+          "dmi": 60894,
+          "gameShape": 7,
+          "salary": 14535,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "countryId": "BA",
+      "name": "Bosna i Hercegovina",
+      "teamId": "011bb347-3efa-7273-ae43-0119fc30bf3f",
+      "players": [
+        {
+          "playerId": "019c440c-5baa-7a4b-8101-151a5aaaf933",
+          "name": "Almir Adilović",
+          "position": "SmallForward",
+          "dmi": 110945,
+          "gameShape": 7,
+          "salary": 24243,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4d5e-cbe6-75b1-ad11-4a3e3952f804",
+          "name": "Dino Zjalić",
+          "position": "ShootingGuard",
+          "dmi": 93059,
+          "gameShape": 7,
+          "salary": 20774,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4d5c-9542-7210-b03f-d0b3d35762f7",
+          "name": "Edin Vlašić",
+          "position": "ShootingGuard",
+          "dmi": 92817,
+          "gameShape": 7,
+          "salary": 20633,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4d5d-4f1e-788c-b16f-e3d2136ec2c6",
+          "name": "Gaj Hašek",
+          "position": "Center",
+          "dmi": 238734,
+          "gameShape": 7,
+          "salary": 47285,
+          "potential": 9
+        },
+        {
+          "playerId": "019a56cf-09b2-7ca2-959e-2a06a92a5c84",
+          "name": "Igor Lučić",
+          "position": "Center",
+          "dmi": 382436,
+          "gameShape": 7,
+          "salary": 62696,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4d5e-e719-7bf0-9296-18a63820428a",
+          "name": "Josip Muštra",
+          "position": "Center",
+          "dmi": 247938,
+          "gameShape": 7,
+          "salary": 57338,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4d5c-a2db-7c55-9ac3-4a26b3dda55e",
+          "name": "Joško Ljubić",
+          "position": "ShootingGuard",
+          "dmi": 97059,
+          "gameShape": 7,
+          "salary": 23360,
+          "potential": 8
+        },
+        {
+          "playerId": "019a5676-f6e8-734c-b74a-afc72287a878",
+          "name": "Mahir Mucinić",
+          "position": "Center",
+          "dmi": 424590,
+          "gameShape": 7,
+          "salary": 78775,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4d5a-fd46-786b-aa69-abed8d50f448",
+          "name": "Mehmedalija Lagumdžija",
+          "position": "SmallForward",
+          "dmi": 88774,
+          "gameShape": 7,
+          "salary": 20985,
+          "potential": 7
+        },
+        {
+          "playerId": "019c440b-0083-78b7-bf38-d87815c23350",
+          "name": "Muamer Ferhatović",
+          "position": "Center",
+          "dmi": 72435,
+          "gameShape": 7,
+          "salary": 18167,
+          "potential": 7
+        },
+        {
+          "playerId": "019c440a-57e4-7d83-b020-5121c5ce4c86",
+          "name": "Muamer Smiljanić",
+          "position": "ShootingGuard",
+          "dmi": 107839,
+          "gameShape": 7,
+          "salary": 21582,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4d5e-87e7-714e-a487-6b6c622543c4",
+          "name": "Nadir Balić",
+          "position": "PointGuard",
+          "dmi": 98878,
+          "gameShape": 7,
+          "salary": 21535,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4d5b-7c34-7dd3-92f5-820d5c71c3ee",
+          "name": "Nikola Pušić",
+          "position": "Center",
+          "dmi": 143642,
+          "gameShape": 7,
+          "salary": 30945,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4d5a-087c-7d66-83ba-4424b2be7817",
+          "name": "Safet Hajduković",
+          "position": "ShootingGuard",
+          "dmi": 127418,
+          "gameShape": 7,
+          "salary": 27945,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4406-bd74-78f9-afc5-da00c22eb88d",
+          "name": "Samir Ovčina",
+          "position": "Center",
+          "dmi": 121519,
+          "gameShape": 7,
+          "salary": 24410,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4d5a-a29d-74e4-913a-9f97ffb90a23",
+          "name": "Vahid Kuduzović",
+          "position": "Center",
+          "dmi": 205303,
+          "gameShape": 7,
+          "salary": 42055,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4d5a-3a5a-7056-86fa-221fd2bf525b",
+          "name": "Vid Omrčen",
+          "position": "ShootingGuard",
+          "dmi": 76876,
+          "gameShape": 7,
+          "salary": 18422,
+          "potential": 7
+        }
+      ]
+    },
+    {
+      "countryId": "BG",
+      "name": "Bulgaria",
+      "teamId": "011bb347-3efb-7273-8937-76fe95ce8052",
+      "players": [
+        {
+          "playerId": "019a4da5-f68f-7b1b-bf6a-705aaafbb751",
+          "name": "Alexander Kerezov",
+          "position": "PointGuard",
+          "dmi": 103694,
+          "gameShape": 7,
+          "salary": 19390,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4e59-76b1-755e-bb97-f9ab5b129623",
+          "name": "Angel Alexandrov",
+          "position": "PointGuard",
+          "dmi": 93815,
+          "gameShape": 7,
+          "salary": 18118,
+          "potential": 7
+        },
+        {
+          "playerId": "019a56da-9cd8-7e69-87b1-0c8bddaf8549",
+          "name": "Angel Petrov",
+          "position": "Center",
+          "dmi": 280429,
+          "gameShape": 7,
+          "salary": 60425,
+          "potential": 8
+        },
+        {
+          "playerId": "019a56a5-7e42-799f-bef0-9e9fca129165",
+          "name": "Atanas Mihaylov",
+          "position": "PowerForward",
+          "dmi": 142675,
+          "gameShape": 7,
+          "salary": 30590,
+          "potential": 10
+        },
+        {
+          "playerId": "019a56e8-6acc-7d65-b6db-e12d3c72062c",
+          "name": "Bolat Kurttekin",
+          "position": "PowerForward",
+          "dmi": 216609,
+          "gameShape": 7,
+          "salary": 37401,
+          "potential": 8
+        },
+        {
+          "playerId": "019c44aa-6609-79c5-ba9a-4139707a39ee",
+          "name": "Dobri Misliev",
+          "position": "Center",
+          "dmi": 58797,
+          "gameShape": 7,
+          "salary": 14604,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4eed-42d8-7e9e-a3ae-2c89b8ec2b3b",
+          "name": "Doychin Kolev",
+          "position": "PowerForward",
+          "dmi": 65646,
+          "gameShape": 7,
+          "salary": 14651,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4da5-7319-77ce-9ee7-273718d4d40f",
+          "name": "Emanuel Hovhannesyan",
+          "position": "PowerForward",
+          "dmi": 120652,
+          "gameShape": 7,
+          "salary": 23316,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4da4-160c-76c4-b75c-30c7cf3144ac",
+          "name": "Ivan Iliev",
+          "position": "PowerForward",
+          "dmi": 103229,
+          "gameShape": 7,
+          "salary": 19665,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4da3-6542-7ce4-bf0e-75fbd619d213",
+          "name": "Kiril Iliev",
+          "position": "PointGuard",
+          "dmi": 53872,
+          "gameShape": 7,
+          "salary": 13504,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4da6-efe2-7043-bb5e-c5a7607d8bcb",
+          "name": "Krum Vasilev",
+          "position": "PointGuard",
+          "dmi": 90053,
+          "gameShape": 7,
+          "salary": 21431,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4da6-0429-70aa-b939-ec75f42dd60a",
+          "name": "Martin Zlatanov",
+          "position": "Center",
+          "dmi": 158099,
+          "gameShape": 7,
+          "salary": 31600,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4da4-50fb-7adc-8eb0-41b8bbd72440",
+          "name": "Petar Stoyanov",
+          "position": "PowerForward",
+          "dmi": 64021,
+          "gameShape": 7,
+          "salary": 16141,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4da2-8baa-77d5-8ea3-b30d0d6abc05",
+          "name": "Petar Tzvetkov",
+          "position": "PowerForward",
+          "dmi": 140704,
+          "gameShape": 7,
+          "salary": 27594,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4da4-b93e-7864-b03c-02963eb200ac",
+          "name": "Rusi Kolarov",
+          "position": "SmallForward",
+          "dmi": 53476,
+          "gameShape": 7,
+          "salary": 12398,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4da2-eadd-77f4-83ef-d45ca477ee21",
+          "name": "Todor Vasilev",
+          "position": "PointGuard",
+          "dmi": 79159,
+          "gameShape": 7,
+          "salary": 18836,
+          "potential": 8
+        },
+        {
+          "playerId": "019a56bb-3336-7edc-8c3c-6301a5653471",
+          "name": "Valeri Iliev",
+          "position": "PointGuard",
+          "dmi": 57277,
+          "gameShape": 6,
+          "salary": 16267,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4e90-d4e2-7770-9161-78d8d554b67e",
+          "name": "Vladimir Nanyov",
+          "position": "PowerForward",
+          "dmi": 51820,
+          "gameShape": 7,
+          "salary": 12391,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "countryId": "CN",
+      "name": "China",
+      "teamId": "011bb347-3edc-7a7e-b873-c7b8a1a48aff",
+      "players": [
+        {
+          "playerId": "019bc371-bb2c-7a4a-849a-853c3ffe4f47",
+          "name": "Cao Kunlei",
+          "position": "SmallForward",
+          "dmi": 66794,
+          "gameShape": 7,
+          "salary": 13953,
+          "potential": 9
+        },
+        {
+          "playerId": "019984ee-d212-794b-b908-c050c8716027",
+          "name": "Chen Tinghua",
+          "position": "SmallForward",
+          "dmi": 149818,
+          "gameShape": 7,
+          "salary": 31251,
+          "potential": 9
+        },
+        {
+          "playerId": "0199802c-62ba-7174-9485-9ce9f606b514",
+          "name": "Fang Xiangyang",
+          "position": "SmallForward",
+          "dmi": 115022,
+          "gameShape": 7,
+          "salary": 25466,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4e67-7ca9-744d-a1b7-985ce27ac44f",
+          "name": "Linghu Xianxiong",
+          "position": "Center",
+          "dmi": 195345,
+          "gameShape": 7,
+          "salary": 42336,
+          "potential": 10
+        },
+        {
+          "playerId": "019bc557-08cc-7ecd-9e4f-45b7a47e042b",
+          "name": "Long Xiaofan",
+          "position": "Center",
+          "dmi": 189518,
+          "gameShape": 7,
+          "salary": 39399,
+          "potential": 9
+        },
+        {
+          "playerId": "019984f3-0b3f-74b2-b24c-3b968f83400d",
+          "name": "Luo Xiaoliang",
+          "position": "Center",
+          "dmi": 81330,
+          "gameShape": 7,
+          "salary": 18410,
+          "potential": 7
+        },
+        {
+          "playerId": "0199861a-ad95-793d-bb3b-c8e97ac5623a",
+          "name": "Pan Decai",
+          "position": "SmallForward",
+          "dmi": 117417,
+          "gameShape": 7,
+          "salary": 27741,
+          "potential": 8
+        },
+        {
+          "playerId": "019989d7-4400-71fe-8242-6003643d607f",
+          "name": "Song Yingjiang",
+          "position": "Center",
+          "dmi": 131007,
+          "gameShape": 7,
+          "salary": 31235,
+          "potential": 7
+        },
+        {
+          "playerId": "019bc988-1d7e-730e-b1c0-017cef35eb61",
+          "name": "Wang Ruifeng",
+          "position": "Center",
+          "dmi": 118713,
+          "gameShape": 7,
+          "salary": 28308,
+          "potential": 9
+        },
+        {
+          "playerId": "019984d1-41d6-7bab-9422-100babc8641a",
+          "name": "Xiahou Kunhong",
+          "position": "Center",
+          "dmi": 152640,
+          "gameShape": 7,
+          "salary": 32188,
+          "potential": 8
+        },
+        {
+          "playerId": "019bc755-790a-79da-a8f8-057c96cecae9",
+          "name": "Yue Wenqing",
+          "position": "Center",
+          "dmi": 161081,
+          "gameShape": 7,
+          "salary": 34412,
+          "potential": 9
+        },
+        {
+          "playerId": "019bc596-d6d4-7c54-b121-6c0b03bc4733",
+          "name": "Zhang Chuanbin",
+          "position": "Center",
+          "dmi": 197999,
+          "gameShape": 7,
+          "salary": 44086,
+          "potential": 10
+        },
+        {
+          "playerId": "01998971-e7c5-731d-8054-192a660b893f",
+          "name": "Zhou Qiong",
+          "position": "SmallForward",
+          "dmi": 127169,
+          "gameShape": 7,
+          "salary": 28729,
+          "potential": 8
+        },
+        {
+          "playerId": "019a5694-b46f-7005-9bdc-154041791b62",
+          "name": "Zhuang Chuyi",
+          "position": "SmallForward",
+          "dmi": 176774,
+          "gameShape": 7,
+          "salary": 38694,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "countryId": "ME",
+      "name": "Crna Gora",
+      "teamId": "011bb347-3f23-727f-9be5-9ca6a6676fa3",
+      "players": [
+        {
+          "playerId": "019c4eb6-4ec4-764e-83d9-16e51511c0e9",
+          "name": "Darko Tafra",
+          "position": "ShootingGuard",
+          "dmi": 82287,
+          "gameShape": 7,
+          "salary": 18941,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4dfe-ef0e-7daa-a65d-9350e42a5415",
+          "name": "Ljubomir Luković",
+          "position": "PointGuard",
+          "dmi": 101503,
+          "gameShape": 7,
+          "salary": 20336,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4dff-8e37-74aa-ad9d-e46aed1e294a",
+          "name": "Mihajlo Perović",
+          "position": "SmallForward",
+          "dmi": 85386,
+          "gameShape": 7,
+          "salary": 18813,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4e52-6add-7039-9869-a3900419cd14",
+          "name": "Nikša Kaljić",
+          "position": "PointGuard",
+          "dmi": 81105,
+          "gameShape": 7,
+          "salary": 20229,
+          "potential": 6
+        },
+        {
+          "playerId": "019c4dde-88fd-754b-be0d-24a416229d23",
+          "name": "Pavle Boljević",
+          "position": "PowerForward",
+          "dmi": 70168,
+          "gameShape": 7,
+          "salary": 19879,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4dec-6b96-77cf-a180-31dbfa4e31d4",
+          "name": "Simon Čvorović",
+          "position": "SmallForward",
+          "dmi": 48114,
+          "gameShape": 7,
+          "salary": 12458,
+          "potential": 10
+        },
+        {
+          "playerId": "019e455a-02f8-79f1-8f35-cda8546de81d",
+          "name": "Vojin Medenica",
+          "position": "SmallForward",
+          "dmi": 49490,
+          "gameShape": 7,
+          "salary": 13293,
+          "potential": 6
+        },
+        {
+          "playerId": "019c4dde-4240-7bf1-83f0-72b10dc0dee4",
+          "name": "Vojo Luković",
+          "position": "PowerForward",
+          "dmi": 49487,
+          "gameShape": 7,
+          "salary": 11427,
+          "potential": 10
+        },
+        {
+          "playerId": "019a55e1-4fd5-7fb1-b102-3c930077f4ae",
+          "name": "Vuk Marković",
+          "position": "PowerForward",
+          "dmi": 61385,
+          "gameShape": 7,
+          "salary": 16183,
+          "potential": 7
+        }
+      ]
+    },
+    {
+      "countryId": "GB-WLS",
+      "name": "Cymru",
+      "teamId": "011bb347-3f28-7dfe-a8c6-b9c36a656ec8",
+      "players": []
+    },
+    {
+      "countryId": "CY",
+      "name": "Cyprus",
+      "teamId": "011bb347-3f24-7892-92bf-bb9c37a1e19c",
+      "players": [
+        {
+          "playerId": "019c4e1d-be60-7cf5-bee4-e802ae1f1f51",
+          "name": "Alexios Gkoumlas",
+          "position": "PowerForward",
+          "dmi": 110169,
+          "gameShape": 7,
+          "salary": 22449,
+          "potential": 9
+        },
+        {
+          "playerId": "019e4505-89ac-71fd-ad6c-471b62d0f7fa",
+          "name": "Efthimis Avdikos",
+          "position": "PointGuard",
+          "dmi": 35049,
+          "gameShape": 7,
+          "salary": 8774,
+          "potential": 9
+        },
+        {
+          "playerId": "019e4505-f606-7bf7-9b96-27a8facd273d",
+          "name": "Eftichis Egkelados",
+          "position": "PointGuard",
+          "dmi": 59528,
+          "gameShape": 7,
+          "salary": 14930,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4e00-e710-7584-a276-0a0d30da1eeb",
+          "name": "Erotokritos Mantarinopoulos",
+          "position": "PointGuard",
+          "dmi": 91440,
+          "gameShape": 7,
+          "salary": 22179,
+          "potential": 9
+        },
+        {
+          "playerId": "019c5185-4bd9-7ed7-8fc5-78ae8da6bb83",
+          "name": "Isaak Mavilis",
+          "position": "Center",
+          "dmi": 128029,
+          "gameShape": 7,
+          "salary": 27010,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4ef5-085c-7e84-988e-7a67d3798bd5",
+          "name": "Lisandros Gouninos",
+          "position": "PointGuard",
+          "dmi": 55554,
+          "gameShape": 7,
+          "salary": 14638,
+          "potential": 10
+        },
+        {
+          "playerId": "019a5663-745d-73ef-a195-bde136f0b93f",
+          "name": "Nikos Manaras",
+          "position": "PointGuard",
+          "dmi": 43332,
+          "gameShape": 7,
+          "salary": 9640,
+          "potential": 9
+        },
+        {
+          "playerId": "019a56f1-4d9f-7896-85d4-334fede21478",
+          "name": "Nikos Mpotsis",
+          "position": "PowerForward",
+          "dmi": 75662,
+          "gameShape": 7,
+          "salary": 17902,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4e01-e77d-7f81-b7a5-58038fc3f811",
+          "name": "Panos Griparis",
+          "position": "SmallForward",
+          "dmi": 39475,
+          "gameShape": 7,
+          "salary": 10183,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4e01-bb47-74d8-a9a9-964af6174619",
+          "name": "Rodis Gonidis",
+          "position": "PowerForward",
+          "dmi": 38674,
+          "gameShape": 7,
+          "salary": 10935,
+          "potential": 8
+        },
+        {
+          "playerId": "019e4574-9b19-782a-9048-baafd7a0dff6",
+          "name": "Sotiris Markopoulos",
+          "position": "PointGuard",
+          "dmi": 53051,
+          "gameShape": 7,
+          "salary": 11913,
+          "potential": 10
+        },
+        {
+          "playerId": "019a5604-4c6e-7460-a258-0aee45b96284",
+          "name": "Themis Mantzourakis",
+          "position": "PowerForward",
+          "dmi": 72718,
+          "gameShape": 7,
+          "salary": 16573,
+          "potential": 9
+        },
+        {
+          "playerId": "019a56a1-2a3a-7600-bcb1-ba483368e8d0",
+          "name": "Yiannis Dragotis",
+          "position": "PointGuard",
+          "dmi": 116896,
+          "gameShape": 7,
+          "salary": 25148,
+          "potential": 10
+        }
+      ]
+    },
+    {
+      "countryId": "DK",
+      "name": "Danmark",
+      "teamId": "011bb347-3efe-7ab2-b933-28ee520fdd9f",
+      "players": [
+        {
+          "playerId": "019c4f00-4af2-7711-847d-8cc66368e94b",
+          "name": "Anker Kjaergaard",
+          "position": "Center",
+          "dmi": 32158,
+          "gameShape": 7,
+          "salary": 8776,
+          "potential": 9
+        },
+        {
+          "playerId": "019e3dba-c8e2-7a01-a4ac-9f3e05e90455",
+          "name": "Ben Von Eyben",
+          "position": "PointGuard",
+          "dmi": 50667,
+          "gameShape": 7,
+          "salary": 11781,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4efe-0c33-7ef6-ac97-a8f3a1cf10e9",
+          "name": "Laurids Grosser Jensen",
+          "position": "PowerForward",
+          "dmi": 51037,
+          "gameShape": 7,
+          "salary": 12080,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4e5e-ade1-7619-bcd1-023b46d29dad",
+          "name": "Leo Boelt",
+          "position": "PowerForward",
+          "dmi": 96649,
+          "gameShape": 7,
+          "salary": 19856,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4e8d-697f-70be-94bf-093d9eac96b3",
+          "name": "Marcus Harlind Aagaard",
+          "position": "PointGuard",
+          "dmi": 106362,
+          "gameShape": 7,
+          "salary": 21253,
+          "potential": 10
+        },
+        {
+          "playerId": "01a03e8b-f335-7eea-802e-e3965c610ac6",
+          "name": "Michael Klavsen",
+          "position": "Center",
+          "dmi": 24965,
+          "gameShape": 7,
+          "salary": 7509,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4dfd-7dd6-7cd4-9d53-a59adacb1fce",
+          "name": "Mogens Kramer",
+          "position": "SmallForward",
+          "dmi": 152778,
+          "gameShape": 7,
+          "salary": 28773,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4569-24b5-7652-aec6-23fc0da16f97",
+          "name": "Ricco Bøgholm",
+          "position": "SmallForward",
+          "dmi": 65129,
+          "gameShape": 7,
+          "salary": 14413,
+          "potential": 10
+        },
+        {
+          "playerId": "019e459f-b4f7-71e2-ab83-a51a5cb316e5",
+          "name": "Sofus Pries",
+          "position": "PointGuard",
+          "dmi": 24987,
+          "gameShape": 7,
+          "salary": 6223,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4e00-018b-7278-9335-aac5e30a6d54",
+          "name": "Sven Trier",
+          "position": "PowerForward",
+          "dmi": 78322,
+          "gameShape": 7,
+          "salary": 16799,
+          "potential": 9
+        },
+        {
+          "playerId": "019e3db8-556d-7aed-a8e9-7b8abfc44fe8",
+          "name": "Teis Askham",
+          "position": "PointGuard",
+          "dmi": 58183,
+          "gameShape": 7,
+          "salary": 12196,
+          "potential": 10
+        }
+      ]
+    },
+    {
+      "countryId": "DE",
+      "name": "Deutschland",
+      "teamId": "011bb347-3edf-748f-aa5b-f2de5aed934b",
+      "players": [
+        {
+          "playerId": "019a1eab-73e2-7dc3-8531-3443a1f6ec67",
+          "name": "Constantin Kleinhenz",
+          "position": "PointGuard",
+          "dmi": 69109,
+          "gameShape": 7,
+          "salary": 17558,
+          "potential": 9
+        },
+        {
+          "playerId": "019a1e31-6d25-7249-9a43-312197c02a54",
+          "name": "Fritz Rackel",
+          "position": "PointGuard",
+          "dmi": 102454,
+          "gameShape": 7,
+          "salary": 23189,
+          "potential": 10
+        },
+        {
+          "playerId": "019a1e09-d726-75bb-bce1-75aec8a5c7db",
+          "name": "Hanning Lauenburg",
+          "position": "ShootingGuard",
+          "dmi": 155195,
+          "gameShape": 7,
+          "salary": 32276,
+          "potential": 9
+        },
+        {
+          "playerId": "019bf8ed-04d2-70c3-8aa9-fefbab6bfe3c",
+          "name": "Jakob Johannes van der Linden",
+          "position": "Center",
+          "dmi": 168971,
+          "gameShape": 7,
+          "salary": 39228,
+          "potential": 7
+        },
+        {
+          "playerId": "019bf6fa-3393-7ef1-821c-1454a3a9f26d",
+          "name": "Jannick Hesler",
+          "position": "PointGuard",
+          "dmi": 131863,
+          "gameShape": 7,
+          "salary": 26318,
+          "potential": 7
+        },
+        {
+          "playerId": "019bf76c-91d9-7def-89bb-20a11c8f4cd7",
+          "name": "Ludwig Bystram",
+          "position": "PointGuard",
+          "dmi": 107370,
+          "gameShape": 7,
+          "salary": 21907,
+          "potential": 8
+        },
+        {
+          "playerId": "019a1d90-e754-7421-9c69-752ce4442f4b",
+          "name": "Lukas Scharnwebber",
+          "position": "Center",
+          "dmi": 237316,
+          "gameShape": 7,
+          "salary": 50274,
+          "potential": 9
+        },
+        {
+          "playerId": "019bf803-732b-7dd8-95ed-2f7782b8581a",
+          "name": "Magnus Daumen",
+          "position": "PowerForward",
+          "dmi": 153041,
+          "gameShape": 7,
+          "salary": 33900,
+          "potential": 9
+        },
+        {
+          "playerId": "019a1dfc-0a32-746f-9aee-5cf1d5d7ef76",
+          "name": "Marco Stussig",
+          "position": "ShootingGuard",
+          "dmi": 53161,
+          "gameShape": 7,
+          "salary": 13781,
+          "potential": 10
+        },
+        {
+          "playerId": "019bf7f2-448e-792c-8cd7-63e62e63accf",
+          "name": "Marvin Wechmar",
+          "position": "PointGuard",
+          "dmi": 133092,
+          "gameShape": 7,
+          "salary": 31517,
+          "potential": 10
+        },
+        {
+          "playerId": "019a1d9f-6e3a-745d-a1f8-c95cd3ffa421",
+          "name": "Mirko Vuković",
+          "position": "ShootingGuard",
+          "dmi": 116434,
+          "gameShape": 7,
+          "salary": 26632,
+          "potential": 10
+        },
+        {
+          "playerId": "019bf7fa-dbdd-7cd6-a4da-21e7eb5abdd5",
+          "name": "Paul Reick",
+          "position": "SmallForward",
+          "dmi": 142572,
+          "gameShape": 7,
+          "salary": 28309,
+          "potential": 8
+        },
+        {
+          "playerId": "019a1e80-9923-70da-8614-ecf002120029",
+          "name": "Pavel Chukalin",
+          "position": "Center",
+          "dmi": 394045,
+          "gameShape": 7,
+          "salary": 67649,
+          "potential": 8
+        },
+        {
+          "playerId": "019a5658-c3dc-7d44-befa-8671c40449f4",
+          "name": "Quintin Wengersky",
+          "position": "Center",
+          "dmi": 165232,
+          "gameShape": 7,
+          "salary": 34494,
+          "potential": 9
+        },
+        {
+          "playerId": "019a1d5b-2768-7710-b3be-960ad71e51d4",
+          "name": "Sascha Wiblishauser",
+          "position": "PointGuard",
+          "dmi": 64744,
+          "gameShape": 7,
+          "salary": 18012,
+          "potential": 10
+        },
+        {
+          "playerId": "019bf801-d6cd-799c-b1cd-ad85d884f400",
+          "name": "Sebastian Schirra",
+          "position": "ShootingGuard",
+          "dmi": 77567,
+          "gameShape": 7,
+          "salary": 17441,
+          "potential": 8
+        },
+        {
+          "playerId": "019bf8b8-ef86-7676-a405-735073b294a8",
+          "name": "Thorsten Satzenhofen",
+          "position": "PointGuard",
+          "dmi": 88455,
+          "gameShape": 7,
+          "salary": 20412,
+          "potential": 8
+        },
+        {
+          "playerId": "019bf880-051e-7866-8aaa-0fe22332d87d",
+          "name": "Torsten Schumacher",
+          "position": "PowerForward",
+          "dmi": 129317,
+          "gameShape": 7,
+          "salary": 26677,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "countryId": "EE",
+      "name": "Eesti",
+      "teamId": "011bb347-3f00-7892-9a19-02490cd70f4f",
+      "players": [
+        {
+          "playerId": "019a4e11-4559-7a61-9015-5f09cb7693ec",
+          "name": "Andreas Kivimäe",
+          "position": "Center",
+          "dmi": 308515,
+          "gameShape": 7,
+          "salary": 65621,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4e19-8eda-7087-b8f6-6a48cb490974",
+          "name": "Arne Lill",
+          "position": "PointGuard",
+          "dmi": 121174,
+          "gameShape": 7,
+          "salary": 26521,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4e20-88e8-75c1-9001-401dedff25e8",
+          "name": "Einar Kaasik",
+          "position": "PointGuard",
+          "dmi": 94024,
+          "gameShape": 7,
+          "salary": 22255,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4e0f-ecd4-7c57-80e7-399ab9e5ef0d",
+          "name": "Frank Rebane",
+          "position": "PointGuard",
+          "dmi": 123095,
+          "gameShape": 7,
+          "salary": 26098,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4e14-f8c5-7d02-885a-497fb98769da",
+          "name": "Gunnar Ambros",
+          "position": "Center",
+          "dmi": 323390,
+          "gameShape": 7,
+          "salary": 78271,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4e1a-f4f8-7a0d-8893-4c066485e634",
+          "name": "Indrek Ploom",
+          "position": "Center",
+          "dmi": 265611,
+          "gameShape": 7,
+          "salary": 55723,
+          "potential": 9
+        },
+        {
+          "playerId": "019c45b1-d120-78e0-901d-0c979f6c3b24",
+          "name": "Kristo Kalda",
+          "position": "Center",
+          "dmi": 175234,
+          "gameShape": 7,
+          "salary": 35595,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4e10-39e4-7152-aaf0-12acd0effc7e",
+          "name": "Leonty Markin",
+          "position": "PointGuard",
+          "dmi": 104505,
+          "gameShape": 7,
+          "salary": 23400,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4e12-5e67-7d82-b521-e7062ba3842f",
+          "name": "Osip Loshchilov",
+          "position": "Center",
+          "dmi": 462541,
+          "gameShape": 7,
+          "salary": 96080,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4e18-f031-764e-8cef-25760ec9d315",
+          "name": "Peter Hõbe",
+          "position": "Center",
+          "dmi": 274073,
+          "gameShape": 7,
+          "salary": 57095,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4e16-d949-70fb-8e64-f1755e9b2d8d",
+          "name": "Sven Kolde",
+          "position": "PointGuard",
+          "dmi": 93949,
+          "gameShape": 7,
+          "salary": 20431,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4e10-355c-740a-b191-a3539e302be4",
+          "name": "Tambet Raidmets",
+          "position": "PointGuard",
+          "dmi": 141466,
+          "gameShape": 7,
+          "salary": 29354,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4e1b-6f5d-77df-97fa-b2ae915cab32",
+          "name": "Ude Kastl",
+          "position": "PointGuard",
+          "dmi": 128711,
+          "gameShape": 7,
+          "salary": 27980,
+          "potential": 10
+        }
+      ]
+    },
+    {
+      "countryId": "GB-ENG",
+      "name": "England",
+      "teamId": "011bb347-3ee5-7f56-b917-4334fb15d1ab",
+      "players": [
+        {
+          "playerId": "019a4901-8abc-7787-8550-5ee0b0053b83",
+          "name": "Barker Koutrakos",
+          "position": "PointGuard",
+          "dmi": 179586,
+          "gameShape": 7,
+          "salary": 34735,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4907-fa04-73a0-a335-d9c5218cb864",
+          "name": "Brady Malin",
+          "position": "PointGuard",
+          "dmi": 116144,
+          "gameShape": 7,
+          "salary": 26334,
+          "potential": 8
+        },
+        {
+          "playerId": "019c3870-1a2b-76ff-8125-e4d57d6ec2ad",
+          "name": "Brent Campbell",
+          "position": "PointGuard",
+          "dmi": 64901,
+          "gameShape": 7,
+          "salary": 13403,
+          "potential": 9
+        },
+        {
+          "playerId": "019a490b-8ea6-73eb-9a67-79dbf92304af",
+          "name": "Brian Lynch",
+          "position": "Center",
+          "dmi": 77875,
+          "gameShape": 7,
+          "salary": 18243,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4900-810c-708a-bc07-fa5298bcdd26",
+          "name": "Carl McAdam",
+          "position": "PointGuard",
+          "dmi": 203730,
+          "gameShape": 7,
+          "salary": 40983,
+          "potential": 8
+        },
+        {
+          "playerId": "019c38b2-2556-7f27-aef0-2c611faeb303",
+          "name": "Christopher Chiara",
+          "position": "Center",
+          "dmi": 271208,
+          "gameShape": 7,
+          "salary": 55626,
+          "potential": 10
+        },
+        {
+          "playerId": "019a5666-031c-7c70-9760-0955eba84366",
+          "name": "Connor Hicks",
+          "position": "PointGuard",
+          "dmi": 80590,
+          "gameShape": 7,
+          "salary": 19154,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4903-0558-753f-bcb9-ef9a0ff3da5b",
+          "name": "Emile Hunt",
+          "position": "PointGuard",
+          "dmi": 170689,
+          "gameShape": 7,
+          "salary": 30936,
+          "potential": 10
+        },
+        {
+          "playerId": "019a5696-de73-78c6-b068-58849c144b51",
+          "name": "Hamilton Ansell",
+          "position": "Center",
+          "dmi": 489987,
+          "gameShape": 7,
+          "salary": 91273,
+          "potential": 10
+        },
+        {
+          "playerId": "019c383d-17c8-7cdf-b110-83ea3b48005f",
+          "name": "Hayden Dean",
+          "position": "Center",
+          "dmi": 293875,
+          "gameShape": 7,
+          "salary": 57886,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4902-1639-7a3d-9afe-9afecd899c8a",
+          "name": "Jason Furlong",
+          "position": "Center",
+          "dmi": 270077,
+          "gameShape": 7,
+          "salary": 59624,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4900-02d8-704d-be8f-228bd30154de",
+          "name": "John MacCause",
+          "position": "ShootingGuard",
+          "dmi": 49727,
+          "gameShape": 7,
+          "salary": 13158,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4903-b8af-7bb0-b5d9-c42b66f76129",
+          "name": "Johnny Royston",
+          "position": "ShootingGuard",
+          "dmi": 108996,
+          "gameShape": 7,
+          "salary": 22825,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4e66-472e-70e1-82b9-f708166c9217",
+          "name": "Kendrick Loftus",
+          "position": "Center",
+          "dmi": 325286,
+          "gameShape": 7,
+          "salary": 72367,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4906-ade7-74d2-a745-19627fba0f9b",
+          "name": "Mark Turnbull",
+          "position": "Center",
+          "dmi": 134795,
+          "gameShape": 7,
+          "salary": 29396,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4907-2577-74d0-9d09-77ca94c69829",
+          "name": "Stephen Ham",
+          "position": "SmallForward",
+          "dmi": 159410,
+          "gameShape": 7,
+          "salary": 31454,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4907-9d06-7f71-b14a-1c6190af7399",
+          "name": "Stephen Lockhart",
+          "position": "PointGuard",
+          "dmi": 75639,
+          "gameShape": 7,
+          "salary": 18839,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4906-e9af-710a-a0e5-ee5ce73e2f8f",
+          "name": "Stu Lavender",
+          "position": "Center",
+          "dmi": 431626,
+          "gameShape": 7,
+          "salary": 77713,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "countryId": "ES",
+      "name": "España",
+      "teamId": "011bb347-3ede-7aeb-bdbb-30c25d33761d",
+      "players": [
+        {
+          "playerId": "019a08b5-8690-7a1d-9346-f4ec906d1ef6",
+          "name": "Andreu Rada",
+          "position": "PointGuard",
+          "dmi": 119096,
+          "gameShape": 7,
+          "salary": 28224,
+          "potential": 7
+        },
+        {
+          "playerId": "019be9f7-0669-7918-96fd-497fbd027e2d",
+          "name": "Enrique Caamaño",
+          "position": "SmallForward",
+          "dmi": 135473,
+          "gameShape": 7,
+          "salary": 28056,
+          "potential": 9
+        },
+        {
+          "playerId": "019a098c-863f-71ef-b2a8-573a6538b874",
+          "name": "Enrique Tenorio Tirado",
+          "position": "PointGuard",
+          "dmi": 84203,
+          "gameShape": 7,
+          "salary": 19159,
+          "potential": 10
+        },
+        {
+          "playerId": "019a0616-6180-72ad-9352-67b6321cf5ca",
+          "name": "Florentino Eduegui",
+          "position": "SmallForward",
+          "dmi": 109771,
+          "gameShape": 7,
+          "salary": 21882,
+          "potential": 10
+        },
+        {
+          "playerId": "019be962-d45f-77bd-8960-37d9b455c374",
+          "name": "Gervasi Cerqueda",
+          "position": "Center",
+          "dmi": 138273,
+          "gameShape": 7,
+          "salary": 30181,
+          "potential": 7
+        },
+        {
+          "playerId": "019be9b0-af97-7322-98b9-c845fdf21fe9",
+          "name": "Ignacio Sáez",
+          "position": "PointGuard",
+          "dmi": 90495,
+          "gameShape": 7,
+          "salary": 20374,
+          "potential": 10
+        },
+        {
+          "playerId": "019bf5f7-eeeb-70fe-8ca1-39d0d2e3f35b",
+          "name": "Jordi Iturbe Cano",
+          "position": "SmallForward",
+          "dmi": 118747,
+          "gameShape": 7,
+          "salary": 24220,
+          "potential": 9
+        },
+        {
+          "playerId": "019befba-8955-70e7-860b-06c442c3ee8f",
+          "name": "Juan Luis Ledu",
+          "position": "PointGuard",
+          "dmi": 137767,
+          "gameShape": 7,
+          "salary": 27417,
+          "potential": 9
+        },
+        {
+          "playerId": "019a06f4-47a9-71f7-b0e4-3719aaaaf619",
+          "name": "Juan Miguel Chávez",
+          "position": "Center",
+          "dmi": 261989,
+          "gameShape": 7,
+          "salary": 46647,
+          "potential": 9
+        },
+        {
+          "playerId": "019a08e0-be48-7e97-b714-35843c2f0648",
+          "name": "Oscar Queipo",
+          "position": "SmallForward",
+          "dmi": 108923,
+          "gameShape": 7,
+          "salary": 25570,
+          "potential": 10
+        },
+        {
+          "playerId": "019a0640-2554-76ae-a01d-66b5d4396acd",
+          "name": "Pablo Combis",
+          "position": "Center",
+          "dmi": 208325,
+          "gameShape": 7,
+          "salary": 36346,
+          "potential": 9
+        },
+        {
+          "playerId": "019beb07-40f1-73c8-b17f-26b4472715c8",
+          "name": "Raúl Gironda",
+          "position": "PowerForward",
+          "dmi": 253096,
+          "gameShape": 7,
+          "salary": 50989,
+          "potential": 9
+        },
+        {
+          "playerId": "019a096e-6188-77c2-99bc-b87686ee08e8",
+          "name": "Seber Elgezabal",
+          "position": "PointGuard",
+          "dmi": 122148,
+          "gameShape": 7,
+          "salary": 25858,
+          "potential": 10
+        },
+        {
+          "playerId": "019beb6e-e214-7562-bb6b-6952e6a5b50a",
+          "name": "Vindio Guzmán Baños",
+          "position": "Center",
+          "dmi": 195128,
+          "gameShape": 7,
+          "salary": 41128,
+          "potential": 7
+        },
+        {
+          "playerId": "019a084d-4b79-7b07-9f06-7e36980736ae",
+          "name": "Víctor Orozco",
+          "position": "Center",
+          "dmi": 238681,
+          "gameShape": 7,
+          "salary": 46716,
+          "potential": 8
+        },
+        {
+          "playerId": "019a56c9-4451-76a7-88b4-858c5e2c51fe",
+          "name": "Xorxe Cea",
+          "position": "SmallForward",
+          "dmi": 118827,
+          "gameShape": 7,
+          "salary": 23805,
+          "potential": 7
+        },
+        {
+          "playerId": "019a0b4a-8066-7049-a5f6-e267bb34a6bd",
+          "name": "Zuhaitz Arostegi",
+          "position": "SmallForward",
+          "dmi": 128274,
+          "gameShape": 7,
+          "salary": 26489,
+          "potential": 10
+        }
+      ]
+    },
+    {
+      "countryId": "FR",
+      "name": "France",
+      "teamId": "011bb347-3ee2-7f52-b112-a12ae0e1cc9d",
+      "players": []
+    },
+    {
+      "countryId": "AM",
+      "name": "Hayastan",
+      "teamId": "011dabe9-f1ed-79e5-ae01-860b84903839",
+      "players": [
+        {
+          "playerId": "019c4f02-fca5-7b3d-bc87-2816c88b88cd",
+          "name": "Arsen Tatevosyan",
+          "position": "Center",
+          "dmi": 56246,
+          "gameShape": 7,
+          "salary": 15075,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4ebf-e8ec-78ed-a050-1e01b0ddf545",
+          "name": "Arsham Grigoryan",
+          "position": "PowerForward",
+          "dmi": 59252,
+          "gameShape": 7,
+          "salary": 14088,
+          "potential": 10
+        },
+        {
+          "playerId": "019e457e-ba86-799d-8344-124d65f1f4e3",
+          "name": "Artour Komitasyan",
+          "position": "PointGuard",
+          "dmi": 58572,
+          "gameShape": 7,
+          "salary": 13014,
+          "potential": 5
+        },
+        {
+          "playerId": "019c4f63-1cbc-781c-ad86-9a5150914a13",
+          "name": "Babken Ovagimyan",
+          "position": "ShootingGuard",
+          "dmi": 63047,
+          "gameShape": 7,
+          "salary": 12534,
+          "potential": 10
+        },
+        {
+          "playerId": "019a56ee-841d-7a58-a0a8-42422ea42905",
+          "name": "Benjamin Pedrosyan",
+          "position": "PowerForward",
+          "dmi": 75902,
+          "gameShape": 7,
+          "salary": 17999,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4ee3-ddbe-7064-98a8-c8432aac12be",
+          "name": "Gagik Vartanyan",
+          "position": "PointGuard",
+          "dmi": 76319,
+          "gameShape": 7,
+          "salary": 15930,
+          "potential": 6
+        },
+        {
+          "playerId": "019a56fa-38d7-7e60-af1e-b92f40780852",
+          "name": "Haik Garbisyan",
+          "position": "ShootingGuard",
+          "dmi": 62332,
+          "gameShape": 7,
+          "salary": 15378,
+          "potential": 7
+        },
+        {
+          "playerId": "019e4677-5a6c-7f0a-bf98-0dbca64fba70",
+          "name": "Hairabed Samuelyan",
+          "position": "PowerForward",
+          "dmi": 42061,
+          "gameShape": 7,
+          "salary": 11261,
+          "potential": 7
+        },
+        {
+          "playerId": "019a572b-c475-7365-84a9-f1ab2c7cac7d",
+          "name": "Khacho Asdvadzaduryan",
+          "position": "PointGuard",
+          "dmi": 40561,
+          "gameShape": 7,
+          "salary": 10411,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4e82-0c62-7251-a804-fa339db67555",
+          "name": "Movses Ardashyan",
+          "position": "PowerForward",
+          "dmi": 124412,
+          "gameShape": 7,
+          "salary": 26261,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4e5e-43c5-7006-ba4b-b16a8851b7ca",
+          "name": "Nahapet Manucharyan",
+          "position": "PointGuard",
+          "dmi": 87386,
+          "gameShape": 7,
+          "salary": 18530,
+          "potential": 6
+        },
+        {
+          "playerId": "019c4f69-04c4-710c-96f2-86bbc4b4afb8",
+          "name": "Robert Askanazyan",
+          "position": "SmallForward",
+          "dmi": 94446,
+          "gameShape": 7,
+          "salary": 21869,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4e89-e395-73b2-95b9-e33b41ce1934",
+          "name": "Smbat Badrigyan",
+          "position": "ShootingGuard",
+          "dmi": 42820,
+          "gameShape": 7,
+          "salary": 10765,
+          "potential": 10
+        },
+        {
+          "playerId": "019a56bb-11a2-72bd-a30d-6bbfc8880840",
+          "name": "Vache Mihranyan",
+          "position": "PointGuard",
+          "dmi": 60229,
+          "gameShape": 7,
+          "salary": 14193,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "countryId": "GR",
+      "name": "Hellas",
+      "teamId": "011bb347-3ee3-77e2-b50f-283e7b1fbbc9",
+      "players": [
+        {
+          "playerId": "019a46f7-f165-7524-9f11-5bc199ec06f0",
+          "name": "Antonios Papadoyiorgakis",
+          "position": "PointGuard",
+          "dmi": 83927,
+          "gameShape": 7,
+          "salary": 23169,
+          "potential": 9
+        },
+        {
+          "playerId": "019c5076-f341-7886-8ef2-7b400339a34c",
+          "name": "Argirios Mourlas",
+          "position": "Center",
+          "dmi": 176335,
+          "gameShape": 7,
+          "salary": 39229,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4705-fadc-7e11-b8a9-92a340b7813b",
+          "name": "Avraam Theoklitou",
+          "position": "PointGuard",
+          "dmi": 94516,
+          "gameShape": 6,
+          "salary": 23664,
+          "potential": 8
+        },
+        {
+          "playerId": "019c2170-045a-774c-b9bf-5b3f8c50345d",
+          "name": "Eftichios Spourdoulas",
+          "position": "SmallForward",
+          "dmi": 129674,
+          "gameShape": 7,
+          "salary": 28557,
+          "potential": 9
+        },
+        {
+          "playerId": "019c231b-6bdc-71c4-873e-449fd7b0c0c4",
+          "name": "Fanis Manoukarakis",
+          "position": "PointGuard",
+          "dmi": 109990,
+          "gameShape": 7,
+          "salary": 25706,
+          "potential": 7
+        },
+        {
+          "playerId": "019c22d6-27f3-72b5-ab15-40a1fb26723f",
+          "name": "Garifallos Lavakis",
+          "position": "PowerForward",
+          "dmi": 106045,
+          "gameShape": 7,
+          "salary": 23956,
+          "potential": 9
+        },
+        {
+          "playerId": "019a46f7-5f44-7510-85bc-013d8d5885ba",
+          "name": "Kostas Gagalakos",
+          "position": "PowerForward",
+          "dmi": 167611,
+          "gameShape": 7,
+          "salary": 31959,
+          "potential": 8
+        },
+        {
+          "playerId": "019a46f2-6a98-781f-9ab5-6ed240fc91bb",
+          "name": "Manolakis Kiriakou",
+          "position": "Center",
+          "dmi": 144152,
+          "gameShape": 7,
+          "salary": 31297,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4724-b34b-719a-8c59-4360f3528db8",
+          "name": "Manolis Siagris",
+          "position": "Center",
+          "dmi": 139625,
+          "gameShape": 7,
+          "salary": 37074,
+          "potential": 10
+        },
+        {
+          "playerId": "019c23f8-1a8d-70b7-b13b-073b8d0be7b2",
+          "name": "Marios Mpalamoutis",
+          "position": "ShootingGuard",
+          "dmi": 123549,
+          "gameShape": 7,
+          "salary": 29824,
+          "potential": 7
+        },
+        {
+          "playerId": "019a46f8-edcd-764b-8c9a-4afe3005ac59",
+          "name": "Markos Zavoliarakis",
+          "position": "ShootingGuard",
+          "dmi": 157921,
+          "gameShape": 7,
+          "salary": 29945,
+          "potential": 10
+        },
+        {
+          "playerId": "019c24fb-fb93-7e04-8c08-525eb9132fba",
+          "name": "Michalis Gkinias",
+          "position": "PowerForward",
+          "dmi": 138260,
+          "gameShape": 7,
+          "salary": 28537,
+          "potential": 8
+        },
+        {
+          "playerId": "019b125f-50f4-7f89-b5f0-7cfdc15d8a49",
+          "name": "Nikos Zervos",
+          "position": "Center",
+          "dmi": 77543,
+          "gameShape": 7,
+          "salary": 24715,
+          "potential": 7
+        },
+        {
+          "playerId": "019c2338-6a85-75fe-82f4-94f6a474019e",
+          "name": "Paraskevas Pentaras",
+          "position": "Center",
+          "dmi": 137645,
+          "gameShape": 7,
+          "salary": 29681,
+          "potential": 8
+        },
+        {
+          "playerId": "019a46ee-43d5-7258-897e-e60c63f4d0a0",
+          "name": "Spiros Andreopoulos",
+          "position": "SmallForward",
+          "dmi": 131542,
+          "gameShape": 7,
+          "salary": 25808,
+          "potential": 10
+        },
+        {
+          "playerId": "019c23fc-6634-7f4f-8337-7fd8886c5930",
+          "name": "Yiorgos Masourakis",
+          "position": "PointGuard",
+          "dmi": 118092,
+          "gameShape": 7,
+          "salary": 26225,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "countryId": "HK",
+      "name": "Hong Kong",
+      "teamId": "011bb347-3f04-7816-8373-ebc4f47bc9ef",
+      "players": [
+        {
+          "playerId": "019a4e85-cbd1-7982-b16c-6a5c59c40cb0",
+          "name": "Brian William Langga",
+          "position": "PointGuard",
+          "dmi": 76342,
+          "gameShape": 7,
+          "salary": 17279,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4e7c-dcaa-7695-be35-09fd5dfba032",
+          "name": "Fu Yiu Jo",
+          "position": "PowerForward",
+          "dmi": 91375,
+          "gameShape": 7,
+          "salary": 20790,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4690-5388-707c-9445-785fe82972fa",
+          "name": "Fung Hong Ming",
+          "position": "Center",
+          "dmi": 128132,
+          "gameShape": 7,
+          "salary": 24431,
+          "potential": 10
+        },
+        {
+          "playerId": "019c468b-41c7-759e-b818-cb07cb6af56b",
+          "name": "Li Pui Yik",
+          "position": "ShootingGuard",
+          "dmi": 119991,
+          "gameShape": 7,
+          "salary": 28384,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4e82-8744-783e-8a66-e4da6755bbf8",
+          "name": "Liu Ling Kwan",
+          "position": "PointGuard",
+          "dmi": 85215,
+          "gameShape": 7,
+          "salary": 20440,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4e7e-9d71-7444-a4dc-7340dd58365f",
+          "name": "Lo Yuk Chau",
+          "position": "Center",
+          "dmi": 290330,
+          "gameShape": 7,
+          "salary": 56318,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4e88-1f50-7077-bbf6-4a33ac7527fd",
+          "name": "Tang Shun Lim",
+          "position": "Center",
+          "dmi": 175487,
+          "gameShape": 7,
+          "salary": 34860,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4682-c841-7466-902a-a308e7fb2330",
+          "name": "Wan Chunkai",
+          "position": "PointGuard",
+          "dmi": 138517,
+          "gameShape": 7,
+          "salary": 29424,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4685-879d-704b-83b2-91931cbed806",
+          "name": "Wan Ming Tin",
+          "position": "PointGuard",
+          "dmi": 74028,
+          "gameShape": 7,
+          "salary": 17248,
+          "potential": 9
+        },
+        {
+          "playerId": "019c467b-9f8d-73b1-960e-09679a6567a3",
+          "name": "Wu Yu Kwan",
+          "position": "ShootingGuard",
+          "dmi": 93902,
+          "gameShape": 7,
+          "salary": 19317,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4e7e-1e84-7f19-b852-48bd8bead4ce",
+          "name": "Yip Hon Lung",
+          "position": "PointGuard",
+          "dmi": 116258,
+          "gameShape": 7,
+          "salary": 24258,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "countryId": "HR",
+      "name": "Hrvatska",
+      "teamId": "011bb347-3eef-70c7-8ee5-0a1e2a574115",
+      "players": [
+        {
+          "playerId": "019c4203-d1f4-768e-a52a-a8b759e766c7",
+          "name": "Adam Rasol",
+          "position": "PointGuard",
+          "dmi": 78486,
+          "gameShape": 7,
+          "salary": 17050,
+          "potential": 10
+        },
+        {
+          "playerId": "019e3b49-0fff-7af3-bf75-26be5b928b09",
+          "name": "Albert Šmidt",
+          "position": "PointGuard",
+          "dmi": 55937,
+          "gameShape": 7,
+          "salary": 14899,
+          "potential": 10
+        },
+        {
+          "playerId": "019a56e0-9496-7bd6-8817-026a54a62a7e",
+          "name": "Branko Meštrić",
+          "position": "Center",
+          "dmi": 147195,
+          "gameShape": 7,
+          "salary": 33463,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4200-fde4-796d-8ce6-88295709b6bd",
+          "name": "Hrvoje Munivrana",
+          "position": "PointGuard",
+          "dmi": 47364,
+          "gameShape": 7,
+          "salary": 11528,
+          "potential": 10
+        },
+        {
+          "playerId": "019c41fc-43cf-7728-a604-a1f7210cb7fd",
+          "name": "Ivan Datković",
+          "position": "SmallForward",
+          "dmi": 65873,
+          "gameShape": 7,
+          "salary": 14042,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4e4e-7ad8-7a15-bbb1-644e26b67dc5",
+          "name": "Kristo Saraga",
+          "position": "PointGuard",
+          "dmi": 106646,
+          "gameShape": 7,
+          "salary": 23637,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4209-20d1-7e44-8cf5-af6bf769a971",
+          "name": "Marin Turčinov",
+          "position": "Center",
+          "dmi": 170993,
+          "gameShape": 7,
+          "salary": 43239,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4c6b-832f-7fe4-95de-e6574a3efd81",
+          "name": "Marko Španjić",
+          "position": "PointGuard",
+          "dmi": 94930,
+          "gameShape": 7,
+          "salary": 20663,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4c70-c0fe-7cf4-b99b-689ccb0e803e",
+          "name": "Miran Simeunović",
+          "position": "Center",
+          "dmi": 68848,
+          "gameShape": 7,
+          "salary": 14044,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4c6f-6d02-78d0-9816-67e26956ae50",
+          "name": "Miroslav Fižuleto",
+          "position": "PointGuard",
+          "dmi": 100898,
+          "gameShape": 7,
+          "salary": 21724,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4f07-21b8-7433-bde8-f1ceed1a0970",
+          "name": "Moša Pantić",
+          "position": "Center",
+          "dmi": 84973,
+          "gameShape": 7,
+          "salary": 19843,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4c6f-51cf-734c-b0f6-0cb7f2b21f0b",
+          "name": "Pier Cesare Morbelli",
+          "position": "PointGuard",
+          "dmi": 107223,
+          "gameShape": 7,
+          "salary": 22273,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4c70-8f20-72ed-9e98-a639a1fe85d3",
+          "name": "Tomislav Strašek",
+          "position": "PointGuard",
+          "dmi": 107941,
+          "gameShape": 7,
+          "salary": 24290,
+          "potential": 10
+        },
+        {
+          "playerId": "019c41fc-1237-739c-aede-a9a206f375b3",
+          "name": "Tvrtko Tepavac",
+          "position": "Center",
+          "dmi": 102213,
+          "gameShape": 7,
+          "salary": 21237,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4c71-b13f-78ed-b49f-481db6f706e7",
+          "name": "Valentin Gršković",
+          "position": "SmallForward",
+          "dmi": 87980,
+          "gameShape": 7,
+          "salary": 20043,
+          "potential": 10
+        },
+        {
+          "playerId": "019c420f-2c22-7e03-85f0-99c83b8a4fdd",
+          "name": "Vice Skorić",
+          "position": "PointGuard",
+          "dmi": 87363,
+          "gameShape": 7,
+          "salary": 18760,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4c6a-1400-75f5-8828-43b24d1ee23f",
+          "name": "Živko Mikuličić",
+          "position": "Center",
+          "dmi": 148321,
+          "gameShape": 7,
+          "salary": 31072,
+          "potential": 7
+        }
+      ]
+    },
+    {
+      "countryId": "IE",
+      "name": "Ireland",
+      "teamId": "011bb347-3f03-74b4-acac-1531e07d45ac",
+      "players": [
+        {
+          "playerId": "019c4654-89fb-716c-b7da-c7e4cd41fd8c",
+          "name": "Alan Zammit",
+          "position": "PowerForward",
+          "dmi": 45148,
+          "gameShape": 7,
+          "salary": 11957,
+          "potential": 6
+        },
+        {
+          "playerId": "019a5669-c00c-76d1-a0b0-4eae105f2831",
+          "name": "Alex Donovan",
+          "position": "PointGuard",
+          "dmi": 94709,
+          "gameShape": 7,
+          "salary": 20943,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4e6c-1341-74af-a00e-2d64c9000fb5",
+          "name": "Austin MacBride",
+          "position": "SmallForward",
+          "dmi": 85416,
+          "gameShape": 7,
+          "salary": 18793,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4e76-a66d-7717-8557-c9b4bc5766d0",
+          "name": "Ernie Murray",
+          "position": "ShootingGuard",
+          "dmi": 56262,
+          "gameShape": 7,
+          "salary": 11662,
+          "potential": 5
+        },
+        {
+          "playerId": "019c4e95-d703-7d64-8a70-12605fb7eea6",
+          "name": "Gary Kelly",
+          "position": "Center",
+          "dmi": 38869,
+          "gameShape": 7,
+          "salary": 9442,
+          "potential": 8
+        },
+        {
+          "playerId": "019a566b-0fd1-706c-8687-4b59033b8a07",
+          "name": "Gearóid Walsh",
+          "position": "PointGuard",
+          "dmi": 67559,
+          "gameShape": 7,
+          "salary": 15351,
+          "potential": 6
+        },
+        {
+          "playerId": "019e4569-75d3-73c4-9495-b9558500dd62",
+          "name": "Graham Griffiths",
+          "position": "SmallForward",
+          "dmi": 60624,
+          "gameShape": 7,
+          "salary": 14098,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4e6a-c856-7aea-a70a-2948b2484734",
+          "name": "Henry Kilmartin",
+          "position": "PointGuard",
+          "dmi": 53270,
+          "gameShape": 7,
+          "salary": 13854,
+          "potential": 6
+        },
+        {
+          "playerId": "019a4e6c-0a30-707a-9159-28f90b96bbb5",
+          "name": "Humphrey Dineen",
+          "position": "PointGuard",
+          "dmi": 62440,
+          "gameShape": 7,
+          "salary": 16521,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4655-63ec-7722-97ad-c18d147abbbc",
+          "name": "Jimmy Phelan",
+          "position": "PowerForward",
+          "dmi": 93799,
+          "gameShape": 7,
+          "salary": 23148,
+          "potential": 10
+        },
+        {
+          "playerId": "019e4559-848f-7140-80bf-01470657aca3",
+          "name": "Kyle Wogan",
+          "position": "PointGuard",
+          "dmi": 53206,
+          "gameShape": 7,
+          "salary": 12493,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4e8a-b7cc-72f0-978e-b3e895a5af69",
+          "name": "Naumantas Motulas",
+          "position": "Center",
+          "dmi": 59928,
+          "gameShape": 7,
+          "salary": 12278,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4657-ddf0-7d85-bc49-8069b92159c7",
+          "name": "Nick O'Malley",
+          "position": "Center",
+          "dmi": 44408,
+          "gameShape": 7,
+          "salary": 12682,
+          "potential": 9
+        },
+        {
+          "playerId": "019e3e63-af08-770d-a4ef-e39ccec4a341",
+          "name": "Pete Gray",
+          "position": "Center",
+          "dmi": 52716,
+          "gameShape": 7,
+          "salary": 13945,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4e94-f11d-750b-830b-80af279a15d8",
+          "name": "Ricky Brunt",
+          "position": "PowerForward",
+          "dmi": 72757,
+          "gameShape": 7,
+          "salary": 16807,
+          "potential": 5
+        },
+        {
+          "playerId": "019a4e6a-44e0-7955-b8ba-89421433aa38",
+          "name": "Scott Sullivan",
+          "position": "SmallForward",
+          "dmi": 80226,
+          "gameShape": 7,
+          "salary": 22452,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4eb8-4f9e-7900-9ffa-06c429366901",
+          "name": "Sol Flynn",
+          "position": "PointGuard",
+          "dmi": 82559,
+          "gameShape": 7,
+          "salary": 17878,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4e6a-babc-77e0-985f-32c154542bae",
+          "name": "Terry Heighway",
+          "position": "PointGuard",
+          "dmi": 54744,
+          "gameShape": 7,
+          "salary": 12418,
+          "potential": 8
+        }
+      ]
+    },
+    {
+      "countryId": "IL",
+      "name": "Israel",
+      "teamId": "011bb347-3ee6-7fa5-b685-7df640c34346",
+      "players": [
+        {
+          "playerId": "019a4973-43c2-79b7-b449-ee3a2533e3f4",
+          "name": "Avni Barzilay",
+          "position": "Center",
+          "dmi": 1163816,
+          "gameShape": 7,
+          "salary": 174976,
+          "potential": 9
+        },
+        {
+          "playerId": "019a496a-2853-709d-b567-e7b4f298180c",
+          "name": "Dan Asraf",
+          "position": "PointGuard",
+          "dmi": 126589,
+          "gameShape": 7,
+          "salary": 28420,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4978-09ef-7085-88ae-3af8bcf9f3a6",
+          "name": "Eden Tsuriel",
+          "position": "Center",
+          "dmi": 276892,
+          "gameShape": 7,
+          "salary": 55712,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4975-f68e-7d66-8bdd-cc232c96d41a",
+          "name": "Eilon Kalderon",
+          "position": "SmallForward",
+          "dmi": 92121,
+          "gameShape": 7,
+          "salary": 23776,
+          "potential": 7
+        },
+        {
+          "playerId": "019a496f-7359-7086-8549-c632914761e6",
+          "name": "Elishav Oved",
+          "position": "Center",
+          "dmi": 722575,
+          "gameShape": 7,
+          "salary": 112089,
+          "potential": 9
+        },
+        {
+          "playerId": "019c3e04-559f-72cb-97e4-130b30b91e57",
+          "name": "Igor Pe'er",
+          "position": "Center",
+          "dmi": 260178,
+          "gameShape": 7,
+          "salary": 52445,
+          "potential": 7
+        },
+        {
+          "playerId": "019a496a-7164-74d7-a54a-ed68bffba646",
+          "name": "Malik Abbas",
+          "position": "Center",
+          "dmi": 210265,
+          "gameShape": 7,
+          "salary": 39583,
+          "potential": 7
+        },
+        {
+          "playerId": "019a496c-cdd6-7808-a9c2-207b4d067a79",
+          "name": "Moshe Milo",
+          "position": "PointGuard",
+          "dmi": 143944,
+          "gameShape": 7,
+          "salary": 31383,
+          "potential": 10
+        },
+        {
+          "playerId": "019a497a-02bf-75d1-bef8-52b8f869d44f",
+          "name": "Naser Rais",
+          "position": "PointGuard",
+          "dmi": 111967,
+          "gameShape": 7,
+          "salary": 24124,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4978-7ada-74da-8c25-fac30a0a9c4c",
+          "name": "Oran Zelinger",
+          "position": "PointGuard",
+          "dmi": 124422,
+          "gameShape": 7,
+          "salary": 27975,
+          "potential": 9
+        },
+        {
+          "playerId": "019a496b-f949-76ed-8cbc-eb4abe4f3f28",
+          "name": "Semen Kosov",
+          "position": "SmallForward",
+          "dmi": 119757,
+          "gameShape": 7,
+          "salary": 29264,
+          "potential": 9
+        },
+        {
+          "playerId": "019a497c-6c7a-7299-9774-01d708029cde",
+          "name": "Yanir Revivo",
+          "position": "ShootingGuard",
+          "dmi": 161609,
+          "gameShape": 7,
+          "salary": 34087,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4974-d24b-77d0-a092-68c0123bf2d9",
+          "name": "Yechezkel Avramov",
+          "position": "SmallForward",
+          "dmi": 177420,
+          "gameShape": 7,
+          "salary": 31802,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4975-fd32-79fc-b999-d558e37fca3c",
+          "name": "Ziauddin Sulaiman",
+          "position": "ShootingGuard",
+          "dmi": 194134,
+          "gameShape": 7,
+          "salary": 35099,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "countryId": "IT",
+      "name": "Italia",
+      "teamId": "011bb347-3ee1-7f35-9a54-d0601c2fc4ba",
+      "players": [
+        {
+          "playerId": "019a25c8-67ae-74cb-aefd-d642d47696d4",
+          "name": "Alexander Raffaele",
+          "position": "SmallForward",
+          "dmi": 133376,
+          "gameShape": 7,
+          "salary": 30810,
+          "potential": 9
+        },
+        {
+          "playerId": "019b056b-6656-7ce2-a00c-9b2bf9070606",
+          "name": "Benedetto Prestipino",
+          "position": "PointGuard",
+          "dmi": 98747,
+          "gameShape": 7,
+          "salary": 25571,
+          "potential": 7
+        },
+        {
+          "playerId": "019a276b-24e6-7255-afb7-b9a79c4d77ec",
+          "name": "Catello Attazzo",
+          "position": "PointGuard",
+          "dmi": 88845,
+          "gameShape": 7,
+          "salary": 18742,
+          "potential": 10
+        },
+        {
+          "playerId": "019a27a0-e4d2-756c-a2b3-6ae2a177ec47",
+          "name": "Eduardo Barlati",
+          "position": "SmallForward",
+          "dmi": 141144,
+          "gameShape": 7,
+          "salary": 31591,
+          "potential": 8
+        },
+        {
+          "playerId": "019a24e8-53b0-7aea-a2c8-619aac504c0c",
+          "name": "Enrico Rantolo",
+          "position": "PointGuard",
+          "dmi": 85537,
+          "gameShape": 7,
+          "salary": 19785,
+          "potential": 10
+        },
+        {
+          "playerId": "019a28c1-fae1-750c-b518-05a855f76625",
+          "name": "Gene Vivian",
+          "position": "PointGuard",
+          "dmi": 121534,
+          "gameShape": 7,
+          "salary": 25983,
+          "potential": 10
+        },
+        {
+          "playerId": "019a293a-8dbb-75ff-9530-b1f0817fb46c",
+          "name": "Gian Domenico Militello",
+          "position": "Center",
+          "dmi": 546142,
+          "gameShape": 7,
+          "salary": 82301,
+          "potential": 10
+        },
+        {
+          "playerId": "019c0337-3f3b-75e6-8c41-aeca8d0000a6",
+          "name": "Gianni Arcellotti",
+          "position": "PointGuard",
+          "dmi": 137019,
+          "gameShape": 7,
+          "salary": 29693,
+          "potential": 8
+        },
+        {
+          "playerId": "019a28e5-922e-7baa-8c06-1f3bff99ae64",
+          "name": "Guido Cirrotti",
+          "position": "PointGuard",
+          "dmi": 125616,
+          "gameShape": 7,
+          "salary": 26672,
+          "potential": 10
+        },
+        {
+          "playerId": "019a2857-34fc-76d9-8bc7-de1f90608c5a",
+          "name": "Luigi Vivian",
+          "position": "SmallForward",
+          "dmi": 172378,
+          "gameShape": 7,
+          "salary": 31543,
+          "potential": 8
+        },
+        {
+          "playerId": "019a29f2-51c8-7be7-bfbd-95f4344ddb21",
+          "name": "Nicola Laudadio",
+          "position": "PowerForward",
+          "dmi": 607042,
+          "gameShape": 7,
+          "salary": 108533,
+          "potential": 10
+        },
+        {
+          "playerId": "019a24d9-12d8-7b6e-9071-823b2814810d",
+          "name": "Pietro Varano",
+          "position": "Center",
+          "dmi": 347785,
+          "gameShape": 7,
+          "salary": 67309,
+          "potential": 9
+        },
+        {
+          "playerId": "019a2581-f307-7496-8377-8ed5b37faafa",
+          "name": "Scipio Rullo",
+          "position": "Center",
+          "dmi": 439580,
+          "gameShape": 7,
+          "salary": 87348,
+          "potential": 10
+        },
+        {
+          "playerId": "019a28fc-1678-7d33-8f4b-31fcb2f46be7",
+          "name": "Torquato Nigro",
+          "position": "SmallForward",
+          "dmi": 105058,
+          "gameShape": 7,
+          "salary": 23106,
+          "potential": 10
+        },
+        {
+          "playerId": "019a29ec-2540-7f50-8138-d5cb6bc7c561",
+          "name": "Ugo Fusaro",
+          "position": "Center",
+          "dmi": 390481,
+          "gameShape": 7,
+          "salary": 85024,
+          "potential": 9
+        },
+        {
+          "playerId": "019c091c-0c77-78cb-8794-6dfcfbc50694",
+          "name": "Yuri Dimartino",
+          "position": "PointGuard",
+          "dmi": 156562,
+          "gameShape": 7,
+          "salary": 32868,
+          "potential": 8
+        }
+      ]
+    },
+    {
+      "countryId": "LV",
+      "name": "Latvija",
+      "teamId": "011bb347-3f05-7026-ac06-160f6a8e1be5",
+      "players": [
+        {
+          "playerId": "019c4728-7be9-78df-9c32-5d59f1698ad4",
+          "name": "Antons Raminš",
+          "position": "Center",
+          "dmi": 62058,
+          "gameShape": 7,
+          "salary": 14215,
+          "potential": 9
+        },
+        {
+          "playerId": "019e455c-de58-7e44-80dc-ccc9c414ea9d",
+          "name": "Arturs Eidinš",
+          "position": "Center",
+          "dmi": 142779,
+          "gameShape": 7,
+          "salary": 30664,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4ecf-5095-7d45-a3b8-0184c3a73a88",
+          "name": "Austris Šteins-Akmentinš",
+          "position": "SmallForward",
+          "dmi": 67815,
+          "gameShape": 7,
+          "salary": 14374,
+          "potential": 10
+        },
+        {
+          "playerId": "019c471c-ae6d-7790-9616-e61082b8436b",
+          "name": "Benedikts Ikstitis",
+          "position": "SmallForward",
+          "dmi": 97357,
+          "gameShape": 7,
+          "salary": 22532,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4f0c-6400-7a24-a187-e72e86d4e846",
+          "name": "Guntars Lipsks",
+          "position": "PointGuard",
+          "dmi": 206424,
+          "gameShape": 7,
+          "salary": 44203,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4723-38a0-7779-bd80-acda3bad25eb",
+          "name": "Guntars Versitis",
+          "position": "PowerForward",
+          "dmi": 109854,
+          "gameShape": 7,
+          "salary": 21244,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4723-91c8-75e3-8ef5-cd7efa8cb287",
+          "name": "Intars Staris",
+          "position": "Center",
+          "dmi": 94665,
+          "gameShape": 7,
+          "salary": 22663,
+          "potential": 8
+        },
+        {
+          "playerId": "019c471e-9dc0-7ad6-86a2-1111f8744126",
+          "name": "Ivo Ostinš",
+          "position": "PointGuard",
+          "dmi": 103981,
+          "gameShape": 7,
+          "salary": 22790,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4725-45ab-7711-bdcf-77add6be491f",
+          "name": "Juris Bilmanis",
+          "position": "PowerForward",
+          "dmi": 52353,
+          "gameShape": 7,
+          "salary": 11479,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4720-832b-7af7-a661-2a338bfbcc39",
+          "name": "Normunds Grinvalds",
+          "position": "PointGuard",
+          "dmi": 101635,
+          "gameShape": 7,
+          "salary": 19564,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4721-6705-7b10-99a7-23b232544821",
+          "name": "Peteris Rungis",
+          "position": "Center",
+          "dmi": 96699,
+          "gameShape": 7,
+          "salary": 21034,
+          "potential": 9
+        },
+        {
+          "playerId": "019c472d-6ff1-71a6-a1f7-5efa719db19b",
+          "name": "Tore Davidsson",
+          "position": "Center",
+          "dmi": 156425,
+          "gameShape": 7,
+          "salary": 29039,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4f0c-0905-74fb-9b2a-e14b4d703110",
+          "name": "Tālivaldis Feldmanis",
+          "position": "PointGuard",
+          "dmi": 73286,
+          "gameShape": 7,
+          "salary": 17683,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4f04-3fc2-75b6-9a78-c0c217314414",
+          "name": "Tālivaldis Taukacs",
+          "position": "ShootingGuard",
+          "dmi": 99131,
+          "gameShape": 7,
+          "salary": 23069,
+          "potential": 10
+        },
+        {
+          "playerId": "019c472f-2dbc-7c2b-872e-e8f612c92fd6",
+          "name": "Vidmants Treinis",
+          "position": "PowerForward",
+          "dmi": 83341,
+          "gameShape": 7,
+          "salary": 19494,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4efa-a754-755a-ae52-9779745ceaa3",
+          "name": "Ziedonis Ennitis",
+          "position": "PointGuard",
+          "dmi": 178221,
+          "gameShape": 7,
+          "salary": 38578,
+          "potential": 7
+        }
+      ]
+    },
+    {
+      "countryId": "LT",
+      "name": "Lietuva",
+      "teamId": "011bb347-3eeb-7cc1-b74b-4de167070a7b",
+      "players": [
+        {
+          "playerId": "019a4b3d-1edf-7e0d-bc6e-b82ed8616185",
+          "name": "Andriejus Doroševicius",
+          "position": "PointGuard",
+          "dmi": 174890,
+          "gameShape": 7,
+          "salary": 34069,
+          "potential": 8
+        },
+        {
+          "playerId": "019c40e7-3d1e-78c2-8586-4e308d30f5bf",
+          "name": "Antanas Nagibinas",
+          "position": "ShootingGuard",
+          "dmi": 189402,
+          "gameShape": 7,
+          "salary": 33955,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4b3a-254e-7d26-ab55-18775137a495",
+          "name": "Arnas Naugžemis",
+          "position": "PowerForward",
+          "dmi": 134323,
+          "gameShape": 7,
+          "salary": 28382,
+          "potential": 9
+        },
+        {
+          "playerId": "019c40b5-b905-7e5a-98db-5c12b83e7dc1",
+          "name": "Augantas Iršėnas",
+          "position": "ShootingGuard",
+          "dmi": 74277,
+          "gameShape": 7,
+          "salary": 16170,
+          "potential": 9
+        },
+        {
+          "playerId": "019c40ae-b5bc-7ed3-a6f2-615f21e79edf",
+          "name": "Dorotėjas Pikcilingis",
+          "position": "PointGuard",
+          "dmi": 229870,
+          "gameShape": 7,
+          "salary": 40629,
+          "potential": 8
+        },
+        {
+          "playerId": "019c40c4-d550-7d6a-bdfb-23ca8e5c6827",
+          "name": "Ernestas Krikštanavicius",
+          "position": "PointGuard",
+          "dmi": 80505,
+          "gameShape": 7,
+          "salary": 15313,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4b28-3e4f-7df9-99cb-ecc192f34721",
+          "name": "Eugenijus Mašanauskas",
+          "position": "Center",
+          "dmi": 391294,
+          "gameShape": 7,
+          "salary": 85369,
+          "potential": 9
+        },
+        {
+          "playerId": "019c40c4-22c6-76fb-be2a-f4412cdc01a1",
+          "name": "Linas Piatnickis",
+          "position": "SmallForward",
+          "dmi": 102903,
+          "gameShape": 7,
+          "salary": 21878,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4b26-cf1f-75f4-bff6-5463dfc2d6f8",
+          "name": "Lucjan Kunkel",
+          "position": "Center",
+          "dmi": 191804,
+          "gameShape": 7,
+          "salary": 46718,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4b2e-b4e6-7abc-949e-f5918f2273c0",
+          "name": "Merkys Ernius",
+          "position": "Center",
+          "dmi": 82043,
+          "gameShape": 7,
+          "salary": 18049,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4b47-a38d-7265-bf92-5097fdd54943",
+          "name": "Naumantas Kriveliovas",
+          "position": "PointGuard",
+          "dmi": 160651,
+          "gameShape": 7,
+          "salary": 37994,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4b39-af71-72a5-bc9c-a1daf8ce41e7",
+          "name": "Nomedas Siatkovskis",
+          "position": "PointGuard",
+          "dmi": 177307,
+          "gameShape": 7,
+          "salary": 31925,
+          "potential": 9
+        },
+        {
+          "playerId": "019c409f-ad48-7d19-952e-9494140b7fa2",
+          "name": "Vaidas Naikauskas",
+          "position": "Center",
+          "dmi": 199261,
+          "gameShape": 7,
+          "salary": 38340,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4b2f-d27d-75ad-9c8e-92005d087190",
+          "name": "Varūnas Jermalis",
+          "position": "PointGuard",
+          "dmi": 158797,
+          "gameShape": 7,
+          "salary": 35950,
+          "potential": 10
+        }
+      ]
+    },
+    {
+      "countryId": "LU",
+      "name": "Luxembourg",
+      "teamId": "01219d1d-1d17-7848-8175-33169c8cd461",
+      "players": [
+        {
+          "playerId": "019b290d-8dba-7a40-99ff-4922d2918d70",
+          "name": "Armand Le Boulch",
+          "position": "Center",
+          "dmi": 87337,
+          "gameShape": 7,
+          "salary": 22010,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4e75-566b-7399-86b2-384040c04f92",
+          "name": "Bruno Alves",
+          "position": "PowerForward",
+          "dmi": 32567,
+          "gameShape": 7,
+          "salary": 7954,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4e60-9434-705f-95e9-91d8678d6188",
+          "name": "Carlo Maria Cometa",
+          "position": "SmallForward",
+          "dmi": 71029,
+          "gameShape": 7,
+          "salary": 15873,
+          "potential": 7
+        },
+        {
+          "playerId": "019e457a-9a17-7c78-9c36-6cce1f2a666f",
+          "name": "Christian Saat",
+          "position": "PointGuard",
+          "dmi": 64232,
+          "gameShape": 7,
+          "salary": 13212,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4ee1-34e3-71ad-a997-d7df7b6dd434",
+          "name": "Hanns Lederhuber",
+          "position": "PointGuard",
+          "dmi": 74373,
+          "gameShape": 7,
+          "salary": 15419,
+          "potential": 9
+        },
+        {
+          "playerId": "019e4594-2c5e-700d-8093-5b04899ac1bf",
+          "name": "Kristof Vannieuwenkerke",
+          "position": "SmallForward",
+          "dmi": 33727,
+          "gameShape": 7,
+          "salary": 9463,
+          "potential": 10
+        },
+        {
+          "playerId": "019a56a6-36ee-7f7c-8883-40edc6e5f1fd",
+          "name": "Laurent Bazoge",
+          "position": "Center",
+          "dmi": 107714,
+          "gameShape": 7,
+          "salary": 27429,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4ec8-c08c-782e-9fed-67fe1d6fe86d",
+          "name": "Lorentz Dechilly",
+          "position": "Center",
+          "dmi": 45680,
+          "gameShape": 7,
+          "salary": 11543,
+          "potential": 10
+        },
+        {
+          "playerId": "019a5684-4f57-7760-a7cb-90c6d8ba072c",
+          "name": "Mikael Marcoux",
+          "position": "ShootingGuard",
+          "dmi": 62304,
+          "gameShape": 7,
+          "salary": 13566,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4f6a-0531-7d40-8f85-8e997eb0b40c",
+          "name": "Mortimer Roose",
+          "position": "SmallForward",
+          "dmi": 93897,
+          "gameShape": 7,
+          "salary": 18670,
+          "potential": 9
+        },
+        {
+          "playerId": "019e45fa-6c75-718a-8ccd-0a64cb7baa38",
+          "name": "Reimund Sproll",
+          "position": "PowerForward",
+          "dmi": 50944,
+          "gameShape": 7,
+          "salary": 12238,
+          "potential": 10
+        },
+        {
+          "playerId": "019a5697-b8b3-7781-a981-af300c0468b9",
+          "name": "Rodrigo Arrepia",
+          "position": "PointGuard",
+          "dmi": 40785,
+          "gameShape": 7,
+          "salary": 12389,
+          "potential": 8
+        },
+        {
+          "playerId": "019a56d1-87a7-74dc-ac28-c633ada5eb42",
+          "name": "Ruedi Legnick",
+          "position": "PowerForward",
+          "dmi": 48884,
+          "gameShape": 7,
+          "salary": 13255,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4efb-6c2f-7e54-b200-93dbca7c04f9",
+          "name": "Steffen Preiss",
+          "position": "Center",
+          "dmi": 93648,
+          "gameShape": 7,
+          "salary": 19636,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4eca-f674-74c2-96b4-974f6b87ac90",
+          "name": "Stéphane Guillou",
+          "position": "PowerForward",
+          "dmi": 39345,
+          "gameShape": 7,
+          "salary": 12062,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4ed3-aab6-7e8d-954e-fdf4cdfbaa44",
+          "name": "Tobias Andreas Buchwieser",
+          "position": "ShootingGuard",
+          "dmi": 59309,
+          "gameShape": 7,
+          "salary": 14047,
+          "potential": 6
+        },
+        {
+          "playerId": "019e45a8-6230-7ce6-9dc5-2f969254693f",
+          "name": "Éric Dumoulin",
+          "position": "Center",
+          "dmi": 57430,
+          "gameShape": 7,
+          "salary": 13119,
+          "potential": 10
+        }
+      ]
+    },
+    {
+      "countryId": "HU",
+      "name": "Magyarország",
+      "teamId": "011bb347-3f07-705e-b419-848dc885930f",
+      "players": [
+        {
+          "playerId": "019a4f84-82dd-78b1-b78f-1ef5e9a2a9e4",
+          "name": "Albin Aggod",
+          "position": "Center",
+          "dmi": 392170,
+          "gameShape": 7,
+          "salary": 78383,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4f89-e816-7b80-9c12-d29be49971a9",
+          "name": "András Gróf",
+          "position": "PointGuard",
+          "dmi": 133562,
+          "gameShape": 7,
+          "salary": 27893,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4f8a-ae96-7268-a25a-947eb7682893",
+          "name": "Csaba Nacsa",
+          "position": "Center",
+          "dmi": 622308,
+          "gameShape": 7,
+          "salary": 121095,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4fd3-78b7-7c62-a409-7b0182ee3403",
+          "name": "Erik Takáts",
+          "position": "PointGuard",
+          "dmi": 108847,
+          "gameShape": 7,
+          "salary": 23838,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4f91-5ea5-7df5-ac63-1c3f265623c7",
+          "name": "Félix Dvéri",
+          "position": "SmallForward",
+          "dmi": 53037,
+          "gameShape": 7,
+          "salary": 11723,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4f84-06cd-7039-b84c-234e50613fb8",
+          "name": "Gedeon Kapuvári",
+          "position": "Center",
+          "dmi": 235377,
+          "gameShape": 7,
+          "salary": 47994,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4f84-7a97-7475-89bf-3785eb39062d",
+          "name": "Gergely Orth",
+          "position": "SmallForward",
+          "dmi": 106307,
+          "gameShape": 7,
+          "salary": 21776,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4f94-d39f-7c5f-bbc7-33cd75f52625",
+          "name": "Győző Koltai",
+          "position": "ShootingGuard",
+          "dmi": 90736,
+          "gameShape": 7,
+          "salary": 19302,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4f86-bd8c-736b-ab4c-e3764eb41fbf",
+          "name": "Gábor Ballai",
+          "position": "PointGuard",
+          "dmi": 73580,
+          "gameShape": 7,
+          "salary": 17408,
+          "potential": 10
+        },
+        {
+          "playerId": "019a56cb-3bf8-7200-b7ef-234ce8f33fbd",
+          "name": "Henrik Seres",
+          "position": "PowerForward",
+          "dmi": 144245,
+          "gameShape": 7,
+          "salary": 28777,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4f8f-1bb0-7cd5-8c95-2e616e8e57e7",
+          "name": "István Hannich",
+          "position": "Center",
+          "dmi": 446959,
+          "gameShape": 7,
+          "salary": 86304,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4f84-f6a7-7176-ac49-c0679c438852",
+          "name": "János Gujdár",
+          "position": "PointGuard",
+          "dmi": 173534,
+          "gameShape": 7,
+          "salary": 31356,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4fd3-2e47-72cf-8261-8a3a351380e9",
+          "name": "Karl Hinterleitner",
+          "position": "PowerForward",
+          "dmi": 257094,
+          "gameShape": 7,
+          "salary": 52294,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4f83-9302-773a-b78b-6eca3e613c12",
+          "name": "Konstantin Jusztin",
+          "position": "Center",
+          "dmi": 906269,
+          "gameShape": 7,
+          "salary": 143126,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4f83-e5b8-7c4a-9252-65672a2a60da",
+          "name": "László Fábry",
+          "position": "ShootingGuard",
+          "dmi": 174408,
+          "gameShape": 7,
+          "salary": 37974,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4f93-d33a-7e62-a620-f2f1e40ace06",
+          "name": "Tamás Szentmihályi",
+          "position": "Center",
+          "dmi": 511020,
+          "gameShape": 7,
+          "salary": 112106,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4f8c-01b1-7519-a5f8-ecfda453d030",
+          "name": "Vilmos Fischl",
+          "position": "PointGuard",
+          "dmi": 94562,
+          "gameShape": 7,
+          "salary": 20991,
+          "potential": 7
+        }
+      ]
+    },
+    {
+      "countryId": "MK",
+      "name": "Makedonija",
+      "teamId": "011bb347-3f08-7226-9c2e-5db1cf761930",
+      "players": [
+        {
+          "playerId": "019a5002-6a33-7bce-bd35-048d4e4f5392",
+          "name": "Anton Dzuvalekovski",
+          "position": "Center",
+          "dmi": 130313,
+          "gameShape": 5,
+          "salary": 49384,
+          "potential": 7
+        },
+        {
+          "playerId": "019a5003-413e-7dc2-984c-929d76609560",
+          "name": "Koce Ignjatov",
+          "position": "PowerForward",
+          "dmi": 60829,
+          "gameShape": 7,
+          "salary": 13409,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4860-bb81-78bf-8735-0f424e26e2c3",
+          "name": "Lavrentij Dostinov",
+          "position": "ShootingGuard",
+          "dmi": 29363,
+          "gameShape": 7,
+          "salary": 7075,
+          "potential": 7
+        },
+        {
+          "playerId": "019a56e4-59eb-77d7-adcb-444737b32263",
+          "name": "Lazar Cuculovski",
+          "position": "PowerForward",
+          "dmi": 112338,
+          "gameShape": 7,
+          "salary": 25352,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4862-657b-7850-940e-25a18942d33c",
+          "name": "Rangel Serafimovski",
+          "position": "PowerForward",
+          "dmi": 75343,
+          "gameShape": 7,
+          "salary": 17500,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4860-44a0-74b1-9b32-bce87b105863",
+          "name": "Stojan Stojkovski",
+          "position": "PointGuard",
+          "dmi": 59810,
+          "gameShape": 7,
+          "salary": 13104,
+          "potential": 10
+        }
+      ]
+    },
+    {
+      "countryId": "MT",
+      "name": "Malta",
+      "teamId": "011fa4bb-ae66-7260-b747-c514f0cd5cfe",
+      "players": [
+        {
+          "playerId": "019c4e84-4b21-7220-80c7-0e195c54e2f6",
+          "name": "Arnold Cutajar",
+          "position": "Center",
+          "dmi": 38874,
+          "gameShape": 7,
+          "salary": 9611,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4eba-cc43-7f19-a7dc-8efa0c1aa95c",
+          "name": "Bjorn Fitzpatrick",
+          "position": "ShootingGuard",
+          "dmi": 46316,
+          "gameShape": 7,
+          "salary": 11439,
+          "potential": 4
+        },
+        {
+          "playerId": "019c4e8d-22c2-762a-beeb-00766ea44267",
+          "name": "Clint Grimaldi",
+          "position": "SmallForward",
+          "dmi": 51599,
+          "gameShape": 7,
+          "salary": 11221,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4f01-4288-7221-a37f-874aa4709fd2",
+          "name": "Donald Farrugia",
+          "position": "PointGuard",
+          "dmi": 85713,
+          "gameShape": 7,
+          "salary": 19701,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4e65-84a7-7c4f-bf05-c2a1ae15393f",
+          "name": "Erin Sant",
+          "position": "PointGuard",
+          "dmi": 25588,
+          "gameShape": 7,
+          "salary": 7178,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4e67-479c-7114-9480-b90f335589a3",
+          "name": "Ian Parisi",
+          "position": "PointGuard",
+          "dmi": 53537,
+          "gameShape": 7,
+          "salary": 12594,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4ea2-a780-7753-a2d2-2753a53d161e",
+          "name": "Jean-Marc Schembri",
+          "position": "PointGuard",
+          "dmi": 59166,
+          "gameShape": 7,
+          "salary": 14336,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4e8d-3471-71e6-bb37-aef2c9387c56",
+          "name": "Jonathan Bonnici",
+          "position": "SmallForward",
+          "dmi": 85716,
+          "gameShape": 7,
+          "salary": 19348,
+          "potential": 9
+        },
+        {
+          "playerId": "019e45ed-4d8a-7de2-96b2-b437e02361f8",
+          "name": "Jordan Briffa",
+          "position": "Center",
+          "dmi": 71443,
+          "gameShape": 7,
+          "salary": 15881,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4f6c-9c5d-7be1-ac2a-2d9172314b3b",
+          "name": "Josef Lauri",
+          "position": "ShootingGuard",
+          "dmi": 49964,
+          "gameShape": 7,
+          "salary": 10820,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4e9a-be9e-7f04-aba4-42e17a48cd94",
+          "name": "Julian Briffa",
+          "position": "Center",
+          "dmi": 74207,
+          "gameShape": 6,
+          "salary": 18169,
+          "potential": 10
+        },
+        {
+          "playerId": "019a56fa-bf25-7ee2-a17e-1954affd95f2",
+          "name": "Lino Meli",
+          "position": "PointGuard",
+          "dmi": 41360,
+          "gameShape": 7,
+          "salary": 11059,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4efd-aaef-75ff-8509-db32c6afd135",
+          "name": "Malcolm Cacciottolo",
+          "position": "PointGuard",
+          "dmi": 45482,
+          "gameShape": 7,
+          "salary": 10163,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4f6d-4d36-746d-9cf2-15d2c15909a0",
+          "name": "Michael Boffa",
+          "position": "ShootingGuard",
+          "dmi": 57360,
+          "gameShape": 7,
+          "salary": 12802,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4ecd-46e3-7028-b8e1-1f89c68eb19b",
+          "name": "Shaun Borg",
+          "position": "PowerForward",
+          "dmi": 51317,
+          "gameShape": 7,
+          "salary": 12365,
+          "potential": 10
+        },
+        {
+          "playerId": "019a568d-861b-7651-9c43-10ef9cf1d6d8",
+          "name": "Stephen Briffa",
+          "position": "Center",
+          "dmi": 325469,
+          "gameShape": 7,
+          "salary": 59700,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4ee5-4847-717b-ab9d-b4eb0a6f3c44",
+          "name": "Vincent Fabri",
+          "position": "SmallForward",
+          "dmi": 76285,
+          "gameShape": 7,
+          "salary": 15255,
+          "potential": 7
+        },
+        {
+          "playerId": "019e4675-d628-7e72-98c5-b53c8420ab83",
+          "name": "Warren Cardona",
+          "position": "SmallForward",
+          "dmi": 70050,
+          "gameShape": 7,
+          "salary": 15335,
+          "potential": 8
+        }
+      ]
+    },
+    {
+      "countryId": "MD",
+      "name": "Moldova",
+      "teamId": "011bb347-3f2d-747b-827d-58832662b6cd",
+      "players": [
+        {
+          "playerId": "019a5686-70f6-7b32-a613-acb330a761d6",
+          "name": "Aurel Filimon",
+          "position": "Center",
+          "dmi": 109604,
+          "gameShape": 7,
+          "salary": 24585,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4e95-5b39-7e6e-9cba-7b4f68f4e4ae",
+          "name": "Eduard Tripac",
+          "position": "PowerForward",
+          "dmi": 59036,
+          "gameShape": 7,
+          "salary": 16077,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4f65-f1cd-7477-9ae3-68507ac3e0d5",
+          "name": "Serghei Magariu",
+          "position": "SmallForward",
+          "dmi": 102449,
+          "gameShape": 7,
+          "salary": 21800,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4eef-05cd-78bb-ac23-fb41019b88d1",
+          "name": "Vicusor Ababii",
+          "position": "SmallForward",
+          "dmi": 34334,
+          "gameShape": 7,
+          "salary": 7976,
+          "potential": 10
+        },
+        {
+          "playerId": "019e4559-deda-726d-98e6-18545bcc3022",
+          "name": "Vsevolod Lamonov",
+          "position": "PowerForward",
+          "dmi": 85989,
+          "gameShape": 7,
+          "salary": 18409,
+          "potential": 6
+        }
+      ]
+    },
+    {
+      "countryId": "NL",
+      "name": "Nederland",
+      "teamId": "011bb347-3ee7-75e3-8fd5-33f509f8f5f5",
+      "players": [
+        {
+          "playerId": "019a56b9-1197-705d-94f7-a7c2701d42d6",
+          "name": "Alfonso de Zwart",
+          "position": "Center",
+          "dmi": 338207,
+          "gameShape": 7,
+          "salary": 63002,
+          "potential": 8
+        },
+        {
+          "playerId": "019a49d5-64c9-7471-9e82-84ed72ebd3d1",
+          "name": "Driekus Holla",
+          "position": "PointGuard",
+          "dmi": 62726,
+          "gameShape": 7,
+          "salary": 12343,
+          "potential": 9
+        },
+        {
+          "playerId": "019a56fc-f9f3-7e8e-b60c-6fb66690c8a4",
+          "name": "Eppo Schreiner",
+          "position": "PointGuard",
+          "dmi": 155881,
+          "gameShape": 7,
+          "salary": 32233,
+          "potential": 10
+        },
+        {
+          "playerId": "019a49d6-0ad7-78f5-9142-e395977d44b1",
+          "name": "George Westbroek",
+          "position": "Center",
+          "dmi": 356217,
+          "gameShape": 7,
+          "salary": 72815,
+          "potential": 8
+        },
+        {
+          "playerId": "019e39a6-ed01-781e-bf70-d917756cf484",
+          "name": "Jobias Graas",
+          "position": "PointGuard",
+          "dmi": 109581,
+          "gameShape": 7,
+          "salary": 23104,
+          "potential": 7
+        },
+        {
+          "playerId": "019a56d3-3c26-7cf6-9d3b-585b4208ec9c",
+          "name": "Joseph Hering",
+          "position": "PointGuard",
+          "dmi": 56050,
+          "gameShape": 7,
+          "salary": 14018,
+          "potential": 10
+        },
+        {
+          "playerId": "019a49d7-ce83-79f2-839d-a802ef4a351b",
+          "name": "Klaas-Jan Bessems",
+          "position": "PointGuard",
+          "dmi": 97645,
+          "gameShape": 7,
+          "salary": 23826,
+          "potential": 10
+        },
+        {
+          "playerId": "019c3e92-41d0-75c7-b8e3-8124aa03e123",
+          "name": "Mathieu Nekkers",
+          "position": "PointGuard",
+          "dmi": 96117,
+          "gameShape": 7,
+          "salary": 19397,
+          "potential": 7
+        },
+        {
+          "playerId": "019c3e92-d698-7267-9657-c43d89683ebf",
+          "name": "Niels Glastra",
+          "position": "PowerForward",
+          "dmi": 151789,
+          "gameShape": 7,
+          "salary": 28486,
+          "potential": 10
+        },
+        {
+          "playerId": "019e39a6-7f45-7fbc-bc52-6c3887c3d338",
+          "name": "Sacco Oldenburger",
+          "position": "PowerForward",
+          "dmi": 72185,
+          "gameShape": 7,
+          "salary": 15483,
+          "potential": 8
+        },
+        {
+          "playerId": "019a49da-ff83-75c4-bbfe-44bb3ae99add",
+          "name": "Timo Panhuis",
+          "position": "Center",
+          "dmi": 330979,
+          "gameShape": 7,
+          "salary": 55157,
+          "potential": 10
+        },
+        {
+          "playerId": "019c3e99-f7a3-707d-9408-6f1d59090b60",
+          "name": "Wijnand Oosterveld",
+          "position": "PointGuard",
+          "dmi": 48698,
+          "gameShape": 7,
+          "salary": 13416,
+          "potential": 10
+        }
+      ]
+    },
+    {
+      "countryId": "NO",
+      "name": "Norge",
+      "teamId": "011bb347-3ef1-7a15-86ad-e4b1d7a1a33e",
+      "players": [
+        {
+          "playerId": "019e45eb-810b-7c38-9ccf-4f794b589372",
+          "name": "Bendik Lindstad",
+          "position": "PowerForward",
+          "dmi": 118743,
+          "gameShape": 7,
+          "salary": 25500,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4e9b-9bad-7078-9f78-ffbde70aca6e",
+          "name": "Gøran Sæther",
+          "position": "PointGuard",
+          "dmi": 40343,
+          "gameShape": 7,
+          "salary": 10553,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4cb6-18bd-75bf-ad26-d1f71d5b3258",
+          "name": "Harald Martin Nordberg",
+          "position": "SmallForward",
+          "dmi": 95634,
+          "gameShape": 7,
+          "salary": 19507,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4cb5-43af-74ba-9074-2fd459ddcff4",
+          "name": "Helge Dahl",
+          "position": "ShootingGuard",
+          "dmi": 99839,
+          "gameShape": 7,
+          "salary": 22839,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4eea-2fe2-765f-96ad-4a2924cba6a2",
+          "name": "Idar Buseth",
+          "position": "Center",
+          "dmi": 112280,
+          "gameShape": 7,
+          "salary": 26233,
+          "potential": 8
+        },
+        {
+          "playerId": "019c429a-c534-7d2b-a92f-fe352eacaa12",
+          "name": "Jon-Ove Ryen",
+          "position": "PowerForward",
+          "dmi": 66433,
+          "gameShape": 7,
+          "salary": 13432,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4e7e-d60c-7409-8c5b-e478b55445bb",
+          "name": "Kåre Hauge",
+          "position": "PowerForward",
+          "dmi": 61995,
+          "gameShape": 7,
+          "salary": 13615,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4e91-0118-7ee5-a3ac-de8c2b76d0f7",
+          "name": "Leif Ludvig Gustavsen",
+          "position": "PointGuard",
+          "dmi": 76371,
+          "gameShape": 7,
+          "salary": 17100,
+          "potential": 8
+        },
+        {
+          "playerId": "019a56b3-549b-780a-a2ab-74005c26f339",
+          "name": "Per Damgaard",
+          "position": "PointGuard",
+          "dmi": 40153,
+          "gameShape": 7,
+          "salary": 10816,
+          "potential": 10
+        },
+        {
+          "playerId": "019c429e-b8e9-7f38-8b31-b0fbf07b6bc6",
+          "name": "Roald Andreassen",
+          "position": "SmallForward",
+          "dmi": 106103,
+          "gameShape": 7,
+          "salary": 22186,
+          "potential": 10
+        }
+      ]
+    },
+    {
+      "countryId": "PL",
+      "name": "Polska",
+      "teamId": "011bb347-3f11-74b5-a912-a6b676d29293",
+      "players": [
+        {
+          "playerId": "019a5101-adda-7f59-a1bf-6568b8cce2a8",
+          "name": "Albert Kwiatkowski",
+          "position": "PowerForward",
+          "dmi": 128600,
+          "gameShape": 7,
+          "salary": 30831,
+          "potential": 11
+        },
+        {
+          "playerId": "019a5139-60b9-7685-bad7-26fd46b385be",
+          "name": "Błażej Łysakowski",
+          "position": "PointGuard",
+          "dmi": 94196,
+          "gameShape": 7,
+          "salary": 23540,
+          "potential": 10
+        },
+        {
+          "playerId": "019a50ff-2075-7381-ac14-902cf1c4f5a1",
+          "name": "Damian Korulczyk",
+          "position": "Center",
+          "dmi": 278207,
+          "gameShape": 7,
+          "salary": 58590,
+          "potential": 9
+        },
+        {
+          "playerId": "019a512f-2b26-7003-8f04-74e42f54fffd",
+          "name": "Dominik Bartoszewicz",
+          "position": "PointGuard",
+          "dmi": 142178,
+          "gameShape": 7,
+          "salary": 27576,
+          "potential": 8
+        },
+        {
+          "playerId": "019a50fb-5080-75e3-9e43-92d5c32b0658",
+          "name": "Eustachy Mołczan",
+          "position": "Center",
+          "dmi": 308136,
+          "gameShape": 7,
+          "salary": 61322,
+          "potential": 10
+        },
+        {
+          "playerId": "019a50fe-4125-7316-accf-0a2731ff8623",
+          "name": "Felix Tobias Kozmer",
+          "position": "SmallForward",
+          "dmi": 78331,
+          "gameShape": 7,
+          "salary": 19262,
+          "potential": 8
+        },
+        {
+          "playerId": "019a5122-80fe-7db9-bd18-dbfb836bf0c6",
+          "name": "Filip Kopaczynski",
+          "position": "Center",
+          "dmi": 380402,
+          "gameShape": 7,
+          "salary": 68345,
+          "potential": 9
+        },
+        {
+          "playerId": "019a5105-1249-708a-bf2e-44548944972d",
+          "name": "Jacek Kosiorek",
+          "position": "PointGuard",
+          "dmi": 107310,
+          "gameShape": 7,
+          "salary": 25087,
+          "potential": 10
+        },
+        {
+          "playerId": "019c499b-a6a5-7ac1-950c-04713ea3c127",
+          "name": "Jerzy Kominiak",
+          "position": "SmallForward",
+          "dmi": 141031,
+          "gameShape": 7,
+          "salary": 28219,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4978-a142-7f9b-9beb-0c846e42fcdc",
+          "name": "Konrad Karpiel",
+          "position": "PowerForward",
+          "dmi": 139833,
+          "gameShape": 7,
+          "salary": 28473,
+          "potential": 9
+        },
+        {
+          "playerId": "019c49a3-c702-7d4c-8343-d53ec1e4c6bc",
+          "name": "Mirosław Żółtański",
+          "position": "Center",
+          "dmi": 363471,
+          "gameShape": 7,
+          "salary": 74309,
+          "potential": 10
+        },
+        {
+          "playerId": "019c49c8-7660-7d74-b20a-35cdaf8ca066",
+          "name": "Stanisław Antończyk",
+          "position": "Center",
+          "dmi": 111751,
+          "gameShape": 7,
+          "salary": 27810,
+          "potential": 10
+        },
+        {
+          "playerId": "019a511a-3365-733f-ae71-2a672cc584f3",
+          "name": "Sylwester Leonczuk",
+          "position": "PointGuard",
+          "dmi": 85867,
+          "gameShape": 7,
+          "salary": 21546,
+          "potential": 10
+        },
+        {
+          "playerId": "019c497d-6daa-7371-9b7e-bc18d4be5080",
+          "name": "Wojciech Goździewski",
+          "position": "Center",
+          "dmi": 470615,
+          "gameShape": 7,
+          "salary": 88688,
+          "potential": 10
+        },
+        {
+          "playerId": "019c49d0-c847-7000-a8be-0d4e0e3ab85e",
+          "name": "Włodzimierz Tylka",
+          "position": "SmallForward",
+          "dmi": 95442,
+          "gameShape": 7,
+          "salary": 20187,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "countryId": "PT",
+      "name": "Portugal",
+      "teamId": "011bb347-3ee9-7095-91f5-68815b372339",
+      "players": [
+        {
+          "playerId": "019a4a5d-b737-7bbe-8f00-c131aaec60e8",
+          "name": "Amadeu Cunha",
+          "position": "Center",
+          "dmi": 445931,
+          "gameShape": 7,
+          "salary": 69635,
+          "potential": 10
+        },
+        {
+          "playerId": "019af70d-ec37-7ae2-862b-f93e8134f108",
+          "name": "António Fino",
+          "position": "PointGuard",
+          "dmi": 90236,
+          "gameShape": 7,
+          "salary": 20877,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4a6e-b5e5-7912-96c9-b3fe1b82d2c7",
+          "name": "Artur Borges",
+          "position": "PointGuard",
+          "dmi": 180907,
+          "gameShape": 7,
+          "salary": 31895,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4a6a-1e37-7daa-9ced-afe5a14d989d",
+          "name": "Dino Idanha",
+          "position": "PointGuard",
+          "dmi": 81658,
+          "gameShape": 7,
+          "salary": 19829,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4a6d-7711-7c7f-a4fa-f85b75fbe0cb",
+          "name": "Dário Silvestre",
+          "position": "PointGuard",
+          "dmi": 98259,
+          "gameShape": 7,
+          "salary": 25066,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4a6c-4586-77ac-9b3a-b033dab28e11",
+          "name": "Edgar Sabrosa",
+          "position": "SmallForward",
+          "dmi": 129499,
+          "gameShape": 7,
+          "salary": 26609,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4a5d-325e-7515-ae87-34679c863d7f",
+          "name": "Elias Dourado",
+          "position": "PointGuard",
+          "dmi": 85844,
+          "gameShape": 7,
+          "salary": 20263,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4a65-1c42-7ee6-87a6-76653b3197cf",
+          "name": "Flávio Boaventura",
+          "position": "Center",
+          "dmi": 801357,
+          "gameShape": 7,
+          "salary": 131620,
+          "potential": 9
+        },
+        {
+          "playerId": "019a5657-a675-7d85-af9a-281ba6fd9297",
+          "name": "Gabriel Horta",
+          "position": "PointGuard",
+          "dmi": 110516,
+          "gameShape": 7,
+          "salary": 25131,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4a60-91dd-75bd-a7bb-280f1fe5d1fb",
+          "name": "Manuel Maria Silva",
+          "position": "PowerForward",
+          "dmi": 277692,
+          "gameShape": 7,
+          "salary": 57454,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4a65-8d2d-79fb-94a9-09d45a8e804e",
+          "name": "Maximino Chaves",
+          "position": "Center",
+          "dmi": 480166,
+          "gameShape": 7,
+          "salary": 84859,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4a5c-7f07-7aac-a4e1-e30a558d2f93",
+          "name": "Miguel Vital",
+          "position": "Center",
+          "dmi": 293389,
+          "gameShape": 7,
+          "salary": 60640,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4a62-05d4-7864-9d74-f9c8137ae875",
+          "name": "Tiago Souto",
+          "position": "PointGuard",
+          "dmi": 124554,
+          "gameShape": 7,
+          "salary": 25025,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "countryId": "RO",
+      "name": "România",
+      "teamId": "011bb347-3f14-7ec7-8537-de1f3742607f",
+      "players": []
+    },
+    {
+      "countryId": "RU",
+      "name": "Rossiya",
+      "teamId": "011bb347-3eea-7aca-9b88-81ef7a21876f",
+      "players": [
+        {
+          "playerId": "019a4ac6-1906-7fb5-b27b-470f077818bf",
+          "name": "Andrey Poskrebyshev",
+          "position": "Center",
+          "dmi": 105818,
+          "gameShape": 7,
+          "salary": 28728,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4acc-10be-7b6d-8bb5-59c9f0ec4cd6",
+          "name": "Andrey Rudak",
+          "position": "SmallForward",
+          "dmi": 97805,
+          "gameShape": 7,
+          "salary": 24029,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4007-9a64-708b-b932-fe1a8847b0dd",
+          "name": "Boris Gazarov",
+          "position": "SmallForward",
+          "dmi": 96732,
+          "gameShape": 7,
+          "salary": 20361,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4ac3-d726-72b0-bcb2-99c47676c8ce",
+          "name": "Denis Merenkov",
+          "position": "ShootingGuard",
+          "dmi": 166173,
+          "gameShape": 7,
+          "salary": 37251,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4ad2-fe3a-7a45-90ad-1857cef4fe3e",
+          "name": "Evgeny Nechkin",
+          "position": "Center",
+          "dmi": 62344,
+          "gameShape": 6,
+          "salary": 18001,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4ac6-a483-7a86-96b3-1f5278af14f4",
+          "name": "Gennady Khodorovskiy",
+          "position": "ShootingGuard",
+          "dmi": 117120,
+          "gameShape": 7,
+          "salary": 22626,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4ac7-5136-7d26-82ab-b3bf24e33812",
+          "name": "Gleb Egorov",
+          "position": "PowerForward",
+          "dmi": 224592,
+          "gameShape": 7,
+          "salary": 55056,
+          "potential": 8
+        },
+        {
+          "playerId": "019c3ff8-c387-75ca-8bdc-3d45144f1726",
+          "name": "Kirill Krasnykh",
+          "position": "SmallForward",
+          "dmi": 63766,
+          "gameShape": 7,
+          "salary": 15385,
+          "potential": 6
+        },
+        {
+          "playerId": "019c3ffd-8787-706f-8013-773492ad17d4",
+          "name": "Marat Krestin",
+          "position": "Center",
+          "dmi": 302132,
+          "gameShape": 7,
+          "salary": 61465,
+          "potential": 9
+        },
+        {
+          "playerId": "019c3ffb-8dad-7a16-8027-63cc44d0276b",
+          "name": "Marat Misyurev",
+          "position": "ShootingGuard",
+          "dmi": 81596,
+          "gameShape": 7,
+          "salary": 17926,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4ad1-b21d-785a-89fc-4ba99847d406",
+          "name": "Maxim Raskin",
+          "position": "Center",
+          "dmi": 395213,
+          "gameShape": 7,
+          "salary": 75964,
+          "potential": 8
+        },
+        {
+          "playerId": "019c3ff5-dba0-785e-8321-56048aa8e7af",
+          "name": "Moisey Tychino",
+          "position": "SmallForward",
+          "dmi": 68804,
+          "gameShape": 7,
+          "salary": 17546,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4000-2a00-74da-8884-8df6cbb7c048",
+          "name": "Naum Proskurin",
+          "position": "PointGuard",
+          "dmi": 42628,
+          "gameShape": 7,
+          "salary": 10933,
+          "potential": 10
+        },
+        {
+          "playerId": "019c400c-8610-7094-87a1-3fa460ab8d07",
+          "name": "Rinat Lipin",
+          "position": "SmallForward",
+          "dmi": 99271,
+          "gameShape": 7,
+          "salary": 21548,
+          "potential": 6
+        },
+        {
+          "playerId": "019a4ac8-96ae-7c66-a2f2-65d01b9c1578",
+          "name": "Robert Segal",
+          "position": "ShootingGuard",
+          "dmi": 124726,
+          "gameShape": 7,
+          "salary": 29295,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4acd-a5ec-74f3-b4c3-51385362787d",
+          "name": "Stanislav Erokhov",
+          "position": "Center",
+          "dmi": 521728,
+          "gameShape": 7,
+          "salary": 99381,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4acf-9ebc-7179-a835-652624bc3795",
+          "name": "Vitaly Saburin",
+          "position": "ShootingGuard",
+          "dmi": 104440,
+          "gameShape": 7,
+          "salary": 20775,
+          "potential": 8
+        }
+      ]
+    },
+    {
+      "countryId": "GE",
+      "name": "Sakartvelo",
+      "teamId": "011bb347-3f15-7613-9294-823ecd1cb60b",
+      "players": [
+        {
+          "playerId": "019c4ae4-26f8-7d0e-90ec-9af2223797bf",
+          "name": "Dato Rekhviashvili",
+          "position": "PowerForward",
+          "dmi": 57979,
+          "gameShape": 7,
+          "salary": 12201,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4add-e21d-76b5-a6ee-8561fb2ccd2a",
+          "name": "Gigi Devdariani",
+          "position": "PointGuard",
+          "dmi": 102706,
+          "gameShape": 7,
+          "salary": 21344,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4ea2-699b-734a-9fa7-7cce102fb9ca",
+          "name": "Illarion Ermolenko",
+          "position": "PointGuard",
+          "dmi": 83451,
+          "gameShape": 7,
+          "salary": 15780,
+          "potential": 6
+        },
+        {
+          "playerId": "019c4ae2-e00e-7126-8559-9bce5686073a",
+          "name": "Kartlos Akhalaia",
+          "position": "PowerForward",
+          "dmi": 79894,
+          "gameShape": 7,
+          "salary": 19614,
+          "potential": 9
+        },
+        {
+          "playerId": "019a5343-dc39-7c3d-9e2a-8319eefa76f1",
+          "name": "Valery Sologub",
+          "position": "Center",
+          "dmi": 287644,
+          "gameShape": 7,
+          "salary": 63647,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4ae2-e9f6-7e95-98a0-29671912a424",
+          "name": "Vefik Acahan",
+          "position": "PointGuard",
+          "dmi": 73412,
+          "gameShape": 7,
+          "salary": 17695,
+          "potential": 8
+        }
+      ]
+    },
+    {
+      "countryId": "CH",
+      "name": "Schweiz",
+      "teamId": "011bb347-3ef3-77a8-96eb-f3464feffbf8",
+      "players": [
+        {
+          "playerId": "019c42f3-6b2f-71bf-b6b4-36d1e50f3404",
+          "name": "Aaron Rindisbacher",
+          "position": "Center",
+          "dmi": 147601,
+          "gameShape": 7,
+          "salary": 34113,
+          "potential": 9
+        },
+        {
+          "playerId": "019c42f0-47c5-7113-93a4-74c14428482b",
+          "name": "Alois Rindlisbacher",
+          "position": "PointGuard",
+          "dmi": 166156,
+          "gameShape": 7,
+          "salary": 34908,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4eb9-c2fe-7d99-a952-37debb904028",
+          "name": "Angelo Kamer",
+          "position": "PowerForward",
+          "dmi": 62998,
+          "gameShape": 7,
+          "salary": 14251,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4cd8-4127-77d1-b3c2-fd3d474aa7d0",
+          "name": "Bertrand von Ow",
+          "position": "PointGuard",
+          "dmi": 49251,
+          "gameShape": 7,
+          "salary": 12478,
+          "potential": 10
+        },
+        {
+          "playerId": "019c42ed-f4a6-7170-8227-ee19dbdfc6e3",
+          "name": "Denis Rauschenberger",
+          "position": "Center",
+          "dmi": 203989,
+          "gameShape": 7,
+          "salary": 43857,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4cd7-dd6d-7bac-85ce-7489c2609c05",
+          "name": "Hubert Bröcking",
+          "position": "PointGuard",
+          "dmi": 75234,
+          "gameShape": 7,
+          "salary": 15792,
+          "potential": 8
+        },
+        {
+          "playerId": "019c42f3-1bd6-7e06-b7f2-7a15a87db16a",
+          "name": "Jakob Sauthier",
+          "position": "PointGuard",
+          "dmi": 69154,
+          "gameShape": 7,
+          "salary": 16156,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4cda-2abb-7393-b6e9-20ee098cd5f8",
+          "name": "Jasper Trolese",
+          "position": "PointGuard",
+          "dmi": 103174,
+          "gameShape": 7,
+          "salary": 24392,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4cdb-7a2f-755b-83cf-cc76bffd40b2",
+          "name": "Julien Verdet",
+          "position": "ShootingGuard",
+          "dmi": 64282,
+          "gameShape": 7,
+          "salary": 15071,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4f1f-b096-7bee-a2f0-59daae07d2ed",
+          "name": "Luc Morrel",
+          "position": "PointGuard",
+          "dmi": 87405,
+          "gameShape": 7,
+          "salary": 22575,
+          "potential": 9
+        },
+        {
+          "playerId": "019e3bf5-df41-7a73-990c-c04c36b7e285",
+          "name": "Michaël Lépinay",
+          "position": "PowerForward",
+          "dmi": 90673,
+          "gameShape": 7,
+          "salary": 23056,
+          "potential": 9
+        },
+        {
+          "playerId": "019c42f5-aa78-748a-8796-b199b910e804",
+          "name": "Ortlieb Zipperlen",
+          "position": "Center",
+          "dmi": 207137,
+          "gameShape": 7,
+          "salary": 38999,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4cdb-90da-71a0-aefc-591d2f88289c",
+          "name": "Philippe Lanz",
+          "position": "SmallForward",
+          "dmi": 105623,
+          "gameShape": 7,
+          "salary": 21428,
+          "potential": 8
+        },
+        {
+          "playerId": "019c42f0-2a03-7772-ae1c-2e4fbc87ab23",
+          "name": "Rolf Kist",
+          "position": "Center",
+          "dmi": 173176,
+          "gameShape": 7,
+          "salary": 38401,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4efd-37fc-76fe-bec3-5e739ffb6531",
+          "name": "Tom Kissel",
+          "position": "SmallForward",
+          "dmi": 119480,
+          "gameShape": 7,
+          "salary": 23773,
+          "potential": 9
+        },
+        {
+          "playerId": "019c42ee-1c52-7c1f-9550-afaca56efb74",
+          "name": "Werner Habenicht",
+          "position": "Center",
+          "dmi": 79637,
+          "gameShape": 7,
+          "salary": 16020,
+          "potential": 7
+        },
+        {
+          "playerId": "019c42f5-01da-7218-8244-dd9d52c21af9",
+          "name": "Wisi Neugebauer",
+          "position": "ShootingGuard",
+          "dmi": 59554,
+          "gameShape": 7,
+          "salary": 15328,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "countryId": "GB-SCT",
+      "name": "Scotland",
+      "teamId": "011bb347-3f17-7056-ae4f-27cff3d82009",
+      "players": [
+        {
+          "playerId": "01a03e89-0408-72f0-bb18-f669e9e7c014",
+          "name": "Alfred MacHarold",
+          "position": "PointGuard",
+          "dmi": 21866,
+          "gameShape": 6,
+          "salary": 6822,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4e66-ef2f-7622-8abb-c37ff8956de1",
+          "name": "Andrew Skinner",
+          "position": "Center",
+          "dmi": 161467,
+          "gameShape": 7,
+          "salary": 37440,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4f67-e0f9-7032-9cc9-b28b1b08ef98",
+          "name": "Ariel Zegarek",
+          "position": "PowerForward",
+          "dmi": 88850,
+          "gameShape": 7,
+          "salary": 18991,
+          "potential": 7
+        },
+        {
+          "playerId": "019e456a-4e87-723b-ba9f-f4c946c851c4",
+          "name": "Blair MacCraken",
+          "position": "SmallForward",
+          "dmi": 56854,
+          "gameShape": 7,
+          "salary": 11953,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4e81-2f53-76ab-a7c0-b70be9124bbe",
+          "name": "Christopher Christie",
+          "position": "SmallForward",
+          "dmi": 50191,
+          "gameShape": 7,
+          "salary": 12822,
+          "potential": 10
+        },
+        {
+          "playerId": "019e4677-99a0-744d-bf94-7cebc2eb8c97",
+          "name": "Dickie Robison",
+          "position": "Center",
+          "dmi": 125979,
+          "gameShape": 7,
+          "salary": 26807,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4f67-7fb5-78c5-8c92-04e8c3203dd9",
+          "name": "Dougal Reid",
+          "position": "PointGuard",
+          "dmi": 51275,
+          "gameShape": 7,
+          "salary": 11917,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4f68-6e73-70a9-97ac-6c123ce31cd8",
+          "name": "Gregor Lindsay",
+          "position": "PowerForward",
+          "dmi": 75413,
+          "gameShape": 7,
+          "salary": 16494,
+          "potential": 5
+        },
+        {
+          "playerId": "019a56df-1274-70e0-9ebe-1c3357df4c71",
+          "name": "Ian Skinner",
+          "position": "SmallForward",
+          "dmi": 34154,
+          "gameShape": 7,
+          "salary": 8242,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4e5e-178f-7265-9163-5dfd9fd723e7",
+          "name": "Jon Joyce",
+          "position": "PointGuard",
+          "dmi": 46232,
+          "gameShape": 7,
+          "salary": 11015,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4eac-f281-791e-9aa0-a8e11ca84782",
+          "name": "Joseph Withers",
+          "position": "Center",
+          "dmi": 36575,
+          "gameShape": 7,
+          "salary": 7452,
+          "potential": 6
+        },
+        {
+          "playerId": "019a566c-2d38-76ec-9f45-ec89b58f5478",
+          "name": "Kieran MacNuir",
+          "position": "PointGuard",
+          "dmi": 74129,
+          "gameShape": 7,
+          "salary": 15685,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4e86-8109-77e3-899e-b41e548ceee0",
+          "name": "Ronnie FitzGerald",
+          "position": "Center",
+          "dmi": 71314,
+          "gameShape": 7,
+          "salary": 17683,
+          "potential": 8
+        },
+        {
+          "playerId": "01a03fac-cf12-7d06-803f-7cd3606297fd",
+          "name": "Rory Cameron",
+          "position": "ShootingGuard",
+          "dmi": 27467,
+          "gameShape": 7,
+          "salary": 8244,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "countryId": "AL",
+      "name": "Shqipëria",
+      "teamId": "011bb347-3f26-72ab-b0df-8f7401bed211",
+      "players": [
+        {
+          "playerId": "019e467b-83e2-7b34-939f-5002b5caf535",
+          "name": "Arsim Krashi",
+          "position": "PointGuard",
+          "dmi": 59175,
+          "gameShape": 7,
+          "salary": 12900,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4e5f-4432-7132-b552-1e7f6e3ddf97",
+          "name": "Besart Lezha",
+          "position": "PointGuard",
+          "dmi": 48586,
+          "gameShape": 7,
+          "salary": 12275,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4ea6-2493-795d-b00c-7cb50c96d9b1",
+          "name": "Bilind Bixhaj",
+          "position": "PointGuard",
+          "dmi": 91103,
+          "gameShape": 7,
+          "salary": 20476,
+          "potential": 8
+        },
+        {
+          "playerId": "019e467e-ddac-7691-a613-fa003461690f",
+          "name": "Bleart Boletini",
+          "position": "PointGuard",
+          "dmi": 54105,
+          "gameShape": 7,
+          "salary": 13271,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4f69-1f4b-7710-a616-505a3e1cb0a8",
+          "name": "Devoll Zeka",
+          "position": "SmallForward",
+          "dmi": 41004,
+          "gameShape": 7,
+          "salary": 10072,
+          "potential": 6
+        },
+        {
+          "playerId": "019c4ef2-f5d3-7203-a3a7-7f5b90a1c82a",
+          "name": "Drin Beka",
+          "position": "PowerForward",
+          "dmi": 44115,
+          "gameShape": 7,
+          "salary": 9618,
+          "potential": 5
+        },
+        {
+          "playerId": "019c4eb4-b805-79f3-b742-125a56499442",
+          "name": "Dritor Zelj",
+          "position": "Center",
+          "dmi": 53425,
+          "gameShape": 7,
+          "salary": 11339,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4e54-019c-79b6-9252-f7229e59e827",
+          "name": "Edi Abdurrahmani",
+          "position": "PointGuard",
+          "dmi": 66473,
+          "gameShape": 7,
+          "salary": 14689,
+          "potential": 7
+        },
+        {
+          "playerId": "019e45c9-a4dd-7682-bc48-5ec1aca63bb2",
+          "name": "Edin Cana",
+          "position": "PowerForward",
+          "dmi": 37005,
+          "gameShape": 7,
+          "salary": 8996,
+          "potential": 5
+        },
+        {
+          "playerId": "019a56ba-69c0-7c52-814d-b2d2db1bee65",
+          "name": "Gazmadh Bregu",
+          "position": "Center",
+          "dmi": 138850,
+          "gameShape": 7,
+          "salary": 32413,
+          "potential": 8
+        },
+        {
+          "playerId": "019a56b9-ca43-72b3-a0c9-f90ff189fa6c",
+          "name": "Marnesh Dushku",
+          "position": "PointGuard",
+          "dmi": 45001,
+          "gameShape": 7,
+          "salary": 10898,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4ebc-decd-7b12-b85e-10b187fa6233",
+          "name": "Pashk Mujedini",
+          "position": "PointGuard",
+          "dmi": 53242,
+          "gameShape": 7,
+          "salary": 13298,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4e50-848a-7c7f-9779-4e2a1cfab7ea",
+          "name": "Perinjak Hila",
+          "position": "Center",
+          "dmi": 66933,
+          "gameShape": 7,
+          "salary": 13467,
+          "potential": 8
+        },
+        {
+          "playerId": "019a56de-a554-76ae-94bc-77e4df09dc0c",
+          "name": "Ramadan Zeka",
+          "position": "PointGuard",
+          "dmi": 84807,
+          "gameShape": 7,
+          "salary": 21762,
+          "potential": 9
+        },
+        {
+          "playerId": "01a03f17-3e95-75f2-a805-a09d8f9dc57e",
+          "name": "Valmir Ligoreci",
+          "position": "SmallForward",
+          "dmi": 38685,
+          "gameShape": 7,
+          "salary": 12322,
+          "potential": 5
+        },
+        {
+          "playerId": "019c4f68-a380-7bfd-a073-51900b24267e",
+          "name": "Zani Shala",
+          "position": "PowerForward",
+          "dmi": 37333,
+          "gameShape": 7,
+          "salary": 8358,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "countryId": "SI",
+      "name": "Slovenija",
+      "teamId": "011bb347-3f19-783e-9e92-a785593911bd",
+      "players": [
+        {
+          "playerId": "019a538d-32f5-782b-b235-f09dc51b707f",
+          "name": "Bor Grilanc",
+          "position": "PointGuard",
+          "dmi": 58430,
+          "gameShape": 5,
+          "salary": 19383,
+          "potential": 6
+        },
+        {
+          "playerId": "019c4b2f-4d67-745e-97e0-6eb974c170d5",
+          "name": "Borja Rosić",
+          "position": "Center",
+          "dmi": 166620,
+          "gameShape": 7,
+          "salary": 37685,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4b38-f01f-7c28-8a74-da8a281cffbd",
+          "name": "Brane Vinkšelj",
+          "position": "Center",
+          "dmi": 178512,
+          "gameShape": 5,
+          "salary": 48722,
+          "potential": 9
+        },
+        {
+          "playerId": "019a538d-6cda-74e3-b23b-20f939be3827",
+          "name": "Darjan Aljančič",
+          "position": "Center",
+          "dmi": 154942,
+          "gameShape": 7,
+          "salary": 37577,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4b34-23b7-72a9-a6f0-93dc558ac451",
+          "name": "Dore Lovreković",
+          "position": "Center",
+          "dmi": 486785,
+          "gameShape": 7,
+          "salary": 95096,
+          "potential": 9
+        },
+        {
+          "playerId": "019a5387-93d6-7642-ad85-04d4d65a8a9f",
+          "name": "Emil Dolenjšak",
+          "position": "PointGuard",
+          "dmi": 133605,
+          "gameShape": 7,
+          "salary": 29919,
+          "potential": 6
+        },
+        {
+          "playerId": "019a5396-1db3-77d1-845e-e4b76b0a8fdf",
+          "name": "Hasim Vidovič",
+          "position": "PointGuard",
+          "dmi": 152208,
+          "gameShape": 7,
+          "salary": 28933,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4b2e-c2b6-77ef-9814-b8f0e03fad93",
+          "name": "Mark Košmrl",
+          "position": "Center",
+          "dmi": 256406,
+          "gameShape": 7,
+          "salary": 56277,
+          "potential": 8
+        },
+        {
+          "playerId": "019a5388-4186-7b10-9d75-7b60dfe24ec5",
+          "name": "Metod Glebov",
+          "position": "SmallForward",
+          "dmi": 161134,
+          "gameShape": 7,
+          "salary": 33038,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4b43-8a81-7027-8ba8-557c76cc1d7e",
+          "name": "Nik Neuhold",
+          "position": "Center",
+          "dmi": 154752,
+          "gameShape": 6,
+          "salary": 31852,
+          "potential": 7
+        },
+        {
+          "playerId": "019a5387-aca6-7f2b-8430-0f9b0c3e388a",
+          "name": "Nikolaj Gorinšek",
+          "position": "SmallForward",
+          "dmi": 61511,
+          "gameShape": 7,
+          "salary": 14965,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4b2f-9ca7-790a-9810-6254acef602d",
+          "name": "Tezej Tomaš",
+          "position": "Center",
+          "dmi": 324201,
+          "gameShape": 7,
+          "salary": 65716,
+          "potential": 10
+        }
+      ]
+    },
+    {
+      "countryId": "SK",
+      "name": "Slovensko",
+      "teamId": "011bb347-3f1a-7cc1-b140-64a1ee6680bd",
+      "players": [
+        {
+          "playerId": "019c4bcc-5fe8-7555-971e-264ddc13bac8",
+          "name": "Amos Voznák",
+          "position": "PointGuard",
+          "dmi": 138946,
+          "gameShape": 7,
+          "salary": 30554,
+          "potential": 8
+        },
+        {
+          "playerId": "019a5413-88f9-7a86-9d15-20910b9a94a7",
+          "name": "Andrej Cekan",
+          "position": "PowerForward",
+          "dmi": 62373,
+          "gameShape": 7,
+          "salary": 14737,
+          "potential": 8
+        },
+        {
+          "playerId": "019a5411-b9cf-7ffe-bee7-dc23a81e6046",
+          "name": "Barnabáš Mičovský",
+          "position": "SmallForward",
+          "dmi": 40442,
+          "gameShape": 7,
+          "salary": 11990,
+          "potential": 9
+        },
+        {
+          "playerId": "019a540f-97ef-7cb9-a947-2134ddd1c42b",
+          "name": "Jaroslav Hatvaník",
+          "position": "PointGuard",
+          "dmi": 183608,
+          "gameShape": 7,
+          "salary": 33003,
+          "potential": 6
+        },
+        {
+          "playerId": "019a5410-eb0a-7847-82b4-f98a5e2f805d",
+          "name": "Julián Maják",
+          "position": "Center",
+          "dmi": 250117,
+          "gameShape": 7,
+          "salary": 49395,
+          "potential": 9
+        },
+        {
+          "playerId": "019a5415-3f54-7755-98f8-e7295874dfbc",
+          "name": "Kamil Krajčír",
+          "position": "SmallForward",
+          "dmi": 135659,
+          "gameShape": 7,
+          "salary": 27926,
+          "potential": 10
+        },
+        {
+          "playerId": "019a56a1-f3b0-7936-ba6c-cb57c61f3121",
+          "name": "Kamil Zaťko",
+          "position": "Center",
+          "dmi": 234732,
+          "gameShape": 7,
+          "salary": 48395,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4bcc-1a90-7de6-81e0-63d61562adfd",
+          "name": "Lukáš Vohnút",
+          "position": "Center",
+          "dmi": 164138,
+          "gameShape": 7,
+          "salary": 39424,
+          "potential": 8
+        },
+        {
+          "playerId": "019a540e-1b7a-71c1-9622-8f262de19057",
+          "name": "Marián Kalinák",
+          "position": "Center",
+          "dmi": 84789,
+          "gameShape": 7,
+          "salary": 22843,
+          "potential": 9
+        },
+        {
+          "playerId": "019a540d-4470-7e8f-bb6e-7d02c331c33e",
+          "name": "Martin Sklenák",
+          "position": "SmallForward",
+          "dmi": 103215,
+          "gameShape": 7,
+          "salary": 22399,
+          "potential": 9
+        },
+        {
+          "playerId": "019a540c-e130-73cc-aa87-b4bebd352aaf",
+          "name": "Peter Smolárik",
+          "position": "Center",
+          "dmi": 334907,
+          "gameShape": 7,
+          "salary": 68211,
+          "potential": 9
+        },
+        {
+          "playerId": "019a540e-4d1a-7195-938e-2cafc50001ab",
+          "name": "Radoslav Tokár",
+          "position": "Center",
+          "dmi": 271955,
+          "gameShape": 7,
+          "salary": 56773,
+          "potential": 9
+        },
+        {
+          "playerId": "019a5683-d9d2-7696-b7c8-f2b61d4f6753",
+          "name": "Viktor Volanský",
+          "position": "PointGuard",
+          "dmi": 123288,
+          "gameShape": 7,
+          "salary": 25988,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4bd0-0d07-7829-8247-e378d814f6fa",
+          "name": "Vladimír Iskra",
+          "position": "ShootingGuard",
+          "dmi": 146326,
+          "gameShape": 7,
+          "salary": 31878,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4bd7-a2b3-7437-9470-5133102bf328",
+          "name": "Šimon Borbeľ",
+          "position": "ShootingGuard",
+          "dmi": 64423,
+          "gameShape": 7,
+          "salary": 14445,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "countryId": "RS",
+      "name": "Srbija",
+      "teamId": "011bb347-3ef4-7a0c-b614-5a76f1a2294c",
+      "players": [
+        {
+          "playerId": "019a4cf0-7a7b-78a2-a5cd-ca901ef48ea7",
+          "name": "Darko Popović",
+          "position": "Center",
+          "dmi": 855630,
+          "gameShape": 7,
+          "salary": 132943,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4318-7576-7210-92d0-22f3d961f711",
+          "name": "Dragan Lambulić",
+          "position": "PowerForward",
+          "dmi": 133307,
+          "gameShape": 7,
+          "salary": 26446,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4cf3-e560-720f-9ca6-52231c1b66f2",
+          "name": "Dragan Ljubanović",
+          "position": "PointGuard",
+          "dmi": 95048,
+          "gameShape": 7,
+          "salary": 19334,
+          "potential": 10
+        },
+        {
+          "playerId": "019c431b-de4e-7a34-a8b8-af4dc123a62e",
+          "name": "Dragan Perić",
+          "position": "Center",
+          "dmi": 207728,
+          "gameShape": 7,
+          "salary": 48130,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4cec-1acc-7da0-8c2a-82fcfb072986",
+          "name": "Lazar Vlastimirović",
+          "position": "Center",
+          "dmi": 432494,
+          "gameShape": 7,
+          "salary": 89095,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4316-7b9b-762f-ae93-6c5cbbe349cc",
+          "name": "Milan Koturović",
+          "position": "PowerForward",
+          "dmi": 74897,
+          "gameShape": 7,
+          "salary": 17512,
+          "potential": 8
+        },
+        {
+          "playerId": "01a03474-6288-7135-983d-c65cbb36bb7b",
+          "name": "Márton Angyal",
+          "position": "PowerForward",
+          "dmi": 38013,
+          "gameShape": 7,
+          "salary": 11208,
+          "potential": 8
+        },
+        {
+          "playerId": "019c432a-2a4e-77ba-9835-58049febfca6",
+          "name": "Nikola Pokrajac",
+          "position": "PointGuard",
+          "dmi": 154024,
+          "gameShape": 7,
+          "salary": 34869,
+          "potential": 10
+        },
+        {
+          "playerId": "019c431e-6cf0-7055-a7eb-4371cf15cd3f",
+          "name": "Slobodan Kojadinović",
+          "position": "PowerForward",
+          "dmi": 98591,
+          "gameShape": 7,
+          "salary": 21523,
+          "potential": 11
+        },
+        {
+          "playerId": "019c432f-96ec-7002-bebf-0e32a4a8381f",
+          "name": "Vuk Kravić",
+          "position": "PointGuard",
+          "dmi": 95261,
+          "gameShape": 7,
+          "salary": 19901,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4cf8-c3fc-7c88-8e6b-ab96eba87c19",
+          "name": "Zoran Kitić",
+          "position": "Center",
+          "dmi": 268689,
+          "gameShape": 7,
+          "salary": 57478,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4332-ffc4-79ec-8333-fa10bb3df6e2",
+          "name": "Zoran Šestić",
+          "position": "SmallForward",
+          "dmi": 98651,
+          "gameShape": 7,
+          "salary": 21783,
+          "potential": 8
+        }
+      ]
+    },
+    {
+      "countryId": "FI",
+      "name": "Suomi",
+      "teamId": "011bb347-3f1c-7dc3-832f-a90941dab5b2",
+      "players": [
+        {
+          "playerId": "019a543a-901c-794d-94ae-ff4c514110d5",
+          "name": "Andrian Khitrin",
+          "position": "SmallForward",
+          "dmi": 74972,
+          "gameShape": 7,
+          "salary": 17435,
+          "potential": 9
+        },
+        {
+          "playerId": "019a543f-f555-78ad-94e8-da0f96d129cc",
+          "name": "Antero Kantonen",
+          "position": "SmallForward",
+          "dmi": 111908,
+          "gameShape": 7,
+          "salary": 26550,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4bfa-b1ff-7c13-b831-daae161c761a",
+          "name": "Antti Hukkanen",
+          "position": "PointGuard",
+          "dmi": 94222,
+          "gameShape": 7,
+          "salary": 19690,
+          "potential": 9
+        },
+        {
+          "playerId": "019a542f-5a24-77ab-9292-b87adc4cf14f",
+          "name": "Antti Jäkälä",
+          "position": "Center",
+          "dmi": 134534,
+          "gameShape": 7,
+          "salary": 28476,
+          "potential": 7
+        },
+        {
+          "playerId": "019a542d-8af9-7eef-8910-a7000e574b65",
+          "name": "George Jokisalo",
+          "position": "Center",
+          "dmi": 447512,
+          "gameShape": 7,
+          "salary": 77444,
+          "potential": 9
+        },
+        {
+          "playerId": "019a5430-c60e-7664-9ff4-3a5eeab493f2",
+          "name": "Heikki Sarahete",
+          "position": "Center",
+          "dmi": 432893,
+          "gameShape": 7,
+          "salary": 76339,
+          "potential": 10
+        },
+        {
+          "playerId": "019a5438-65f7-729c-ab8a-ebdd0661bac8",
+          "name": "Jussi Tossavainen",
+          "position": "SmallForward",
+          "dmi": 173371,
+          "gameShape": 7,
+          "salary": 34352,
+          "potential": 9
+        },
+        {
+          "playerId": "019a5431-3193-7d9e-8695-728d61703f11",
+          "name": "Jyrki Haapamäki",
+          "position": "SmallForward",
+          "dmi": 97421,
+          "gameShape": 7,
+          "salary": 19642,
+          "potential": 7
+        },
+        {
+          "playerId": "019a542d-2fff-7f22-8a1a-4da8d26eb660",
+          "name": "Mika Poutia",
+          "position": "SmallForward",
+          "dmi": 103394,
+          "gameShape": 7,
+          "salary": 21890,
+          "potential": 6
+        },
+        {
+          "playerId": "019a542d-619f-7e3d-91dc-e46ddc0fde72",
+          "name": "Mikko Rautavuori",
+          "position": "Center",
+          "dmi": 359782,
+          "gameShape": 7,
+          "salary": 67642,
+          "potential": 8
+        },
+        {
+          "playerId": "019a5430-e723-7b9a-9891-ea3c9cd623ae",
+          "name": "Olli Kukkola",
+          "position": "SmallForward",
+          "dmi": 86392,
+          "gameShape": 7,
+          "salary": 18400,
+          "potential": 8
+        },
+        {
+          "playerId": "019a543c-a9b6-7249-b970-93d7c1c6354f",
+          "name": "Olli Mennander",
+          "position": "ShootingGuard",
+          "dmi": 72188,
+          "gameShape": 7,
+          "salary": 16019,
+          "potential": 8
+        },
+        {
+          "playerId": "019a5433-e853-7011-9bf8-c8d17ce0a3de",
+          "name": "Peter Carlsson",
+          "position": "Center",
+          "dmi": 235096,
+          "gameShape": 7,
+          "salary": 43400,
+          "potential": 9
+        },
+        {
+          "playerId": "019a543a-d247-7cd6-9b2e-11c2324549ca",
+          "name": "Petri Knuts",
+          "position": "SmallForward",
+          "dmi": 57966,
+          "gameShape": 7,
+          "salary": 12458,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4c08-e5af-7870-9d2d-3927021fb1de",
+          "name": "Tommy Ingelen",
+          "position": "Center",
+          "dmi": 128889,
+          "gameShape": 7,
+          "salary": 31179,
+          "potential": 7
+        },
+        {
+          "playerId": "019a5431-b5e8-7b32-82e6-f161e968f3af",
+          "name": "Tuomas Käyhty",
+          "position": "PointGuard",
+          "dmi": 91926,
+          "gameShape": 7,
+          "salary": 20404,
+          "potential": 10
+        }
+      ]
+    },
+    {
+      "countryId": "SE",
+      "name": "Sverige",
+      "teamId": "011bb347-3ee0-7868-822d-ec45dc2ee6a0",
+      "players": [
+        {
+          "playerId": "019bffc8-d01f-70d8-9a70-11b6c19ea2b7",
+          "name": "Anders Mathiasson",
+          "position": "Center",
+          "dmi": 44676,
+          "gameShape": 7,
+          "salary": 11271,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4e69-f94e-7217-be49-f1c16bc8bfa3",
+          "name": "Anton Morgansson",
+          "position": "Center",
+          "dmi": 96922,
+          "gameShape": 7,
+          "salary": 22696,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4e55-f0c7-7b00-813b-7b4377bac95b",
+          "name": "Bertil Olsson",
+          "position": "PointGuard",
+          "dmi": 34391,
+          "gameShape": 7,
+          "salary": 8447,
+          "potential": 7
+        },
+        {
+          "playerId": "019bffbc-769f-7f5d-8aba-fb252343d4c0",
+          "name": "Ismail Abdel",
+          "position": "Center",
+          "dmi": 62809,
+          "gameShape": 7,
+          "salary": 15060,
+          "potential": 7
+        },
+        {
+          "playerId": "019a230d-4bbd-7ee0-ac8c-7972d1845c5a",
+          "name": "Jaakko Jolkkonen",
+          "position": "SmallForward",
+          "dmi": 98840,
+          "gameShape": 7,
+          "salary": 22326,
+          "potential": 9
+        },
+        {
+          "playerId": "019c84fe-ea90-7671-8609-b72f5f6777f8",
+          "name": "Joakim Nissell",
+          "position": "PointGuard",
+          "dmi": 53658,
+          "gameShape": 7,
+          "salary": 13719,
+          "potential": 6
+        },
+        {
+          "playerId": "019a232e-583b-7297-b0b5-5f91c4eba8be",
+          "name": "Johan Oskarsson",
+          "position": "Center",
+          "dmi": 104599,
+          "gameShape": 7,
+          "salary": 22462,
+          "potential": 8
+        },
+        {
+          "playerId": "019c0007-a28d-750c-9ae2-01020631d1f2",
+          "name": "Jonas Beckblad",
+          "position": "PointGuard",
+          "dmi": 61454,
+          "gameShape": 7,
+          "salary": 15129,
+          "potential": 10
+        },
+        {
+          "playerId": "019bff7f-ca04-7359-97a3-12be5c4940df",
+          "name": "Klas Alexandersson",
+          "position": "PointGuard",
+          "dmi": 46736,
+          "gameShape": 7,
+          "salary": 12089,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4ecc-dcc7-7ad4-b2e1-068b618dd602",
+          "name": "Mats Hammarerberg",
+          "position": "PointGuard",
+          "dmi": 43883,
+          "gameShape": 7,
+          "salary": 10963,
+          "potential": 8
+        },
+        {
+          "playerId": "019bffdd-c0ef-7f51-a899-c74869a2310e",
+          "name": "Mikael Persson",
+          "position": "Center",
+          "dmi": 171750,
+          "gameShape": 7,
+          "salary": 34184,
+          "potential": 9
+        },
+        {
+          "playerId": "019bffa3-c39d-716e-9b98-856ead4aa9ca",
+          "name": "Olov Månsson",
+          "position": "ShootingGuard",
+          "dmi": 33611,
+          "gameShape": 7,
+          "salary": 7539,
+          "potential": 8
+        },
+        {
+          "playerId": "019bffa6-72e5-7b87-935b-4bc4b5936acb",
+          "name": "Patrick Åkermo",
+          "position": "Center",
+          "dmi": 52387,
+          "gameShape": 7,
+          "salary": 15786,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4eac-7f8e-7b61-86c8-846abae9f8cd",
+          "name": "Patrik Molén",
+          "position": "PointGuard",
+          "dmi": 47474,
+          "gameShape": 7,
+          "salary": 9936,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4e86-c7c6-7226-aeed-548b625ce2c9",
+          "name": "Thomas Skogwald",
+          "position": "PointGuard",
+          "dmi": 43256,
+          "gameShape": 7,
+          "salary": 10175,
+          "potential": 8
+        },
+        {
+          "playerId": "019bffe2-960b-7dcb-98b0-e27a3c7026ef",
+          "name": "Urban Roding",
+          "position": "Center",
+          "dmi": 103213,
+          "gameShape": 7,
+          "salary": 20630,
+          "potential": 9
+        },
+        {
+          "playerId": "019bfff8-99c4-7cc7-bfb8-ddb5435c600c",
+          "name": "Yiannis Aggelakakis",
+          "position": "Center",
+          "dmi": 106594,
+          "gameShape": 7,
+          "salary": 24157,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "countryId": "TW",
+      "name": "Taiwan",
+      "teamId": "011bb347-3f1d-7b21-99fa-d3bcd36bbe20",
+      "players": [
+        {
+          "playerId": "019a54be-cc86-74ad-9606-6660b0fc6771",
+          "name": "Bian Kaiyan",
+          "position": "Center",
+          "dmi": 148628,
+          "gameShape": 7,
+          "salary": 33206,
+          "potential": 8
+        },
+        {
+          "playerId": "019a54be-a32c-730e-8fda-bab14ef3d3a5",
+          "name": "Chen Lai Hong",
+          "position": "SmallForward",
+          "dmi": 101947,
+          "gameShape": 7,
+          "salary": 20251,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4c9a-0cfc-749f-8d5e-2fc6b7d9ebc1",
+          "name": "Chen Licheng",
+          "position": "PointGuard",
+          "dmi": 35282,
+          "gameShape": 7,
+          "salary": 7862,
+          "potential": 10
+        },
+        {
+          "playerId": "019a54b8-565d-7dd2-9daa-2dc83cb799c0",
+          "name": "Dai Jin Soon",
+          "position": "Center",
+          "dmi": 163572,
+          "gameShape": 7,
+          "salary": 35170,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4efb-bbc4-7c1e-a92f-88b5cae6022a",
+          "name": "Ding Kien Anh",
+          "position": "Center",
+          "dmi": 207741,
+          "gameShape": 7,
+          "salary": 41012,
+          "potential": 7
+        },
+        {
+          "playerId": "019a54b9-77d7-7bc9-89bb-3b5f7c246d55",
+          "name": "Fang Yiming",
+          "position": "Center",
+          "dmi": 178004,
+          "gameShape": 7,
+          "salary": 40726,
+          "potential": 10
+        },
+        {
+          "playerId": "019a54b9-2522-7932-8d97-19021f7ad751",
+          "name": "Han Yok Lee",
+          "position": "PointGuard",
+          "dmi": 52248,
+          "gameShape": 7,
+          "salary": 12678,
+          "potential": 7
+        },
+        {
+          "playerId": "019c4c99-7863-7c48-aaef-f28ae28b16ff",
+          "name": "He Chun Ho",
+          "position": "SmallForward",
+          "dmi": 103736,
+          "gameShape": 7,
+          "salary": 21561,
+          "potential": 9
+        },
+        {
+          "playerId": "019a54b5-6dfe-790b-8d36-41fb82034c18",
+          "name": "Lai Wei Nyen",
+          "position": "PointGuard",
+          "dmi": 96881,
+          "gameShape": 7,
+          "salary": 19496,
+          "potential": 10
+        },
+        {
+          "playerId": "019a54b2-4bb9-717c-ac8f-a89df658ba14",
+          "name": "Li Sze Yuen",
+          "position": "Center",
+          "dmi": 254692,
+          "gameShape": 7,
+          "salary": 58910,
+          "potential": 8
+        },
+        {
+          "playerId": "019a54b6-e22d-7468-90a5-cd3e6104a5d4",
+          "name": "Liao Ling Hu",
+          "position": "SmallForward",
+          "dmi": 200522,
+          "gameShape": 7,
+          "salary": 38988,
+          "potential": 9
+        },
+        {
+          "playerId": "019a54b9-1497-76d9-be3b-3c86c07c801d",
+          "name": "Ouyang Tu An",
+          "position": "Center",
+          "dmi": 131736,
+          "gameShape": 7,
+          "salary": 27258,
+          "potential": 8
+        },
+        {
+          "playerId": "019a54b4-6553-7e8a-ab9b-a3d5422910b3",
+          "name": "Shao Shang Kuan",
+          "position": "PointGuard",
+          "dmi": 193490,
+          "gameShape": 7,
+          "salary": 40217,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4c95-5464-7328-a88e-5bc6e6932a37",
+          "name": "Tan Yew Pong",
+          "position": "PowerForward",
+          "dmi": 171202,
+          "gameShape": 7,
+          "salary": 31650,
+          "potential": 9
+        },
+        {
+          "playerId": "019a56bf-b99c-744b-a441-9c0a05645768",
+          "name": "Wang Sing Leong",
+          "position": "PowerForward",
+          "dmi": 133257,
+          "gameShape": 7,
+          "salary": 27719,
+          "potential": 8
+        },
+        {
+          "playerId": "019a54b5-f253-784a-80e0-706b23d4936c",
+          "name": "Yun Yong",
+          "position": "Center",
+          "dmi": 57464,
+          "gameShape": 7,
+          "salary": 12815,
+          "potential": 8
+        }
+      ]
+    },
+    {
+      "countryId": "TR",
+      "name": "Türkiye",
+      "teamId": "011bb347-3edd-7a9b-87b1-27916711fabd",
+      "players": [
+        {
+          "playerId": "019bdf24-6a02-737b-aefd-bb0fc9323ff3",
+          "name": "Ata Adni",
+          "position": "PointGuard",
+          "dmi": 92843,
+          "gameShape": 7,
+          "salary": 24327,
+          "potential": 8
+        },
+        {
+          "playerId": "019a0042-76bb-77cc-97cb-15115278a240",
+          "name": "Bayram Saglamer",
+          "position": "Center",
+          "dmi": 284230,
+          "gameShape": 7,
+          "salary": 64943,
+          "potential": 10
+        },
+        {
+          "playerId": "019a009b-1401-73cb-a709-8f19c58ce656",
+          "name": "Bünyamin Özata",
+          "position": "PointGuard",
+          "dmi": 93600,
+          "gameShape": 7,
+          "salary": 20317,
+          "potential": 9
+        },
+        {
+          "playerId": "019a018a-68d7-7c52-842b-ab7192ff5529",
+          "name": "Gani Sarizambak",
+          "position": "PointGuard",
+          "dmi": 125253,
+          "gameShape": 7,
+          "salary": 22282,
+          "potential": 9
+        },
+        {
+          "playerId": "019e1c7f-eef7-774f-ad51-46a9a36fc0c4",
+          "name": "Haktan Serener",
+          "position": "Center",
+          "dmi": 42333,
+          "gameShape": 7,
+          "salary": 8491,
+          "potential": 9
+        },
+        {
+          "playerId": "019be0c8-4d1f-787c-aadc-2f5b6ccc6eb2",
+          "name": "Halil Ibrahim Çevik",
+          "position": "ShootingGuard",
+          "dmi": 111966,
+          "gameShape": 7,
+          "salary": 25705,
+          "potential": 6
+        },
+        {
+          "playerId": "019bdf95-2be8-7faf-ac16-fe656c4e8d3e",
+          "name": "Hasan Gümbürt",
+          "position": "Center",
+          "dmi": 159885,
+          "gameShape": 7,
+          "salary": 29403,
+          "potential": 10
+        },
+        {
+          "playerId": "019a00ec-10dc-7403-bb21-69041cab2eff",
+          "name": "Kadim Muhtar",
+          "position": "PointGuard",
+          "dmi": 45875,
+          "gameShape": 7,
+          "salary": 10471,
+          "potential": 7
+        },
+        {
+          "playerId": "019a0125-7281-7379-9e92-ed81d87bb3d6",
+          "name": "Kerim Algim",
+          "position": "PointGuard",
+          "dmi": 95689,
+          "gameShape": 7,
+          "salary": 20780,
+          "potential": 9
+        },
+        {
+          "playerId": "019a0031-080d-7469-93f7-351f82fb240e",
+          "name": "Oguzhan Beder",
+          "position": "PointGuard",
+          "dmi": 104158,
+          "gameShape": 7,
+          "salary": 23456,
+          "potential": 7
+        },
+        {
+          "playerId": "019e1b97-5cb9-7402-92be-a9645b6ff248",
+          "name": "Rüzgar Deniz",
+          "position": "PointGuard",
+          "dmi": 34765,
+          "gameShape": 7,
+          "salary": 9230,
+          "potential": 9
+        },
+        {
+          "playerId": "019be037-dd47-735a-bcc2-7ee7c04861eb",
+          "name": "Serif Kubat",
+          "position": "Center",
+          "dmi": 158692,
+          "gameShape": 7,
+          "salary": 37022,
+          "potential": 9
+        },
+        {
+          "playerId": "019a56cf-4474-74d2-87ef-a497db38e397",
+          "name": "Talat Rençber",
+          "position": "SmallForward",
+          "dmi": 99042,
+          "gameShape": 7,
+          "salary": 22461,
+          "potential": 9
+        },
+        {
+          "playerId": "019bdff1-8674-743b-8486-ed07a801d152",
+          "name": "Teoman Mümtaz",
+          "position": "Center",
+          "dmi": 172754,
+          "gameShape": 7,
+          "salary": 41093,
+          "potential": 9
+        },
+        {
+          "playerId": "019be0b4-f8ae-7028-a817-8ac0ba02eb7b",
+          "name": "Tunç Okergin",
+          "position": "Center",
+          "dmi": 271513,
+          "gameShape": 7,
+          "salary": 49802,
+          "potential": 9
+        },
+        {
+          "playerId": "019be10a-584b-7b7f-8f24-84ca13da1e7e",
+          "name": "Önder Agirtas",
+          "position": "PointGuard",
+          "dmi": 122271,
+          "gameShape": 7,
+          "salary": 25214,
+          "potential": 10
+        }
+      ]
+    },
+    {
+      "countryId": "UA",
+      "name": "Ukraina",
+      "teamId": "011bb347-3ef8-73df-a659-a79fff1a73ad",
+      "players": [
+        {
+          "playerId": "019c43e0-3a44-7d31-a95f-1b733c30732e",
+          "name": "Andriy Bashlay",
+          "position": "Center",
+          "dmi": 129985,
+          "gameShape": 7,
+          "salary": 28345,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4d4a-33dd-787a-8fe3-47eb95b438cc",
+          "name": "Dmytro Sharov",
+          "position": "PointGuard",
+          "dmi": 79494,
+          "gameShape": 7,
+          "salary": 18592,
+          "potential": 7
+        },
+        {
+          "playerId": "019c43e7-8ce7-709a-a12b-0cb0eda70864",
+          "name": "Dumitru Sutula",
+          "position": "PowerForward",
+          "dmi": 62723,
+          "gameShape": 7,
+          "salary": 14824,
+          "potential": 10
+        },
+        {
+          "playerId": "019a5691-2178-740a-8804-30ece08bccc2",
+          "name": "Klim Oshipko",
+          "position": "PointGuard",
+          "dmi": 74868,
+          "gameShape": 7,
+          "salary": 17235,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4d47-b029-79fe-b8d6-fe62047638b0",
+          "name": "Leonid Novoselskiy",
+          "position": "SmallForward",
+          "dmi": 98304,
+          "gameShape": 7,
+          "salary": 21803,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4d48-064a-704a-8825-e06de23dd664",
+          "name": "Olexiy Shukhovtsev",
+          "position": "PointGuard",
+          "dmi": 60137,
+          "gameShape": 7,
+          "salary": 15767,
+          "potential": 9
+        },
+        {
+          "playerId": "019c43e3-0e55-7638-8546-2cd1651fb6d8",
+          "name": "Olexiy Sviderskiy",
+          "position": "Center",
+          "dmi": 55352,
+          "gameShape": 7,
+          "salary": 14214,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4d49-9e46-7943-95e8-51b8384e9168",
+          "name": "Piotra Zian'ko",
+          "position": "PointGuard",
+          "dmi": 83114,
+          "gameShape": 7,
+          "salary": 17765,
+          "potential": 9
+        },
+        {
+          "playerId": "019c43e7-d255-7520-9b86-1a8d75d1cc52",
+          "name": "Radomyr Kopzyuh",
+          "position": "PointGuard",
+          "dmi": 74429,
+          "gameShape": 7,
+          "salary": 18931,
+          "potential": 7
+        },
+        {
+          "playerId": "019c43e3-855b-7b11-82fe-00e91e2f32f7",
+          "name": "Roman Bovdur",
+          "position": "SmallForward",
+          "dmi": 124945,
+          "gameShape": 7,
+          "salary": 24681,
+          "potential": 7
+        },
+        {
+          "playerId": "019a4d47-9e07-7c19-a093-45d8cd16c854",
+          "name": "Shmavon Karapetyan",
+          "position": "Center",
+          "dmi": 145060,
+          "gameShape": 7,
+          "salary": 26968,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4d47-b93a-79cf-b86b-9fdb8e3a3698",
+          "name": "Stepan Kornishov",
+          "position": "SmallForward",
+          "dmi": 58037,
+          "gameShape": 7,
+          "salary": 14436,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4d4d-8390-7cc1-9364-361f0775725e",
+          "name": "Vasyl Zherzh",
+          "position": "Center",
+          "dmi": 153686,
+          "gameShape": 7,
+          "salary": 29126,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4d4a-21bb-7538-a0e4-a99f6475729d",
+          "name": "Vladimir Shkirin",
+          "position": "Center",
+          "dmi": 397474,
+          "gameShape": 7,
+          "salary": 80003,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4d4b-ac1d-7727-8df5-e7439b3f5cd5",
+          "name": "Vladyslav Popko",
+          "position": "PointGuard",
+          "dmi": 155386,
+          "gameShape": 7,
+          "salary": 31170,
+          "potential": 6
+        },
+        {
+          "playerId": "019c43df-cd29-792f-80d9-cdd221b7ea63",
+          "name": "Vojtus' Zagortsau",
+          "position": "SmallForward",
+          "dmi": 64633,
+          "gameShape": 7,
+          "salary": 15366,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4d4c-6171-7b0d-867b-8937c4a26fed",
+          "name": "Yan Klimov",
+          "position": "Center",
+          "dmi": 386316,
+          "gameShape": 7,
+          "salary": 74671,
+          "potential": 8
+        }
+      ]
+    },
+    {
+      "countryId": "US",
+      "name": "USA",
+      "teamId": "011bb347-3ed8-7818-8c16-b85be550c0a5",
+      "players": [
+        {
+          "playerId": "01989225-f80c-7b79-903d-9a45a021863b",
+          "name": "Arthur Miaque",
+          "position": "Center",
+          "dmi": 342726,
+          "gameShape": 7,
+          "salary": 68127,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4e73-0ed4-78cc-914e-761f0cc4d08b",
+          "name": "Damián Lozano",
+          "position": "ShootingGuard",
+          "dmi": 115864,
+          "gameShape": 7,
+          "salary": 22267,
+          "potential": 10
+        },
+        {
+          "playerId": "0198a6fc-0da1-722d-b6d7-f661fff6829b",
+          "name": "Donny Irby",
+          "position": "PointGuard",
+          "dmi": 87077,
+          "gameShape": 7,
+          "salary": 18223,
+          "potential": 10
+        },
+        {
+          "playerId": "019b3091-5d7f-7cdf-9be2-8f30e2fc8434",
+          "name": "Duane Walter",
+          "position": "PointGuard",
+          "dmi": 95826,
+          "gameShape": 7,
+          "salary": 20623,
+          "potential": 10
+        },
+        {
+          "playerId": "019b3ee7-1bbc-792c-ab74-9a6750ef38fb",
+          "name": "Eric Bosh",
+          "position": "Center",
+          "dmi": 282213,
+          "gameShape": 7,
+          "salary": 60104,
+          "potential": 9
+        },
+        {
+          "playerId": "019b3892-da5b-7ed8-97e9-8fd144084496",
+          "name": "Jesse Shoemaker",
+          "position": "SmallForward",
+          "dmi": 99498,
+          "gameShape": 7,
+          "salary": 22440,
+          "potential": 8
+        },
+        {
+          "playerId": "01988fb4-e9f7-7f4c-8d88-c01ccac5d8f3",
+          "name": "Kraig Holton",
+          "position": "Center",
+          "dmi": 670860,
+          "gameShape": 7,
+          "salary": 113606,
+          "potential": 9
+        },
+        {
+          "playerId": "0198963d-5bc1-7df6-994e-58faab8c95dc",
+          "name": "Lino Messer",
+          "position": "ShootingGuard",
+          "dmi": 106402,
+          "gameShape": 7,
+          "salary": 22205,
+          "potential": 8
+        },
+        {
+          "playerId": "019892be-0264-7e85-8068-fae4fa9a33a9",
+          "name": "Logan Wesley",
+          "position": "SmallForward",
+          "dmi": 104628,
+          "gameShape": 7,
+          "salary": 22592,
+          "potential": 10
+        },
+        {
+          "playerId": "01989126-74e3-7392-af81-fdb978f510d3",
+          "name": "Tre Holland",
+          "position": "Center",
+          "dmi": 75046,
+          "gameShape": 7,
+          "salary": 19074,
+          "potential": 9
+        },
+        {
+          "playerId": "01989ee2-6419-7a20-80bd-dd74d3d44d3d",
+          "name": "Warren Crane",
+          "position": "PowerForward",
+          "dmi": 271384,
+          "gameShape": 7,
+          "salary": 57848,
+          "potential": 9
+        }
+      ]
+    },
+    {
+      "countryId": "IS",
+      "name": "Ísland",
+      "teamId": "011bb347-3f25-7c5a-b540-189c61d38c92",
+      "players": [
+        {
+          "playerId": "019e45cc-5318-7d71-80c5-4e004e0298e5",
+          "name": "Bjartur Hólmgrímsson",
+          "position": "PointGuard",
+          "dmi": 46710,
+          "gameShape": 7,
+          "salary": 13085,
+          "potential": 6
+        },
+        {
+          "playerId": "019a572b-3e26-7fb9-88c6-7e08a735a265",
+          "name": "Flóki Geirfinnsson",
+          "position": "PointGuard",
+          "dmi": 71169,
+          "gameShape": 7,
+          "salary": 18367,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4e63-c1b2-7564-8a98-c70633da4574",
+          "name": "Guðmann Marvinsson",
+          "position": "PowerForward",
+          "dmi": 49479,
+          "gameShape": 7,
+          "salary": 12993,
+          "potential": 9
+        },
+        {
+          "playerId": "019e45cb-8c73-73e0-a5f3-27774d4197b8",
+          "name": "Hinrik Pétursson",
+          "position": "SmallForward",
+          "dmi": 45186,
+          "gameShape": 7,
+          "salary": 11635,
+          "potential": 7
+        },
+        {
+          "playerId": "019e467d-6270-7f63-9674-f075d50c15c1",
+          "name": "Hlynur Snorrason",
+          "position": "SmallForward",
+          "dmi": 39069,
+          "gameShape": 7,
+          "salary": 10429,
+          "potential": 8
+        },
+        {
+          "playerId": "019a572a-d107-7e1d-8827-37fc01140346",
+          "name": "Júlíus Karlsson",
+          "position": "PointGuard",
+          "dmi": 50243,
+          "gameShape": 7,
+          "salary": 12715,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4f68-8022-7b6a-9f28-6ea9bbddb6d5",
+          "name": "Kjartan Antonsson",
+          "position": "PointGuard",
+          "dmi": 59193,
+          "gameShape": 7,
+          "salary": 16553,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4ee3-cc0f-7f58-aa00-90520c03c37c",
+          "name": "Konráð Hólmarsson",
+          "position": "PointGuard",
+          "dmi": 81105,
+          "gameShape": 7,
+          "salary": 18268,
+          "potential": 6
+        },
+        {
+          "playerId": "019a5727-ee56-76b1-8aeb-5d4acb5aad53",
+          "name": "Kristinn Gíslason",
+          "position": "PointGuard",
+          "dmi": 75650,
+          "gameShape": 7,
+          "salary": 18512,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4f67-38f8-78d3-b63e-01d72867cf56",
+          "name": "Sverrir Guðmundsson",
+          "position": "Center",
+          "dmi": 229441,
+          "gameShape": 7,
+          "salary": 43793,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4f68-c6df-7202-9b59-c2a275657e73",
+          "name": "Unnþór Broddason",
+          "position": "SmallForward",
+          "dmi": 42660,
+          "gameShape": 7,
+          "salary": 10564,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4ef3-4e3f-7bc5-b810-91ac36fb8dfa",
+          "name": "Ísólfur Óðinsson",
+          "position": "ShootingGuard",
+          "dmi": 47050,
+          "gameShape": 7,
+          "salary": 10383,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4f61-de6a-7556-a8d7-b3dd5d37e18a",
+          "name": "Óliver Mánason",
+          "position": "PointGuard",
+          "dmi": 61193,
+          "gameShape": 7,
+          "salary": 12460,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4f67-537e-73f3-9f57-953907928adb",
+          "name": "Þormar Víkingsson",
+          "position": "SmallForward",
+          "dmi": 59593,
+          "gameShape": 7,
+          "salary": 14686,
+          "potential": 6
+        }
+      ]
+    },
+    {
+      "countryId": "AT",
+      "name": "Österreich",
+      "teamId": "011bb347-3ef2-7043-8d2e-27dbd7f625e5",
+      "players": [
+        {
+          "playerId": "019a4cc7-066a-7f56-9160-eaf2083166d1",
+          "name": "Alexander Grill",
+          "position": "PointGuard",
+          "dmi": 56728,
+          "gameShape": 7,
+          "salary": 14388,
+          "potential": 9
+        },
+        {
+          "playerId": "019c42c3-73d6-73c4-847c-05c86dc8df09",
+          "name": "Axel Trattner",
+          "position": "Center",
+          "dmi": 86432,
+          "gameShape": 7,
+          "salary": 19334,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4cc5-c490-75af-af42-43a41c7215b7",
+          "name": "Bohuslav Miška",
+          "position": "Center",
+          "dmi": 129040,
+          "gameShape": 7,
+          "salary": 26578,
+          "potential": 8
+        },
+        {
+          "playerId": "019c42c2-4a46-72df-bade-7ff43c59f390",
+          "name": "Christian Bultmann",
+          "position": "PowerForward",
+          "dmi": 64264,
+          "gameShape": 7,
+          "salary": 14710,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4cc8-6c88-7771-9db4-95e791678f97",
+          "name": "Christoph Mitterer",
+          "position": "PointGuard",
+          "dmi": 55679,
+          "gameShape": 7,
+          "salary": 12230,
+          "potential": 9
+        },
+        {
+          "playerId": "019c42c2-b761-7ea9-a9e0-9a464b4ad5bd",
+          "name": "David Tiefenbach",
+          "position": "SmallForward",
+          "dmi": 70985,
+          "gameShape": 7,
+          "salary": 19091,
+          "potential": 7
+        },
+        {
+          "playerId": "019e4619-9160-7b22-805b-8aa47025465d",
+          "name": "Georg Malik",
+          "position": "ShootingGuard",
+          "dmi": 51175,
+          "gameShape": 7,
+          "salary": 12295,
+          "potential": 6
+        },
+        {
+          "playerId": "019c4e8b-1038-76f9-afa5-d51be11cadb3",
+          "name": "Hartwig Özdemir",
+          "position": "SmallForward",
+          "dmi": 68031,
+          "gameShape": 7,
+          "salary": 13753,
+          "potential": 8
+        },
+        {
+          "playerId": "019c4f09-57a0-72d1-8697-add5ac0edb43",
+          "name": "Jakob Kammerlander",
+          "position": "PowerForward",
+          "dmi": 48123,
+          "gameShape": 7,
+          "salary": 13147,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4cc5-db3a-7e88-befb-b6856b2432e8",
+          "name": "Johann Haberlandner",
+          "position": "PowerForward",
+          "dmi": 69464,
+          "gameShape": 7,
+          "salary": 19649,
+          "potential": 9
+        },
+        {
+          "playerId": "019c4ee1-7ba0-7ef6-ae12-509d8053a53b",
+          "name": "Klaus Angerer",
+          "position": "PowerForward",
+          "dmi": 66277,
+          "gameShape": 7,
+          "salary": 14407,
+          "potential": 10
+        },
+        {
+          "playerId": "019c42c9-6165-79db-9f68-9a0142b4ff5d",
+          "name": "Patrick Jung",
+          "position": "PointGuard",
+          "dmi": 51483,
+          "gameShape": 7,
+          "salary": 13657,
+          "potential": 7
+        },
+        {
+          "playerId": "019e3bd4-0dc1-722b-acb1-9c3ccf0295bf",
+          "name": "Peter Vorauer",
+          "position": "SmallForward",
+          "dmi": 50423,
+          "gameShape": 7,
+          "salary": 11291,
+          "potential": 7
+        },
+        {
+          "playerId": "019c42c6-8d55-70a4-b343-7612a882dfd5",
+          "name": "Richard Hofmann",
+          "position": "PowerForward",
+          "dmi": 75314,
+          "gameShape": 7,
+          "salary": 14552,
+          "potential": 5
+        },
+        {
+          "playerId": "019e3bd4-a8db-7a55-9109-cbd59ddc4701",
+          "name": "Simon Ranzenmayr",
+          "position": "PowerForward",
+          "dmi": 45893,
+          "gameShape": 7,
+          "salary": 10546,
+          "potential": 10
+        },
+        {
+          "playerId": "019c42c6-fa70-74f6-8be1-5bb03cbd8db1",
+          "name": "Çetin Sen",
+          "position": "Center",
+          "dmi": 91235,
+          "gameShape": 7,
+          "salary": 19167,
+          "potential": 7
+        }
+      ]
+    },
+    {
+      "countryId": "CZ",
+      "name": "Česká Rep.",
+      "teamId": "011bb347-3efc-72e5-97ce-6c51b3519941",
+      "players": [
+        {
+          "playerId": "019a4db6-0aa5-7d25-a745-8fb14543ea8a",
+          "name": "Bedřich Bukáček",
+          "position": "Center",
+          "dmi": 355266,
+          "gameShape": 7,
+          "salary": 71924,
+          "potential": 8
+        },
+        {
+          "playerId": "019a4db9-9546-70b3-a9f5-448354c6c506",
+          "name": "Boris Serbin",
+          "position": "Center",
+          "dmi": 215980,
+          "gameShape": 7,
+          "salary": 44797,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4db4-b221-72a8-9b5c-4d5689669c41",
+          "name": "David Hejtmánek",
+          "position": "Center",
+          "dmi": 53076,
+          "gameShape": 7,
+          "salary": 13785,
+          "potential": 6
+        },
+        {
+          "playerId": "019c4e86-fcd4-7ef1-866a-55c1656b838d",
+          "name": "Ivan Lepeška",
+          "position": "SmallForward",
+          "dmi": 81919,
+          "gameShape": 7,
+          "salary": 16496,
+          "potential": 10
+        },
+        {
+          "playerId": "019a4db6-061d-7281-9945-453ff536e0bb",
+          "name": "Ivo Ujčík",
+          "position": "PointGuard",
+          "dmi": 58905,
+          "gameShape": 7,
+          "salary": 15087,
+          "potential": 10
+        },
+        {
+          "playerId": "019c44d3-e4f6-7984-bc89-d831a662fe6b",
+          "name": "Jan Vondrouš",
+          "position": "PointGuard",
+          "dmi": 68925,
+          "gameShape": 7,
+          "salary": 14668,
+          "potential": 9
+        },
+        {
+          "playerId": "019a4dbb-1697-7b16-a7e9-b710abd668fd",
+          "name": "Jindřich Kašpar",
+          "position": "PointGuard",
+          "dmi": 53735,
+          "gameShape": 7,
+          "salary": 13439,
+          "potential": 10
+        },
+        {
+          "playerId": "019c44ca-ac4f-7fb2-95b0-7d516e1e159b",
+          "name": "Jindřich Vichnar",
+          "position": "ShootingGuard",
+          "dmi": 92960,
+          "gameShape": 7,
+          "salary": 23107,
+          "potential": 9
+        },
+        {
+          "playerId": "019c44d7-57b9-7b1b-a40e-7df614d022de",
+          "name": "Kazimír Baťánek",
+          "position": "Center",
+          "dmi": 63011,
+          "gameShape": 7,
+          "salary": 13935,
+          "potential": 7
+        },
+        {
+          "playerId": "019a56c8-5948-740a-8b9b-094349ee5a9c",
+          "name": "Maxim Pivko",
+          "position": "SmallForward",
+          "dmi": 69068,
+          "gameShape": 7,
+          "salary": 13851,
+          "potential": 10
+        },
+        {
+          "playerId": "019c44cc-2f24-74cc-9fb8-255721d99bf8",
+          "name": "Miroslav Vocásek",
+          "position": "Center",
+          "dmi": 225605,
+          "gameShape": 7,
+          "salary": 41731,
+          "potential": 9
+        },
+        {
+          "playerId": "019e3d4a-7aa7-7d53-872e-960d1b597600",
+          "name": "Tomáš Volf",
+          "position": "ShootingGuard",
+          "dmi": 101719,
+          "gameShape": 7,
+          "salary": 22537,
+          "potential": 10
+        },
+        {
+          "playerId": "019c4e61-e436-787e-898a-eef08f0d3876",
+          "name": "Vladimír Buchar",
+          "position": "PowerForward",
+          "dmi": 76899,
+          "gameShape": 7,
+          "salary": 19588,
+          "potential": 7
+        },
+        {
+          "playerId": "019c44c9-6ee9-7e25-8cf4-ac10ea28e3c7",
+          "name": "Wiesław Tomal",
+          "position": "PointGuard",
+          "dmi": 85171,
+          "gameShape": 7,
+          "salary": 18251,
+          "potential": 10
+        }
+      ]
+    }
+  ]
+}
