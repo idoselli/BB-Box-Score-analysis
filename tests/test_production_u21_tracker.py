@@ -88,21 +88,31 @@ class ProductionU21TrackerTests(unittest.TestCase):
                 browser = app.test_client()
                 page = browser.get("/beta/u21-tracker")
                 empty_page = browser.get("/beta/u21-tracker?season=74&countryId=FR")
+                compared = browser.get("/beta/u21-tracker?season=74&countryId=IL&compareCountryId=FR")
+                duplicate = browser.get("/beta/u21-tracker?season=74&countryId=IL&compareCountryId=IL")
                 api = browser.get("/beta/api/u21-tracker?season=74&countryId=IL")
         self.assertEqual(page.status_code, 200)
         self.assertIn(b"Test Guard", page.data)
+        self.assertIn(b"123,456", page.data)
+        self.assertIn(b"10,000", page.data)
+        self.assertIn(b'data-position="PG"', page.data)
         self.assertIn(b"No players appeared in the recorded squad.", empty_page.data)
+        self.assertIn(b'id="tracker-squad-2"', compared.data)
+        self.assertNotIn(b'id="tracker-squad-2"', duplicate.data)
         self.assertEqual(api.json["weeks"], [2])
         self.assertEqual(api.json["players"][0]["playerId"], player_id)
         self.assertEqual(api.json["players"][0]["points"][0]["dmi"], 123456)
 
     def test_vercel_reads_published_snapshots_without_a_new_build(self):
         team = {"countryId": "IL", "name": "Israel", "teamId": "team"}
+        other = {"countryId": "US", "name": "USA", "teamId": "other"}
         documents = {
             "index.json": {"seasons": [74]},
-            "s74/meta.json": {"season": 74, "weeks": [2], "countries": [team]},
+            "s74/meta.json": {"season": 74, "weeks": [2], "countries": [team, other]},
             "s74/w2.json": {"countries": [{**team, "players": [
                 {"playerId": "player", "name": "Test Guard", "dmi": 123456},
+            ]}, {**other, "players": [
+                {"playerId": "opponent", "name": "Test Center", "dmi": 234567},
             ]}]},
         }
 
@@ -114,7 +124,8 @@ class ProductionU21TrackerTests(unittest.TestCase):
             with patch.object(tracker, "PRODUCTION_TRACKER_ROOT", Path(directory)), \
                  patch.dict("os.environ", {"VERCEL": "1"}), \
                  patch.object(tracker.requests, "get", side_effect=response) as request:
-                api = app.test_client().get("/beta/api/u21-tracker?season=74&countryId=IL")
-        self.assertEqual(api.status_code, 200)
-        self.assertEqual(api.json["players"][0]["points"][0]["dmi"], 123456)
+                page = app.test_client().get("/beta/u21-tracker?season=74&countryId=IL&compareCountryId=US")
+        self.assertEqual(page.status_code, 200)
+        self.assertIn(b"Test Guard", page.data)
+        self.assertIn(b"Test Center", page.data)
         self.assertEqual(request.call_count, 3)

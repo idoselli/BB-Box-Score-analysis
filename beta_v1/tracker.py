@@ -250,20 +250,47 @@ def production_seasons() -> list[int]:
 def series(
     season: int, country_id: str, *, root: Path | None = None, meta: dict[str, Any] | None = None
 ) -> dict[str, Any]:
+    return squad_series(season, [country_id], root=root, meta=meta)[0]
+
+
+def squad_series(
+    season: int, country_ids: list[str], *, root: Path | None = None, meta: dict[str, Any] | None = None
+) -> list[dict[str, Any]]:
     directory = (root or TRACKER_ROOT) / f"s{season}"
     if meta is None:
         meta = read_archive(directory / "meta.json") or {}
-    points: dict[str, dict[str, Any]] = {}
-    country_name = ""
-    for week in meta.get("weeks", []):
+    weeks = meta.get("weeks", [])
+    squads = {
+        country_id: {
+            "season": season,
+            "countryId": country_id,
+            "countryName": "",
+            "weeks": weeks,
+            "syntheticWeeks": meta.get("syntheticWeeks", []),
+            "demo": bool(meta.get("demo")),
+            "players": {},
+        }
+        for country_id in country_ids
+    }
+    for week in weeks:
         snapshot = read_archive(directory / f"w{week}.json") or {}
-        country = next((item for item in snapshot.get("countries", []) if item.get("countryId") == country_id), None)
-        if not country:
-            continue
-        country_name = country["name"]
-        for player in country.get("players", []):
-            item = points.setdefault(player["playerId"], {"playerId": player["playerId"], "name": player["name"], "position": player.get("position"), "points": []})
-            item["name"] = player["name"]
-            item["position"] = player.get("position")
-            item["points"].append({"week": week, "dmi": player.get("dmi"), "gameShape": player.get("gameShape"), "salary": player.get("salary"), "potential": player.get("potential"), "syntheticDmi": bool(snapshot.get("syntheticDmi"))})
-    return {"season": season, "countryId": country_id, "countryName": country_name, "weeks": meta.get("weeks", []), "syntheticWeeks": meta.get("syntheticWeeks", []), "demo": bool(meta.get("demo")), "players": sorted(points.values(), key=lambda item: item["name"].casefold())}
+        for country in snapshot.get("countries", []):
+            squad = squads.get(country.get("countryId"))
+            if squad is None:
+                continue
+            squad["countryName"] = country["name"]
+            for player in country.get("players", []):
+                player_id = player["playerId"]
+                item = squad["players"].setdefault(player_id, {"playerId": player_id, "points": []})
+                item.update(name=player["name"], position=player.get("position"))
+                item["points"].append({
+                    "week": week,
+                    "dmi": player.get("dmi"),
+                    "gameShape": player.get("gameShape"),
+                    "salary": player.get("salary"),
+                    "potential": player.get("potential"),
+                    "syntheticDmi": bool(snapshot.get("syntheticDmi")),
+                })
+    for squad in squads.values():
+        squad["players"] = sorted(squad["players"].values(), key=lambda item: item["name"].casefold())
+    return list(squads.values())

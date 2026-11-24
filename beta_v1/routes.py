@@ -156,10 +156,17 @@ def tracker_page():
     meta = tracker.read_archive(root / f"s{season}" / "meta.json") if season else None
     country_ids = [item["countryId"] for item in (meta or {}).get("countries", [])]
     country_id = request.args.get("countryId")
-    if country_ids and country_id not in country_ids:
-        country_id = "IL" if "IL" in country_ids else country_ids[0]
-    data = tracker.series(season, country_id, root=root, meta=meta) if meta and country_id else None
-    return render_template("beta/tracker.html", seasons=seasons, season=season, meta=meta, country_id=country_id, data=data)
+    if country_id not in country_ids:
+        country_id = "IL" if "IL" in country_ids else next(iter(country_ids), None)
+    compare_id = request.args.get("compareCountryId")
+    if compare_id not in country_ids or compare_id == country_id:
+        compare_id = None
+    selected = [item for item in (country_id, compare_id) if item]
+    squads = tracker.squad_series(season, selected, root=root, meta=meta) if selected else []
+    return render_template(
+        "beta/tracker.html", seasons=seasons, season=season, meta=meta,
+        country_id=country_id, compare_id=compare_id, squads=squads,
+    )
 
 
 @beta_bp.get("/api/u21-tracker")

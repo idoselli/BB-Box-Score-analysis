@@ -41,7 +41,7 @@ class BetaRoutesTests(unittest.TestCase):
             self.assertEqual(client.get(path).status_code, 200, path)
         self.assertEqual(client.get("/api/u21-tracker?season=98765").status_code, 404)
         self.assertEqual(client.get("/beta/api/u21-tracker?season=98765").status_code, 404)
-        with patch.dict("os.environ", {"BB_V1_EXCEPTION_APPROVED": "false"}):
+        with patch.dict("os.environ", {"BB_V1_EXCEPTION_APPROVED": "false"}), patch.object(tracker, "production_seasons", return_value=[]):
             archive = client.get("/beta/api/market/archive")
             self.assertEqual(archive.status_code, 200)
             self.assertTrue(archive.json["demo"])
@@ -53,11 +53,11 @@ class BetaRoutesTests(unittest.TestCase):
         self.assertIn(b'BuzzerBeater \xc2\xb7 Current tool', home.data)
 
     def test_demo_player_line_and_illustrative_week(self):
-        with patch.dict("os.environ", {"BB_V1_EXCEPTION_APPROVED": "false"}):
+        with patch.object(tracker, "production_seasons", return_value=[]):
             response = web_tool.app.test_client().get("/beta/u21-tracker?season=1&countryId=DEMO-01")
         self.assertIn(b'id="player-filter"', response.data)
-        self.assertIn(b"Dashed segments include illustrative DMI", response.data)
-        self.assertIn(b"not a historical measurement", response.data)
+        self.assertIn(b"Hollow markers show illustrative DMI", response.data)
+        self.assertIn(b"Other figures for that week are unknown", response.data)
         data = tracker.series(1, "DEMO-01", root=demo.DEMO_ROOT / "u21-tracker")
         self.assertEqual(len(data["players"]), 12)
         for player in data["players"]:
