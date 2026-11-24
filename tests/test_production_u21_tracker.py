@@ -37,6 +37,13 @@ class ProductionU21TrackerTests(unittest.TestCase):
         codes = {country["id"] for country in tracked_countries(client, set())}
         self.assertEqual(codes, {"DE", "GB-WLS", "IL", "US", "CN", "HK", "TW"})
 
+    def test_incomplete_api_calendar_uses_confirmed_friday_anchor(self):
+        seasons = [{"number": 73, "startDate": "2026-08-08", "endDate": "2026-11-14"}]
+        with patch("builtins.print"):
+            self.assertEqual(snapshot_period(seasons, date(2026, 11, 27)), (74, 2))
+            self.assertEqual(snapshot_period(seasons, date(2027, 2, 19)), (74, 14))
+            self.assertEqual(snapshot_period(seasons, date(2027, 2, 26)), (75, 1))
+
     def test_roster_figures_reach_the_existing_page_and_api(self):
         team_id = "22222222-2222-4222-8222-222222222222"
         player_id = "44444444-4444-4444-8444-444444444444"

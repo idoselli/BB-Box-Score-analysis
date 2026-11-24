@@ -105,8 +105,10 @@ python collect_u21_tracker.py --dry-run --countries IL,US,CN,HK,TW
 
 The API supplies season dates. The tracker counts one week per Friday, with
 November 27, 2026 as season 74, week 2. Each later season starts its tracker
-count on the Friday on or before its API start date. The workflow's manual
-dispatch defaults to a dry run and accepts a week override.
+count on the Friday on or before its API start date. If the API calendar is
+missing the current season, the tracker advances in 14-week seasons from the
+confirmed Friday anchor. The workflow's manual dispatch defaults to a dry run
+and accepts a week override.
 
 Run locally:
 

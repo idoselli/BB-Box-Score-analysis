@@ -16,7 +16,9 @@ from scrape_u21_tracker import env_value, load_dotenv
 PRODUCTION_API = "https://next-api.buzzerbeater.com/v1"
 EXTRA_COUNTRIES = {"US", "CN", "HK", "TW", "IL"}  # Keep Israel in Nika's tracker.
 REQUEST_INTERVAL = 2.1  # Personal tokens allow 30 requests per minute.
-FIRST_FRIDAY_OVERRIDES = {74: date(2026, 11, 20)}
+ANCHOR_SEASON = 74
+ANCHOR_FRIDAY = date(2026, 11, 20)
+WEEKS_PER_SEASON = 14
 
 
 def snapshot_period(seasons: list[dict], today: date) -> tuple[int, int]:
@@ -26,15 +28,28 @@ def snapshot_period(seasons: list[dict], today: date) -> tuple[int, int]:
         start = date.fromisoformat(season["startDate"])
         end = date.fromisoformat(season["endDate"]) if season.get("endDate") else None
         friday_on_or_before_start = start - timedelta(days=(start.weekday() - 4) % 7)
-        first_friday = FIRST_FRIDAY_OVERRIDES.get(number, friday_on_or_before_start)
-        if first_friday <= today and (end is None or today <= end):
+        first_friday = ANCHOR_FRIDAY if number == ANCHOR_SEASON else friday_on_or_before_start
+        last_day = end or first_friday + timedelta(weeks=WEEKS_PER_SEASON, days=-7)
+        if first_friday <= today <= last_day:
             periods.append((first_friday, number))
 
-    if not periods:
+    if periods:
+        first_friday, number = max(periods)
+        if today < ANCHOR_FRIDAY or number >= ANCHOR_SEASON:
+            return number, ((today - first_friday).days + 6) // 7 + 1
+
+    if today < ANCHOR_FRIDAY:
         raise ValueError(f"The API calendar has no tracker season covering {today}.")
-    first_friday, number = max(periods)
+    recent = sorted(seasons, key=lambda item: item["number"])[-3:]
+    print(
+        f"API calendar has no current production season for {today}; using the confirmed Friday calendar. "
+        f"Latest API entries: {[(item['number'], item['startDate'], item.get('endDate')) for item in recent]}",
+        flush=True,
+    )
     # Each tracker week ends with the Friday training snapshot.
-    return number, ((today - first_friday).days + 6) // 7 + 1
+    elapsed_weeks = ((today - ANCHOR_FRIDAY).days + 6) // 7
+    seasons_elapsed, week = divmod(elapsed_weeks, WEEKS_PER_SEASON)
+    return ANCHOR_SEASON + seasons_elapsed, week + 1
 
 
 def tracked_countries(client: V1Client, country_ids: set[str]) -> list[dict]:
