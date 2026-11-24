@@ -2,8 +2,8 @@
 {% block title %}U21 tracker · New site{% endblock %}
 {% block content %}
 <section class="card">
-  <h1>U21 tracker · new world</h1>
-  <p>Weekly roster figures for the selected junior national squad. Legacy history is available in the <a href="/u21-tracker">current tracker</a>.</p>
+  <h1>U21 tracker</h1>
+  <p>Weekly roster figures for the selected junior national squad. <a href="/u21-tracker">View seasons 72 and 73</a>.</p>
   {% if meta and meta.demo %}<div class="warning">Demo data: every player, value, and team ID shown here is simulated. These are not BuzzerBeater observations.</div>{% endif %}
   {% if not meta %}<div class="warning">No snapshot is available yet.</div>{% else %}
   <form class="row" method="get">
@@ -23,7 +23,7 @@
   </div>
   <div id="chart" class="tracker-chart" aria-live="polite"></div>
   <div id="chart-legend" class="tracker-legend"></div>
-  <p class="muted">Select a player to see an individual line. Dashed segments include illustrative DMI.</p>
+  <p class="muted">Select a player to see an individual line.{% if meta.syntheticWeeks %} Dashed segments include illustrative DMI.{% endif %}</p>
   <div class="scroll"><table><thead><tr><th>Player</th><th>Position</th><th>Latest DMI</th><th>Game shape</th><th>Salary</th><th>Potential</th><th>Weeks</th></tr></thead><tbody>
   {% for player in data.players %}{% set latest = player.points[-1] %}<tr><td><button type="button" class="tracker-player-link" data-player-id="{{ player.playerId }}">{{ player.name }}</button></td><td>{{ player.position or '—' }}</td><td>{{ latest.dmi if latest.dmi is not none else '—' }}</td><td>{{ latest.gameShape if latest.gameShape is not none else '—' }}</td><td>{{ latest.salary if latest.salary is not none else '—' }}</td><td>{{ latest.potential if latest.potential is not none else '—' }}</td><td>{{ player.points|length }}</td></tr>{% endfor %}
   </tbody></table></div>

@@ -35,11 +35,9 @@ required scopes. A private localhost preview can use the owner's personal token
 with `BB_V1_ALLOW_INMEMORY_TOKEN_LOGIN=true`; sessions then expire after 24 hours
 or a restart. Never commit tokens or put them in browser exports.
 
-The U21/market archive collectors and publication gates remain separate from
-interactive analysis. Without published snapshots these archives show explicitly
-labeled synthetic demos. No new-site historical archive is manufactured from old
-world data. The owner-run collectors use `BB_V1_PERSONAL_TOKEN` and retain their
-existing `BB_V1_EXCEPTION_APPROVED` gate; scheduled workflows remain manual.
+The production U21 tracker and market archive show labeled demos when published
+snapshots are unavailable. The market and beta collectors retain their manual
+workflows and use `BB_V1_PERSONAL_TOKEN` and `BB_V1_EXCEPTION_APPROVED`.
 
 
 ### contact Ido to run it
@@ -89,26 +87,26 @@ Optional env vars:
 - `CURRENT_SEASON` — defaults to `73`
 - `U21_MINUTES_MIN_SEASON` — U21 career history floor (defaults to `60`; NT uses the player's BB season dropdown)
 
-### U21 tracker weekly scrape
-The GitHub Action `.github/workflows/u21-tracker-weekly.yml` refreshes `data/u21-tracker/` every Friday at 10:30 UTC.
+### U21 tracker weekly snapshots
 
-Configure these repository secrets in GitHub before enabling it:
-- `BBAPI_LOGIN`
-- `BBAPI_CODE`
-- `BB_PASSWORD`
+The GitHub Actions workflow `u21-tracker-weekly.yml` is scheduled for Fridays at
+13:30 in `Asia/Jerusalem`. It reads the European confederation's junior squads
+and includes Israel, USA, China, Hong Kong and Taiwan. It reads DMI, game shape,
+salary, position and potential in one roster request per squad and publishes
+completed snapshots under `data/v1/production-u21-tracker/`.
 
-Optional repository variable:
-- `CURRENT_SEASON` - overrides automatic season detection when set
-
-The scraper automatically rolls the scheduled run to season 73 on August 7, 2026, then advances in 98-day season blocks.
-
-The workflow commits only `data/u21-tracker/` JSON files. Credentials are read from GitHub Actions secrets and are not written into the repository.
-
-You can also run the same scraper locally after filling `.env`:
+Set the GitHub Actions secret `BB_U21_API_TOKEN` to a production BuzzerBeater
+personal token with Public scope. For a local dry run, set the same variable in
+the ignored `.env` and run:
 
 ```bash
-python scrape_u21_tracker.py
+python collect_u21_tracker.py --dry-run --countries IL,US,CN,HK,TW
 ```
+
+The API supplies season dates. The tracker counts one week per Friday, with
+November 27, 2026 as season 74, week 2. Each later season starts its tracker
+count on the Friday on or before its API start date. The workflow's manual
+dispatch defaults to a dry run and accepts a week override.
 
 Run locally:
 

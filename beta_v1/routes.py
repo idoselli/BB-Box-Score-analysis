@@ -22,8 +22,12 @@ def _publication_enabled() -> bool:
     return os.environ.get("BB_V1_EXCEPTION_APPROVED") == "true"
 
 
-def _tracker_root() -> Path:
-    return tracker.TRACKER_ROOT if _publication_enabled() and tracker.seasons_available() else demo.DEMO_ROOT / "u21-tracker"
+def _tracker_archive() -> tuple[Path, list[int]]:
+    published_seasons = tracker.production_seasons()
+    if published_seasons:
+        return tracker.PRODUCTION_TRACKER_ROOT, published_seasons
+    demo_root = demo.DEMO_ROOT / "u21-tracker"
+    return demo_root, tracker.seasons_available(demo_root)
 
 
 def _market_path() -> Path:
@@ -141,30 +145,35 @@ def oauth_logout():
 
 @beta_bp.get("/u21-tracker")
 def tracker_page():
-    root = _tracker_root()
-    seasons = tracker.seasons_available(root)
+    root, seasons = _tracker_archive()
+    latest_season = seasons[0] if seasons else 0
     try:
-        season = int(request.args.get("season", seasons[0] if seasons else 0))
+        season = int(request.args.get("season", latest_season))
     except ValueError:
-        season = 0
-    meta = tracker._read(root / f"s{season}" / "meta.json") if season else None
-    country_id = request.args.get("countryId") or ((meta or {}).get("countries") or [{}])[0].get("countryId", "")
-    data = tracker.series(season, country_id, root=root) if meta and country_id else None
-    return render_template("beta/tracker.html", seasons=seasons, season=season, meta=meta, country_id=country_id, data=data, publication_enabled=_publication_enabled())
+        season = latest_season
+    if season not in seasons:
+        season = latest_season
+    meta = tracker.read_archive(root / f"s{season}" / "meta.json") if season else None
+    country_ids = [item["countryId"] for item in (meta or {}).get("countries", [])]
+    country_id = request.args.get("countryId")
+    if country_ids and country_id not in country_ids:
+        country_id = "IL" if "IL" in country_ids else country_ids[0]
+    data = tracker.series(season, country_id, root=root, meta=meta) if meta and country_id else None
+    return render_template("beta/tracker.html", seasons=seasons, season=season, meta=meta, country_id=country_id, data=data)
 
 
 @beta_bp.get("/api/u21-tracker")
 def tracker_api():
-    root = _tracker_root()
+    root, seasons = _tracker_archive()
     try:
         season = int(request.args.get("season", ""))
     except ValueError:
         return jsonify({"error": "Season must be a number."}), 400
-    meta = tracker._read(root / f"s{season}" / "meta.json")
+    meta = tracker.read_archive(root / f"s{season}" / "meta.json") if season in seasons else None
     if not meta:
-        return jsonify({"error": "No beta snapshot for that season."}), 404
+        return jsonify({"error": "No U21 snapshot for that season."}), 404
     country_id = request.args.get("countryId")
-    return jsonify(tracker.series(season, country_id, root=root) if country_id else meta)
+    return jsonify(tracker.series(season, country_id, root=root, meta=meta) if country_id else meta)
 
 
 @beta_bp.route("/match", methods=["GET", "POST"])

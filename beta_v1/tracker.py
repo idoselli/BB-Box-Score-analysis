@@ -12,11 +12,17 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 
+import requests
+
 from .api import V1Client, segment
 
 
 ROOT = Path(__file__).resolve().parents[1]
 TRACKER_ROOT = ROOT / "data" / "v1" / "u21-tracker"
+PRODUCTION_TRACKER_ROOT = TRACKER_ROOT.with_name("production-u21-tracker")
+PRODUCTION_SNAPSHOT_URL = (
+    "https://raw.githubusercontent.com/idoselli/BB-Box-Score-analysis/main/data/v1/production-u21-tracker"
+)
 LEGACY_LIST = ROOT / "data" / "u21-tracker" / "s73" / "meta.json"
 ALIASES = {
     "cymru": "wales", "ceska rep": "czechia", "hellas": "greece",
@@ -157,18 +163,23 @@ def collect(client: V1Client, *, today: date | None = None) -> Path:
                 "potential": player.get("potential"),
             })
         collected.append({**mapped, "players": players})
-    now = datetime.now(timezone.utc).isoformat()
-    snapshot = {"world": "v1", "season": season, "week": week, "scrapedAt": now, "countries": collected}
-    directory = TRACKER_ROOT / f"s{season}"
+    return save_snapshot(TRACKER_ROOT, season, week, collected, datetime.now(timezone.utc).isoformat())
+
+
+def save_snapshot(
+    root: Path, season: int, week: int, countries: list[dict[str, Any]], captured_at: str
+) -> Path:
+    snapshot = {"world": "v1", "season": season, "week": week, "scrapedAt": captured_at, "countries": countries}
+    directory = root / f"s{season}"
     path = directory / f"w{week}.json"
     _write(path, snapshot)
     old_meta = _read(directory / "meta.json") or {}
     weeks = sorted(set(old_meta.get("weeks", [])) | {week})
     synthetic_weeks = sorted(set(old_meta.get("syntheticWeeks", [])) - {week})
     _write(directory / "meta.json", {
-        "world": "v1", "season": season, "weeks": weeks, "updatedAt": now,
+        "world": "v1", "season": season, "weeks": weeks, "updatedAt": captured_at,
         "syntheticWeeks": synthetic_weeks,
-        "countries": [{key: item[key] for key in ("name", "countryId", "teamId")} for item in collected],
+        "countries": [{key: item[key] for key in ("name", "countryId", "teamId")} for item in countries],
     })
     return path
 
@@ -209,13 +220,43 @@ def seasons_available(root: Path | None = None) -> list[int]:
     return sorted((int(path.name[1:]) for path in root.glob("s*") if path.is_dir() and path.name[1:].isdigit()), reverse=True)
 
 
-def series(season: int, country_id: str, *, root: Path | None = None) -> dict[str, Any]:
+def write_production_index() -> None:
+    _write(PRODUCTION_TRACKER_ROOT / "index.json", {"seasons": seasons_available(PRODUCTION_TRACKER_ROOT)})
+
+
+def read_archive(path: Path) -> dict[str, Any] | None:
+    local = _read(path)
+    if os.environ.get("VERCEL") != "1" or not path.is_relative_to(PRODUCTION_TRACKER_ROOT):
+        return local
+    if local and re.fullmatch(r"w\d+\.json", path.name):
+        return local  # Published weekly snapshots are immutable.
+    relative = path.relative_to(PRODUCTION_TRACKER_ROOT).as_posix()
+    try:
+        response = requests.get(f"{PRODUCTION_SNAPSHOT_URL}/{relative}", timeout=4)
+        if response.ok:
+            payload = response.json()
+            if isinstance(payload, dict):
+                return payload
+    except (requests.RequestException, ValueError):
+        pass
+    return local
+
+
+def production_seasons() -> list[int]:
+    index = read_archive(PRODUCTION_TRACKER_ROOT / "index.json") or {}
+    return index.get("seasons") or seasons_available(PRODUCTION_TRACKER_ROOT)
+
+
+def series(
+    season: int, country_id: str, *, root: Path | None = None, meta: dict[str, Any] | None = None
+) -> dict[str, Any]:
     directory = (root or TRACKER_ROOT) / f"s{season}"
-    meta = _read(directory / "meta.json") or {}
+    if meta is None:
+        meta = read_archive(directory / "meta.json") or {}
     points: dict[str, dict[str, Any]] = {}
     country_name = ""
     for week in meta.get("weeks", []):
-        snapshot = _read(directory / f"w{week}.json") or {}
+        snapshot = read_archive(directory / f"w{week}.json") or {}
         country = next((item for item in snapshot.get("countries", []) if item.get("countryId") == country_id), None)
         if not country:
             continue

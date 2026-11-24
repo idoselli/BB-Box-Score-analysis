@@ -5,3 +5,4 @@ Pillow
 gunicorn
 redis>=5,<7
 cryptography>=43
+tzdata; sys_platform == "win32"
