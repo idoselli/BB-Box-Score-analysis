@@ -5,16 +5,16 @@ from __future__ import annotations
 import argparse
 from datetime import date, datetime, timedelta, timezone
 import os
-import time
 from zoneinfo import ZoneInfo
 
 from beta_v1 import tracker
-from beta_v1.api import V1Client, segment
+from beta_v1.api import V1Client, pages, segment
 from scrape_u21_tracker import env_value, load_dotenv
 
 
 PRODUCTION_API = "https://next-api.buzzerbeater.com/v1"
 EXTRA_COUNTRIES = {"US", "CN", "HK", "TW", "IL"}  # Keep Israel in Nika's tracker.
+EUROPEAN_LEAGUE_CONTAINER = "N1"  # The shared Nations of Europe league has no U21 squad.
 REQUEST_INTERVAL = 2.1  # Personal tokens allow 30 requests per minute.
 ANCHOR_SEASON = 74
 ANCHOR_FRIDAY = date(2026, 11, 20)
@@ -57,7 +57,9 @@ def tracked_countries(client: V1Client, country_ids: set[str]) -> list[dict]:
     tracked = {
         country["id"]: country
         for country in countries
-        if country.get("confederation") == "Europe" or country["id"] in EXTRA_COUNTRIES
+        if (
+            country.get("confederation") == "Europe" and country["id"] != EUROPEAN_LEAGUE_CONTAINER
+        ) or country["id"] in EXTRA_COUNTRIES
     }
     missing = (country_ids or EXTRA_COUNTRIES) - tracked.keys()
     if missing:
@@ -70,14 +72,12 @@ def tracked_countries(client: V1Client, country_ids: set[str]) -> list[dict]:
 
 def collect_roster(client: V1Client, country: dict) -> dict:
     code = country["id"]
-    time.sleep(REQUEST_INTERVAL)
     teams = client.get(f"/countries/{segment(code)}/national-teams")["teams"]
     junior_teams = [team for team in teams if team["kind"] == "JuniorNationalTeam"]
     if len(junior_teams) != 1:
         raise ValueError(f"Expected one U21 squad for {code}, found {len(junior_teams)}.")
 
     team_id = junior_teams[0]["id"]
-    time.sleep(REQUEST_INTERVAL)
     roster = client.get(f"/national-teams/{segment(team_id)}/roster")
     if roster["teamId"] != team_id or not isinstance(roster["players"], list):
         raise ValueError(f"Invalid roster response for {code}.")
@@ -118,12 +118,12 @@ def main() -> None:
     token = env_value("BB_U21_API_TOKEN")
     if not token:
         raise SystemExit("BB_U21_API_TOKEN must contain a production personal token with Public scope.")
-    client = V1Client(token, base_url=PRODUCTION_API)
+    client = V1Client(token, base_url=PRODUCTION_API, min_request_interval=REQUEST_INTERVAL)
     now = datetime.now(timezone.utc)
     today = now.astimezone(ZoneInfo("Asia/Jerusalem")).date()
     if os.environ.get("GITHUB_EVENT_NAME") == "schedule":
         today -= timedelta(days=(today.weekday() - 4) % 7)
-    season, calculated_week = snapshot_period(client.get("/seasons")["seasons"], today)
+    season, calculated_week = snapshot_period(pages(client, "/seasons", "seasons"), today)
     week = args.week if args.week is not None else calculated_week
     directory = tracker.PRODUCTION_TRACKER_ROOT / f"s{season}"
     if not args.dry_run and (directory / f"w{week}.json").exists():
@@ -141,6 +141,8 @@ def main() -> None:
         roster = collect_roster(client, country)
         results.append(roster)
         print(f"[{index}/{len(countries)}] {country['name']}: {len(roster['players'])} players", flush=True)
+    player_count = sum(len(roster["players"]) for roster in results)
+    print(f"Collected DMI for {player_count} players across {len(results)} U21 squads.", flush=True)
 
     if not args.dry_run:
         path = tracker.save_snapshot(

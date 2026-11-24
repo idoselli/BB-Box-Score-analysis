@@ -31,6 +31,7 @@ class ProductionU21TrackerTests(unittest.TestCase):
         client.get.return_value = {"countries": [
             {"id": "DE", "name": "Germany", "confederation": "Europe"},
             {"id": "GB-WLS", "name": "Wales", "confederation": "Europe"},
+            {"id": "N1", "name": "Nations of Europe", "confederation": "Europe"},
             {"id": "CA", "name": "Canada", "confederation": "Americas"},
             *({"id": code, "name": code} for code in ("IL", "US", "CN", "HK", "TW")),
         ]}
@@ -59,8 +60,7 @@ class ProductionU21TrackerTests(unittest.TestCase):
                 "salary": 10000, "potential": 9,
             }]},
         ]
-        with patch("collect_u21_tracker.time.sleep"):
-            squad = collect_roster(client, {"id": "IL", "name": "Israel"})
+        squad = collect_roster(client, {"id": "IL", "name": "Israel"})
         self.assertEqual([call.args[0] for call in client.get.call_args_list], [
             "/countries/IL/national-teams", f"/national-teams/{team_id}/roster",
         ])

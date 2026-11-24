@@ -27,7 +27,15 @@ class V1ApiError(Exception):
 
 
 class V1Client:
-    def __init__(self, token: str, *, session: requests.Session | None = None, base_url: str = API_BASE, on_unauthorized: Callable[[str], str | None] | None = None):
+    def __init__(
+        self,
+        token: str,
+        *,
+        session: requests.Session | None = None,
+        base_url: str = API_BASE,
+        on_unauthorized: Callable[[str], str | None] | None = None,
+        min_request_interval: float = 0,
+    ):
         if not token:
             raise ValueError("A v1 bearer token is required.")
         self.session = session or requests.Session()
@@ -35,12 +43,18 @@ class V1Client:
         self.base_url = base_url.rstrip("/")
         self.last_limits: dict[str, str] = {}
         self.on_unauthorized = on_unauthorized
+        self.min_request_interval = min_request_interval
+        self.next_request_at = 0.0
 
     def get(self, path: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
         if not path.startswith("/") or path.startswith("//"):
             raise ValueError("API path must be relative to the v1 base URL.")
         refreshed = False
         for attempt in range(4):
+            wait = self.next_request_at - time.monotonic()
+            if wait > 0:
+                time.sleep(wait)
+            self.next_request_at = time.monotonic() + self.min_request_interval
             try:
                 response = self.session.get(self.base_url + path, params=params, timeout=25)
             except requests.RequestException as exc:
