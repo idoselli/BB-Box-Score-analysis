@@ -2,9 +2,10 @@
   "world": "v1",
   "season": 74,
   "weeks": [
-    1
+    1,
+    2
   ],
-  "updatedAt": "2026-11-24T17:42:58.045166+00:00",
+  "updatedAt": "2026-11-27T20:10:18.930207+00:00",
   "syntheticWeeks": [],
   "countries": [
     {
